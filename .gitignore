@@ -1,0 +1,28 @@
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+*/bin/
+*/gen/
+#*/assets/
+*/libs/easemobchat_2.0.0.jar
+
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Eclipse project files
+*/.classpath
+#*/.project
+*/.settings
+
+
+
+#*.properties
