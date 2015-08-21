@@ -9,8 +9,8 @@
 *.class
 
 # generated files
-*/bin/
-*/gen/
+*bin/
+*gen/
 #*/assets/
 */libs/easemobchat_2.0.0.jar
 
@@ -19,9 +19,9 @@
 local.properties
 
 # Eclipse project files
-*/.classpath
-#*/.project
-*/.settings
+*.classpath
+#*.project
+*.settings
 
 
 
