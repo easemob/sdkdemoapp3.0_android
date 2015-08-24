@@ -204,7 +204,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
                 for (String username : usernames) {
                     EaseUser user = new EaseUser(username);
-                    setUserHearder(user);
                     userlist.put(username, user);
                 }
                 // 存入内存
@@ -259,31 +258,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	    });
 	}
 	
-	/**
-     * 设置hearder属性，方便通讯中对联系人按header分类显示，以及通过右侧ABCD...字母栏快速定位联系人
-     * 
-     * @param username
-     * @param user
-     */
-    private static void setUserHearder(EaseUser user) {
-        String headerName = null;
-        if (!TextUtils.isEmpty(user.getNick())) {
-            headerName = user.getNick();
-        } else {
-            headerName = user.getUsername();
-        }
-        if (Character.isDigit(headerName.charAt(0))) {
-            user.setInitialLetter("#");
-        } else {
-            user.setInitialLetter(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1)
-                    .toUpperCase());
-            char header = user.getInitialLetter().toLowerCase().charAt(0);
-            if (header < 'a' || header > 'z') {
-                user.setInitialLetter("#");
-            }
-        }
-    }
-    
 	/**
 	 * 初始化组件
 	 */

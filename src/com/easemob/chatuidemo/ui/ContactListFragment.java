@@ -58,6 +58,7 @@ import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.controller.EaseSDKHelper.HXSyncListener;
 import com.easemob.easeui.domain.EaseSystemUser;
 import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.widget.EaseContactList;
 import com.easemob.easeui.widget.EaseTitleBar;
 import com.easemob.exceptions.EaseMobException;
@@ -416,15 +417,23 @@ public class ContactListFragment extends Fragment {
 			        && !entry.getKey().equals(Constant.GROUP_USERNAME)
 			        && !entry.getKey().equals(Constant.CHAT_ROOM)
 					&& !entry.getKey().equals(Constant.CHAT_ROBOT)
-					&& !blackList.contains(entry.getKey()))
-				contactList.add(entry.getValue());
+					&& !blackList.contains(entry.getKey())){
+			    EaseUser user = entry.getValue();
+			    EaseCommonUtils.setUserInitialLetter(user);
+				contactList.add(user);
+			}
 		}
 		// 排序
 		Collections.sort(contactList, new Comparator<EaseUser>() {
 
 			@Override
 			public int compare(EaseUser lhs, EaseUser rhs) {
-				return lhs.getUsername().compareTo(rhs.getUsername());
+			    if(lhs.getInitialLetter().equals(rhs.getInitialLetter())){
+			        return lhs.getNick().compareTo(rhs.getNick());
+			    }else{
+			        return lhs.getInitialLetter().compareTo(rhs.getInitialLetter());
+			    }
+			    
 			}
 		});
 

@@ -11,6 +11,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
 import com.easemob.util.HanziToPinyin;
 import com.parse.FindCallback;
@@ -99,7 +100,6 @@ public class ParseManager {
 							user.setAvatar(parseFile.getUrl());
 						}
 						user.setNick(pObject.getString(CONFIG_NICK));
-						setUserHearder(user);
 						mList.add(user);
 					}
 					callback.onSuccess(mList);
@@ -110,30 +110,6 @@ public class ParseManager {
 		});
 	}
 
-	/**
-     * 设置hearder属性，方便通讯中对联系人按header分类显示，以及通过右侧ABCD...字母栏快速定位联系人
-     * 
-     * @param username
-     * @param user
-     */
-    private static void setUserHearder(EaseUser user) {
-        String headerName = null;
-        if (!TextUtils.isEmpty(user.getNick())) {
-            headerName = user.getNick();
-        } else {
-            headerName = user.getUsername();
-        }
-        if (Character.isDigit(headerName.charAt(0))) {
-            user.setInitialLetter("#");
-        } else {
-            user.setInitialLetter(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1)
-                    .toUpperCase());
-            char header = user.getInitialLetter().toLowerCase().charAt(0);
-            if (header < 'a' || header > 'z') {
-                user.setInitialLetter("#");
-            }
-        }
-    }
 	
 	public void asyncGetCurrentUserInfo(final EMValueCallBack<EaseUser> callback){
 		final String username = EMChatManager.getInstance().getCurrentUser();
