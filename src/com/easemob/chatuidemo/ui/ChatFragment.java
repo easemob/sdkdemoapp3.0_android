@@ -15,14 +15,12 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
-import com.easemob.chat.EMMessage.Type;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.widget.ChatRowCall;
-import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.ui.EaseChatFragment;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
@@ -109,10 +107,10 @@ public class ChatFragment extends EaseChatFragment{
     }
     
     @Override
-    protected void onSetMessageAttributes(Map<String, Object> attrsMap, Type type) {
-        super.onSetMessageAttributes(attrsMap, type);
+    protected void onSetMessageAttributes(EMMessage message) {
+        super.onSetMessageAttributes(message);
         //设置消息扩展属性
-        attrsMap.put("em_robot_message", isRobot);
+        message.setAttribute("em_robot_message", isRobot);
     }
     
     @Override
