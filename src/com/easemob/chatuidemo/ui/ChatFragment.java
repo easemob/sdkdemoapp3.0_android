@@ -8,22 +8,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMMessage.Type;
+import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.RobotUser;
+import com.easemob.chatuidemo.widget.ChatRowCall;
+import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.ui.EaseChatFragment;
+import com.easemob.easeui.widget.chatrow.EaseChatRow;
+import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
 
 public class ChatFragment extends EaseChatFragment{
+
     //避免和基类定义的常量可能发生的冲突，常量从11开始定义
     private static final int ITEM_VIDEO = 11;
     static final int ITEM_FILE = 12;
@@ -35,6 +41,10 @@ public class ChatFragment extends EaseChatFragment{
     private static final int REQUEST_CODE_GROUP_DETAIL = 13;
     private static final int REQUEST_CODE_CONTEXT_MENU = 14;
     
+    private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 1;
+    private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
+    private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3; 
+    private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
     
     
     /**
@@ -103,6 +113,12 @@ public class ChatFragment extends EaseChatFragment{
         super.onSetMessageAttributes(attrsMap, type);
         //设置消息扩展属性
         attrsMap.put("em_robot_message", isRobot);
+    }
+    
+    @Override
+    protected EaseCustomChatRowProvider onSetCustomChatRowProvider() {
+        //设置自定义listview item提供者
+        return new CustomChatRowProvider();
     }
   
 
@@ -173,7 +189,7 @@ public class ChatFragment extends EaseChatFragment{
      */
     protected void selectFileFromLocal() {
         Intent intent = null;
-        if (Build.VERSION.SDK_INT < 19) {
+        if (Build.VERSION.SDK_INT < 19) { //19以后这个api不可用，demo这里简单处理成图库选择图片
             intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -209,6 +225,40 @@ public class ChatFragment extends EaseChatFragment{
                     .putExtra("isComingCall", false));
             // videoCallBtn.setEnabled(false);
             inputMenu.hideExtendMenuContainer();
+        }
+    }
+    
+    private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
+        @Override
+        public int getCustomChatRowTypeCount() {
+            //音、视频通话发送、接收共4种
+            return 4;
+        }
+
+        @Override
+        public int getCustomChatRowType(EMMessage message) {
+            if(message.getType() == EMMessage.Type.TXT){
+                //语音通话类型
+                if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
+                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL : MESSAGE_TYPE_SENT_VOICE_CALL;
+                }else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
+                    //视频通话
+                    return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO_CALL : MESSAGE_TYPE_SENT_VIDEO_CALL;
+                }
+            }
+            return 0;
+        }
+
+        @Override
+        public EaseChatRow getCustomChatRow(EMMessage message, int position, BaseAdapter adapter) {
+            if(message.getType() == EMMessage.Type.TXT){
+                // 语音通话,  视频通话
+                if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
+                    message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
+                    return new ChatRowCall(getActivity(), message, position, adapter);
+                }
+            }
+            return null;
         }
     }
     

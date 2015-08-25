@@ -334,13 +334,16 @@
             android:name="EASEMOB_APPKEY"
             android:value="easemob-demo#chatdemoui" />
         <!-- 声明sdk所需的service -->
-        <service android:name="com.easemob.chat.EMChatService"/>
+        <service android:name="com.easemob.chat.EMChatService"
+            android:exported="true"
+            />
         <!-- 声明sdk所需的receiver -->
         <receiver android:name="com.easemob.chat.EMMonitorReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
                 <data android:scheme="package"/>
             </intent-filter>
+            <!-- 可选filter -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.USER_PRESENT" />
