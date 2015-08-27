@@ -150,9 +150,8 @@ public class ContactListFragment extends Fragment {
 		contactList = new ArrayList<EaseUser>();
 		// 获取设置contactlist
 		getContactList();
-		//设置数据
-		contactListLayout.setContactList(contactList);
-		contactListLayout.init();
+		//init list
+		contactListLayout.init(contactList);
 		
 		listView = contactListLayout.getListView();
 		

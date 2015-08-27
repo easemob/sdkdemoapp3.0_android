@@ -19,7 +19,7 @@
         android:layout_marginLeft="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="不能连接到服务器"
+        android:text="@string/unable_to_connect"
         android:textColor="#000"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/iv_neterror"

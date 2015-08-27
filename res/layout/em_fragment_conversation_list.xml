@@ -12,7 +12,7 @@
 	    easemob:titleBarTitle="@string/session"
 	    />
     
-    <include layout="@layout/em_search_bar" />
+    <include layout="@layout/ease_search_bar" />
 
     <include
         android:id="@+id/rl_error_item"

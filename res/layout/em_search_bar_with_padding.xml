@@ -21,6 +21,7 @@
         android:drawableLeft="@drawable/em_search_bar_icon_normal"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:hint="@string/search"
          android:textSize="16sp"
          android:layout_marginLeft="4dp"
         android:singleLine="true"
@@ -35,7 +36,7 @@
         android:layout_marginRight="3dp"
         android:background="@android:color/transparent"
         android:padding="6dp"
-        android:src="@drawable/em_search_clear"
+        android:src="@drawable/ease_search_clear"
         android:visibility="invisible" />
 
 </RelativeLayout>

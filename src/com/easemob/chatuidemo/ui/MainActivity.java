@@ -579,20 +579,10 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 }
             }
             
-			runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					conversationListFragment.errorItem.setVisibility(View.GONE);
-				}
-
-			});
 		}
 
 		@Override
 		public void onDisconnected(final int error) {
-			final String st1 = getResources().getString(R.string.can_not_connect_chat_server_connection);
-			final String st2 = getResources().getString(R.string.the_current_network);
 			runOnUiThread(new Runnable() {
 
 				@Override
@@ -603,13 +593,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 					} else if (error == EMError.CONNECTION_CONFLICT) {
 						// 显示帐号在其他设备登陆dialog
 						showConflictDialog();
-					} else {
-						conversationListFragment.errorItem.setVisibility(View.VISIBLE);
-						if (NetUtils.hasNetwork(MainActivity.this))
-							conversationListFragment.errorText.setText(st1);
-						else
-							conversationListFragment.errorText.setText(st2);
-
 					}
 				}
 

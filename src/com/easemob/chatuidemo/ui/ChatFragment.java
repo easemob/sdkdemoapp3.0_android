@@ -23,16 +23,17 @@ import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.widget.ChatRowCall;
 import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.ui.EaseChatFragment;
+import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
 
-public class ChatFragment extends EaseChatFragment{
+public class ChatFragment extends EaseChatFragment implements EaseChatFragmentListener{
 
     //避免和基类定义的常量可能发生的冲突，常量从11开始定义
     private static final int ITEM_VIDEO = 11;
-    static final int ITEM_FILE = 12;
-    static final int ITEM_VOICE_CALL = 13;
-    static final int ITEM_VIDEO_CALL = 14;
+    private static final int ITEM_FILE = 12;
+    private static final int ITEM_VOICE_CALL = 13;
+    private static final int ITEM_VIDEO_CALL = 14;
     
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
@@ -48,7 +49,7 @@ public class ChatFragment extends EaseChatFragment{
     /**
      * 是否为环信小助手
      */
-    protected boolean isRobot;
+    private boolean isRobot;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,13 +58,14 @@ public class ChatFragment extends EaseChatFragment{
 
     @Override
     protected void setUpView() {
-        super.setUpView();
+        setChatFragmentListener(this);
         if (chatType == Constant.CHATTYPE_SINGLE) { 
             Map<String,RobotUser> robotMap = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getRobotList();
             if(robotMap!=null && robotMap.containsKey(toChatUsername)){
                 isRobot = true;
             }
         }
+        super.setUpView();
     }
     
     @Override
@@ -87,7 +89,7 @@ public class ChatFragment extends EaseChatFragment{
             case ContextMenuActivity.RESULT_CODE_COPY: // 复制消息
                 clipboard.setText(((TextMessageBody) contextMenuMessage.getBody()).getMessage());
                 break;
-            case ContextMenuActivity.RESULT_CODE_DELETE: // 删除消息|
+            case ContextMenuActivity.RESULT_CODE_DELETE: // 删除消息
                 conversation.removeMessage(contextMenuMessage.getMsgId());
                 messageList.refresh();
                 break;
@@ -107,22 +109,20 @@ public class ChatFragment extends EaseChatFragment{
     }
     
     @Override
-    protected void onSetMessageAttributes(EMMessage message) {
-        super.onSetMessageAttributes(message);
+    public void onSetMessageAttributes(EMMessage message) {
         //设置消息扩展属性
         message.setAttribute("em_robot_message", isRobot);
     }
     
     @Override
-    protected EaseCustomChatRowProvider onSetCustomChatRowProvider() {
+    public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
         //设置自定义listview item提供者
         return new CustomChatRowProvider();
     }
   
 
     @Override
-    protected void onEnterToChatDetails() {
-        super.onEnterToChatDetails();
+    public void onEnterToChatDetails() {
         if (chatType == Constant.CHATTYPE_GROUP) {
             EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
             if (group == null) {
@@ -136,8 +136,7 @@ public class ChatFragment extends EaseChatFragment{
     }
 
     @Override
-    protected void onAvatarClick(String username) {
-        super.onAvatarClick(username);
+    public void onAvatarClick(String username) {
         //头像点击事件
         Intent intent = new Intent(getActivity(), UserProfileActivity.class);
         intent.putExtra("username", username);
@@ -145,22 +144,20 @@ public class ChatFragment extends EaseChatFragment{
     }
     
     @Override
-    protected boolean onMessageBubbleClick(EMMessage message) {
+    public boolean onMessageBubbleClick(EMMessage message) {
         //消息框点击事件，demo这里不做覆盖，如需覆盖，return true
-        return super.onMessageBubbleClick(message);
+        return false;
     }
 
     @Override
-    protected void onMessageBubbleLongClick(EMMessage message) {
-        super.onMessageBubbleLongClick(message);
+    public void onMessageBubbleLongClick(EMMessage message) {
         //消息框长按
         startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message",message),
                 REQUEST_CODE_CONTEXT_MENU);
     }
 
     @Override
-    protected void onExtendMenuItemClick(int itemId, View view) {
-        super.onExtendMenuItemClick(itemId, view);
+    public boolean onExtendMenuItemClick(int itemId, View view) {
         switch (itemId) {
         case ITEM_VIDEO: //视频
             Intent intent = new Intent(getActivity(), ImageGridActivity.class);
@@ -180,6 +177,8 @@ public class ChatFragment extends EaseChatFragment{
         default:
             break;
         }
+        //不覆盖已有的点击事件
+        return false;
     }
     
     /**
