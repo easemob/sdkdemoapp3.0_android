@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,7 +16,6 @@ import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.easeui.domain.EaseSystemUser;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.util.HanziToPinyin;
 
@@ -66,13 +66,7 @@ public class DemoDBManager {
                 String username = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_ID));
                 String nick = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_NICK));
                 String avatar = cursor.getString(cursor.getColumnIndex(UserDao.COLUMN_NAME_AVATAR));
-                EaseUser user = null;
-                if (username.equals(Constant.NEW_FRIENDS_USERNAME) || username.equals(Constant.GROUP_USERNAME)
-                        || username.equals(Constant.CHAT_ROOM)|| username.equals(Constant.CHAT_ROBOT)){
-                    user = new EaseSystemUser(username);
-                }else{
-                    user = new EaseUser(username);
-                }
+                EaseUser user = new EaseUser(username);
                 user.setNick(nick);
                 user.setAvatar(avatar);
                 String headerName = null;
@@ -280,6 +274,29 @@ public class DemoDBManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db.isOpen()){
             db.delete(InviteMessgeDao.TABLE_NAME, InviteMessgeDao.COLUMN_NAME_FROM + " = ?", new String[]{from});
+        }
+    }
+    
+    synchronized int getUnreadNotifyCount(){
+        int count = 0;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        if(db.isOpen()){
+            Cursor cursor = db.rawQuery("select " + InviteMessgeDao.COLUMN_NAME_UNREAD_MSG_COUNT + " from " + InviteMessgeDao.TABLE_NAME, null);
+            if(cursor.moveToFirst()){
+                count = cursor.getInt(0);
+            }
+            cursor.close();
+        }
+         return count;
+    }
+    
+    synchronized void setUnreadNotifyCount(int count){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if(db.isOpen()){
+            ContentValues values = new ContentValues();
+            values.put(InviteMessgeDao.COLUMN_NAME_UNREAD_MSG_COUNT, count);
+
+            db.update(InviteMessgeDao.TABLE_NAME, values, null,null);
         }
     }
     

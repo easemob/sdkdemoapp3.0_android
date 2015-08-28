@@ -21,16 +21,19 @@ import android.content.Context;
 import com.easemob.chatuidemo.domain.InviteMessage;
 
 public class InviteMessgeDao {
-	public static final String TABLE_NAME = "new_friends_msgs";
-	public static final String COLUMN_NAME_ID = "id";
-	public static final String COLUMN_NAME_FROM = "username";
-	public static final String COLUMN_NAME_GROUP_ID = "groupid";
-	public static final String COLUMN_NAME_GROUP_Name = "groupname";
+	static final String TABLE_NAME = "new_friends_msgs";
+	static final String COLUMN_NAME_ID = "id";
+	static final String COLUMN_NAME_FROM = "username";
+	static final String COLUMN_NAME_GROUP_ID = "groupid";
+	static final String COLUMN_NAME_GROUP_Name = "groupname";
 	
-	public static final String COLUMN_NAME_TIME = "time";
-	public static final String COLUMN_NAME_REASON = "reason";
+	static final String COLUMN_NAME_TIME = "time";
+	static final String COLUMN_NAME_REASON = "reason";
 	public static final String COLUMN_NAME_STATUS = "status";
-	public static final String COLUMN_NAME_ISINVITEFROMME = "isInviteFromMe";
+	static final String COLUMN_NAME_ISINVITEFROMME = "isInviteFromMe";
+	
+	static final String COLUMN_NAME_UNREAD_MSG_COUNT = "unreadMsgCount";
+	
 		
 	public InviteMessgeDao(Context context){
 	    DemoDBManager.getInstance().onInit(context);
@@ -64,5 +67,13 @@ public class InviteMessgeDao {
 	
 	public void deleteMessage(String from){
 	    DemoDBManager.getInstance().deleteMessage(from);
+	}
+	
+	public int getUnreadMessagesCount(){
+	    return DemoDBManager.getInstance().getUnreadNotifyCount();
+	}
+	
+	public void saveUnreadMessageCount(int count){
+	    DemoDBManager.getInstance().setUnreadNotifyCount(count);
 	}
 }

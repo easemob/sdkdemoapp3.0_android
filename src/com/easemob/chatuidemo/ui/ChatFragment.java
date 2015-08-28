@@ -225,6 +225,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         }
     }
     
+    /**
+     * chat row provider 
+     *
+     */
     private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
         @Override
         public int getCustomChatRowTypeCount() {

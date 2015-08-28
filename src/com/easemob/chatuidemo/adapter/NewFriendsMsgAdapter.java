@@ -148,21 +148,22 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			public void run() {
 				// 调用sdk的同意方法
 				try {
-					if(msg.getGroupId() == null) //同意好友请求
+					if(msg.getGroupId() == null) {//同意好友请求
 						EMChatManager.getInstance().acceptInvitation(msg.getFrom());
-					else //同意加群申请
+					} else { //同意加群申请
 					    EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+					}
+					msg.setStatus(InviteMesageStatus.AGREED);
+                    // 更新db
+                    ContentValues values = new ContentValues();
+                    values.put(InviteMessgeDao.COLUMN_NAME_STATUS, msg.getStatus().ordinal());
+                    messgeDao.updateMessage(msg.getId(), values);
 					((Activity) context).runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
 							pd.dismiss();
 							button.setText(str2);
-							msg.setStatus(InviteMesageStatus.AGREED);
-							// 更新db
-							ContentValues values = new ContentValues();
-							values.put(InviteMessgeDao.COLUMN_NAME_STATUS, msg.getStatus().ordinal());
-							messgeDao.updateMessage(msg.getId(), values);
 							button.setBackgroundDrawable(null);
 							button.setEnabled(false);
 

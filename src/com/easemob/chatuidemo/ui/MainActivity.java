@@ -27,7 +27,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -63,12 +62,9 @@ import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.easemob.easeui.controller.EaseSDKHelper;
-import com.easemob.easeui.domain.EaseSystemUser;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
-import com.easemob.util.HanziToPinyin;
-import com.easemob.util.NetUtils;
 import com.umeng.analytics.MobclickAgent;
 
 public class MainActivity extends BaseActivity implements EMEventListener {
@@ -418,9 +414,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 */
 	public int getUnreadAddressCountTotal() {
 		int unreadAddressCountTotal = 0;
-		EaseUser user = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME);
-		if (user != null)
-			unreadAddressCountTotal = ((EaseSystemUser)user).getUnreadMsgCount();
+		inviteMessgeDao.getUnreadMessagesCount();
 		return unreadAddressCountTotal;
 	}
 
@@ -455,7 +449,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			Map<String, EaseUser> localUsers = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList();
 			Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
 			for (String username : usernameList) {
-			    EaseUser user = setUserHead(username);
+			    EaseUser user = new EaseUser(username);
 				// 添加好友时可能会回调added方法两次
 				if (!localUsers.containsKey(username)) {
 					userDao.saveContact(user);
@@ -770,40 +764,10 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	private void saveInviteMsg(InviteMessage msg) {
 		// 保存msg
 		inviteMessgeDao.saveMessage(msg);
-		// 未读数加1
-		EaseSystemUser user = (EaseSystemUser) ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().get(Constant.NEW_FRIENDS_USERNAME);
-		if (user.getUnreadMsgCount() == 0)
-			user.setUnreadMsgCount(user.getUnreadMsgCount() + 1);
+		//保存未读数，这里没有精确计算
+		inviteMessgeDao.saveUnreadMessageCount(1);
 	}
 
-	/**
-	 * set head
-	 * 
-	 * @param username
-	 * @return
-	 */
-	EaseUser setUserHead(String username) {
-	    EaseUser user = new EaseUser(username);
-		String headerName = null;
-		if (!TextUtils.isEmpty(user.getNick())) {
-			headerName = user.getNick();
-		} else {
-			headerName = user.getUsername();
-		}
-		if (username.equals(Constant.NEW_FRIENDS_USERNAME)) {
-			user.setInitialLetter("");
-		} else if (Character.isDigit(headerName.charAt(0))) {
-			user.setInitialLetter("#");
-		} else {
-			user.setInitialLetter(HanziToPinyin.getInstance().get(headerName.substring(0, 1)).get(0).target.substring(0, 1)
-					.toUpperCase());
-			char header = user.getInitialLetter().toLowerCase().charAt(0);
-			if (header < 'a' || header > 'z') {
-				user.setInitialLetter("#");
-			}
-		}
-		return user;
-	}
 
 	@Override
 	protected void onResume() {

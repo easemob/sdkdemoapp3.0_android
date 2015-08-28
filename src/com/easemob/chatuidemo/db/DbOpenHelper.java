@@ -21,7 +21,7 @@ import com.easemob.easeui.controller.EaseSDKHelper;
 
 public class DbOpenHelper extends SQLiteOpenHelper{
 
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 	private static DbOpenHelper instance;
 
 	private static final String USERNAME_TABLE_CREATE = "CREATE TABLE "
@@ -39,6 +39,7 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 			+ InviteMessgeDao.COLUMN_NAME_REASON + " TEXT, "
 			+ InviteMessgeDao.COLUMN_NAME_STATUS + " INTEGER, "
 			+ InviteMessgeDao.COLUMN_NAME_ISINVITEFROMME + " INTEGER, "
+			+ InviteMessgeDao.COLUMN_NAME_UNREAD_MSG_COUNT + " INTEGER, "
 			+ InviteMessgeDao.COLUMN_NAME_TIME + " TEXT); ";
 			
 	private static final String ROBOT_TABLE_CREATE = "CREATE TABLE "
@@ -88,6 +89,10 @@ public class DbOpenHelper extends SQLiteOpenHelper{
         }
 		if(oldVersion < 4){
 			db.execSQL(ROBOT_TABLE_CREATE);
+		}
+		if(oldVersion < 5){
+		    db.execSQL("ALTER TABLE " + InviteMessgeDao.TABLE_NAME + " ADD COLUMN " + 
+		            InviteMessgeDao.COLUMN_NAME_UNREAD_MSG_COUNT + " INTEGER ;");
 		}
 	}
 	
