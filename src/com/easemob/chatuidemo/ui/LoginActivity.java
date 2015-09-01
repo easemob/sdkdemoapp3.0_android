@@ -27,14 +27,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
-import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.utils.EaseCommonUtils;
 
 /**
@@ -151,7 +148,7 @@ public class LoginActivity extends BaseActivity {
 					Log.e("LoginActivity", "update current user nick fail");
 				}
 				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
-		        ((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().asyncGetCurrentUserInfo();
+				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
 				
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 					pd.dismiss();

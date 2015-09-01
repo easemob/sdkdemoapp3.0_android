@@ -24,9 +24,8 @@ import android.widget.Toast;
 
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.DemoSDKHelper;
+import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
-import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.utils.EaseUserUtils;
 import com.squareup.picasso.Picasso;
@@ -118,7 +117,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	}
 	
 	public void asyncFetchUserInfo(String username){
-		((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().asyncGetUserInfo(username, new EMValueCallBack<EaseUser>() {
+		DemoHelper.getInstance().getUserProfileManager().asyncGetUserInfo(username, new EMValueCallBack<EaseUser>() {
 			
 			@Override
 			public void onSuccess(EaseUser user) {
@@ -129,7 +128,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 					}else{
 						Picasso.with(UserProfileActivity.this).load(R.drawable.em_default_avatar).into(headAvatar);
 					}
-					((DemoSDKHelper) EaseSDKHelper.getInstance()).saveContact(user);
+					DemoHelper.getInstance().saveContact(user);
 				}
 			}
 			
@@ -175,7 +174,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 
 			@Override
 			public void run() {
-				boolean updatenick = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().updateCurrentUserNickName(nickName);
+				boolean updatenick = DemoHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(nickName);
 				if (UserProfileActivity.this.isFinishing()) {
 					return;
 				}
@@ -257,7 +256,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 
 			@Override
 			public void run() {
-				final String avatarUrl = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().uploadUserAvatar(data);
+				final String avatarUrl = DemoHelper.getInstance().getUserProfileManager().uploadUserAvatar(data);
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {

@@ -35,6 +35,7 @@ public class PreferenceUtils {
 	private static String SHARED_KEY_SETTING_CONTACT_SYNCED = "SHARED_KEY_SETTING_CONTACT_SYNCED";
 	private static String SHARED_KEY_SETTING_BALCKLIST_SYNCED = "SHARED_KEY_SETTING_BALCKLIST_SYNCED";
 	
+	private static String SHARED_KEY_CURRENTUSER_USERNAME = "SHARED_KEY_CURRENTUSER_USERNAME";
 	private static String SHARED_KEY_CURRENTUSER_NICK = "SHARED_KEY_CURRENTUSER_NICK";
 	private static String SHARED_KEY_CURRENTUSER_AVATAR = "SHARED_KEY_CURRENTUSER_AVATAR";
 	
@@ -153,6 +154,16 @@ public class PreferenceUtils {
 	public String getCurrentUserAvatar() {
 		return mSharedPreferences.getString(SHARED_KEY_CURRENTUSER_AVATAR, null);
 	}
+	
+	public void setCurrentUserName(String username){
+		editor.putString(SHARED_KEY_CURRENTUSER_USERNAME, username);
+		editor.commit();
+	}
+	
+	public String getCurrentUsername(){
+		return mSharedPreferences.getString(SHARED_KEY_CURRENTUSER_USERNAME, null);
+	}
+
 
 	public void removeCurrentUserInfo() {
 		editor.remove(SHARED_KEY_CURRENTUSER_NICK);

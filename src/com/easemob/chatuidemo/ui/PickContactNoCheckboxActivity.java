@@ -29,10 +29,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoSDKHelper;
+import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.adapter.EaseContactAdapter;
-import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.widget.EaseSidebar;
 
@@ -80,7 +79,7 @@ public class PickContactNoCheckboxActivity extends BaseActivity {
 
 	private void getContactList() {
 		contactList.clear();
-		Map<String, EaseUser> users = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList();
+		Map<String, EaseUser> users = DemoHelper.getInstance().getContactList();
 		Iterator<Entry<String, EaseUser>> iterator = users.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<String, EaseUser> entry = iterator.next();

@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.DemoSDKHelper;
-import com.easemob.easeui.controller.EaseSDKHelper;
+import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.easeui.domain.EaseUser;
-import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
-import com.easemob.util.HanziToPinyin;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
@@ -152,7 +148,7 @@ public class ParseManager {
 					String nick = pUser.getString(CONFIG_NICK);
 					ParseFile pFile = pUser.getParseFile(CONFIG_AVATAR);
 					if(callback!=null){
-					    EaseUser user = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().get(username);
+					    EaseUser user = DemoHelper.getInstance().getContactList().get(username);
 						if(user!=null){
 							user.setNick(nick);
 							if (pFile != null && pFile.getUrl() != null) {

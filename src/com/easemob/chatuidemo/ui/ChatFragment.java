@@ -17,11 +17,10 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoSDKHelper;
+import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.widget.ChatRowCall;
-import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.ui.EaseChatFragment;
 import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
@@ -60,7 +59,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     protected void setUpView() {
         setChatFragmentListener(this);
         if (chatType == Constant.CHATTYPE_SINGLE) { 
-            Map<String,RobotUser> robotMap = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getRobotList();
+            Map<String,RobotUser> robotMap = DemoHelper.getInstance().getRobotList();
             if(robotMap!=null && robotMap.containsKey(toChatUsername)){
                 isRobot = true;
             }

@@ -40,9 +40,9 @@ import android.widget.Toast;
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMVideoCallHelper;
+import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.CameraHelper;
-import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.exceptions.EMServiceNotReadyException;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
@@ -88,7 +88,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         }
         setContentView(R.layout.em_activity_video_call);
         
-        EaseSDKHelper.getInstance().isVideoCalling = true;
+        DemoHelper.getInstance().isVideoCalling = true;
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
@@ -481,7 +481,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EaseSDKHelper.getInstance().isVideoCalling = false;
+        DemoHelper.getInstance().isVideoCalling = false;
         stopMonitor();
         try {
 			callHelper.setSurfaceView(null);

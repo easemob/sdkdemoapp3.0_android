@@ -18,7 +18,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.easemob.chatuidemo.DemoSDKHelper;
+import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.ui.VideoCallActivity;
 import com.easemob.chatuidemo.ui.VoiceCallActivity;
 import com.easemob.util.EMLog;
@@ -27,7 +27,7 @@ public class CallReceiver extends BroadcastReceiver{
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if(!DemoSDKHelper.getInstance().isLogined())
+		if(!DemoHelper.getInstance().isLoggedIn())
 		    return;
 		//拨打方username
 		String from = intent.getStringExtra("from");
