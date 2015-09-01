@@ -12,15 +12,13 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.easemob.easeui.controller.EaseSDKHelper;
-
 public class GCMPushBroadCast extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.i("info", "gcmpush onreceive");
 		String alert = intent.getStringExtra("alert");
-		sendNotification(alert, true);
+		sendNotification(context, alert, true);
 	}
 
 	protected NotificationManager notificationManager = null;
@@ -28,39 +26,38 @@ public class GCMPushBroadCast extends BroadcastReceiver {
 	protected static int notifyID = 0525; // start notification id
 	protected static int foregroundNotifyID = 0555;
 
-	public void sendNotification(String message, boolean isForeground) {
+	public void sendNotification(Context context, String message, boolean isForeground) {
 
-		Context appContext = EaseSDKHelper.getInstance().getAppContext();
 
 		if (notificationManager == null) {
-			notificationManager = (NotificationManager) appContext
+			notificationManager = (NotificationManager) context
 					.getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 
 		try {
 			String notifyText = message;
 
-			PackageManager packageManager = appContext.getPackageManager();
+			PackageManager packageManager = context.getPackageManager();
 			String appname = (String) packageManager
-					.getApplicationLabel(appContext.getApplicationInfo());
+					.getApplicationLabel(context.getApplicationInfo());
 
 			// notification titile
 			String contentTitle = appname;
-			String packageName = appContext.getApplicationInfo().packageName;
+			String packageName = context.getApplicationInfo().packageName;
 
 			Uri defaultSoundUrlUri = RingtoneManager
 					.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 			// create and send notificaiton
 			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-					appContext)
-					.setSmallIcon(appContext.getApplicationInfo().icon)
+			        context)
+					.setSmallIcon(context.getApplicationInfo().icon)
 					.setSound(defaultSoundUrlUri)
 					.setWhen(System.currentTimeMillis()).setAutoCancel(true);
 
-			Intent msgIntent = appContext.getPackageManager()
+			Intent msgIntent = context.getPackageManager()
 					.getLaunchIntentForPackage(packageName);
 
-			PendingIntent pendingIntent = PendingIntent.getActivity(appContext,
+			PendingIntent pendingIntent = PendingIntent.getActivity(context,
 					notifyID, msgIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 			mBuilder.setContentTitle(contentTitle);

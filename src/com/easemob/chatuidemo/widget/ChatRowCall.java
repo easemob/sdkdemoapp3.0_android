@@ -49,7 +49,7 @@ public class ChatRowCall extends EaseChatRow{
     }
 
     @Override
-    protected void onBuubleClick() {
+    protected void onBubbleClick() {
         
     }
 

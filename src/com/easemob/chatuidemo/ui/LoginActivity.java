@@ -27,9 +27,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
+import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.DemoApplication;
+import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.DemoSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.controller.EaseSDKHelper;
@@ -55,8 +57,8 @@ public class LoginActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// 如果用户名密码都有，直接进入主页面
-		if (DemoSDKHelper.getInstance().isLogined()) {
+		// 如果登录成功过，直接进入主页面
+		if (DemoHelper.getInstance().isLoggedIn()) {
 			autoLogin = true;
 			startActivity(new Intent(LoginActivity.this, MainActivity.class));
 

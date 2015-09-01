@@ -48,7 +48,7 @@ import com.easemob.chatuidemo.ui.VoiceCallActivity;
 import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.model.EaseNotifier;
-import com.easemob.easeui.model.EaseNotifier.HXNotificationInfoProvider;
+import com.easemob.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.easemob.easeui.model.EaseSDKModel;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
@@ -289,9 +289,9 @@ public class DemoSDKHelper extends EaseSDKHelper{
      * @return
      */
     @Override
-    protected HXNotificationInfoProvider getNotificationListener() {
+    protected EaseNotificationInfoProvider getNotificationListener() {
         //可以覆盖默认的设置
-        return new HXNotificationInfoProvider() {
+        return new EaseNotificationInfoProvider() {
             
             @Override
             public String getTitle(EMMessage message) {
