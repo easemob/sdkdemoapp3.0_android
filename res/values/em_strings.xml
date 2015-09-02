@@ -75,7 +75,7 @@
     <string name="session">Conversation</string>
     <string name="address_book">Address book</string>
     <string name="setting">Settings</string>
-    <string name="now_refresh_list">Refreshing contact list</string>
+    <string name="now_refresh_list">Loading data</string>
     <string name="Application_and_notify">Invitation and notification</string>
     <string name="save_new_nickname">Save new nickname</string>
     <string name="group_chat">Group chat</string>

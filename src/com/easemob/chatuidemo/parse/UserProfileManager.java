@@ -8,8 +8,8 @@ import android.content.Context;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.utils.PreferenceUtils;
-import com.easemob.easeui.controller.EaseSDKHelper.HXSyncListener;
+import com.easemob.chatuidemo.DemoHelper.DataSyncListener;
+import com.easemob.chatuidemo.utils.PreferenceManager;
 import com.easemob.easeui.domain.EaseUser;
 
 public class UserProfileManager {
@@ -28,7 +28,7 @@ public class UserProfileManager {
 	/**
 	 * HuanXin sync contact nick and avatar listener
 	 */
-	private List<HXSyncListener> syncContactInfosListeners;
+	private List<DataSyncListener> syncContactInfosListeners;
 
 	private boolean isSyncingContactInfosWithServer = false;
 
@@ -42,12 +42,12 @@ public class UserProfileManager {
 			return true;
 		}
 		ParseManager.getInstance().onInit(context);
-		syncContactInfosListeners = new ArrayList<HXSyncListener>();
+		syncContactInfosListeners = new ArrayList<DataSyncListener>();
 		sdkInited = true;
 		return true;
 	}
 
-	public void addSyncContactInfoListener(HXSyncListener listener) {
+	public void addSyncContactInfoListener(DataSyncListener listener) {
 		if (listener == null) {
 			return;
 		}
@@ -56,7 +56,7 @@ public class UserProfileManager {
 		}
 	}
 
-	public void removeSyncContactInfoListener(HXSyncListener listener) {
+	public void removeSyncContactInfoListener(DataSyncListener listener) {
 		if (listener == null) {
 			return;
 		}
@@ -98,7 +98,7 @@ public class UserProfileManager {
 	}
 
 	public void notifyContactInfosSyncListener(boolean success) {
-		for (HXSyncListener listener : syncContactInfosListeners) {
+		for (DataSyncListener listener : syncContactInfosListeners) {
 			listener.onSyncSucess(success);
 		}
 	}
@@ -110,7 +110,7 @@ public class UserProfileManager {
 	public synchronized void reset() {
 		isSyncingContactInfosWithServer = false;
 		currentUser = null;
-		PreferenceUtils.getInstance().removeCurrentUserInfo();
+		PreferenceManager.getInstance().removeCurrentUserInfo();
 	}
 
 	public synchronized EaseUser getCurrentUserInfo() {
@@ -163,20 +163,20 @@ public class UserProfileManager {
 	}
 	private void setCurrentUserNick(String nickname) {
 		getCurrentUserInfo().setNick(nickname);
-		PreferenceUtils.getInstance().setCurrentUserNick(nickname);
+		PreferenceManager.getInstance().setCurrentUserNick(nickname);
 	}
 
 	private void setCurrentUserAvatar(String avatar) {
 		getCurrentUserInfo().setAvatar(avatar);
-		PreferenceUtils.getInstance().setCurrentUserAvatar(avatar);
+		PreferenceManager.getInstance().setCurrentUserAvatar(avatar);
 	}
 
 	private String getCurrentUserNick() {
-		return PreferenceUtils.getInstance().getCurrentUserNick();
+		return PreferenceManager.getInstance().getCurrentUserNick();
 	}
 
 	private String getCurrentUserAvatar() {
-		return PreferenceUtils.getInstance().getCurrentUserAvatar();
+		return PreferenceManager.getInstance().getCurrentUserAvatar();
 	}
 
 }

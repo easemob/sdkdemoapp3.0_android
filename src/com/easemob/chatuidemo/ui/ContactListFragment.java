@@ -27,13 +27,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
 import com.easemob.chat.EMContactManager;
-import com.easemob.chatuidemo.DemoSDKHelper;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.DemoHelper.DataSyncListener;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
-import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.ui.EaseContactListFragment;
+import com.easemob.util.EMLog;
 
 /**
  * 联系人列表页
@@ -41,6 +42,12 @@ import com.easemob.easeui.ui.EaseContactListFragment;
  */
 public class ContactListFragment extends EaseContactListFragment {
 	
+    private static final String TAG = ContactListFragment.class.getSimpleName();
+    private ContactSyncListener contactSyncListener;
+    private BlackListSyncListener blackListSyncListener;
+    private ContactInfoSyncListener contactInfoSyncListener;
+    private View loadingView;
+
     @Override
     protected void initView() {
         super.initView();
@@ -55,12 +62,15 @@ public class ContactListFragment extends EaseContactListFragment {
         //注册上下文菜单
         registerForContextMenu(listView);
         
-        progressBar = (View) getView().findViewById(R.id.progress_bar);
+        loadingView = LayoutInflater.from(getActivity()).inflate(R.layout.em_layout_loading_data, null);
+        contentContainer.addView(loadingView);
     }
     
     
     @Override
     protected void setUpView() {
+        //设置联系人数据
+        setContactsMap(DemoHelper.getInstance().getContactList());
         super.setUpView();
         listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -82,10 +92,37 @@ public class ContactListFragment extends EaseContactListFragment {
             }
         });
         
-        if (!EaseSDKHelper.getInstance().isContactsSyncedWithServer()) {
-            progressBar.setVisibility(View.VISIBLE);
+        
+        contactSyncListener = new ContactSyncListener();
+        DemoHelper.getInstance().addSyncContactListener(contactSyncListener);
+        
+        blackListSyncListener = new BlackListSyncListener();
+        DemoHelper.getInstance().addSyncBlackListListener(blackListSyncListener);
+        
+        contactInfoSyncListener = new ContactInfoSyncListener();
+        DemoHelper.getInstance().getUserProfileManager().addSyncContactInfoListener(contactInfoSyncListener);
+        
+        if (!DemoHelper.getInstance().isContactsSyncedWithServer()) {
+            loadingView.setVisibility(View.VISIBLE);
         } else {
-            progressBar.setVisibility(View.GONE);
+            loadingView.setVisibility(View.GONE);
+        }
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (contactSyncListener != null) {
+            DemoHelper.getInstance().removeSyncContactListener(contactSyncListener);
+            contactSyncListener = null;
+        }
+        
+        if(blackListSyncListener != null){
+            DemoHelper.getInstance().removeSyncBlackListListener(blackListSyncListener);
+        }
+        
+        if(contactInfoSyncListener != null){
+            DemoHelper.getInstance().getUserProfileManager().removeSyncContactInfoListener(contactInfoSyncListener);
         }
     }
     
@@ -167,7 +204,7 @@ public class ContactListFragment extends EaseContactListFragment {
 					// 删除db和内存中此用户的数据
 					UserDao dao = new UserDao(getActivity());
 					dao.deleteContact(tobeDeleteUser.getUsername());
-					((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().remove(tobeDeleteUser.getUsername());
+					DemoHelper.getInstance().getContactList().remove(tobeDeleteUser.getUsername());
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
@@ -190,5 +227,67 @@ public class ContactListFragment extends EaseContactListFragment {
 		}).start();
 
 	}
+	
+	class ContactSyncListener implements DataSyncListener{
+        @Override
+        public void onSyncSucess(final boolean success) {
+            EMLog.d(TAG, "on contact list sync success:" + success);
+            getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    getActivity().runOnUiThread(new Runnable(){
+
+                        @Override
+                        public void run() {
+                            if(success){
+                                loadingView.setVisibility(View.GONE);
+                                refresh();
+                            }else{
+                                String s1 = getResources().getString(R.string.get_failed_please_check);
+                                Toast.makeText(getActivity(), s1, 1).show();
+                                loadingView.setVisibility(View.GONE);
+                            }
+                        }
+                        
+                    });
+                }
+            });
+        }
+    }
+    
+    class BlackListSyncListener implements DataSyncListener{
+
+        @Override
+        public void onSyncSucess(boolean success) {
+            getActivity().runOnUiThread(new Runnable(){
+
+                @Override
+                public void run() {
+                    blackList = EMContactManager.getInstance().getBlackListUsernames();
+                    refresh();
+                }
+                
+            });
+        }
+        
+    };
+    
+    class ContactInfoSyncListener implements DataSyncListener{
+
+        @Override
+        public void onSyncSucess(final boolean success) {
+            EMLog.d(TAG, "on contactinfo list sync success:" + success);
+            getActivity().runOnUiThread(new Runnable() {
+                
+                @Override
+                public void run() {
+                    loadingView.setVisibility(View.GONE);
+                    if(success){
+                        refresh();
+                    }
+                }
+            });
+        }
+        
+    }
 	
 }

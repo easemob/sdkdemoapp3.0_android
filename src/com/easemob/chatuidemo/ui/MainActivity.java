@@ -55,13 +55,13 @@ import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoSDKHelper;
+import com.easemob.chatuidemo.DemoApplication;
+import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
-import com.easemob.easeui.controller.EaseSDKHelper;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
 			// 防止被移除后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
 			// 三个fragment里加的判断同理
-		    DemoSDKHelper.getInstance().logout(true,null);
+		    DemoHelper.getInstance().logout(true,null);
 			finish();
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
@@ -164,20 +164,20 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 	
 	static void asyncFetchGroupsFromServer(){
-	    EaseSDKHelper.getInstance().asyncFetchGroupsFromServer(new EMCallBack(){
+	    DemoHelper.getInstance().asyncFetchGroupsFromServer(new EMCallBack(){
 
             @Override
             public void onSuccess() {
-                EaseSDKHelper.getInstance().noitifyGroupSyncListeners(true);
+                DemoHelper.getInstance().noitifyGroupSyncListeners(true);
                 
-                if(EaseSDKHelper.getInstance().isContactsSyncedWithServer()){
-                    EaseSDKHelper.getInstance().notifyForRecevingEvents();
+                if(DemoHelper.getInstance().isContactsSyncedWithServer()){
+                    DemoHelper.getInstance().notifyForRecevingEvents();
                 }
             }
 
             @Override
             public void onError(int code, String message) {
-                EaseSDKHelper.getInstance().noitifyGroupSyncListeners(false);                
+                DemoHelper.getInstance().noitifyGroupSyncListeners(false);                
             }
 
             @Override
@@ -189,12 +189,10 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	}
 	
 	static void asyncFetchContactsFromServer(){
-	    EaseSDKHelper.getInstance().asyncFetchContactsFromServer(new EMValueCallBack<List<String>>(){
+	    DemoHelper.getInstance().asyncFetchContactsFromServer(new EMValueCallBack<List<String>>(){
 
             @Override
             public void onSuccess(List<String> usernames) {
-                Context context = EaseSDKHelper.getInstance().getAppContext();
-                
                 System.out.println("----------------"+usernames.toString());
                 EMLog.d("roster", "contacts size: " + usernames.size());
                 Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
@@ -203,24 +201,24 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                     userlist.put(username, user);
                 }
                 // 存入内存
-                ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList().putAll(userlist);
+                DemoHelper.getInstance().getContactList().putAll(userlist);
                  // 存入db
-                UserDao dao = new UserDao(context);
+                UserDao dao = new UserDao(DemoApplication.getInstance().getApplicationContext());
                 List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
                 dao.saveContactList(users);
 
-                EaseSDKHelper.getInstance().notifyContactsSyncListener(true);
+                DemoHelper.getInstance().notifyContactsSyncListener(true);
                 
-                if(EaseSDKHelper.getInstance().isGroupsSyncedWithServer()){
-                    EaseSDKHelper.getInstance().notifyForRecevingEvents();
+                if(DemoHelper.getInstance().isGroupsSyncedWithServer()){
+                    DemoHelper.getInstance().notifyForRecevingEvents();
                 }
                 
-                ((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
+                DemoHelper.getInstance().getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
 
 					@Override
 					public void onSuccess(List<EaseUser> uList) {
-						((DemoSDKHelper)EaseSDKHelper.getInstance()).updateContactList(uList);
-						((DemoSDKHelper)EaseSDKHelper.getInstance()).getUserProfileManager().notifyContactInfosSyncListener(true);
+					    DemoHelper.getInstance().updateContactList(uList);
+					    DemoHelper.getInstance().getUserProfileManager().notifyContactInfosSyncListener(true);
 					}
 
 					@Override
@@ -231,24 +229,24 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
             @Override
             public void onError(int error, String errorMsg) {
-                EaseSDKHelper.getInstance().notifyContactsSyncListener(false);
+                DemoHelper.getInstance().notifyContactsSyncListener(false);
             }
 	        
 	    });
 	}
 	
 	static void asyncFetchBlackListFromServer(){
-	    EaseSDKHelper.getInstance().asyncFetchBlackListFromServer(new EMValueCallBack<List<String>>(){
+	    DemoHelper.getInstance().asyncFetchBlackListFromServer(new EMValueCallBack<List<String>>(){
 
             @Override
             public void onSuccess(List<String> value) {
                 EMContactManager.getInstance().saveBlackList(value);
-                EaseSDKHelper.getInstance().notifyBlackListSyncListener(true);
+                DemoHelper.getInstance().notifyBlackListSyncListener(true);
             }
 
             @Override
             public void onError(int error, String errorMsg) {
-                EaseSDKHelper.getInstance().notifyBlackListSyncListener(false);
+                DemoHelper.getInstance().notifyBlackListSyncListener(false);
             }
 	        
 	    });
@@ -312,7 +310,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			EMMessage message = (EMMessage) event.getData();
 
 			// 提示新消息
-			EaseSDKHelper.getInstance().getNotifier().onNewMsg(message);
+			DemoHelper.getInstance().getNotifier().onNewMsg(message);
 
 			refreshUI();
 			break;
@@ -446,7 +444,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		@Override
 		public void onContactAdded(List<String> usernameList) {			
 			// 保存增加的联系人
-			Map<String, EaseUser> localUsers = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList();
+			Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
 			Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
 			for (String username : usernameList) {
 			    EaseUser user = new EaseUser(username);
@@ -466,7 +464,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		@Override
 		public void onContactDeleted(final List<String> usernameList) {
 			// 被删除
-			Map<String, EaseUser> localUsers = ((DemoSDKHelper)EaseSDKHelper.getInstance()).getContactList();
+			Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
 			for (String username : usernameList) {
 				localUsers.remove(username);
 				userDao.deleteContact(username);
@@ -548,15 +546,15 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 		@Override
 		public void onConnected() {
-            boolean groupSynced = EaseSDKHelper.getInstance().isGroupsSyncedWithServer();
-            boolean contactSynced = EaseSDKHelper.getInstance().isContactsSyncedWithServer();
+            boolean groupSynced = DemoHelper.getInstance().isGroupsSyncedWithServer();
+            boolean contactSynced = DemoHelper.getInstance().isContactsSyncedWithServer();
             
             // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
             if(groupSynced && contactSynced){
                 new Thread(){
                     @Override
                     public void run(){
-                        EaseSDKHelper.getInstance().notifyForRecevingEvents();
+                        DemoHelper.getInstance().notifyForRecevingEvents();
                     }
                 }.start();
             }else{
@@ -568,7 +566,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                     asyncFetchContactsFromServer();
                 }
                 
-                if(!EaseSDKHelper.getInstance().isBlackListSyncedWithServer()){
+                if(!DemoHelper.getInstance().isBlackListSyncedWithServer()){
                     asyncFetchBlackListFromServer();
                 }
             }
@@ -623,7 +621,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			// 保存邀请消息
 			EMChatManager.getInstance().saveMessage(msg);
 			// 提醒新消息
-			EaseSDKHelper.getInstance().getNotifier().viberateAndPlayTone(msg);
+			DemoHelper.getInstance().getNotifier().viberateAndPlayTone(msg);
 
 			runOnUiThread(new Runnable() {
 				public void run() {
@@ -718,7 +716,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			// 保存同意消息
 			EMChatManager.getInstance().saveMessage(msg);
 			// 提醒新消息
-			EaseSDKHelper.getInstance().getNotifier().viberateAndPlayTone(msg);
+			DemoHelper.getInstance().getNotifier().viberateAndPlayTone(msg);
 
 			runOnUiThread(new Runnable() {
 				public void run() {
@@ -747,7 +745,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	private void notifyNewIviteMessage(InviteMessage msg) {
 		saveInviteMsg(msg);
 		// 提示有新消息
-		EaseSDKHelper.getInstance().getNotifier().viberateAndPlayTone(null);
+		DemoHelper.getInstance().getNotifier().viberateAndPlayTone(null);
 
 		// 刷新bottom bar消息未读数
 		updateUnreadAddressLable();
@@ -780,7 +778,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 		// unregister this event listener when this activity enters the
 		// background
-		DemoSDKHelper sdkHelper = (DemoSDKHelper) DemoSDKHelper.getInstance();
+		DemoHelper sdkHelper = DemoHelper.getInstance();
 		sdkHelper.pushActivity(this);
 
 		// register the event listener when enter the foreground
@@ -791,7 +789,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	@Override
 	protected void onStop() {
 		EMChatManager.getInstance().unregisterEventListener(this);
-		DemoSDKHelper sdkHelper = (DemoSDKHelper) DemoSDKHelper.getInstance();
+		DemoHelper sdkHelper = DemoHelper.getInstance();
 		sdkHelper.popActivity(this);
 
 		super.onStop();
@@ -825,7 +823,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 */
 	private void showConflictDialog() {
 		isConflictDialogShow = true;
-		DemoSDKHelper.getInstance().logout(false,null);
+		DemoHelper.getInstance().logout(false,null);
 		String st = getResources().getString(R.string.Logoff_notification);
 		if (!MainActivity.this.isFinishing()) {
 			// clear up global variables
@@ -860,7 +858,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 */
 	private void showAccountRemovedDialog() {
 		isAccountRemovedDialogShow = true;
-		DemoSDKHelper.getInstance().logout(true,null);
+		DemoHelper.getInstance().logout(true,null);
 		String st5 = getResources().getString(R.string.Remove_the_notification);
 		if (!MainActivity.this.isFinishing()) {
 			// clear up global variables
@@ -908,7 +906,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             
             @Override
             public void onReceive(Context context, Intent intent) {
-                DemoSDKHelper.getInstance().logout(true,new EMCallBack() {
+                DemoHelper.getInstance().logout(true,new EMCallBack() {
                     
                     @Override
                     public void onSuccess() {

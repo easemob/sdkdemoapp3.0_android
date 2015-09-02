@@ -44,23 +44,6 @@
 		        android:fastScrollEnabled="false" />
 		 </android.support.v4.widget.SwipeRefreshLayout>
 		 
-	    <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:id="@+id/progress_bar">
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/refreshing_group_list"
-                android:layout_gravity="center_horizontal"/>
-        </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>

@@ -83,8 +83,8 @@ public class LoginActivity extends BaseActivity {
 
 			}
 		});
-		if (DemoApplication.getInstance().getUserName() != null) {
-			usernameEditText.setText(DemoApplication.getInstance().getUserName());
+		if (DemoHelper.getInstance().getCurrentUsernName() != null) {
+			usernameEditText.setText(DemoHelper.getInstance().getCurrentUsernName());
 		}
 	}
 
@@ -132,9 +132,8 @@ public class LoginActivity extends BaseActivity {
 				if (!progressShow) {
 					return;
 				}
-				// 登陆成功，保存用户名密码
-				DemoApplication.getInstance().setUserName(currentUsername);
-				DemoApplication.getInstance().setPassword(currentPassword);
+				// 登陆成功，保存用户名
+				DemoHelper.getInstance().setCurrentUserName(currentUsername);
 
 				// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 				// ** manually load all local groups and

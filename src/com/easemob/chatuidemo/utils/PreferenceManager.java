@@ -16,13 +16,13 @@ package com.easemob.chatuidemo.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class PreferenceUtils {
+public class PreferenceManager {
 	/**
 	 * 保存Preference的name
 	 */
 	public static final String PREFERENCE_NAME = "saveInfo";
 	private static SharedPreferences mSharedPreferences;
-	private static PreferenceUtils mPreferenceUtils;
+	private static PreferenceManager mPreferenceUtils;
 	private static SharedPreferences.Editor editor;
 
 	private String SHARED_KEY_SETTING_NOTIFICATION = "shared_key_setting_notification";
@@ -39,14 +39,14 @@ public class PreferenceUtils {
 	private static String SHARED_KEY_CURRENTUSER_NICK = "SHARED_KEY_CURRENTUSER_NICK";
 	private static String SHARED_KEY_CURRENTUSER_AVATAR = "SHARED_KEY_CURRENTUSER_AVATAR";
 	
-	private PreferenceUtils(Context cxt) {
+	private PreferenceManager(Context cxt) {
 		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
 		editor = mSharedPreferences.edit();
 	}
 
 	public static synchronized void init(Context cxt){
 	    if(mPreferenceUtils == null){
-	        mPreferenceUtils = new PreferenceUtils(cxt);
+	        mPreferenceUtils = new PreferenceManager(cxt);
 	    }
 	}
 
@@ -56,7 +56,7 @@ public class PreferenceUtils {
 	 * @param cxt
 	 * @return
 	 */
-	public static PreferenceUtils getInstance() {
+	public static PreferenceManager getInstance() {
 		if (mPreferenceUtils == null) {
 			throw new RuntimeException("please init first!");
 		}
