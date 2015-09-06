@@ -56,7 +56,7 @@ public class PreferenceManager {
 	 * @param cxt
 	 * @return
 	 */
-	public static PreferenceManager getInstance() {
+	public synchronized static PreferenceManager getInstance() {
 		if (mPreferenceUtils == null) {
 			throw new RuntimeException("please init first!");
 		}

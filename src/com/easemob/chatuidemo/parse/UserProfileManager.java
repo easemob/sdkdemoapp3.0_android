@@ -37,7 +37,7 @@ public class UserProfileManager {
 	public UserProfileManager() {
 	}
 
-	public synchronized boolean onInit(Context context) {
+	public synchronized boolean init(Context context) {
 		if (sdkInited) {
 			return true;
 		}

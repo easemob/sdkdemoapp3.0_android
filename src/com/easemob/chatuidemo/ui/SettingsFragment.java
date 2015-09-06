@@ -32,6 +32,7 @@ import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.DemoSettingsModel;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.PreferenceManager;
 import com.easemob.easeui.widget.EaseSwitchButton;
@@ -92,6 +93,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton vibrateSwitch;
     private EaseSwitchButton speakerSwitch;
     private EaseSwitchButton ownerLeaveSwitch;
+    private DemoSettingsModel settingsModel;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -131,6 +133,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		llDiagnose=(LinearLayout) getView().findViewById(R.id.ll_diagnose);
 		pushNick=(LinearLayout) getView().findViewById(R.id.ll_set_push_nick);
 		
+		settingsModel = DemoHelper.getInstance().getSettingsModel();
+		
 		blacklistContainer.setOnClickListener(this);
 		userProfileContainer.setOnClickListener(this);
 		rl_switch_notification.setOnClickListener(this);
@@ -145,7 +149,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		
 		// 震动和声音总开关，来消息时，是否允许此开关打开
 		// the vibrate and sound notification are allowed or not?
-		if (PreferenceManager.getInstance().getSettingMsgNotification()) {
+		if (settingsModel.getSettingMsgNotification()) {
 			notifiSwitch.openSwitch();
 		} else {
 		    notifiSwitch.closeSwitch();
@@ -153,7 +157,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		
 		// 是否打开声音
 		// sound notification is switched on or not?
-		if (PreferenceManager.getInstance().getSettingMsgSound()) {
+		if (settingsModel.getSettingMsgSound()) {
 		    soundSwitch.openSwitch();
 		} else {
 		    soundSwitch.closeSwitch();
@@ -161,7 +165,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		
 		// 是否打开震动
 		// vibrate notification is switched on or not?
-		if (PreferenceManager.getInstance().getSettingMsgVibrate()) {
+		if (settingsModel.getSettingMsgVibrate()) {
 		    vibrateSwitch.openSwitch();
 		} else {
 		    vibrateSwitch.closeSwitch();
@@ -169,7 +173,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 
 		// 是否打开扬声器
 		// the speaker is switched on or not?
-		if (PreferenceManager.getInstance().getSettingMsgSpeaker()) {
+		if (settingsModel.getSettingMsgSpeaker()) {
 		    speakerSwitch.openSwitch();
 		} else {
 		    speakerSwitch.closeSwitch();
@@ -195,41 +199,41 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				textview1.setVisibility(View.GONE);
 				textview2.setVisibility(View.GONE);
 
-				PreferenceManager.getInstance().setSettingMsgNotification(false);
+				settingsModel.setSettingMsgNotification(false);
 			} else {
 			    notifiSwitch.openSwitch();
 				rl_switch_sound.setVisibility(View.VISIBLE);
 				rl_switch_vibrate.setVisibility(View.VISIBLE);
 				textview1.setVisibility(View.VISIBLE);
 				textview2.setVisibility(View.VISIBLE);
-				PreferenceManager.getInstance().setSettingMsgNotification(true);
+				settingsModel.setSettingMsgNotification(true);
 			}
 			break;
 		case R.id.rl_switch_sound:
 			if (soundSwitch.isSwitchOpen()) {
 			    soundSwitch.closeSwitch();
-			    PreferenceManager.getInstance().setSettingMsgSound(false);
+			    settingsModel.setSettingMsgSound(false);
 			} else {
 			    soundSwitch.openSwitch();
-			    PreferenceManager.getInstance().setSettingMsgSound(true);
+			    settingsModel.setSettingMsgSound(true);
 			}
 			break;
 		case R.id.rl_switch_vibrate:
 			if (vibrateSwitch.isSwitchOpen()) {
 			    vibrateSwitch.closeSwitch();
-			    PreferenceManager.getInstance().setSettingMsgVibrate(false);
+			    settingsModel.setSettingMsgVibrate(false);
 			} else {
 			    vibrateSwitch.openSwitch();
-			    PreferenceManager.getInstance().setSettingMsgVibrate(true);
+			    settingsModel.setSettingMsgVibrate(true);
 			}
 			break;
 		case R.id.rl_switch_speaker:
 			if (speakerSwitch.isSwitchOpen()) {
 			    speakerSwitch.closeSwitch();
-			    PreferenceManager.getInstance().setSettingMsgSpeaker(false);
+			    settingsModel.setSettingMsgSpeaker(false);
 			} else {
 			    speakerSwitch.openSwitch();
-			    PreferenceManager.getInstance().setSettingMsgVibrate(true);
+			    settingsModel.setSettingMsgVibrate(true);
 			}
 			break;
 		case R.id.rl_switch_chatroom_owner_leave:
@@ -270,7 +274,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pd.setMessage(st);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
-		DemoHelper.getInstance().logout(true,new EMCallBack() {
+		DemoHelper.getInstance().logout(false,new EMCallBack() {
 			
 			@Override
 			public void onSuccess() {

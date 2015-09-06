@@ -7,7 +7,7 @@ import com.easemob.chatuidemo.R;
 import com.easemob.easeui.ui.EaseChatFragment;
 
 /**
- * 聊天页面，需要fragment的使用{@link #ChatFragment}
+ * 聊天页面，需要fragment的使用{@link #EaseChatFragment}
  *
  */
 public class ChatActivity extends BaseActivity{

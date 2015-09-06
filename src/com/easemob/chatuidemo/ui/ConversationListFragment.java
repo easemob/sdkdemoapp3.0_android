@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
@@ -51,14 +51,14 @@ public class ConversationListFragment extends EaseConversationListFragment{
                     if(conversation.isGroup()){
                         if(conversation.getType() == EMConversationType.ChatRoom){
                             // it's group chat
-                            intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
+                            intent.putExtra(Constant.CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
                         }else{
-                            intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
+                            intent.putExtra(Constant.CHAT_TYPE, Constant.CHATTYPE_GROUP);
                         }
                         
                     }
                     // it's single chat
-                    intent.putExtra("userId", username);
+                    intent.putExtra(Constant.USER_ID, username);
                     startActivity(intent);
                 }
             }
