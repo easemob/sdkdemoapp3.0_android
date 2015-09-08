@@ -120,8 +120,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		setContentView(R.layout.em_activity_main);
 		initView();
 
-		// MobclickAgent.setDebugMode( true );
-		// --?--
+		//umeng api
 		MobclickAgent.updateOnlineConfig(this);
 
 		if (getIntent().getBooleanExtra("conflict", false) && !isConflictDialogShow) {
@@ -141,14 +140,14 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
 				.commit();
 		
-		init();
+		initListener();
 	}
 
-	private void init() {     
+	private void initListener() {     
 		// setContactListener监听联系人的变化等
 		EMContactManager.getInstance().setContactListener(new MyContactListener());
-		// 注册一个监听连接状态的listener
 		
+		// 注册一个监听连接状态的listener
 		connectionListener = new MyConnectionListener();
 		EMChatManager.getInstance().addConnectionListener(connectionListener);
 		
