@@ -36,7 +36,6 @@ public class InviteMessgeDao {
 	
 		
 	public InviteMessgeDao(Context context){
-	    DemoDBManager.getInstance().onInit(context);
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 package com.easemob.chatuidemo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
 import com.easemob.chatuidemo.db.DemoDBManager;
+import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.parse.UserProfileManager;
 import com.easemob.chatuidemo.receiver.CallReceiver;
@@ -50,7 +52,11 @@ public class DemoHelper {
      * 数据同步listener
      */
     static public interface DataSyncListener {
-        public void onSyncSucess(boolean success);
+        /**
+         * 同步完毕
+         * @param success true：成功同步到数据，false失败
+         */
+        public void onSyncComplete(boolean success);
     }
 
     protected static final String TAG = "DemoHelper";
@@ -131,6 +137,8 @@ public class DemoHelper {
 	public void init(Context context) {
 		if (EaseUI.getInstance().init(context)) {
 		    appContext = context;
+		    //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
+		    EMChat.getInstance().setDebugMode(true);
 		    easeUI = EaseUI.getInstance();
 		    //调用easeui的api设置providers
 		    setEaseUIProviders();
@@ -290,6 +298,30 @@ public class DemoHelper {
 
             @Override
             public void onConnected() {
+                boolean groupSynced = DemoHelper.getInstance().isGroupsSyncedWithServer();
+                boolean contactSynced = DemoHelper.getInstance().isContactsSyncedWithServer();
+                
+                // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
+                if(groupSynced && contactSynced){
+                    new Thread(){
+                        @Override
+                        public void run(){
+                            DemoHelper.getInstance().notifyForRecevingEvents();
+                        }
+                    }.start();
+                }else{
+                    if(!groupSynced){
+                        asyncFetchGroupsFromServer(null);
+                    }
+                    
+                    if(!contactSynced){
+                        asyncFetchContactsFromServer(null);
+                    }
+                    
+                    if(!DemoHelper.getInstance().isBlackListSyncedWithServer()){
+                        asyncFetchBlackListFromServer(null);
+                    }
+                }
             }
         };
         
@@ -647,6 +679,12 @@ public class DemoHelper {
                    
                    isGroupsSyncedWithServer = true;
                    isSyncingGroupsWithServer = false;
+                   
+                   //通知listener同步群组完毕
+                   noitifyGroupSyncListeners(true);
+                   if(isContactsSyncedWithServer()){
+                       notifyForRecevingEvents();
+                   }
                    if(callback != null){
                        callback.onSuccess();
                    }
@@ -654,6 +692,7 @@ public class DemoHelper {
                    PreferenceManager.getInstance().setGroupsSynced(false);
                    isGroupsSyncedWithServer = false;
                    isSyncingGroupsWithServer = false;
+                   noitifyGroupSyncListeners(false);
                    if(callback != null){
                        callback.onError(e.getErrorCode(), e.toString());
                    }
@@ -665,7 +704,7 @@ public class DemoHelper {
 
    public void noitifyGroupSyncListeners(boolean success){
        for (DataSyncListener listener : syncGroupsListeners) {
-           listener.onSyncSucess(success);
+           listener.onSyncComplete(success);
        }
    }
    
@@ -682,16 +721,47 @@ public class DemoHelper {
                List<String> usernames = null;
                try {
                    usernames = EMContactManager.getInstance().getContactUserNames();
-                   
                    // in case that logout already before server returns, we should return immediately
                    if(!EMChat.getInstance().isLoggedIn()){
                        return;
                    }
-                   
+                  
+                   Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
+                   for (String username : usernames) {
+                       EaseUser user = new EaseUser(username);
+                       userlist.put(username, user);
+                   }
+                   // 存入内存
+                   DemoHelper.getInstance().getContactList().putAll(userlist);
+                    // 存入db
+                   UserDao dao = new UserDao(DemoApplication.getInstance().getApplicationContext());
+                   List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
+                   dao.saveContactList(users);
+
                    PreferenceManager.getInstance().setContactSynced(true);
                    
                    isContactsSyncedWithServer = true;
                    isSyncingContactsWithServer = false;
+                   
+                   //通知listeners联系人同步完毕
+                   notifyContactsSyncListener(true);
+                   if(isGroupsSyncedWithServer()){
+                       notifyForRecevingEvents();
+                   }
+                   
+                   
+                   DemoHelper.getInstance().getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
+
+                       @Override
+                       public void onSuccess(List<EaseUser> uList) {
+                           updateContactList(uList);
+                           getUserProfileManager().notifyContactInfosSyncListener(true);
+                       }
+
+                       @Override
+                       public void onError(int error, String errorMsg) {
+                       }
+                   });
                    if(callback != null){
                        callback.onSuccess(usernames);
                    }
@@ -699,6 +769,7 @@ public class DemoHelper {
                    PreferenceManager.getInstance().setContactSynced(false);
                    isContactsSyncedWithServer = false;
                    isSyncingContactsWithServer = false;
+                   noitifyGroupSyncListeners(false);
                    e.printStackTrace();
                    if(callback != null){
                        callback.onError(e.getErrorCode(), e.toString());
@@ -711,7 +782,7 @@ public class DemoHelper {
 
    public void notifyContactsSyncListener(boolean success){
        for (DataSyncListener listener : syncContactsListeners) {
-           listener.onSyncSucess(success);
+           listener.onSyncComplete(success);
        }
    }
    
@@ -727,8 +798,7 @@ public class DemoHelper {
            @Override
            public void run(){
                try {
-                   List<String> usernames = null;
-                   usernames = EMContactManager.getInstance().getBlackListUsernamesFromServer();
+                   List<String> usernames = EMContactManager.getInstance().getBlackListUsernamesFromServer();
                    
                    // in case that logout already before server returns, we should return immediately
                    if(!EMChat.getInstance().isLoggedIn()){
@@ -739,6 +809,9 @@ public class DemoHelper {
                    
                    isBlackListSyncedWithServer = true;
                    isSyncingBlackListWithServer = false;
+                   
+                   EMContactManager.getInstance().saveBlackList(usernames);
+                   notifyBlackListSyncListener(true);
                    if(callback != null){
                        callback.onSuccess(usernames);
                    }
@@ -760,7 +833,7 @@ public class DemoHelper {
 	
 	public void notifyBlackListSyncListener(boolean success){
         for (DataSyncListener listener : syncBlackListListeners) {
-            listener.onSyncSucess(success);
+            listener.onSyncComplete(success);
         }
     }
     

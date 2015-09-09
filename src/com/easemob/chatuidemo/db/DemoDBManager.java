@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.easemob.chatuidemo.domain.RobotUser;
@@ -23,11 +24,14 @@ public class DemoDBManager {
     static private DemoDBManager dbMgr = new DemoDBManager();
     private DbOpenHelper dbHelper;
     
-    void onInit(Context context){
-        dbHelper = DbOpenHelper.getInstance(context);
+    private DemoDBManager(){
+        dbHelper = DbOpenHelper.getInstance(DemoApplication.getInstance().getApplicationContext());
     }
     
     public static synchronized DemoDBManager getInstance(){
+        if(dbMgr == null){
+            dbMgr = new DemoDBManager();
+        }
         return dbMgr;
     }
     

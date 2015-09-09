@@ -99,7 +99,7 @@ public class UserProfileManager {
 
 	public void notifyContactInfosSyncListener(boolean success) {
 		for (DataSyncListener listener : syncContactInfosListeners) {
-			listener.onSyncSucess(success);
+			listener.onSyncComplete(success);
 		}
 	}
 

@@ -59,11 +59,11 @@ public class ContactListFragment extends EaseContactListFragment {
         headerView.findViewById(R.id.robot_item).setOnClickListener(clickListener);
         //添加headerview
         listView.addHeaderView(headerView);
-        //注册上下文菜单
-        registerForContextMenu(listView);
-        
+        //添加正在加载数据提示的loading view
         loadingView = LayoutInflater.from(getActivity()).inflate(R.layout.em_layout_loading_data, null);
         contentContainer.addView(loadingView);
+        //注册上下文菜单
+        registerForContextMenu(listView);
     }
     
     
@@ -230,7 +230,7 @@ public class ContactListFragment extends EaseContactListFragment {
 	
 	class ContactSyncListener implements DataSyncListener{
         @Override
-        public void onSyncSucess(final boolean success) {
+        public void onSyncComplete(final boolean success) {
             EMLog.d(TAG, "on contact list sync success:" + success);
             getActivity().runOnUiThread(new Runnable() {
                 public void run() {
@@ -257,7 +257,7 @@ public class ContactListFragment extends EaseContactListFragment {
     class BlackListSyncListener implements DataSyncListener{
 
         @Override
-        public void onSyncSucess(boolean success) {
+        public void onSyncComplete(boolean success) {
             getActivity().runOnUiThread(new Runnable(){
 
                 @Override
@@ -274,7 +274,7 @@ public class ContactListFragment extends EaseContactListFragment {
     class ContactInfoSyncListener implements DataSyncListener{
 
         @Override
-        public void onSyncSucess(final boolean success) {
+        public void onSyncComplete(final boolean success) {
             EMLog.d(TAG, "on contactinfo list sync success:" + success);
             getActivity().runOnUiThread(new Runnable() {
                 

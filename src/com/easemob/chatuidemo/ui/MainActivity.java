@@ -37,8 +37,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
-import com.easemob.EMConnectionListener;
-import com.easemob.EMError;
 import com.easemob.EMEventListener;
 import com.easemob.EMGroupChangeListener;
 import com.easemob.EMNotifierEvent;
@@ -89,7 +87,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	// 账号被移除
 	private boolean isCurrentAccountRemoved = false;
 	
-	private MyConnectionListener connectionListener = null;
 	private MyGroupChangeListener groupChangeListener = null;
 
 	/**
@@ -123,7 +120,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		//umeng api
 		MobclickAgent.updateOnlineConfig(this);
 
-		if (getIntent().getBooleanExtra("conflict", false) && !isConflictDialogShow) {
+		if (getIntent().getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
 			showConflictDialog();
 		} else if (getIntent().getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
 			showAccountRemovedDialog();
@@ -147,9 +144,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		// setContactListener监听联系人的变化等
 		EMContactManager.getInstance().setContactListener(new MyContactListener());
 		
-		// 注册一个监听连接状态的listener
-		connectionListener = new MyConnectionListener();
-		EMChatManager.getInstance().addConnectionListener(connectionListener);
 		
 		groupChangeListener = new MyGroupChangeListener();
 		// 注册群聊相关的listener
@@ -160,96 +154,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		registerInternalDebugReceiver();
 	}
 
-
-	
-	static void asyncFetchGroupsFromServer(){
-	    DemoHelper.getInstance().asyncFetchGroupsFromServer(new EMCallBack(){
-
-            @Override
-            public void onSuccess() {
-                DemoHelper.getInstance().noitifyGroupSyncListeners(true);
-                
-                if(DemoHelper.getInstance().isContactsSyncedWithServer()){
-                    DemoHelper.getInstance().notifyForRecevingEvents();
-                }
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                DemoHelper.getInstance().noitifyGroupSyncListeners(false);                
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-                
-            }
-            
-        });
-	}
-	
-	static void asyncFetchContactsFromServer(){
-	    DemoHelper.getInstance().asyncFetchContactsFromServer(new EMValueCallBack<List<String>>(){
-
-            @Override
-            public void onSuccess(List<String> usernames) {
-                System.out.println("----------------"+usernames.toString());
-                EMLog.d("roster", "contacts size: " + usernames.size());
-                Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
-                for (String username : usernames) {
-                    EaseUser user = new EaseUser(username);
-                    userlist.put(username, user);
-                }
-                // 存入内存
-                DemoHelper.getInstance().getContactList().putAll(userlist);
-                 // 存入db
-                UserDao dao = new UserDao(DemoApplication.getInstance().getApplicationContext());
-                List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
-                dao.saveContactList(users);
-
-                DemoHelper.getInstance().notifyContactsSyncListener(true);
-                
-                if(DemoHelper.getInstance().isGroupsSyncedWithServer()){
-                    DemoHelper.getInstance().notifyForRecevingEvents();
-                }
-                
-                DemoHelper.getInstance().getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
-
-					@Override
-					public void onSuccess(List<EaseUser> uList) {
-					    DemoHelper.getInstance().updateContactList(uList);
-					    DemoHelper.getInstance().getUserProfileManager().notifyContactInfosSyncListener(true);
-					}
-
-					@Override
-					public void onError(int error, String errorMsg) {
-					}
-				});
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-                DemoHelper.getInstance().notifyContactsSyncListener(false);
-            }
-	        
-	    });
-	}
-	
-	static void asyncFetchBlackListFromServer(){
-	    DemoHelper.getInstance().asyncFetchBlackListFromServer(new EMValueCallBack<List<String>>(){
-
-            @Override
-            public void onSuccess(List<String> value) {
-                EMContactManager.getInstance().saveBlackList(value);
-                DemoHelper.getInstance().notifyBlackListSyncListener(true);
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-                DemoHelper.getInstance().notifyBlackListSyncListener(false);
-            }
-	        
-	    });
-	}
 	
 	/**
 	 * 初始化组件
@@ -359,10 +263,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			conflictBuilder = null;
 		}
 
-		if(connectionListener != null){
-		    EMChatManager.getInstance().removeConnectionListener(connectionListener);
-		}
-		
 		if(groupChangeListener != null){
 		    EMGroupManager.getInstance().removeGroupChangeListener(groupChangeListener);
 		}
@@ -537,59 +437,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 	}
 
-	/**
-	 * 连接监听listener
-	 * 
-	 */
-	public class MyConnectionListener implements EMConnectionListener {
-
-		@Override
-		public void onConnected() {
-            boolean groupSynced = DemoHelper.getInstance().isGroupsSyncedWithServer();
-            boolean contactSynced = DemoHelper.getInstance().isContactsSyncedWithServer();
-            
-            // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
-            if(groupSynced && contactSynced){
-                new Thread(){
-                    @Override
-                    public void run(){
-                        DemoHelper.getInstance().notifyForRecevingEvents();
-                    }
-                }.start();
-            }else{
-                if(!groupSynced){
-                    asyncFetchGroupsFromServer();
-                }
-                
-                if(!contactSynced){
-                    asyncFetchContactsFromServer();
-                }
-                
-                if(!DemoHelper.getInstance().isBlackListSyncedWithServer()){
-                    asyncFetchBlackListFromServer();
-                }
-            }
-            
-		}
-
-		@Override
-		public void onDisconnected(final int error) {
-			runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					if (error == EMError.USER_REMOVED) {
-						// 显示帐号已经被移除
-						showAccountRemovedDialog();
-					} else if (error == EMError.CONNECTION_CONFLICT) {
-						// 显示帐号在其他设备登陆dialog
-						showConflictDialog();
-					}
-				}
-
-			});
-		}
-	}
 
 	/**
 	 * MyGroupChangeListener
@@ -890,9 +737,9 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		if (getIntent().getBooleanExtra("conflict", false) && !isConflictDialogShow) {
+		if (intent.getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
 			showConflictDialog();
-		} else if (getIntent().getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
+		} else if (intent.getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
 			showAccountRemovedDialog();
 		}
 	}

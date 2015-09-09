@@ -38,7 +38,6 @@ public class UserDao {
 	
 	
 	public UserDao(Context context) {
-	    DemoDBManager.getInstance().onInit(context);
 	}
 
 	/**
