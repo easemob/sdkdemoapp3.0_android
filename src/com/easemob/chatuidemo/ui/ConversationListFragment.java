@@ -51,14 +51,14 @@ public class ConversationListFragment extends EaseConversationListFragment{
                     if(conversation.isGroup()){
                         if(conversation.getType() == EMConversationType.ChatRoom){
                             // it's group chat
-                            intent.putExtra(Constant.CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
+                            intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
                         }else{
-                            intent.putExtra(Constant.CHAT_TYPE, Constant.CHATTYPE_GROUP);
+                            intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
                         }
                         
                     }
                     // it's single chat
-                    intent.putExtra(Constant.USER_ID, username);
+                    intent.putExtra(Constant.EXTRA_USER_ID, username);
                     startActivity(intent);
                 }
             }

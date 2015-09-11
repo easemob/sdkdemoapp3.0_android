@@ -4,37 +4,49 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
 import com.easemob.EMEventListener;
+import com.easemob.EMGroupChangeListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMContactManager;
+import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
 import com.easemob.chatuidemo.db.DemoDBManager;
+import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.RobotUser;
+import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.easemob.chatuidemo.parse.UserProfileManager;
 import com.easemob.chatuidemo.receiver.CallReceiver;
 import com.easemob.chatuidemo.ui.ChatActivity;
+import com.easemob.chatuidemo.ui.GroupsActivity;
 import com.easemob.chatuidemo.ui.MainActivity;
 import com.easemob.chatuidemo.ui.VideoCallActivity;
 import com.easemob.chatuidemo.ui.VoiceCallActivity;
+import com.easemob.chatuidemo.ui.MainActivity.MyContactListener;
 import com.easemob.chatuidemo.utils.PreferenceManager;
 import com.easemob.easeui.R;
 import com.easemob.easeui.controller.EaseUI;
@@ -118,6 +130,12 @@ public class DemoHelper {
 
     private DemoSettingsModel settingsModel;
 
+    private InviteMessgeDao inviteMessgeDao;
+
+    private UserDao userDao;
+
+    private LocalBroadcastManager broadcastManager;
+
 	private DemoHelper() {
 	}
 
@@ -146,11 +164,17 @@ public class DemoHelper {
 			PreferenceManager.init(context);
 			//初始化用户管理类
 			getUserProfileManager().init(context);
-			//设置全局监听
-			setListeners();
 			
+			//设置全局监听
+			setGlobalListeners();
+			init();
 		}
 	}
+
+    private void init() {
+        broadcastManager = LocalBroadcastManager.getInstance(appContext);
+        initDbDao();
+    }
 
     protected void setEaseUIProviders() {
         //需要easeui库显示用户头像和昵称设置此provider
@@ -276,7 +300,7 @@ public class DemoHelper {
         });
     }
     
-    protected void setListeners(){
+    protected void setGlobalListeners(){
         syncGroupsListeners = new ArrayList<DataSyncListener>();
         syncContactsListeners = new ArrayList<DataSyncListener>();
         syncBlackListListeners = new ArrayList<DataSyncListener>();
@@ -335,11 +359,216 @@ public class DemoHelper {
         appContext.registerReceiver(callReceiver, callFilter);    
         //注册连接监听
         EMChatManager.getInstance().addConnectionListener(connectionListener);       
+        //注册群组变动监听
+        EMGroupManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
+        //注册联系人变动监听
+        EMContactManager.getInstance().setContactListener(new MyContactListener());
         //注册消息事件监听
         initEventListener();
         
     }
     
+    private void initDbDao() {
+        inviteMessgeDao = new InviteMessgeDao(appContext);
+        userDao = new UserDao(appContext);
+    }
+    
+    /**
+     * 群组变动监听
+     */
+    class MyGroupChangeListener implements EMGroupChangeListener {
+
+        @Override
+        public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
+            
+            boolean hasGroup = false;
+            for (EMGroup group : EMGroupManager.getInstance().getAllGroups()) {
+                if (group.getGroupId().equals(groupId)) {
+                    hasGroup = true;
+                    break;
+                }
+            }
+            if (!hasGroup)
+                return;
+
+            // 被邀请
+            String st3 = appContext.getString(R.string.Invite_you_to_join_a_group_chat);
+            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
+            msg.setChatType(ChatType.GroupChat);
+            msg.setFrom(inviter);
+            msg.setTo(groupId);
+            msg.setMsgId(UUID.randomUUID().toString());
+            msg.addBody(new TextMessageBody(inviter + " " +st3));
+            // 保存邀请消息
+            EMChatManager.getInstance().saveMessage(msg);
+            // 提醒新消息
+            getNotifier().viberateAndPlayTone(msg);
+            //发送local广播
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onInvitationAccpted(String groupId, String inviter, String reason) {
+        }
+        @Override
+        public void onInvitationDeclined(String groupId, String invitee, String reason) {
+        }
+
+        @Override
+        public void onUserRemoved(String groupId, String groupName) {
+            //TODO 提示用户被T了，demo省略此步骤
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onGroupDestroy(String groupId, String groupName) {
+            // 群被解散
+            //TODO 提示用户群被解散,demo省略
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
+            
+            // 用户申请加入群聊
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(applyer);
+            msg.setTime(System.currentTimeMillis());
+            msg.setGroupId(groupId);
+            msg.setGroupName(groupName);
+            msg.setReason(reason);
+            Log.d(TAG, applyer + " 申请加入群聊：" + groupName);
+            msg.setStatus(InviteMesageStatus.BEAPPLYED);
+            notifyNewIviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onApplicationAccept(String groupId, String groupName, String accepter) {
+
+            String st4 = appContext.getString(R.string.Agreed_to_your_group_chat_application);
+            // 加群申请被同意
+            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
+            msg.setChatType(ChatType.GroupChat);
+            msg.setFrom(accepter);
+            msg.setTo(groupId);
+            msg.setMsgId(UUID.randomUUID().toString());
+            msg.addBody(new TextMessageBody(accepter + " " +st4));
+            // 保存同意消息
+            EMChatManager.getInstance().saveMessage(msg);
+            // 提醒新消息
+            getNotifier().viberateAndPlayTone(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
+            // 加群申请被拒绝，demo未实现
+        }
+    }
+    
+    /***
+     * 好友变化listener
+     * 
+     */
+    public class MyContactListener implements EMContactListener {
+
+        @Override
+        public void onContactAdded(List<String> usernameList) {         
+            // 保存增加的联系人
+            Map<String, EaseUser> localUsers = getContactList();
+            Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
+            for (String username : usernameList) {
+                EaseUser user = new EaseUser(username);
+                // 添加好友时可能会回调added方法两次
+                if (!localUsers.containsKey(username)) {
+                    userDao.saveContact(user);
+                }
+                toAddUsers.put(username, user);
+            }
+            localUsers.putAll(toAddUsers);
+            //发送好友变动广播
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactDeleted(final List<String> usernameList) {
+            // 被删除
+            Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
+            for (String username : usernameList) {
+                localUsers.remove(username);
+                userDao.deleteContact(username);
+                inviteMessgeDao.deleteMessage(username);
+            }
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactInvited(String username, String reason) {
+            // 接到邀请的消息，如果不处理(同意或拒绝)，掉线后，服务器会自动再发过来，所以客户端不需要重复提醒
+            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+
+            for (InviteMessage inviteMessage : msgs) {
+                if (inviteMessage.getGroupId() == null && inviteMessage.getFrom().equals(username)) {
+                    inviteMessgeDao.deleteMessage(username);
+                }
+            }
+            // 自己封装的javabean
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(username);
+            msg.setTime(System.currentTimeMillis());
+            msg.setReason(reason);
+            Log.d(TAG, username + "请求加你为好友,reason: " + reason);
+            // 设置相应status
+            msg.setStatus(InviteMesageStatus.BEINVITEED);
+            notifyNewIviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactAgreed(String username) {
+            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+            for (InviteMessage inviteMessage : msgs) {
+                if (inviteMessage.getFrom().equals(username)) {
+                    return;
+                }
+            }
+            // 自己封装的javabean
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(username);
+            msg.setTime(System.currentTimeMillis());
+            Log.d(TAG, username + "同意了你的好友请求");
+            msg.setStatus(InviteMesageStatus.BEAGREED);
+            notifyNewIviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactRefused(String username) {
+            // 参考同意，被邀请实现此功能,demo未实现
+            Log.d(username, username + "拒绝了你的好友请求");
+        }
+
+    }
+    
+    /**
+     * 保存并提示消息的邀请消息
+     * @param msg
+     */
+    private void notifyNewIviteMessage(InviteMessage msg){
+        if(inviteMessgeDao == null){
+            inviteMessgeDao = new InviteMessgeDao(appContext);
+        }
+        inviteMessgeDao.saveMessage(msg);
+        //保存未读数，这里没有精确计算
+        inviteMessgeDao.saveUnreadMessageCount(1);
+        // 提示有新消息
+        getNotifier().viberateAndPlayTone(null);
+    }
+    
+    /**
+     * 账号在别的设备登录
+     */
     protected void onConnectionConflict(){
         Intent intent = new Intent(appContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -347,6 +576,9 @@ public class DemoHelper {
         appContext.startActivity(intent);
     }
     
+    /**
+     * 账号被移除
+     */
     protected void onCurrentAccountRemoved(){
         Intent intent = new Intent(appContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

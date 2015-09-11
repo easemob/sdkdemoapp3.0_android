@@ -274,6 +274,10 @@ public class DemoDBManager {
         return msgs;
     }
     
+    /**
+     * 删除要求消息
+     * @param from
+     */
     synchronized public void deleteMessage(String from){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db.isOpen()){

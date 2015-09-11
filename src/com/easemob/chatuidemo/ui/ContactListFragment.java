@@ -69,6 +69,15 @@ public class ContactListFragment extends EaseContactListFragment {
     
     @Override
     protected void setUpView() {
+        titleBar.setRightImageResource(R.drawable.ease_add);
+        titleBar.setRightLayoutClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), AddContactActivity.class));
+            }
+        });
+        
         //设置联系人数据
         setContactsMap(DemoHelper.getInstance().getContactList());
         super.setUpView();
