@@ -69,7 +69,7 @@ public class ContactListFragment extends EaseContactListFragment {
     
     @Override
     protected void setUpView() {
-        titleBar.setRightImageResource(R.drawable.ease_add);
+        titleBar.setRightImageResource(R.drawable.em_add);
         titleBar.setRightLayoutClickListener(new OnClickListener() {
             
             @Override
