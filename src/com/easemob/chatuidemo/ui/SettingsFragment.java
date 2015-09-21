@@ -32,7 +32,7 @@ import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.DemoSettingsModel;
+import com.easemob.chatuidemo.DemoModel;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.PreferenceManager;
 import com.easemob.easeui.widget.EaseSwitchButton;
@@ -93,7 +93,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton vibrateSwitch;
     private EaseSwitchButton speakerSwitch;
     private EaseSwitchButton ownerLeaveSwitch;
-    private DemoSettingsModel settingsModel;
+    private DemoModel settingsModel;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -133,7 +133,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		llDiagnose=(LinearLayout) getView().findViewById(R.id.ll_diagnose);
 		pushNick=(LinearLayout) getView().findViewById(R.id.ll_set_push_nick);
 		
-		settingsModel = DemoHelper.getInstance().getSettingsModel();
+		settingsModel = DemoHelper.getInstance().getModel();
 		
 		blacklistContainer.setOnClickListener(this);
 		userProfileContainer.setOnClickListener(this);

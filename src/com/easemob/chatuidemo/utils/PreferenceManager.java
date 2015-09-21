@@ -22,7 +22,7 @@ public class PreferenceManager {
 	 */
 	public static final String PREFERENCE_NAME = "saveInfo";
 	private static SharedPreferences mSharedPreferences;
-	private static PreferenceManager mPreferenceUtils;
+	private static PreferenceManager mPreferencemManager;
 	private static SharedPreferences.Editor editor;
 
 	private String SHARED_KEY_SETTING_NOTIFICATION = "shared_key_setting_notification";
@@ -45,8 +45,8 @@ public class PreferenceManager {
 	}
 
 	public static synchronized void init(Context cxt){
-	    if(mPreferenceUtils == null){
-	        mPreferenceUtils = new PreferenceManager(cxt);
+	    if(mPreferencemManager == null){
+	        mPreferencemManager = new PreferenceManager(cxt);
 	    }
 	}
 
@@ -57,11 +57,11 @@ public class PreferenceManager {
 	 * @return
 	 */
 	public synchronized static PreferenceManager getInstance() {
-		if (mPreferenceUtils == null) {
+		if (mPreferencemManager == null) {
 			throw new RuntimeException("please init first!");
 		}
 		
-		return mPreferenceUtils;
+		return mPreferencemManager;
 	}
 	
 	public void setSettingMsgNotification(boolean paramBoolean) {

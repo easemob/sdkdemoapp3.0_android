@@ -7,16 +7,60 @@ import java.util.Map;
 import android.content.Context;
 
 import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.utils.PreferenceManager;
+import com.easemob.easeui.domain.EaseUser;
 
-public class DemoSettingsModel {
+public class DemoModel {
     UserDao dao = null;
     protected Context context = null;
     protected Map<Key,Object> valueCache = new HashMap<Key,Object>();
     
-    public DemoSettingsModel(Context ctx){
+    public DemoModel(Context ctx){
         context = ctx;
-//        PreferenceManager.init(context);
+        PreferenceManager.init(context);
+    }
+    
+    public boolean saveContactList(List<EaseUser> contactList) {
+        UserDao dao = new UserDao(context);
+        dao.saveContactList(contactList);
+        return true;
+    }
+
+    public Map<String, EaseUser> getContactList() {
+        UserDao dao = new UserDao(context);
+        return dao.getContactList();
+    }
+    
+    public void saveContact(EaseUser user){
+        UserDao dao = new UserDao(context);
+        dao.saveContact(user);
+    }
+    
+    /**
+     * 设置当前用户的环信id
+     * @param username
+     */
+    public void setCurrentUserName(String username){
+        PreferenceManager.getInstance().setCurrentUserName(username);
+    }
+    
+    /**
+     * 获取当前用户的环信id
+     */
+    public String getCurrentUsernName(){
+        return PreferenceManager.getInstance().getCurrentUsername();
+    }
+    
+    public Map<String, RobotUser> getRobotList(){
+        UserDao dao = new UserDao(context);
+        return dao.getRobotUser();
+    }
+
+    public boolean saveRobotList(List<RobotUser> robotList){
+        UserDao dao = new UserDao(context);
+        dao.saveRobotUser(robotList);
+        return true;
     }
     
     public void setSettingMsgNotification(boolean paramBoolean) {
@@ -130,6 +174,30 @@ public class DemoSettingsModel {
         }
        
         return (List<String>) val;
+    }
+    
+    public void setGroupsSynced(boolean synced){
+        PreferenceManager.getInstance().setGroupsSynced(synced);
+    }
+    
+    public boolean isGroupsSynced(){
+        return PreferenceManager.getInstance().isGroupsSynced();
+    }
+    
+    public void setContactSynced(boolean synced){
+        PreferenceManager.getInstance().setContactSynced(synced);
+    }
+    
+    public boolean isContactSynced(){
+        return PreferenceManager.getInstance().isContactSynced();
+    }
+    
+    public void setBlacklistSynced(boolean synced){
+        PreferenceManager.getInstance().setBlacklistSynced(synced);
+    }
+    
+    public boolean isBacklistSynced(){
+        return PreferenceManager.getInstance().isBacklistSynced();
     }
    
     

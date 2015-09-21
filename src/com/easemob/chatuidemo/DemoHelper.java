@@ -30,23 +30,21 @@ import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
+import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.db.DemoDBManager;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
-import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
+import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.parse.UserProfileManager;
 import com.easemob.chatuidemo.receiver.CallReceiver;
 import com.easemob.chatuidemo.ui.ChatActivity;
-import com.easemob.chatuidemo.ui.GroupsActivity;
 import com.easemob.chatuidemo.ui.MainActivity;
 import com.easemob.chatuidemo.ui.VideoCallActivity;
 import com.easemob.chatuidemo.ui.VoiceCallActivity;
-import com.easemob.chatuidemo.ui.MainActivity.MyContactListener;
 import com.easemob.chatuidemo.utils.PreferenceManager;
 import com.easemob.easeui.R;
 import com.easemob.easeui.controller.EaseUI;
@@ -88,31 +86,26 @@ public class DemoHelper {
 
 	private static DemoHelper instance = null;
 	
+	private DemoModel demoModel = null;
+	
 	/**
      * HuanXin sync groups status listener
      */
     private List<DataSyncListener> syncGroupsListeners;
-
     /**
      * HuanXin sync contacts status listener
      */
     private List<DataSyncListener> syncContactsListeners;
-
     /**
      * HuanXin sync blacklist status listener
      */
     private List<DataSyncListener> syncBlackListListeners;
 
     private boolean isSyncingGroupsWithServer = false;
-
     private boolean isSyncingContactsWithServer = false;
-
     private boolean isSyncingBlackListWithServer = false;
-    
     private boolean isGroupsSyncedWithServer = false;
-
     private boolean isContactsSyncedWithServer = false;
-
     private boolean isBlackListSyncedWithServer = false;
     
     private boolean alreadyNotified = false;
@@ -128,10 +121,7 @@ public class DemoHelper {
 
     private EMConnectionListener connectionListener;
 
-    private DemoSettingsModel settingsModel;
-
     private InviteMessgeDao inviteMessgeDao;
-
     private UserDao userDao;
 
     private LocalBroadcastManager broadcastManager;
@@ -157,7 +147,9 @@ public class DemoHelper {
 		    appContext = context;
 		    //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
 		    EMChat.getInstance().setDebugMode(true);
+		    //get easeui instance
 		    easeUI = EaseUI.getInstance();
+		    demoModel = new DemoModel(context);
 		    //调用easeui的api设置providers
 		    setEaseUIProviders();
 			//初始化PreferenceManager
@@ -167,14 +159,11 @@ public class DemoHelper {
 			
 			//设置全局监听
 			setGlobalListeners();
-			init();
+			broadcastManager = LocalBroadcastManager.getInstance(appContext);
+	        initDbDao();
 		}
 	}
 
-    private void init() {
-        broadcastManager = LocalBroadcastManager.getInstance(appContext);
-        initDbDao();
-    }
 
     protected void setEaseUIProviders() {
         //需要easeui库显示用户头像和昵称设置此provider
@@ -186,31 +175,30 @@ public class DemoHelper {
             }
         });
         
-        settingsModel = new DemoSettingsModel(appContext);
         //不设置，则使用easeui默认的
         easeUI.setSettingsProvider(new EaseSettingsProvider() {
             
             @Override
             public boolean isSpeakerOpened() {
-                return settingsModel.getSettingMsgSpeaker();
+                return demoModel.getSettingMsgSpeaker();
             }
             
             @Override
             public boolean isMsgVibrateAllowed(EMMessage message) {
-                return settingsModel.getSettingMsgVibrate();
+                return demoModel.getSettingMsgVibrate();
             }
             
             @Override
             public boolean isMsgSoundAllowed(EMMessage message) {
-                return settingsModel.getSettingMsgSound();
+                return demoModel.getSettingMsgSound();
             }
             
             @Override
             public boolean isMsgNotifyAllowed(EMMessage message) {
                 if(message == null){
-                    return settingsModel.getSettingMsgNotification();
+                    return demoModel.getSettingMsgNotification();
                 }
-                if(!settingsModel.getSettingMsgNotification()){
+                if(!demoModel.getSettingMsgNotification()){
                     return false;
                 }else{
                     //如果允许新消息提示
@@ -220,10 +208,10 @@ public class DemoHelper {
                     // 获取设置的不提示新消息的用户或者群组ids
                     if (message.getChatType() == ChatType.Chat) {
                         chatUsename = message.getFrom();
-                        notNotifyIds = settingsModel.getDisabledIds();
+                        notNotifyIds = demoModel.getDisabledIds();
                     } else {
                         chatUsename = message.getTo();
-                        notNotifyIds = settingsModel.getDisabledGroups();
+                        notNotifyIds = demoModel.getDisabledGroups();
                     }
 
                     if (notNotifyIds == null || !notNotifyIds.contains(chatUsename)) {
@@ -300,14 +288,17 @@ public class DemoHelper {
         });
     }
     
+    /**
+     * 设置全局事件监听
+     */
     protected void setGlobalListeners(){
         syncGroupsListeners = new ArrayList<DataSyncListener>();
         syncContactsListeners = new ArrayList<DataSyncListener>();
         syncBlackListListeners = new ArrayList<DataSyncListener>();
         
-        isGroupsSyncedWithServer = PreferenceManager.getInstance().isGroupsSynced();
-        isContactsSyncedWithServer = PreferenceManager.getInstance().isContactSynced();
-        isBlackListSyncedWithServer = PreferenceManager.getInstance().isBacklistSynced();
+        isGroupsSyncedWithServer = demoModel.isGroupsSynced();
+        isContactsSyncedWithServer = demoModel.isContactSynced();
+        isBlackListSyncedWithServer = demoModel.isBacklistSynced();
         
         // create the global connection listener
         connectionListener = new EMConnectionListener() {
@@ -322,11 +313,9 @@ public class DemoHelper {
 
             @Override
             public void onConnected() {
-                boolean groupSynced = DemoHelper.getInstance().isGroupsSyncedWithServer();
-                boolean contactSynced = DemoHelper.getInstance().isContactsSyncedWithServer();
                 
                 // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
-                if(groupSynced && contactSynced){
+                if(isGroupsSyncedWithServer && isContactsSyncedWithServer){
                     new Thread(){
                         @Override
                         public void run(){
@@ -334,11 +323,11 @@ public class DemoHelper {
                         }
                     }.start();
                 }else{
-                    if(!groupSynced){
+                    if(!isGroupsSyncedWithServer){
                         asyncFetchGroupsFromServer(null);
                     }
                     
-                    if(!contactSynced){
+                    if(!isContactsSyncedWithServer){
                         asyncFetchContactsFromServer(null);
                     }
                     
@@ -741,6 +730,10 @@ public class DemoHelper {
 	    return easeUI.getNotifier();
 	}
 	
+	public DemoModel getModel(){
+        return (DemoModel) demoModel;
+    }
+	
 	/**
 	 * 设置好友user list到内存中
 	 * 
@@ -755,7 +748,7 @@ public class DemoHelper {
      */
     public void saveContact(EaseUser user){
     	contactList.put(user.getUsername(), user);
-    	DemoDBManager.getInstance().saveContact(user);
+    	demoModel.saveContact(user);
     }
     
     /**
@@ -765,7 +758,7 @@ public class DemoHelper {
      */
     public Map<String, EaseUser> getContactList() {
         if (isLoggedIn() && contactList == null) {
-            contactList = DemoDBManager.getInstance().getContactList();
+            contactList = demoModel.getContactList();
         }
         
         return contactList;
@@ -777,7 +770,7 @@ public class DemoHelper {
      */
     public void setCurrentUserName(String username){
     	this.username = username;
-    	PreferenceManager.getInstance().setCurrentUserName(username);
+    	demoModel.setCurrentUserName(username);
     }
     
     /**
@@ -785,7 +778,7 @@ public class DemoHelper {
      */
     public String getCurrentUsernName(){
     	if(username == null){
-    		username = PreferenceManager.getInstance().getCurrentUsername();
+    		username = demoModel.getCurrentUsernName();
     	}
     	return username;
     }
@@ -795,7 +788,7 @@ public class DemoHelper {
 	}
 	public Map<String, RobotUser> getRobotList() {
 		if (isLoggedIn() && robotList == null) {
-			robotList = DemoDBManager.getInstance().getRobotList();
+			robotList = demoModel.getRobotList();
 		}
 		return robotList;
 	}
@@ -811,7 +804,7 @@ public class DemoHelper {
          }
          ArrayList<EaseUser> mList = new ArrayList<EaseUser>();
          mList.addAll(contactList.values());
-         DemoDBManager.getInstance().saveContactList(mList);
+         demoModel.saveContactList(mList);
     }
 
 	public UserProfileManager getUserProfileManager() {
@@ -907,7 +900,7 @@ public class DemoHelper {
                        return;
                    }
                    
-                   PreferenceManager.getInstance().setGroupsSynced(true);
+                   demoModel.setGroupsSynced(true);
                    
                    isGroupsSyncedWithServer = true;
                    isSyncingGroupsWithServer = false;
@@ -921,7 +914,7 @@ public class DemoHelper {
                        callback.onSuccess();
                    }
                } catch (EaseMobException e) {
-                   PreferenceManager.getInstance().setGroupsSynced(false);
+                   demoModel.setGroupsSynced(false);
                    isGroupsSyncedWithServer = false;
                    isSyncingGroupsWithServer = false;
                    noitifyGroupSyncListeners(false);
@@ -964,13 +957,13 @@ public class DemoHelper {
                        userlist.put(username, user);
                    }
                    // 存入内存
-                   DemoHelper.getInstance().getContactList().putAll(userlist);
+                   getContactList().putAll(userlist);
                     // 存入db
                    UserDao dao = new UserDao(DemoApplication.getInstance().getApplicationContext());
                    List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
                    dao.saveContactList(users);
 
-                   PreferenceManager.getInstance().setContactSynced(true);
+                   demoModel.setContactSynced(true);
                    
                    isContactsSyncedWithServer = true;
                    isSyncingContactsWithServer = false;
@@ -982,7 +975,7 @@ public class DemoHelper {
                    }
                    
                    
-                   DemoHelper.getInstance().getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
+                   getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
 
                        @Override
                        public void onSuccess(List<EaseUser> uList) {
@@ -998,7 +991,7 @@ public class DemoHelper {
                        callback.onSuccess(usernames);
                    }
                } catch (EaseMobException e) {
-                   PreferenceManager.getInstance().setContactSynced(false);
+                   demoModel.setContactSynced(false);
                    isContactsSyncedWithServer = false;
                    isSyncingContactsWithServer = false;
                    noitifyGroupSyncListeners(false);
@@ -1037,7 +1030,7 @@ public class DemoHelper {
                        return;
                    }
                    
-                   PreferenceManager.getInstance().setBlacklistSynced(true);
+                   demoModel.setBlacklistSynced(true);
                    
                    isBlackListSyncedWithServer = true;
                    isSyncingBlackListWithServer = false;
@@ -1048,7 +1041,7 @@ public class DemoHelper {
                        callback.onSuccess(usernames);
                    }
                } catch (EaseMobException e) {
-                   PreferenceManager.getInstance().setBlacklistSynced(false);
+                   demoModel.setBlacklistSynced(false);
                    
                    isBlackListSyncedWithServer = false;
                    isSyncingBlackListWithServer = true;
@@ -1108,9 +1101,9 @@ public class DemoHelper {
         isSyncingContactsWithServer = false;
         isSyncingBlackListWithServer = false;
         
-        PreferenceManager.getInstance().setGroupsSynced(false);
-        PreferenceManager.getInstance().setContactSynced(false);
-        PreferenceManager.getInstance().setBlacklistSynced(false);
+        demoModel.setGroupsSynced(false);
+        demoModel.setContactSynced(false);
+        demoModel.setBlacklistSynced(false);
         
         isGroupsSyncedWithServer = false;
         isContactsSyncedWithServer = false;
@@ -1130,10 +1123,6 @@ public class DemoHelper {
 
     public void popActivity(Activity activity) {
         easeUI.popActivity(activity);
-    }
-    
-    public DemoSettingsModel getSettingsModel(){
-        return settingsModel;
     }
 
 }
