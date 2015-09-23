@@ -749,13 +749,11 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 							// update block
 							EMLog.d(TAG, "group msg is blocked:" + group.getMsgBlocked());
-//							if (group.isMsgBlocked()) {
-//								iv_switch_block_groupmsg.setVisibility(View.VISIBLE);
-//								iv_switch_unblock_groupmsg.setVisibility(View.INVISIBLE);
-//							} else {
-//								iv_switch_block_groupmsg.setVisibility(View.INVISIBLE);
-//								iv_switch_unblock_groupmsg.setVisibility(View.VISIBLE);
-//							}
+							if (group.isMsgBlocked()) {
+								switchButton.openSwitch();
+							} else {
+							    switchButton.closeSwitch();
+							}
 						}
 					});
 

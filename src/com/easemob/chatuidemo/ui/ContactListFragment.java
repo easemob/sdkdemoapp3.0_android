@@ -30,8 +30,10 @@ import com.easemob.chat.EMContactManager;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.DemoHelper.DataSyncListener;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.db.DemoDBManager;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.widget.ContactItemView;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.ui.EaseContactListFragment;
 import com.easemob.util.EMLog;
@@ -47,13 +49,16 @@ public class ContactListFragment extends EaseContactListFragment {
     private BlackListSyncListener blackListSyncListener;
     private ContactInfoSyncListener contactInfoSyncListener;
     private View loadingView;
+    private ContactItemView applicationItem;
+    private InviteMessgeDao inviteMessgeDao;
 
     @Override
     protected void initView() {
         super.initView();
         View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.em_contacts_header, null);
         HeaderItemClickListener clickListener = new HeaderItemClickListener();
-        headerView.findViewById(R.id.application_item).setOnClickListener(clickListener);
+        applicationItem = (ContactItemView) headerView.findViewById(R.id.application_item);
+        applicationItem.setOnClickListener(clickListener);
         headerView.findViewById(R.id.group_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.chat_room_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.robot_item).setOnClickListener(clickListener);
@@ -64,6 +69,19 @@ public class ContactListFragment extends EaseContactListFragment {
         contentContainer.addView(loadingView);
         //注册上下文菜单
         registerForContextMenu(listView);
+    }
+    
+    @Override
+    public void refresh() {
+        super.refresh();
+        if(inviteMessgeDao == null){
+            inviteMessgeDao = new InviteMessgeDao(getActivity());
+        }
+        if(inviteMessgeDao.getUnreadMessagesCount() > 0){
+            applicationItem.showUnreadMsgView();
+        }else{
+            applicationItem.hideUnreadMsgView();
+        }
     }
     
     
@@ -164,6 +182,7 @@ public class ContactListFragment extends EaseContactListFragment {
         }
 	    
 	}
+	
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {

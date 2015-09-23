@@ -126,7 +126,10 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
 				.commit();
 		
+		// 注册群组和联系人监听
+        DemoHelper.getInstance().registerGroupAndContactListener();
 		registerBroadcastReceiver();
+		
 		
 		//内部测试方法，请忽略
         registerInternalDebugReceiver();
@@ -320,7 +323,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 */
 	public int getUnreadAddressCountTotal() {
 		int unreadAddressCountTotal = 0;
-		inviteMessgeDao.getUnreadMessagesCount();
+		unreadAddressCountTotal = inviteMessgeDao.getUnreadMessagesCount();
 		return unreadAddressCountTotal;
 	}
 

@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@drawable/em_chat_error_item_bg"
-    android:clickable="true"
-    android:orientation="vertical" >
-    
-    <ImageView 
-        android:layout_marginLeft="9dp"
+    android:gravity="center_vertical"
+    android:clickable="true" >
+
+    <ImageView
         android:id="@+id/iv_neterror"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/em_login_error_icon"
-        android:layout_centerVertical="true"
-        />
+        android:layout_marginLeft="9dp"
+        android:src="@drawable/em_login_error_icon" />
+
     <TextView
-        android:id="@+id/tv_connect_errormsg" 
-        android:layout_marginLeft="4dp"
+        android:id="@+id/tv_connect_errormsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
         android:text="@string/unable_to_connect"
-        android:textColor="#000"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/iv_neterror"
-        />
-    
-   <!--  <TextView 
+        android:textColor="#000" />
+
+    <!--
+         <TextView 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="查看详情"
@@ -33,7 +30,7 @@
         android:layout_alignParentRight="true"
         android:background="@drawable/em_ic_preference_single_normal"
         android:textColor="#000"
-        /> -->
-    
+        />
+    -->
 
-</RelativeLayout>
+</LinearLayout>

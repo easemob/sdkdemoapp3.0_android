@@ -28,7 +28,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
     @Override
     protected void initView() {
         super.initView();
-        LayoutInflater.from(getActivity()).inflate(R.layout.em_chat_neterror_item, errorItemContainer);
+        View errorView = LayoutInflater.from(getActivity()).inflate(R.layout.em_chat_neterror_item, errorItemContainer);
         errorText = (TextView) getView().findViewById(R.id.tv_connect_errormsg);
     }
     

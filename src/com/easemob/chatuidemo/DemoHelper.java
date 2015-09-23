@@ -126,6 +126,8 @@ public class DemoHelper {
 
     private LocalBroadcastManager broadcastManager;
 
+    private boolean isGroupAndContactListenerRegisted;
+
 	private DemoHelper() {
 	}
 
@@ -149,9 +151,9 @@ public class DemoHelper {
 		    EMChat.getInstance().setDebugMode(true);
 		    //get easeui instance
 		    easeUI = EaseUI.getInstance();
-		    demoModel = new DemoModel(context);
 		    //调用easeui的api设置providers
 		    setEaseUIProviders();
+		    demoModel = new DemoModel(context);
 			//初始化PreferenceManager
 			PreferenceManager.init(context);
 			//初始化用户管理类
@@ -348,18 +350,30 @@ public class DemoHelper {
         appContext.registerReceiver(callReceiver, callFilter);    
         //注册连接监听
         EMChatManager.getInstance().addConnectionListener(connectionListener);       
-        //注册群组变动监听
-        EMGroupManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
-        //注册联系人变动监听
-        EMContactManager.getInstance().setContactListener(new MyContactListener());
+        //注册群组和联系人监听
+        registerGroupAndContactListener();
         //注册消息事件监听
-        initEventListener();
+        registerEventListener();
         
     }
     
     private void initDbDao() {
         inviteMessgeDao = new InviteMessgeDao(appContext);
         userDao = new UserDao(appContext);
+    }
+    
+    /**
+     * 注册群组和联系人监听，由于logout的时候会被sdk清除掉，再次登录的时候需要再注册一下
+     */
+    public void registerGroupAndContactListener(){
+        if(!isGroupAndContactListenerRegisted){
+            //注册群组变动监听
+            EMGroupManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
+            //注册联系人变动监听
+            EMContactManager.getInstance().setContactListener(new MyContactListener());
+            isGroupAndContactListenerRegisted = true;
+        }
+        
     }
     
     /**
@@ -595,7 +609,7 @@ public class DemoHelper {
      * 因为可能会有UI页面先处理到这个消息，所以一般如果UI页面已经处理，这里就不需要再次处理
      * activityList.size() <= 0 意味着所有页面都已经在后台运行，或者已经离开Activity Stack
      */
-    protected void initEventListener() {
+    protected void registerEventListener() {
         eventListener = new EMEventListener() {
             private BroadcastReceiver broadCastReceiver = null;
             
@@ -957,6 +971,7 @@ public class DemoHelper {
                        userlist.put(username, user);
                    }
                    // 存入内存
+                   getContactList().clear();
                    getContactList().putAll(userlist);
                     // 存入db
                    UserDao dao = new UserDao(DemoApplication.getInstance().getApplicationContext());
@@ -1110,6 +1125,7 @@ public class DemoHelper {
         isBlackListSyncedWithServer = false;
         
         alreadyNotified = false;
+        isGroupAndContactListenerRegisted = false;
         
         setContactList(null);
         setRobotList(null);
