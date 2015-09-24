@@ -25,6 +25,7 @@ import com.easemob.EMValueCallBack;
 import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMGroup;
@@ -154,6 +155,8 @@ public class DemoHelper {
 		    //调用easeui的api设置providers
 		    setEaseUIProviders();
 		    demoModel = new DemoModel(context);
+		    //设置chat options
+		    setChatoptions();
 			//初始化PreferenceManager
 			PreferenceManager.init(context);
 			//初始化用户管理类
@@ -166,6 +169,11 @@ public class DemoHelper {
 		}
 	}
 
+	private void setChatoptions(){
+	    //easeui库默认设置了一些options，可以覆盖
+	    EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+	    options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());  
+	}
 
     protected void setEaseUIProviders() {
         //需要easeui库显示用户头像和昵称设置此provider
@@ -333,7 +341,7 @@ public class DemoHelper {
                         asyncFetchContactsFromServer(null);
                     }
                     
-                    if(!DemoHelper.getInstance().isBlackListSyncedWithServer()){
+                    if(!isBlackListSyncedWithServer){
                         asyncFetchBlackListFromServer(null);
                     }
                 }
@@ -893,7 +901,7 @@ public class DemoHelper {
 	/**
     * 同步操作，从服务器获取群组列表
     * 该方法会记录更新状态，可以通过isSyncingGroupsFromServer获取是否正在更新
-    * 和HXPreferenceUtils.getInstance().getSettingSyncGroupsFinished()获取是否更新已经完成
+    * 和isGroupsSyncedWithServer获取是否更新已经完成
     * @throws EaseMobException
     */
    public synchronized void asyncFetchGroupsFromServer(final EMCallBack callback){
@@ -974,11 +982,12 @@ public class DemoHelper {
                    getContactList().clear();
                    getContactList().putAll(userlist);
                     // 存入db
-                   UserDao dao = new UserDao(DemoApplication.getInstance().getApplicationContext());
+                   UserDao dao = new UserDao(appContext);
                    List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
                    dao.saveContactList(users);
 
                    demoModel.setContactSynced(true);
+                   EMLog.d(TAG, "set contact syn status to true");
                    
                    isContactsSyncedWithServer = true;
                    isSyncingContactsWithServer = false;

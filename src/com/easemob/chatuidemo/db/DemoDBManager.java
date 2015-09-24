@@ -312,6 +312,7 @@ public class DemoDBManager {
         if(dbHelper != null){
             dbHelper.closeDB();
         }
+        dbMgr = null;
     }
     
     

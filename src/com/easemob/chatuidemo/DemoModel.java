@@ -199,6 +199,14 @@ public class DemoModel {
     public boolean isBacklistSynced(){
         return PreferenceManager.getInstance().isBacklistSynced();
     }
+    
+    public void allowChatroomOwnerLeave(boolean value){
+        PreferenceManager.getInstance().setSettingAllowChatroomOwnerLeave(value);
+    }
+    
+    public boolean isChatroomOwnerLeaveAllowed(){
+        return PreferenceManager.getInstance().getSettingAllowChatroomOwnerLeave();
+    }
    
     
     enum Key{
