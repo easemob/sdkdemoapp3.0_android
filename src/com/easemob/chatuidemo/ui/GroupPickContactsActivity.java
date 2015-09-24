@@ -75,13 +75,23 @@ public class GroupPickContactsActivity extends BaseActivity {
 				alluserList.add(user);
 		}
 		// 对list进行排序
-		Collections.sort(alluserList, new Comparator<EaseUser>() {
-			@Override
-			public int compare(EaseUser lhs, EaseUser rhs) {
-				return (lhs.getUsername().compareTo(rhs.getUsername()));
+        Collections.sort(alluserList, new Comparator<EaseUser>() {
 
-			}
-		});
+            @Override
+            public int compare(EaseUser lhs, EaseUser rhs) {
+                if(lhs.getInitialLetter().equals(rhs.getInitialLetter())){
+                    return lhs.getNick().compareTo(rhs.getNick());
+                }else{
+                    if("#".equals(lhs.getInitialLetter())){
+                        return 1;
+                    }else if("#".equals(rhs.getInitialLetter())){
+                        return -1;
+                    }
+                    return lhs.getInitialLetter().compareTo(rhs.getInitialLetter());
+                }
+                
+            }
+        });
 
 		listView = (ListView) findViewById(R.id.list);
 		contactAdapter = new PickContactAdapter(this, R.layout.em_row_contact_with_checkbox, alluserList);
