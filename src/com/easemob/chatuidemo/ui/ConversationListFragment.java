@@ -3,12 +3,12 @@ package com.easemob.chatuidemo.ui;
 import android.content.Intent;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +28,9 @@ public class ConversationListFragment extends EaseConversationListFragment{
     @Override
     protected void initView() {
         super.initView();
-        View errorView = LayoutInflater.from(getActivity()).inflate(R.layout.em_chat_neterror_item, errorItemContainer);
-        errorText = (TextView) getView().findViewById(R.id.tv_connect_errormsg);
+        View errorView = (LinearLayout) View.inflate(getActivity(),R.layout.em_chat_neterror_item, null);
+        errorItemContainer.addView(errorView);
+        errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
     }
     
     @Override
@@ -78,7 +79,6 @@ public class ConversationListFragment extends EaseConversationListFragment{
     
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
         getActivity().getMenuInflater().inflate(R.menu.em_delete_message, menu); 
     }
 
