@@ -40,6 +40,7 @@ import android.widget.Toast;
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMVideoCallHelper;
+import com.easemob.chat.EMVideoCallHelper.EMVideoOrientation;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.CameraHelper;
@@ -369,7 +370,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
             }
         };
-        EMChatManager.getInstance().addVoiceCallStateChangeListener(callStateListener);
+        EMChatManager.getInstance().addCallStateChangeListener(callStateListener);
     }
 
     @Override
@@ -480,7 +481,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         DemoHelper.getInstance().isVideoCalling = false;
         stopMonitor();
         try {
@@ -490,6 +490,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 			cameraHelper = null;
 		} catch (Exception e) {
 		}
+        super.onDestroy();
     }
 
     @Override
@@ -504,27 +505,27 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
      * 方便开发测试，实际app中去掉显示即可
      */
     void startMonitor(){
-//        new Thread(new Runnable() {
-//            public void run() {
-//                while(monitor){
-//                    runOnUiThread(new Runnable() {
-//                        public void run() {
-//                            monitorTextView.setText("宽x高："+callHelper.getVideoWidth()+"x"+callHelper.getVideoHeight()
-//                                    + "\n延迟：" + callHelper.getVideoTimedelay()
-//                                    + "\n帧率：" + callHelper.getVideoFramerate()
-//                                    + "\n丢包数：" + callHelper.getVideoLostcnt()
-//                                    + "\n本地比特率：" + callHelper.getLocalBitrate()
-//                                    + "\n对方比特率：" + callHelper.getRemoteBitrate());
-//                            
-//                        }
-//                    });
-//                    try {
-//                        Thread.sleep(1500);
-//                    } catch (InterruptedException e) {
-//                    }
-//                }
-//            }
-//        }).start();
+        new Thread(new Runnable() {
+            public void run() {
+                while(monitor){
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            monitorTextView.setText("宽x高："+callHelper.getVideoWidth()+"x"+callHelper.getVideoHeight()
+                                    + "\n延迟：" + callHelper.getVideoTimedelay()
+                                    + "\n帧率：" + callHelper.getVideoFramerate()
+                                    + "\n丢包数：" + callHelper.getVideoLostcnt()
+                                    + "\n本地比特率：" + callHelper.getLocalBitrate()
+                                    + "\n对方比特率：" + callHelper.getRemoteBitrate());
+                            
+                        }
+                    });
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+        }).start();
     }
     
     void stopMonitor(){

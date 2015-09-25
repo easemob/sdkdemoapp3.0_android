@@ -1,8 +1,15 @@
 package com.easemob.chatuidemo.ui;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,11 +27,12 @@ import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.chatuidemo.widget.ChatRowCall;
+import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
 import com.easemob.easeui.ui.EaseChatFragment;
 import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
+import com.easemob.util.PathUtil;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragmentListener{
 
@@ -98,6 +106,37 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
                 startActivity(intent);
                 
+                break;
+
+            default:
+                break;
+            }
+        }
+        if(resultCode == Activity.RESULT_OK){
+            switch (requestCode) {
+            case REQUEST_CODE_SELECT_VIDEO: //发送选中的视频
+                if (data != null) {
+                    int duration = data.getIntExtra("dur", 0);
+                    String videoPath = data.getStringExtra("path");
+                    File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
+                    try {
+                        FileOutputStream fos = new FileOutputStream(file);
+                        Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+                        ThumbBitmap.compress(CompressFormat.JPEG, 100, fos);
+                        fos.close();
+                        sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case REQUEST_CODE_SELECT_FILE: //发送选中的文件
+                if (data != null) {
+                    Uri uri = data.getData();
+                    if (uri != null) {
+                        sendFileByUri(uri);
+                    }
+                }
                 break;
 
             default:
@@ -257,7 +296,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 // 语音通话,  视频通话
                 if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
-                    return new ChatRowCall(getActivity(), message, position, adapter);
+                    return new ChatRowVoiceCall(getActivity(), message, position, adapter);
                 }
             }
             return null;
