@@ -132,7 +132,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         localSurface = (SurfaceView) findViewById(R.id.local_surface);
         localSurface.setZOrderMediaOverlay(true);
         localSurface.setZOrderOnTop(true);
-        localSurfaceHolder = localSurface.getHolder();
+        localSurfaceHolder = localSurface.getHolder(); 
 
         // 获取callHelper,cameraHelper
         callHelper = EMVideoCallHelper.getInstance();

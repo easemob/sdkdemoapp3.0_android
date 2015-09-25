@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatOptions;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.DemoModel;
@@ -94,6 +95,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton speakerSwitch;
     private EaseSwitchButton ownerLeaveSwitch;
     private DemoModel settingsModel;
+    private EMChatOptions chatOptions;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,8 +120,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		speakerSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_speaker);
 		ownerLeaveSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_owner_leave);
 		
-		
-		
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
 		if(!TextUtils.isEmpty(EMChatManager.getInstance().getCurrentUser())){
 			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMChatManager.getInstance().getCurrentUser() + ")");
@@ -134,6 +134,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pushNick=(LinearLayout) getView().findViewById(R.id.ll_set_push_nick);
 		
 		settingsModel = DemoHelper.getInstance().getModel();
+		chatOptions = EMChatManager.getInstance().getChatOptions();
 		
 		blacklistContainer.setOnClickListener(this);
 		userProfileContainer.setOnClickListener(this);
@@ -180,7 +181,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		}
 
 		// 是否允许聊天室owner leave
-		if(PreferenceManager.getInstance().getSettingAllowChatroomOwnerLeave()){
+		if(settingsModel.isChatroomOwnerLeaveAllowed()){
 		    ownerLeaveSwitch.openSwitch();
 		}else{
 		    ownerLeaveSwitch.closeSwitch();
@@ -239,11 +240,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		case R.id.rl_switch_chatroom_owner_leave:
 		    if(ownerLeaveSwitch.isSwitchOpen()){
 		        ownerLeaveSwitch.closeSwitch();
-		        PreferenceManager.getInstance().setSettingAllowChatroomOwnerLeave(false);
-
+		        settingsModel.allowChatroomOwnerLeave(false);
+		        chatOptions.allowChatroomOwnerLeave(false);
 		    }else{
 		        ownerLeaveSwitch.openSwitch();
-		        PreferenceManager.getInstance().setSettingAllowChatroomOwnerLeave(true);
+		        settingsModel.allowChatroomOwnerLeave(true);
+		        chatOptions.allowChatroomOwnerLeave(true);
 		    }
 		    break;
 		case R.id.btn_logout: //退出登陆
