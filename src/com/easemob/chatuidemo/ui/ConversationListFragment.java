@@ -90,20 +90,16 @@ public class ConversationListFragment extends EaseConversationListFragment{
             deleteMessage = true;
             handled = true;
         } else*/ if (item.getItemId() == R.id.delete_conversation) {
-            deleteMessage = true;
-            handled = true;
-        }
-        EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-        // 删除此会话
-        EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
-        InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
-        inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
-        refresh();
+        	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+            // 删除此会话
+            EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
+            InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
+            inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
+            refresh();
 
-        // 更新消息未读数
-        ((MainActivity) getActivity()).updateUnreadLabel();
-        
-        return handled ? true : super.onContextItemSelected(item);
+            // 更新消息未读数
+            ((MainActivity) getActivity()).updateUnreadLabel();        }
+        return true;
     }
 
 }
