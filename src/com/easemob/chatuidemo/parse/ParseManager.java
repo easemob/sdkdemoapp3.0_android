@@ -9,6 +9,7 @@ import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -96,6 +97,7 @@ public class ParseManager {
 							user.setAvatar(parseFile.getUrl());
 						}
 						user.setNick(pObject.getString(CONFIG_NICK));
+						EaseCommonUtils.setUserInitialLetter(user);
 						mList.add(user);
 					}
 					callback.onSuccess(mList);

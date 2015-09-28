@@ -55,6 +55,7 @@ import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.model.EaseNotifier;
 import com.easemob.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.easemob.easeui.utils.EaseCommonUtils;
+import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 
@@ -976,6 +977,7 @@ public class DemoHelper {
                    Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
                    for (String username : usernames) {
                        EaseUser user = new EaseUser(username);
+                       EaseCommonUtils.setUserInitialLetter(user);
                        userlist.put(username, user);
                    }
                    // 存入内存
