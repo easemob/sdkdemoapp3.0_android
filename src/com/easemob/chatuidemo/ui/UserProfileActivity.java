@@ -22,13 +22,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.utils.EaseUserUtils;
-import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends BaseActivity implements OnClickListener{
 	
@@ -122,13 +122,16 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			@Override
 			public void onSuccess(EaseUser user) {
 				if (user != null) {
+				    DemoHelper.getInstance().saveContact(user);
+				    if(isFinishing()){
+				        return;
+				    }
 					tvNickName.setText(user.getNick());
 					if(!TextUtils.isEmpty(user.getAvatar())){
-						 Picasso.with(UserProfileActivity.this).load(user.getAvatar()).placeholder(R.drawable.em_default_avatar).into(headAvatar);
+						 Glide.with(UserProfileActivity.this).load(user.getAvatar()).placeholder(R.drawable.em_default_avatar).into(headAvatar);
 					}else{
-						Picasso.with(UserProfileActivity.this).load(R.drawable.em_default_avatar).into(headAvatar);
+					    Glide.with(UserProfileActivity.this).load(R.drawable.em_default_avatar).into(headAvatar);
 					}
-					DemoHelper.getInstance().saveContact(user);
 				}
 			}
 			
