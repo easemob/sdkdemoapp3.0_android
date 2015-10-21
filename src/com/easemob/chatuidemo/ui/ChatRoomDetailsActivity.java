@@ -49,6 +49,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	private static final String TAG = "ChatRoomDetailsActivity";
 	private static final int REQUEST_CODE_EXIT = 1;
 	private static final int REQUEST_CODE_EXIT_DELETE = 2;
+	private static final int REQUEST_CODE_CLEAR_ALL_HISTORY = 3;
 
 	String longClickUsername = null;
 
@@ -74,6 +75,10 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	private RelativeLayout blockGroupMsgLayout;
 	private RelativeLayout showChatRoomIdLayout;
 	private TextView chatRoomIdTextView;
+	private TextView chatRoomNickTextView;
+	private TextView chatRoomOwnerTextView;
+	private RelativeLayout showChatRoomNickLayout;
+	private RelativeLayout showChatRoomOwnerLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +87,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		instance = this;
 		st = getResources().getString(R.string.people);
 		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
+		clearAllHistory.setVisibility(View.GONE);
 		userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
 		userGridview.setVisibility(View.GONE);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
@@ -92,7 +98,12 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		blockGroupMsgLayout = (RelativeLayout)findViewById(R.id.rl_switch_block_groupmsg);
 		showChatRoomIdLayout = (RelativeLayout)findViewById(R.id.rl_group_id);
+		showChatRoomNickLayout = (RelativeLayout)findViewById(R.id.rl_group_nick);
+		showChatRoomOwnerLayout = (RelativeLayout)findViewById(R.id.rl_group_owner);
 		chatRoomIdTextView = (TextView)findViewById(R.id.tv_group_id);
+		chatRoomNickTextView = (TextView)findViewById(R.id.tv_group_nick_value);
+		chatRoomOwnerTextView = (TextView)findViewById(R.id.tv_group_owner_value);
+		
 
 		Drawable referenceDrawable = getResources().getDrawable(R.drawable.em_smiley_add_btn);
 		referenceWidth = referenceDrawable.getIntrinsicWidth();
@@ -103,8 +114,12 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		 
 		 showChatRoomIdLayout.setVisibility(View.VISIBLE);
 		 chatRoomIdTextView.setText("聊天室ID："+roomId);
+		 showChatRoomNickLayout.setVisibility(View.VISIBLE);
+		 showChatRoomOwnerLayout.setVisibility(View.VISIBLE);
 		 
 		 room = EMChatManager.getInstance().getChatRoom(roomId);
+		 chatRoomNickTextView.setText(room.getName());
+		 chatRoomOwnerTextView.setText(room.getOwner());
 
 		exitBtn.setVisibility(View.GONE);
 		deleteBtn.setVisibility(View.GONE);
@@ -118,8 +133,10 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			deleteBtn.setVisibility(View.GONE);
 		}
 		
-		((TextView) findViewById(R.id.group_name)).setText(room.getName() + "(" + room.getAffiliationsCount() + st);
-		adapter = new GridAdapter(this, R.layout.em_grid, room.getMembers());
+		((TextView) findViewById(R.id.group_name)).setText(room.getName());
+		List<String> owner = new java.util.ArrayList<String>();
+		owner.add(room.getOwner());
+		adapter = new GridAdapter(this, R.layout.em_grid, owner);
 		userGridview.setAdapter(adapter);
 		
 		updateRoom();
@@ -252,8 +269,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 					runOnUiThread(new Runnable() {
 						public void run() {
-							((TextView) findViewById(R.id.group_name)).setText(returnRoom.getName() + "(" + returnRoom.getAffiliationsCount()
-									+ "人)");
+							((TextView) findViewById(R.id.group_name)).setText(returnRoom.getName());
 							loadingPB.setVisibility(View.INVISIBLE);
 							adapter.notifyDataSetChanged();
 							if (EMChatManager.getInstance().getCurrentUser().equals(returnRoom.getOwner())) {
