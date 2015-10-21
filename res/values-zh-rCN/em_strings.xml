@@ -306,4 +306,6 @@
     <string name="toast_updatephoto_success">更新头像成功!</string>
     <string name="toast_updatephoto_fail">更新头像失败!</string>
     <string name="user_already_in_contactlist">此用户已是你好友(被拉黑状态)，从黑名单列表中移出即可</string>
+    <string name="group_nick">聊天室名称:</string>
+    <string name="group_owner">群主：</string>
 </resources>

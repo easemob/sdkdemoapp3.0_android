@@ -20,14 +20,21 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -52,10 +59,14 @@ public class PublicChatRoomsActivity extends BaseActivity {
 	private boolean isFirstLoading = true;
 	private boolean hasMoreData = true;
 	private String cursor;
-	private final int pagesize = 20;
+	private final int pagesize = 50;
     private LinearLayout footLoadingLayout;
     private ProgressBar footLoadingPB;
     private TextView footLoadingText;
+    private EditText etSearch;
+    private ImageButton ibClean;
+    private List<EMChatRoom> rooms;
+    private InputMethodManager inputMethodManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +74,16 @@ public class PublicChatRoomsActivity extends BaseActivity {
 		setContentView(R.layout.em_activity_public_groups);
 
 		// 搜索框
+		etSearch = (EditText)findViewById(R.id.query);
+		ibClean = (ImageButton)findViewById(R.id.search_clear);
+		etSearch.setHint(R.string.search);
+		inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		pb = (ProgressBar) findViewById(R.id.progressBar);
 		listView = (ListView) findViewById(R.id.list);
 		title = (TextView)findViewById(R.id.tv_title);
 		title.setText(getResources().getString(R.string.chat_room));
 		chatRoomList = new ArrayList<EMChatRoom>();
+		rooms = new ArrayList<EMChatRoom>();
 		
 		View footView = getLayoutInflater().inflate(R.layout.em_listview_footer_view, null);
         footLoadingLayout = (LinearLayout) footView.findViewById(R.id.loading_layout);
@@ -75,6 +91,37 @@ public class PublicChatRoomsActivity extends BaseActivity {
         footLoadingText = (TextView) footView.findViewById(R.id.loading_text);
         listView.addFooterView(footView, null, false);
         footLoadingLayout.setVisibility(View.GONE);
+        
+        etSearch.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				adapter.getFilter().filter(s);
+				if(s.length()>0){
+					ibClean.setVisibility(View.VISIBLE);
+				}else{
+					ibClean.setVisibility(View.INVISIBLE);
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+        
+        ibClean.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				etSearch.getText().clear();
+				hideSoftKeyboard();
+			}
+		});
         
         //获取及显示数据
         loadAndShowData();
@@ -149,6 +196,13 @@ public class PublicChatRoomsActivity extends BaseActivity {
         
 	}
 	
+	void hideSoftKeyboard(){
+		if(getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN){
+			if(getCurrentFocus() != null){
+				inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+			}
+		}
+	}
 	private void loadAndShowData(){
 		new Thread(new Runnable() {
 
@@ -174,6 +228,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
                                 //设置adapter
                                 adapter = new ChatRoomAdapter(PublicChatRoomsActivity.this, 1, chatRoomList);
                                 listView.setAdapter(adapter);
+                                rooms.addAll(chatRooms);
                             }else{
                                 if(chatRooms.size() < pagesize){
                                     hasMoreData = false;
@@ -207,6 +262,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
 	private class ChatRoomAdapter extends ArrayAdapter<EMChatRoom> {
 
 		private LayoutInflater inflater;
+		private RoomFilter filter;
 
 		public ChatRoomAdapter(Context context, int res, List<EMChatRoom> rooms) {
 			super(context, res, rooms);
@@ -223,6 +279,46 @@ public class PublicChatRoomsActivity extends BaseActivity {
 
 			return convertView;
 		}
+		
+		@Override
+		public Filter getFilter(){
+			if(filter == null){
+				filter = new RoomFilter();
+			}
+			return filter;
+		}
+		
+		private class RoomFilter extends Filter{
+
+			@Override
+			protected FilterResults performFiltering(CharSequence constraint) {
+				FilterResults results = new FilterResults();
+				
+				if(constraint == null || constraint.length() == 0){
+					results.values = rooms;
+					results.count = rooms.size();
+				}else{
+					List<EMChatRoom> roomss = new ArrayList<EMChatRoom>();
+					for(EMChatRoom chatRoom : rooms){
+						if(chatRoom.getName().contains(constraint)){
+							roomss.add(chatRoom);
+						}
+					}
+					results.values = roomss;
+					results.count = roomss.size();
+				}
+				return results;
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void publishResults(CharSequence constraint, FilterResults results) {
+				chatRoomList.clear();
+				chatRoomList.addAll((List<EMChatRoom>)results.values);
+				notifyDataSetChanged();
+			}
+			
+		}		
 	}
 	
 	public void back(View view){

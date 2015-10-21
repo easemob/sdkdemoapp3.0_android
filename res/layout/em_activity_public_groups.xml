@@ -45,7 +45,7 @@
         
     </RelativeLayout>
 	
-    
+    <include android:id="@+id/search_bar_view" layout="@layout/em_search_bar_with_padding"/>
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
