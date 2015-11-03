@@ -110,7 +110,80 @@
                     android:layout_marginRight="10dip"
                     android:background="#E6E6E6" />
             </RelativeLayout>
+			<RelativeLayout
+                android:id="@+id/rl_group_nick"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/em_btn_bottom_selector"
+                android:visibility="gone" >
 
+                <TextView
+                	android:id="@+id/tv_group_nick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="20dip"
+                    android:text="@string/group_nick"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:typeface="serif" />
+                
+                  <TextView 
+                    android:id="@+id/tv_group_nick_value"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/tv_group_nick"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="18sp"
+                    /> 
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="#E6E6E6" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/rl_group_owner"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/em_btn_bottom_selector"
+                android:visibility="gone" >
+
+                <TextView
+                	android:id="@+id/tv_group_owner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="20dip"
+                    android:text="@string/group_owner"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:typeface="serif" />
+                
+                  <TextView 
+                    android:id="@+id/tv_group_owner_value"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/tv_group_owner"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="18sp"
+                    /> 
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="#E6E6E6" />
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/clear_all_history"
                 android:layout_width="match_parent"
