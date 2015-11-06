@@ -26,12 +26,14 @@ import com.easemob.chat.TextMessageBody;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.domain.EmojiconExampleGroupData;
 import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
 import com.easemob.easeui.ui.EaseChatFragment;
 import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
+import com.easemob.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.easemob.util.PathUtil;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragmentListener{
@@ -73,6 +75,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             }
         }
         super.setUpView();
+        ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
     }
     
     @Override
