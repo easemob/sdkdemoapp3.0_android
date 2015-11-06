@@ -2,10 +2,10 @@ package com.easemob.chatuidemo.domain;
 
 import java.util.Arrays;
 
-import com.easemob.easeui.R;
+import com.easemob.chatuidemo.R;
 import com.easemob.easeui.domain.EaseEmojicon;
-import com.easemob.easeui.domain.EaseEmojiconGroupEntity;
 import com.easemob.easeui.domain.EaseEmojicon.Type;
+import com.easemob.easeui.domain.EaseEmojiconGroupEntity;
 
 public class EmojiconExampleGroupData {
     
