@@ -212,7 +212,7 @@
         <activity
             android:name="com.easemob.chatuidemo.ui.VoiceCallActivity"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/nornal_style" >
         </activity>
         <!-- 视频通话 -->
@@ -220,7 +220,7 @@
             android:name="com.easemob.chatuidemo.ui.VideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:theme="@style/horizontal_slide" >
         </activity>
         <!-- 群聊简单信息 -->

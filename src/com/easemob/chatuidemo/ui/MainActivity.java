@@ -13,10 +13,6 @@
  */
 package com.easemob.chatuidemo.ui;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,20 +22,17 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMMessage;
@@ -49,8 +42,6 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
-import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
-import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
@@ -346,108 +337,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	private InviteMessgeDao inviteMessgeDao;
 	private UserDao userDao;
 
-	/***
-	 * 好友变化listener
-	 * 
-	 */
-	public class MyContactListener implements EMContactListener {
-
-		@Override
-		public void onContactAdded(List<String> usernameList) {			
-			// 保存增加的联系人
-			Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
-			Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
-			for (String username : usernameList) {
-			    EaseUser user = new EaseUser(username);
-				// 添加好友时可能会回调added方法两次
-				if (!localUsers.containsKey(username)) {
-					userDao.saveContact(user);
-				}
-				toAddUsers.put(username, user);
-			}
-			localUsers.putAll(toAddUsers);
-			// 刷新ui
-			if (currentTabIndex == 1)
-				contactListFragment.refresh();
-
-		}
-
-		@Override
-		public void onContactDeleted(final List<String> usernameList) {
-			// 被删除
-			Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
-			for (String username : usernameList) {
-				localUsers.remove(username);
-				userDao.deleteContact(username);
-				inviteMessgeDao.deleteMessage(username);
-			}
-			runOnUiThread(new Runnable() {
-				public void run() {
-					// 如果正在与此用户的聊天页面
-					String st10 = getResources().getString(R.string.have_you_removed);
-					if (ChatActivity.activityInstance != null
-							&& usernameList.contains(ChatActivity.activityInstance.getToChatUsername())) {
-						Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, 1).show();
-						ChatActivity.activityInstance.finish();
-					}
-					updateUnreadLabel();
-					// 刷新ui
-					contactListFragment.refresh();
-					conversationListFragment.refresh();
-				}
-			});
-
-		}
-
-		@Override
-		public void onContactInvited(String username, String reason) {
-			
-			// 接到邀请的消息，如果不处理(同意或拒绝)，掉线后，服务器会自动再发过来，所以客户端不需要重复提醒
-			List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
-
-			for (InviteMessage inviteMessage : msgs) {
-				if (inviteMessage.getGroupId() == null && inviteMessage.getFrom().equals(username)) {
-					inviteMessgeDao.deleteMessage(username);
-				}
-			}
-			// 自己封装的javabean
-			InviteMessage msg = new InviteMessage();
-			msg.setFrom(username);
-			msg.setTime(System.currentTimeMillis());
-			msg.setReason(reason);
-			Log.d(TAG, username + "请求加你为好友,reason: " + reason);
-			// 设置相应status
-			msg.setStatus(InviteMesageStatus.BEINVITEED);
-			notifyNewIviteMessage(msg);
-
-		}
-
-		@Override
-		public void onContactAgreed(String username) {
-			List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
-			for (InviteMessage inviteMessage : msgs) {
-				if (inviteMessage.getFrom().equals(username)) {
-					return;
-				}
-			}
-			// 自己封装的javabean
-			InviteMessage msg = new InviteMessage();
-			msg.setFrom(username);
-			msg.setTime(System.currentTimeMillis());
-			Log.d(TAG, username + "同意了你的好友请求");
-			msg.setStatus(InviteMesageStatus.BEAGREED);
-			notifyNewIviteMessage(msg);
-
-		}
-
-		@Override
-		public void onContactRefused(String username) {
-			
-			// 参考同意，被邀请实现此功能,demo未实现
-			Log.d(username, username + "拒绝了你的好友请求");
-		}
-
-	}
 
 
 
@@ -484,6 +373,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 		if (!isConflict && !isCurrentAccountRemoved) {
 			updateUnreadLabel();
 			updateUnreadAddressLable();
