@@ -202,6 +202,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
+            callHelper.setRenderFlag(true);
         }
 
         @Override
@@ -219,12 +220,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     }
                 }
 
-            } else {
-            }
+            } 
         }
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
+            callHelper.setRenderFlag(false);
         }
 
     }
