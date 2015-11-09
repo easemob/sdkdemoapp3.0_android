@@ -54,6 +54,7 @@ import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
 
 public class MainActivity extends BaseActivity implements EMEventListener {
 
@@ -108,6 +109,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 		//umeng api
 		MobclickAgent.updateOnlineConfig(this);
+		UmengUpdateAgent.setUpdateOnlyWifi(false);
+		UmengUpdateAgent.update(this);
 
 		if (getIntent().getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
 			showConflictDialog();
