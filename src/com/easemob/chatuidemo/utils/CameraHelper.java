@@ -60,7 +60,15 @@ public class CameraHelper implements PreviewCallback {
      * 开启相机拍摄
      */
     public void startCapture() {
+        
         try {
+            if (mCamera != null) {
+                mCamera.setPreviewCallback(null); 
+                mCamera.stopPreview(); 
+                mCamera.release(); 
+                mCamera = null; 
+            }
+            
             cameraInfo = new CameraInfo();
             if (mCamera == null) {
                 // mCamera = Camera.open();
@@ -122,8 +130,10 @@ public class CameraHelper implements PreviewCallback {
             Log.d(TAG, "camera start preview");
         } catch (Exception e) {
             e.printStackTrace();
-            if (mCamera != null)
+            if (mCamera != null){
                 mCamera.release();
+                mCamera = null;
+            }
         }
     }
 
