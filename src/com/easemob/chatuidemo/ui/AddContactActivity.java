@@ -13,6 +13,12 @@
  */
 package com.easemob.chatuidemo.ui;
 
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMContactManager;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.R;
+import com.easemob.easeui.widget.EaseAlertDialog;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -25,12 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMContactManager;
-import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.R;
-import com.easemob.easeui.widget.EaseAlertDialog;
 
 public class AddContactActivity extends BaseActivity{
 	private EditText editText;
@@ -90,14 +90,14 @@ public class AddContactActivity extends BaseActivity{
 	 * @param view
 	 */
 	public void addContact(View view){
-		if(EMChatManager.getInstance().getCurrentUser().equals(nameText.getText().toString())){
+		if(EMClient.getInstance().getCurrentUser().equals(nameText.getText().toString())){
 			new EaseAlertDialog(this, R.string.not_add_myself).show();
 			return;
 		}
 		
 		if(DemoHelper.getInstance().getContactList().containsKey(nameText.getText().toString())){
 		    //提示已在好友列表中(在黑名单列表里)，无需添加
-		    if(EMContactManager.getInstance().getBlackListUsernames().contains(nameText.getText().toString())){
+		    if(EMClient.getInstance().contactManager().getBlackListUsernames().contains(nameText.getText().toString())){
 		        new EaseAlertDialog(this, R.string.user_already_in_contactlist).show();
 		        return;
 		    }
@@ -117,7 +117,7 @@ public class AddContactActivity extends BaseActivity{
 				try {
 					//demo写死了个reason，实际应该让用户手动填入
 					String s = getResources().getString(R.string.Add_a_friend);
-					EMContactManager.getInstance().addContact(toAddUsername, s);
+					EMClient.getInstance().contactManager().addContact(toAddUsername, s);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();

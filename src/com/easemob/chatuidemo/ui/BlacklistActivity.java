@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMContactManager;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.utils.EaseUserUtils;
@@ -40,7 +41,7 @@ public class BlacklistActivity extends Activity {
 		listView = (ListView) findViewById(R.id.list);
 
 		// 从本地获取黑名单
-		 List<String> blacklist = EMContactManager.getInstance().getBlackListUsernames();
+		 List<String> blacklist = EMClient.getInstance().contactManager().getBlackListUsernames();
 
 		// 显示黑名单列表
 		if (blacklist != null) {
@@ -85,7 +86,7 @@ public class BlacklistActivity extends Activity {
             public void run() {
                 try {
                     // 移出黑民单
-                    EMContactManager.getInstance().deleteUserFromBlackList(tobeRemoveUser);
+                    EMClient.getInstance().contactManager().removeUserFromBlackList(tobeRemoveUser);
                     runOnUiThread(new Runnable() {
                         public void run() {
                             pd.dismiss();

@@ -4,6 +4,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMGroup;
+import com.easemob.chat.EMGroupManager;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMTextMessageBody;
+import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.domain.EmojiconExampleGroupData;
+import com.easemob.chatuidemo.domain.RobotUser;
+import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
+import com.easemob.easeui.ui.EaseChatFragment;
+import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
+import com.easemob.easeui.widget.chatrow.EaseChatRow;
+import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
+import com.easemob.easeui.widget.emojicon.EaseEmojiconMenu;
+import com.easemob.util.PathUtil;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,24 +36,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
-
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.domain.EmojiconExampleGroupData;
-import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
-import com.easemob.easeui.ui.EaseChatFragment;
-import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
-import com.easemob.easeui.widget.chatrow.EaseChatRow;
-import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
-import com.easemob.easeui.widget.emojicon.EaseEmojiconMenu;
-import com.easemob.util.PathUtil;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragmentListener{
 
@@ -97,7 +98,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
             switch (resultCode) {
             case ContextMenuActivity.RESULT_CODE_COPY: // 复制消息
-                clipboard.setText(((TextMessageBody) contextMenuMessage.getBody()).getMessage());
+                clipboard.setText(((EMTextMessageBody) contextMenuMessage.getBody()).getMessage());
                 break;
             case ContextMenuActivity.RESULT_CODE_DELETE: // 删除消息
                 conversation.removeMessage(contextMenuMessage.getMsgId());
@@ -167,7 +168,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     @Override
     public void onEnterToChatDetails() {
         if (chatType == Constant.CHATTYPE_GROUP) {
-            EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
+            EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
             if (group == null) {
                 Toast.makeText(getActivity(), R.string.gorup_not_found, 0).show();
                 return;
@@ -246,7 +247,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
      * 拨打语音电话
      */
     protected void startVoiceCall() {
-        if (!EMChatManager.getInstance().isConnected()) {
+        if (!EMClient.getInstance().isConnected()) {
             Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
         } else {
             startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
@@ -260,7 +261,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
      * 拨打视频电话
      */
     protected void startVideoCall() {
-        if (!EMChatManager.getInstance().isConnected())
+        if (!EMClient.getInstance().isConnected())
             Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
         else {
             startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)

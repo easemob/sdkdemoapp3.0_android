@@ -1,17 +1,18 @@
 package com.easemob.chatuidemo.ui;
 
+import com.easemob.chat.EMCallStateChangeListener;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMTextMessageBody;
+import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.R;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.SoundPool;
 import android.os.Bundle;
-
-import com.easemob.chat.EMCallStateChangeListener;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.R;
 
 public class CallActivity extends BaseActivity {
 
@@ -44,7 +45,7 @@ public class CallActivity extends BaseActivity {
         audioManager.setMicrophoneMute(false);
         
         if(callStateListener != null)
-            EMChatManager.getInstance().removeCallStateChangeListener(callStateListener);
+            EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
             
     }
     
@@ -115,7 +116,7 @@ public class CallActivity extends BaseActivity {
      */
     protected void saveCallRecord(int type) {
         EMMessage message = null;
-        TextMessageBody txtBody = null;
+        EMTextMessageBody txtBody = null;
         if (!isInComingCall) { // 打出去的通话
             message = EMMessage.createSendMessage(EMMessage.Type.TXT);
             message.setReceipt(username);
@@ -134,28 +135,28 @@ public class CallActivity extends BaseActivity {
         String st8 = getResources().getString(R.string.Has_been_cancelled);
         switch (callingState) {
         case NORMAL:
-            txtBody = new TextMessageBody(st1 + callDruationText);
+            txtBody = new EMTextMessageBody(st1 + callDruationText);
             break;
         case REFUESD:
-            txtBody = new TextMessageBody(st2);
+            txtBody = new EMTextMessageBody(st2);
             break;
         case BEREFUESD:
-            txtBody = new TextMessageBody(st3);
+            txtBody = new EMTextMessageBody(st3);
             break;
         case OFFLINE:
-            txtBody = new TextMessageBody(st4);
+            txtBody = new EMTextMessageBody(st4);
             break;
         case BUSY:
-            txtBody = new TextMessageBody(st5);
+            txtBody = new EMTextMessageBody(st5);
             break;
         case NORESPONSE:
-            txtBody = new TextMessageBody(st6);
+            txtBody = new EMTextMessageBody(st6);
             break;
         case UNANSWERED:
-            txtBody = new TextMessageBody(st7);
+            txtBody = new EMTextMessageBody(st7);
             break;
         default:
-            txtBody = new TextMessageBody(st8);
+            txtBody = new EMTextMessageBody(st8);
             break;
         }
         // 设置扩展属性
@@ -169,7 +170,7 @@ public class CallActivity extends BaseActivity {
         message.setMsgId(msgid);
 
         // 保存
-        EMChatManager.getInstance().saveMessage(message, false);
+        EMClient.getInstance().chatManager().saveMessage(message);
     }
 
     enum CallingState {

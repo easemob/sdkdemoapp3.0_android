@@ -18,6 +18,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.easemob.EMValueCallBack;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMContact;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.domain.RobotUser;
+import com.easemob.exceptions.EaseMobException;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,15 +44,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.easemob.EMValueCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMContact;
-import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.db.UserDao;
-import com.easemob.chatuidemo.domain.RobotUser;
-import com.easemob.exceptions.EaseMobException;
 
 public class RobotsActivity extends BaseActivity {
 
@@ -156,7 +156,7 @@ public class RobotsActivity extends BaseActivity {
 			@Override
 			public void run() {
 				try {
-					List<EMContact> mList = EMChatManager.getInstance().getRobotsFromServer();
+					List<EMContact> mList = EMClient.getInstance().getRobotsFromServer();
 					callback.onSuccess(mList);
 				} catch (EaseMobException e) {
 					e.printStackTrace();

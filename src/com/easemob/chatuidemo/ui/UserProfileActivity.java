@@ -2,6 +2,14 @@ package com.easemob.chatuidemo.ui;
 
 import java.io.ByteArrayOutputStream;
 
+import com.bumptech.glide.Glide;
+import com.easemob.EMValueCallBack;
+import com.easemob.chat.EMClient;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.R;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.utils.EaseUserUtils;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
@@ -21,14 +29,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.easemob.EMValueCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.R;
-import com.easemob.easeui.domain.EaseUser;
-import com.easemob.easeui.utils.EaseUserUtils;
 
 public class UserProfileActivity extends BaseActivity implements OnClickListener{
 	
@@ -75,8 +75,8 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			iconRightArrow.setVisibility(View.INVISIBLE);
 		}
 		if(username != null){
-    		if (username.equals(EMChatManager.getInstance().getCurrentUser())) {
-    			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
+    		if (username.equals(EMClient.getInstance().getCurrentUser())) {
+    			tvUsername.setText(EMClient.getInstance().getCurrentUser());
     			EaseUserUtils.setUserNick(username, tvNickName);
                 EaseUserUtils.setUserAvatar(this, username, headAvatar);
     		} else {

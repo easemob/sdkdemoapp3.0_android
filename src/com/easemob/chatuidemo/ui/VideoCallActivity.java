@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMVideoCallHelper;
 import com.easemob.chat.EMVideoCallHelper.EMVideoOrientation;
 import com.easemob.chatuidemo.DemoHelper;
@@ -212,7 +213,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 if (!isInComingCall) {
                     try {
                         // 拨打视频通话
-                        EMChatManager.getInstance().makeVideoCall(username);
+                        EMClient.getInstance().callManager().makeVideoCall(username);
                         // 通知cameraHelper可以写入数据
                         cameraHelper.setStartFlag(true);
                     } catch (EMServiceNotReadyException e) {
@@ -273,7 +274,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             } catch (Exception e) {
                             }
                             openSpeakerOn();
-                            ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMChatManager.getInstance().isDirectCall()
+                            ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
                                     ? R.string.direct_call : R.string.relay_call);
                             handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
                             isHandsfreeState = true;
@@ -371,7 +372,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
             }
         };
-        EMChatManager.getInstance().addCallStateChangeListener(callStateListener);
+        EMClient.getInstance().callManager().addCallStateChangeListener(callStateListener);
     }
 
     @Override
@@ -382,7 +383,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             if (ringtone != null)
                 ringtone.stop();
             try {
-                EMChatManager.getInstance().rejectCall();
+                EMClient.getInstance().callManager().rejectCall();
             } catch (Exception e1) {
                 e1.printStackTrace();
                 saveCallRecord(1);
@@ -398,7 +399,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             if (isInComingCall) {
                 try {
                     callStateTextView.setText("正在接听...");
-                    EMChatManager.getInstance().answerCall();
+                    EMClient.getInstance().callManager().answerCall();
                     cameraHelper.setStartFlag(true);
 
                     openSpeakerOn();
@@ -427,7 +428,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             endCallTriggerByMe = true;
             callStateTextView.setText(getResources().getString(R.string.hanging_up));
             try {
-                EMChatManager.getInstance().endCall();
+                EMClient.getInstance().callManager().endCall();
             } catch (Exception e) {
                 e.printStackTrace();
                 saveCallRecord(1);
@@ -496,7 +497,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
     @Override
     public void onBackPressed() {
-        EMChatManager.getInstance().endCall();
+        EMClient.getInstance().callManager().endCall();
         callDruationText = chronometer.getText().toString();
         saveCallRecord(1);
         finish();

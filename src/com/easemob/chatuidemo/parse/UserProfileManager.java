@@ -3,14 +3,14 @@ package com.easemob.chatuidemo.parse;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-
 import com.easemob.EMValueCallBack;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.DemoHelper.DataSyncListener;
 import com.easemob.chatuidemo.utils.PreferenceManager;
 import com.easemob.easeui.domain.EaseUser;
+
+import android.content.Context;
 
 public class UserProfileManager {
 
@@ -77,7 +77,7 @@ public class UserProfileManager {
 				isSyncingContactInfosWithServer = false;
 				// in case that logout already before server returns,we should
 				// return immediately
-				if (!EMChat.getInstance().isLoggedIn()) {
+				if (!EMClient.getInstance().isLoggedIn()) {
 					return;
 				}
 				if (callback != null) {
@@ -115,7 +115,7 @@ public class UserProfileManager {
 
 	public synchronized EaseUser getCurrentUserInfo() {
 		if (currentUser == null) {
-			String username = EMChatManager.getInstance().getCurrentUser();
+			String username = EMClient.getInstance().getCurrentUser();
 			currentUser = new EaseUser(username);
 			String nick = getCurrentUserNick();
 			currentUser.setNick((nick != null) ? nick : username);

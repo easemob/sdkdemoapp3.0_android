@@ -13,6 +13,23 @@
  */
 package com.easemob.chatuidemo.ui;
 
+import com.easemob.EMCallBack;
+import com.easemob.EMMessageListener;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMConversation.EMConversationType;
+import com.easemob.chat.EMMessage;
+import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.db.InviteMessgeDao;
+import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.domain.InviteMessage;
+import com.easemob.easeui.utils.EaseCommonUtils;
+import com.easemob.util.EMLog;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.update.UmengUpdateAgent;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -29,25 +46,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.easemob.EMCallBack;
-import com.easemob.EMEventListener;
-import com.easemob.EMNotifierEvent;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMConversation.EMConversationType;
-import com.easemob.chat.EMMessage;
-import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.db.InviteMessgeDao;
-import com.easemob.chatuidemo.db.UserDao;
-import com.easemob.chatuidemo.domain.InviteMessage;
-import com.easemob.easeui.utils.EaseCommonUtils;
-import com.easemob.util.EMLog;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.update.UmengUpdateAgent;
-
-public class MainActivity extends BaseActivity implements EMEventListener {
+public class MainActivity extends BaseActivity {
 
 	protected static final String TAG = "MainActivity";
 	// 未读消息textview
@@ -175,37 +174,24 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		currentTabIndex = index;
 	}
 
-	/**
-	 * 监听事件
-     */
-	@Override
-	public void onEvent(EMNotifierEvent event) {
-		switch (event.getEvent()) {
-		case EventNewMessage: // 普通消息
-		{
-			EMMessage message = (EMMessage) event.getData();
-
+	EMMessageListener messageListener = new EMMessageListener() {
+		
+		@Override
+		public void onMessageReceived(EMMessage message) {
 			// 提示新消息
 			DemoHelper.getInstance().getNotifier().onNewMsg(message);
-
 			refreshUIWithMessage();
-			break;
-		}
-
-		case EventOfflineMessage: {
-		    refreshUIWithMessage();
-			break;
-		}
-
-		case EventConversationListChanged: {
-		    refreshUIWithMessage();
-		    break;
 		}
 		
-		default:
-			break;
-		}
-	}
+		@Override
+		public void onMessageReadAckReceived(EMMessage message) {}
+		
+		@Override
+		public void onMessageDeliveryAckReceived(EMMessage message) {}
+		
+		@Override
+		public void onMessageChanged(EMMessage message, Object change) {}
+	};
 
 	private void refreshUIWithMessage() {
 		runOnUiThread(new Runnable() {
@@ -329,8 +315,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	public int getUnreadMsgCountTotal() {
 		int unreadMsgCountTotal = 0;
 		int chatroomUnreadMsgCount = 0;
-		unreadMsgCountTotal = EMChatManager.getInstance().getUnreadMsgsCount();
-		for(EMConversation conversation:EMChatManager.getInstance().getAllConversations().values()){
+		unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMsgsCount();
+		for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
 			if(conversation.getType() == EMConversationType.ChatRoom)
 			chatroomUnreadMsgCount=chatroomUnreadMsgCount+conversation.getUnreadMsgCount();
 		}
@@ -387,14 +373,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		DemoHelper sdkHelper = DemoHelper.getInstance();
 		sdkHelper.pushActivity(this);
 
-		// register the event listener when enter the foreground
-		EMChatManager.getInstance().registerEventListener(this,
-				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage ,EMNotifierEvent.Event.EventOfflineMessage, EMNotifierEvent.Event.EventConversationListChanged});
+		EMClient.getInstance().chatManager().addMessageListener(messageListener);
 	}
 
 	@Override
 	protected void onStop() {
-		EMChatManager.getInstance().unregisterEventListener(this);
+		EMClient.getInstance().chatManager().removeMessageListener(messageListener);
 		DemoHelper sdkHelper = DemoHelper.getInstance();
 		sdkHelper.popActivity(this);
 

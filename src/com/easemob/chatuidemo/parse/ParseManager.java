@@ -3,10 +3,9 @@ package com.easemob.chatuidemo.parse;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
-
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.utils.EaseCommonUtils;
@@ -19,6 +18,8 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+
+import android.content.Context;
 
 public class ParseManager {
 
@@ -49,7 +50,7 @@ public class ParseManager {
 	}
 
 	public boolean updateParseNickName(final String nickname) {
-		String username = EMChatManager.getInstance().getCurrentUser();
+		String username = EMClient.getInstance().getCurrentUser();
 		ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
 		pQuery.whereEqualTo(CONFIG_USERNAME, username);
 		ParseObject pUser = null;
@@ -110,7 +111,7 @@ public class ParseManager {
 
 	
 	public void asyncGetCurrentUserInfo(final EMValueCallBack<EaseUser> callback){
-		final String username = EMChatManager.getInstance().getCurrentUser();
+		final String username = EMClient.getInstance().getCurrentUser();
 		asyncGetUserInfo(username, new EMValueCallBack<EaseUser>() {
 
 			@Override
@@ -176,7 +177,7 @@ public class ParseManager {
 	}
 
 	public String uploadParseAvatar(byte[] data) {
-		String username = EMChatManager.getInstance().getCurrentUser();
+		String username = EMClient.getInstance().getCurrentUser();
 		ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
 		pQuery.whereEqualTo(CONFIG_USERNAME, username);
 		ParseObject pUser = null;

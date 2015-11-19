@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chatuidemo.Constant;
@@ -44,7 +45,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 EMConversation conversation = conversationListView.getItem(position);
                 String username = conversation.getUserName();
-                if (username.equals(EMChatManager.getInstance().getCurrentUser()))
+                if (username.equals(EMClient.getInstance().getCurrentUser()))
                     Toast.makeText(getActivity(), R.string.Cant_chat_with_yourself, 0).show();
                 else {
                     // 进入聊天页面
@@ -92,7 +93,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
         } else*/ if (item.getItemId() == R.id.delete_conversation) {
         	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
             // 删除此会话
-            EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
+            EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
             InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
             inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
             refresh();

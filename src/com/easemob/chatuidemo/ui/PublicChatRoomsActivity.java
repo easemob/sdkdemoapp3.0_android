@@ -17,6 +17,14 @@ package com.easemob.chatuidemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.easemob.EMChatRoomChangeListener;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMChatRoom;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMCursorResult;
+import com.easemob.chatuidemo.R;
+import com.easemob.exceptions.EaseMobException;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,13 +48,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.easemob.EMChatRoomChangeListener;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatRoom;
-import com.easemob.chat.EMCursorResult;
-import com.easemob.chatuidemo.R;
-import com.easemob.exceptions.EaseMobException;
 
 public class PublicChatRoomsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -126,7 +127,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
         //获取及显示数据
         loadAndShowData();
         
-        EMChatManager.getInstance().addChatRoomChangeListener(new EMChatRoomChangeListener(){
+        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(new EMChatRoomChangeListener(){
             @Override
             public void onChatRoomDestroyed(String roomId, String roomName) {
                 chatRoomList.clear();
@@ -209,7 +210,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
             public void run() {
                 try {
                     isLoading = true;
-                    final EMCursorResult<EMChatRoom> result = EMChatManager.getInstance().fetchPublicChatRoomsFromServer(pagesize, cursor);
+                    final EMCursorResult<EMChatRoom> result = EMClient.getInstance().chatroomManager().fetchPublicChatRoomsFromServer(pagesize, cursor);
                     //获取group list
                     final List<EMChatRoom> chatRooms = result.getData();
                     runOnUiThread(new Runnable() {

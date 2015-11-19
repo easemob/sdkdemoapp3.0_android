@@ -14,6 +14,13 @@
 
 package com.easemob.chatuidemo.ui;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMGroup;
+import com.easemob.chat.EMGroupInfo;
+import com.easemob.chatuidemo.R;
+import com.easemob.exceptions.EaseMobException;
+
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -21,13 +28,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupInfo;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chatuidemo.R;
-import com.easemob.exceptions.EaseMobException;
 
 public class GroupSimpleDetailActivity extends BaseActivity {
 	private Button btn_add_group;
@@ -73,7 +73,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 			public void run() {
 				//从服务器获取详情
 				try {
-					group = EMGroupManager.getInstance().getGroupFromServer(groupid);
+					group = EMClient.getInstance().groupManager().getGroupFromServer(groupid);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							showGroupDetail();
@@ -112,9 +112,9 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 				try {
 					//如果是membersOnly的群，需要申请加入，不能直接join
 					if(group.isMembersOnly()){
-					    EMGroupManager.getInstance().applyJoinToGroup(groupid, st2);
+					    EMClient.getInstance().groupManager().applyJoinToGroup(groupid, st2);
 					}else{
-					    EMGroupManager.getInstance().joinGroup(groupid);
+					    EMClient.getInstance().groupManager().joinGroup(groupid);
 					}
 					runOnUiThread(new Runnable() {
 						public void run() {
@@ -142,7 +142,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
      private void showGroupDetail() {
          progressBar.setVisibility(View.INVISIBLE);
          //获取详情成功，并且自己不在群中，才让加入群聊按钮可点击
-         if(!group.getMembers().contains(EMChatManager.getInstance().getCurrentUser()))
+         if(!group.getMembers().contains(EMClient.getInstance().getCurrentUser()))
              btn_add_group.setEnabled(true);
          tv_name.setText(group.getGroupName());
          tv_admin.setText(group.getOwner());

@@ -37,6 +37,8 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMConversation;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.easeui.widget.EaseAlertDialog;
@@ -117,7 +119,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		 showChatRoomNickLayout.setVisibility(View.VISIBLE);
 		 showChatRoomOwnerLayout.setVisibility(View.VISIBLE);
 		 
-		 room = EMChatManager.getInstance().getChatRoom(roomId);
+		 room = EMClient.getInstance().chatroomManager().getChatRoom(roomId);
 		 chatRoomNickTextView.setText(room.getName());
 		 chatRoomOwnerTextView.setText(room.getOwner());
 
@@ -128,7 +130,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		blockGroupMsgLayout.setVisibility(View.GONE);
 		
 		// 如果自己是群主，显示解散按钮
-		if (EMChatManager.getInstance().getCurrentUser().equals(room.getOwner())) {
+		if (EMClient.getInstance().getCurrentUser().equals(room.getOwner())) {
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.GONE);
 		}
@@ -226,7 +228,10 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	 * 清空群聊天记录
 	 */
 	public void clearGroupHistory() {
-		EMChatManager.getInstance().clearConversation(room.getId());
+		EMConversation conversation = EMClient.getInstance().chatManager().getConversation(room.getId());
+		if (conversation != null) {
+			conversation.clearAllMessages();
+		}
 		Toast.makeText(this, R.string.messages_are_empty, 0).show();
 	}
 
@@ -239,7 +244,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					EMChatManager.getInstance().leaveChatRoom(roomId);
+					EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
@@ -265,14 +270,14 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					final EMChatRoom returnRoom = EMChatManager.getInstance().fetchChatRoomFromServer(roomId);
+					final EMChatRoom returnRoom = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId);
 
 					runOnUiThread(new Runnable() {
 						public void run() {
 							((TextView) findViewById(R.id.group_name)).setText(returnRoom.getName());
 							loadingPB.setVisibility(View.INVISIBLE);
 							adapter.notifyDataSetChanged();
-							if (EMChatManager.getInstance().getCurrentUser().equals(returnRoom.getOwner())) {
+							if (EMClient.getInstance().getCurrentUser().equals(returnRoom.getOwner())) {
 								// 显示解散按钮
 								exitBtn.setVisibility(View.GONE);
 								deleteBtn.setVisibility(View.GONE);
@@ -359,7 +364,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			    holder.imageView.setImageResource(R.drawable.em_smiley_minus_btn);
 //				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_minus_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限，不提供加减人按钮
-				if (!room.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
+				if (!room.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
 					// if current user is not room admin, hide add/remove btn
 					convertView.setVisibility(View.INVISIBLE);
 				} else { // 显示删除按钮
@@ -386,7 +391,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			    holder.imageView.setImageResource(R.drawable.em_smiley_add_btn);
 //				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_add_btn, 0, 0);
 				// 如果不是创建者或者没有相应权限
-				if (!room.getOwner().equals(EMChatManager.getInstance().getCurrentUser())) {
+				if (!room.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
 					// if current user is not room admin, hide add/remove btn
 					convertView.setVisibility(View.INVISIBLE);
 				} else {
@@ -430,7 +435,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					public void onClick(View v) {
 						if (isInDeleteMode) {
 							// 如果是删除自己，return
-							if (EMChatManager.getInstance().getCurrentUser().equals(username)) {
+							if (EMClient.getInstance().getCurrentUser().equals(username)) {
 							    new EaseAlertDialog(ChatRoomDetailsActivity.this, R.string.not_delete_myself).show();
 								return;
 							}

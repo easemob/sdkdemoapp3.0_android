@@ -13,6 +13,19 @@
  */
 package com.easemob.chatuidemo.ui;
 
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMContactManager;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.DemoHelper.DataSyncListener;
+import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.db.InviteMessgeDao;
+import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.widget.ContactItemView;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.ui.EaseContactListFragment;
+import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.EMLog;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.ContextMenu;
@@ -25,18 +38,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
-
-import com.easemob.chat.EMContactManager;
-import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.DemoHelper.DataSyncListener;
-import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.db.DemoDBManager;
-import com.easemob.chatuidemo.db.InviteMessgeDao;
-import com.easemob.chatuidemo.db.UserDao;
-import com.easemob.chatuidemo.widget.ContactItemView;
-import com.easemob.easeui.domain.EaseUser;
-import com.easemob.easeui.ui.EaseContactListFragment;
-import com.easemob.util.EMLog;
 
 /**
  * 联系人列表页
@@ -228,7 +229,7 @@ public class ContactListFragment extends EaseContactListFragment {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					EMContactManager.getInstance().deleteContact(tobeDeleteUser.getUsername());
+					EMClient.getInstance().contactManager().deleteContact(tobeDeleteUser.getUsername());
 					// 删除db和内存中此用户的数据
 					UserDao dao = new UserDao(getActivity());
 					dao.deleteContact(tobeDeleteUser.getUsername());
@@ -290,8 +291,12 @@ public class ContactListFragment extends EaseContactListFragment {
 
                 @Override
                 public void run() {
-                    blackList = EMContactManager.getInstance().getBlackListUsernames();
-                    refresh();
+                    try {
+						blackList = EMClient.getInstance().contactManager().getBlackListFromServer();
+	                    refresh();
+					} catch (EaseMobException e) {
+						e.printStackTrace();
+					}
                 }
                 
             });

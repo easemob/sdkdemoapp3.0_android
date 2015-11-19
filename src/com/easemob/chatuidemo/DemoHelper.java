@@ -6,34 +6,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.easemob.EMCallBack;
 import com.easemob.EMConnectionListener;
 import com.easemob.EMError;
-import com.easemob.EMEventListener;
 import com.easemob.EMGroupChangeListener;
-import com.easemob.EMNotifierEvent;
+import com.easemob.EMMessageListener;
 import com.easemob.EMValueCallBack;
-import com.easemob.chat.CmdMessageBody;
-import com.easemob.chat.EMChat;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMCmdMessageBody;
 import com.easemob.chat.EMContactListener;
-import com.easemob.chat.EMContactManager;
 import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.TextMessageBody;
+import com.easemob.chat.EMOptions;
+import com.easemob.chat.EMTextMessageBody;
 import com.easemob.chatuidemo.db.DemoDBManager;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
@@ -59,9 +46,17 @@ import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.model.EaseNotifier;
 import com.easemob.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.easemob.easeui.utils.EaseCommonUtils;
-import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+import android.widget.Toast;
 
 public class DemoHelper {
     /**
@@ -82,7 +77,7 @@ public class DemoHelper {
     /**
      * EMEventListener
      */
-    protected EMEventListener eventListener = null;
+    protected EMMessageListener messageListener = null;
 
 	private Map<String, EaseUser> contactList;
 
@@ -154,14 +149,14 @@ public class DemoHelper {
 		if (EaseUI.getInstance().init(context)) {
 		    appContext = context;
 		    //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
-		    EMChat.getInstance().setDebugMode(true);
+		    EMClient.getInstance().setDebugMode(true);
 		    //get easeui instance
 		    easeUI = EaseUI.getInstance();
 		    //调用easeui的api设置providers
 		    setEaseUIProviders();
 		    demoModel = new DemoModel(context);
 		    //设置chat options
-		    setChatoptions();
+		    setChatOptions();
 			//初始化PreferenceManager
 			PreferenceManager.init(context);
 			//初始化用户管理类
@@ -174,9 +169,9 @@ public class DemoHelper {
 		}
 	}
 
-	private void setChatoptions(){
+	private void setChatOptions(){
 	    //easeui库默认设置了一些options，可以覆盖
-	    EMChatOptions options = EMChatManager.getInstance().getChatOptions();
+	    EMOptions options = EMClient.getInstance().getOptions();
 	    options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());  
 	}
 
@@ -375,7 +370,7 @@ public class DemoHelper {
         };
         
         
-        IntentFilter callFilter = new IntentFilter(EMChatManager.getInstance().getIncomingCallBroadcastAction());
+        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
         if(callReceiver == null){
             callReceiver = new CallReceiver();
         }
@@ -383,7 +378,7 @@ public class DemoHelper {
         //注册通话广播接收者
         appContext.registerReceiver(callReceiver, callFilter);    
         //注册连接监听
-        EMChatManager.getInstance().addConnectionListener(connectionListener);       
+        EMClient.getInstance().addConnectionListener(connectionListener);       
         //注册群组和联系人监听
         registerGroupAndContactListener();
         //注册消息事件监听
@@ -402,9 +397,9 @@ public class DemoHelper {
     public void registerGroupAndContactListener(){
         if(!isGroupAndContactListenerRegisted){
             //注册群组变动监听
-            EMGroupManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
+            EMClient.getInstance().groupManager().addGroupChangeListener(new MyGroupChangeListener());
             //注册联系人变动监听
-            EMContactManager.getInstance().setContactListener(new MyContactListener());
+            EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
             isGroupAndContactListenerRegisted = true;
         }
         
@@ -419,7 +414,7 @@ public class DemoHelper {
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
             
             boolean hasGroup = false;
-            for (EMGroup group : EMGroupManager.getInstance().getAllGroups()) {
+            for (EMGroup group : EMClient.getInstance().groupManager().getAllGroups()) {
                 if (group.getGroupId().equals(groupId)) {
                     hasGroup = true;
                     break;
@@ -435,9 +430,9 @@ public class DemoHelper {
             msg.setFrom(inviter);
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new TextMessageBody(inviter + " " +st3));
+            msg.addBody(new EMTextMessageBody(inviter + " " +st3));
             // 保存邀请消息
-            EMChatManager.getInstance().saveMessage(msg);
+            EMClient.getInstance().chatManager().saveMessage(msg);
             // 提醒新消息
             getNotifier().viberateAndPlayTone(msg);
             //发送local广播
@@ -490,9 +485,9 @@ public class DemoHelper {
             msg.setFrom(accepter);
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new TextMessageBody(accepter + " " +st4));
+            msg.addBody(new EMTextMessageBody(accepter + " " +st4));
             // 保存同意消息
-            EMChatManager.getInstance().saveMessage(msg);
+            EMClient.getInstance().chatManager().saveMessage(msg);
             // 提醒新消息
             getNotifier().viberateAndPlayTone(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
@@ -508,7 +503,7 @@ public class DemoHelper {
      * 好友变化listener
      * 
      */
-    public class MyContactListener implements EMContactListener {
+    public class MyContactListener extends EMContactListener {
 
         @Override
         public void onContactAdded(List<String> usernameList) {         
@@ -628,7 +623,7 @@ public class DemoHelper {
         //实际开发中，可能还需要从服务器获取用户信息,
         //从服务器获取的数据，最好缓存起来，避免频繁的网络请求
         EaseUser user = null;
-        if(username.equals(EMChatManager.getInstance().getCurrentUser()))
+        if(username.equals(EMClient.getInstance().getCurrentUser()))
             return getUserProfileManager().getCurrentUserInfo();
         user = getContactList().get(username);
         //TODO 获取不在好友列表里的群成员具体信息，即陌生人信息，demo未实现
@@ -644,40 +639,22 @@ public class DemoHelper {
      * activityList.size() <= 0 意味着所有页面都已经在后台运行，或者已经离开Activity Stack
      */
     protected void registerEventListener() {
-        eventListener = new EMEventListener() {
+    	messageListener = new EMMessageListener() {
             private BroadcastReceiver broadCastReceiver = null;
-            
-            @Override
-            public void onEvent(EMNotifierEvent event) {
-                EMMessage message = null;
-                if(event.getData() instanceof EMMessage){
-                    message = (EMMessage)event.getData();
-                    EMLog.d(TAG, "receive the event : " + event.getEvent() + ",id : " + message.getMsgId());
+			
+			@Override
+			public void onMessageReceived(EMMessage message) {
+				EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+				//应用在后台，不需要刷新UI,通知栏提示新消息
+                if(!easeUI.hasForegroundActivies()){
+                    getNotifier().onNewMsg(message);
                 }
                 
-                switch (event.getEvent()) {
-                case EventNewMessage:
-                    //应用在后台，不需要刷新UI,通知栏提示新消息
-                    if(!easeUI.hasForegroundActivies()){
-                        getNotifier().onNewMsg(message);
-                    }
-                    break;
-                case EventOfflineMessage:
-                    if(!easeUI.hasForegroundActivies()){
-                        EMLog.d(TAG, "received offline messages");
-                        List<EMMessage> messages = (List<EMMessage>) event.getData();
-                        getNotifier().onNewMesg(messages);
-                    }
-                    break;
-                // below is just giving a example to show a cmd toast, the app should not follow this
-                // so be careful of this
-                case EventNewCMDMessage:
-                { 
-                    
+                if (message.getType() == Type.CMD) {
                     EMLog.d(TAG, "收到透传消息");
                     //获取消息body
-                    CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-                    final String action = cmdMsgBody.action;//获取自定义action
+                    EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+                    final String action = cmdMsgBody.action();//获取自定义action
                     
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
@@ -704,24 +681,26 @@ public class DemoHelper {
                     Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
                     broadcastIntent.putExtra("cmd_value", str+action);
                     appContext.sendBroadcast(broadcastIntent, null);
-                    
-                    break;
                 }
-                case EventDeliveryAck:
-                    message.setDelivered(true);
-                    break;
-                case EventReadAck:
-                    message.setAcked(true);
-                    break;
-                // add other events in case you are interested in
-                default:
-                    break;
-                }
-                
-            }
-        };
-        
-        EMChatManager.getInstance().registerEventListener(eventListener);
+			}
+			
+			@Override
+			public void onMessageReadAckReceived(EMMessage message) {
+				message.setAcked(true);
+			}
+			
+			@Override
+			public void onMessageDeliveryAckReceived(EMMessage message) {
+				message.setDelivered(true);
+			}
+			
+			@Override
+			public void onMessageChanged(EMMessage message, Object change) {
+				
+			}
+		};
+		
+        EMClient.getInstance().chatManager().addMessageListener(messageListener);
     }
 
 	/**
@@ -730,7 +709,7 @@ public class DemoHelper {
 	 * @return
 	 */
 	public boolean isLoggedIn() {
-		return EMChat.getInstance().isLoggedIn();
+		return EMClient.getInstance().isLoggedIn();
 	}
 
 	/**
@@ -743,7 +722,7 @@ public class DemoHelper {
 	 */
 	public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
 		endCall();
-		EMChatManager.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+		EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
 			@Override
 			public void onSuccess() {
@@ -864,7 +843,7 @@ public class DemoHelper {
 
 	void endCall() {
 		try {
-			EMChatManager.getInstance().endCall();
+			EMClient.getInstance().callManager().endCall();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -941,10 +920,10 @@ public class DemoHelper {
            @Override
            public void run(){
                try {
-                   EMGroupManager.getInstance().getGroupsFromServer();
+                   EMClient.getInstance().groupManager().getGroupsFromServer();
                    
                    // in case that logout already before server returns, we should return immediately
-                   if(!EMChat.getInstance().isLoggedIn()){
+                   if(!EMClient.getInstance().isLoggedIn()){
                        return;
                    }
                    
@@ -993,9 +972,9 @@ public class DemoHelper {
            public void run(){
                List<String> usernames = null;
                try {
-                   usernames = EMContactManager.getInstance().getContactUserNames();
+                   usernames = EMClient.getInstance().contactManager().getAllContacts();
                    // in case that logout already before server returns, we should return immediately
-                   if(!EMChat.getInstance().isLoggedIn()){
+                   if(!EMClient.getInstance().isLoggedIn()){
                        return;
                    }
                   
@@ -1074,10 +1053,10 @@ public class DemoHelper {
            @Override
            public void run(){
                try {
-                   List<String> usernames = EMContactManager.getInstance().getBlackListUsernamesFromServer();
+                   List<String> usernames = EMClient.getInstance().contactManager().getBlackListFromServer();
                    
                    // in case that logout already before server returns, we should return immediately
-                   if(!EMChat.getInstance().isLoggedIn()){
+                   if(!EMClient.getInstance().isLoggedIn()){
                        return;
                    }
                    
@@ -1086,7 +1065,6 @@ public class DemoHelper {
                    isBlackListSyncedWithServer = true;
                    isSyncingBlackListWithServer = false;
                    
-                   EMContactManager.getInstance().saveBlackList(usernames);
                    notifyBlackListSyncListener(true);
                    if(callback != null){
                        callback.onSuccess(usernames);
@@ -1143,7 +1121,7 @@ public class DemoHelper {
         }
         
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
-        EMChat.getInstance().setAppInited();
+        EMClient.getInstance().setAppInited();
         alreadyNotified = true;
     }
 	
