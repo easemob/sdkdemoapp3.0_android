@@ -16,8 +16,6 @@ package com.easemob.chatuidemo;
 import android.app.Application;
 import android.content.Context;
 
-import com.easemob.EMCallBack;
-
 public class DemoApplication extends Application {
 
 	public static Context applicationContext;
@@ -29,6 +27,7 @@ public class DemoApplication extends Application {
 	 * 当前用户nickname,为了苹果推送不是userid而是昵称
 	 */
 	public static String currentUserNick = "";
+	
 
 	@Override
 	public void onCreate() {
@@ -38,12 +37,11 @@ public class DemoApplication extends Application {
         
         //init demo helper
         DemoHelper.getInstance().init(applicationContext);
+        
 	}
 
 	public static DemoApplication getInstance() {
 		return instance;
 	}
  
-
-
 }
