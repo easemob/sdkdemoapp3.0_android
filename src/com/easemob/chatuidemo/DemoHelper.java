@@ -59,7 +59,6 @@ import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.model.EaseNotifier;
 import com.easemob.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.easemob.easeui.utils.EaseCommonUtils;
-import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 
@@ -153,6 +152,14 @@ public class DemoHelper {
 	public void init(Context context) {
 		if (EaseUI.getInstance().init(context)) {
 		    appContext = context;
+		    
+		    //if your app is supposed to user Google Push, please set project number
+            String projectNumber = "562451699741";
+            //不使用GCM推送的注释掉这行
+            EMChatManager.getInstance().setGCMProjectNumber(projectNumber);
+            //在小米手机上当app被kill时使用小米推送进行消息提示，同GCM一样不是必须的
+            EMChatManager.getInstance().setMipushConfig("2882303761517370134", "5131737040134");
+		    
 		    //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
 		    EMChat.getInstance().setDebugMode(true);
 		    //get easeui instance
@@ -171,6 +178,7 @@ public class DemoHelper {
 			setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
 	        initDbDao();
+	        
 		}
 	}
 
