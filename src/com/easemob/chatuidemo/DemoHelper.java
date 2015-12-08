@@ -503,7 +503,7 @@ public class DemoHelper {
      * 好友变化listener
      * 
      */
-    public class MyContactListener extends EMContactListener {
+    public class MyContactListener implements EMContactListener {
 
         @Override
         public void onContactAdded(List<String> usernameList) {         
@@ -643,55 +643,55 @@ public class DemoHelper {
             private BroadcastReceiver broadCastReceiver = null;
 			
 			@Override
-			public void onMessageReceived(EMMessage message) {
-				EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
-				//应用在后台，不需要刷新UI,通知栏提示新消息
-                if(!easeUI.hasForegroundActivies()){
-                    getNotifier().onNewMsg(message);
-                }
-                
-                if (message.getType() == Type.CMD) {
-                    EMLog.d(TAG, "收到透传消息");
-                    //获取消息body
-                    EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
-                    final String action = cmdMsgBody.action();//获取自定义action
-                    
-                    //获取扩展属性 此处省略
-                    //message.getStringAttribute("");
-                    EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
-                    final String str = appContext.getString(R.string.receive_the_passthrough);
-                    
-                    final String CMD_TOAST_BROADCAST = "easemob.demo.cmd.toast";
-                    IntentFilter cmdFilter = new IntentFilter(CMD_TOAST_BROADCAST);
-                    
-                    if(broadCastReceiver == null){
-                        broadCastReceiver = new BroadcastReceiver(){
+			public void onMessageReceived(List<EMMessage> messages) {
+			    for (EMMessage message : messages) {
+			        EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+			        //应用在后台，不需要刷新UI,通知栏提示新消息
+			        if(!easeUI.hasForegroundActivies()){
+			            getNotifier().onNewMsg(message);
+			        }
 
-                            @Override
-                            public void onReceive(Context context, Intent intent) {
-                                // TODO Auto-generated method stub
-                                Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
-                            }
-                        };
-                        
-                      //注册广播接收者
-                        appContext.registerReceiver(broadCastReceiver,cmdFilter);
-                    }
+			        if (message.getType() == Type.CMD) {
+			            EMLog.d(TAG, "收到透传消息");
+			            //获取消息body
+			            EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+			            final String action = cmdMsgBody.action();//获取自定义action
 
-                    Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
-                    broadcastIntent.putExtra("cmd_value", str+action);
-                    appContext.sendBroadcast(broadcastIntent, null);
-                }
+			            //获取扩展属性 此处省略
+			            //message.getStringAttribute("");
+			            EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
+			            final String str = appContext.getString(R.string.receive_the_passthrough);
+
+			            final String CMD_TOAST_BROADCAST = "easemob.demo.cmd.toast";
+			            IntentFilter cmdFilter = new IntentFilter(CMD_TOAST_BROADCAST);
+
+			            if(broadCastReceiver == null){
+			                broadCastReceiver = new BroadcastReceiver(){
+
+			                    @Override
+			                    public void onReceive(Context context, Intent intent) {
+			                        // TODO Auto-generated method stub
+			                        Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
+			                    }
+			                };
+
+			                //注册广播接收者
+			                appContext.registerReceiver(broadCastReceiver,cmdFilter);
+			            }
+
+			            Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
+			            broadcastIntent.putExtra("cmd_value", str+action);
+			            appContext.sendBroadcast(broadcastIntent, null);
+			        }
+			    }
 			}
 			
 			@Override
-			public void onMessageReadAckReceived(EMMessage message) {
-				message.setAcked(true);
+			public void onMessageReadAckReceived(List<EMMessage> messages) {
 			}
 			
 			@Override
-			public void onMessageDeliveryAckReceived(EMMessage message) {
-				message.setDelivered(true);
+			public void onMessageDeliveryAckReceived(List<EMMessage> message) {
 			}
 			
 			@Override
