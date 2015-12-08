@@ -13,6 +13,8 @@
  */
 package com.easemob.chatuidemo.ui;
 
+import java.util.List;
+
 import com.easemob.EMCallBack;
 import com.easemob.EMMessageListener;
 import com.easemob.chat.EMClient;
@@ -177,17 +179,21 @@ public class MainActivity extends BaseActivity {
 	EMMessageListener messageListener = new EMMessageListener() {
 		
 		@Override
-		public void onMessageReceived(EMMessage message) {
+		public void onMessageReceived(List<EMMessage> messages) {
 			// 提示新消息
-			DemoHelper.getInstance().getNotifier().onNewMsg(message);
+		    for (EMMessage message : messages) {
+		        DemoHelper.getInstance().getNotifier().onNewMsg(message);
+		    }
 			refreshUIWithMessage();
 		}
 		
 		@Override
-		public void onMessageReadAckReceived(EMMessage message) {}
+		public void onMessageReadAckReceived(List<EMMessage> messages) {
+		}
 		
 		@Override
-		public void onMessageDeliveryAckReceived(EMMessage message) {}
+		public void onMessageDeliveryAckReceived(List<EMMessage> message) {
+		}
 		
 		@Override
 		public void onMessageChanged(EMMessage message, Object change) {}

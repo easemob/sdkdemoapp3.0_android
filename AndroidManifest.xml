@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.easemob.chatuidemo"
     android:versionCode="24"
-    android:versionName="2.2.4" >
+    android:versionName="3.0.4" >
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -340,7 +340,7 @@
         <!-- 设置环信应用的appkey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
-            android:value="easemob-demo#chatdemoui" />
+            android:value="easemob-demo#no1" />
         <!-- 声明sdk所需的service -->
         <service android:name="com.easemob.chat.EMChatService"
             android:exported="true"
