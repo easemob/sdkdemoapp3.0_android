@@ -6,6 +6,7 @@ import java.util.List;
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMClient;
+import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.DemoHelper.DataSyncListener;
 import com.easemob.chatuidemo.utils.PreferenceManager;
 import com.easemob.easeui.domain.EaseUser;
@@ -77,7 +78,7 @@ public class UserProfileManager {
 				isSyncingContactInfosWithServer = false;
 				// in case that logout already before server returns,we should
 				// return immediately
-				if (!EMClient.getInstance().isLoggedIn()) {
+				if (!DemoHelper.getInstance().isLoggedIn()) {
 					return;
 				}
 				if (callback != null) {

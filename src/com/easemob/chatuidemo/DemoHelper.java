@@ -709,7 +709,7 @@ public class DemoHelper {
 	 * @return
 	 */
 	public boolean isLoggedIn() {
-		return EMClient.getInstance().isLoggedIn();
+		return EMClient.getInstance().isLoggedInBefore();
 	}
 
 	/**
@@ -923,7 +923,7 @@ public class DemoHelper {
                    EMClient.getInstance().groupManager().getGroupsFromServer();
                    
                    // in case that logout already before server returns, we should return immediately
-                   if(!EMClient.getInstance().isLoggedIn()){
+                   if(!isLoggedIn()){
                        return;
                    }
                    
@@ -974,7 +974,7 @@ public class DemoHelper {
                try {
                    usernames = EMClient.getInstance().contactManager().getAllContacts();
                    // in case that logout already before server returns, we should return immediately
-                   if(!EMClient.getInstance().isLoggedIn()){
+                   if(!isLoggedIn()){
                        return;
                    }
                   
@@ -1056,7 +1056,7 @@ public class DemoHelper {
                    List<String> usernames = EMClient.getInstance().contactManager().getBlackListFromServer();
                    
                    // in case that logout already before server returns, we should return immediately
-                   if(!EMClient.getInstance().isLoggedIn()){
+                   if(!isLoggedIn()){
                        return;
                    }
                    
