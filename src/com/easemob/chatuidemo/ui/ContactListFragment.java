@@ -291,14 +291,9 @@ public class ContactListFragment extends EaseContactListFragment {
 
                 @Override
                 public void run() {
-                    try {
-						blackList = EMClient.getInstance().contactManager().getBlackListFromServer();
-	                    refresh();
-					} catch (EaseMobException e) {
-						e.printStackTrace();
-					}
+                    blackList = EMClient.getInstance().contactManager().getBlackListFromDB();
+                    refresh();
                 }
-                
             });
         }
         
