@@ -1,16 +1,15 @@
 package com.easemob.chatuidemo.widget;
 
+import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMTextMessageBody;
+import com.easemob.chatuidemo.Constant;
+import com.easemob.easeui.R;
+import com.easemob.easeui.widget.chatrow.EaseChatRow;
+
 import android.content.Context;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.easemob.chat.EMMessage;
-import com.easemob.chat.TextMessageBody;
-import com.easemob.chatuidemo.Constant;
-import com.easemob.easeui.EaseConstant;
-import com.easemob.easeui.R;
-import com.easemob.easeui.widget.chatrow.EaseChatRow;
 
 public class ChatRowVoiceCall extends EaseChatRow{
 
@@ -24,11 +23,11 @@ public class ChatRowVoiceCall extends EaseChatRow{
     @Override
     protected void onInflatView() {
         if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
-            inflater.inflate(message.direct == EMMessage.Direct.RECEIVE ?
+            inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
                     R.layout.ease_row_received_voice_call : R.layout.ease_row_sent_voice_call, this);
         // 视频通话
         }else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
-            inflater.inflate(message.direct == EMMessage.Direct.RECEIVE ?
+            inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
                     R.layout.ease_row_received_video_call : R.layout.ease_row_sent_video_call, this);
         }
     }
@@ -41,7 +40,7 @@ public class ChatRowVoiceCall extends EaseChatRow{
 
     @Override
     protected void onSetUpView() {
-        TextMessageBody txtBody = (TextMessageBody) message.getBody();
+        EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
         contentvView.setText(txtBody.getMessage());
     }
     

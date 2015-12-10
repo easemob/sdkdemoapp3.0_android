@@ -18,6 +18,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMGroup;
+import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.R;
+import com.easemob.easeui.adapter.EaseContactAdapter;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.widget.EaseSidebar;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,17 +39,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
-
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.R;
-import com.easemob.easeui.adapter.EaseContactAdapter;
-import com.easemob.easeui.domain.EaseUser;
-import com.easemob.easeui.widget.EaseSidebar;
 
 public class GroupPickContactsActivity extends BaseActivity {
 	private ListView listView;
@@ -63,7 +62,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 			isCreatingNewGroup = true;
 		} else {
 			// 获取此群组的成员列表
-			EMGroup group = EMGroupManager.getInstance().getGroup(groupId);
+			EMGroup group = EMClient.getInstance().groupManager().getGroup(groupId);
 			exitingMembers = group.getMembers();
 		}
 		if(exitingMembers == null)

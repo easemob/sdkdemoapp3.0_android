@@ -15,6 +15,12 @@ package com.easemob.chatuidemo.adapter;
 
 import java.util.List;
 
+import com.easemob.chat.EMClient;
+import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.db.InviteMessgeDao;
+import com.easemob.chatuidemo.domain.InviteMessage;
+import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -29,13 +35,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.db.InviteMessgeDao;
-import com.easemob.chatuidemo.domain.InviteMessage;
-import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 
 public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 
@@ -149,9 +148,9 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				// 调用sdk的同意方法
 				try {
 					if(msg.getGroupId() == null) {//同意好友请求
-						EMChatManager.getInstance().acceptInvitation(msg.getFrom());
+						EMClient.getInstance().contactManager().acceptInvitation(msg.getFrom());
 					} else { //同意加群申请
-					    EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+						EMClient.getInstance().groupManager().acceptApplication(msg.getFrom(), msg.getGroupId());
 					}
 					msg.setStatus(InviteMesageStatus.AGREED);
                     // 更新db

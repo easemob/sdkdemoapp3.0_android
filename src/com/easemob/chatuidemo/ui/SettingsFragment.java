@@ -13,6 +13,15 @@
  */
 package com.easemob.chatuidemo.ui;
 
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMOptions;
+import com.easemob.chatuidemo.Constant;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.DemoModel;
+import com.easemob.chatuidemo.R;
+import com.easemob.easeui.widget.EaseSwitchButton;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,16 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMChatOptions;
-import com.easemob.chatuidemo.Constant;
-import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.DemoModel;
-import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.utils.PreferenceManager;
-import com.easemob.easeui.widget.EaseSwitchButton;
 
 /**
  * 设置界面
@@ -95,7 +94,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton speakerSwitch;
     private EaseSwitchButton ownerLeaveSwitch;
     private DemoModel settingsModel;
-    private EMChatOptions chatOptions;
+    private EMOptions chatOptions;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,8 +120,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		ownerLeaveSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_owner_leave);
 		
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
-		if(!TextUtils.isEmpty(EMChatManager.getInstance().getCurrentUser())){
-			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMChatManager.getInstance().getCurrentUser() + ")");
+		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
+			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMClient.getInstance().getCurrentUser() + ")");
 		}
 
 		textview1 = (TextView) getView().findViewById(R.id.textview1);
@@ -134,7 +133,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pushNick=(LinearLayout) getView().findViewById(R.id.ll_set_push_nick);
 		
 		settingsModel = DemoHelper.getInstance().getModel();
-		chatOptions = EMChatManager.getInstance().getChatOptions();
+		chatOptions = EMClient.getInstance().getOptions();
 		
 		blacklistContainer.setOnClickListener(this);
 		userProfileContainer.setOnClickListener(this);
@@ -262,7 +261,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			break;
 		case R.id.ll_user_profile:
 			startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra("setting", true)
-			        .putExtra("username", EMChatManager.getInstance().getCurrentUser()));
+			        .putExtra("username", EMClient.getInstance().getCurrentUser()));
 			break;
 		default:
 			break;

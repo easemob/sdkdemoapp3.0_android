@@ -13,6 +13,15 @@
  */
 package com.easemob.chatuidemo.ui;
 
+import com.easemob.EMCallBack;
+import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMGroupManager;
+import com.easemob.chatuidemo.DemoApplication;
+import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.R;
+import com.easemob.easeui.utils.EaseCommonUtils;
+
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -25,14 +34,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chatuidemo.DemoApplication;
-import com.easemob.chatuidemo.DemoHelper;
-import com.easemob.chatuidemo.R;
-import com.easemob.easeui.utils.EaseCommonUtils;
 
 /**
  * 登陆页面
@@ -125,7 +126,7 @@ public class LoginActivity extends BaseActivity {
 
 		final long start = System.currentTimeMillis();
 		// 调用sdk登陆方法登陆聊天服务器
-		EMChatManager.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
+		EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
 
 			@Override
 			public void onSuccess() {
@@ -139,11 +140,11 @@ public class LoginActivity extends BaseActivity {
 
 				// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 				// ** manually load all local groups and
-			    EMGroupManager.getInstance().loadAllGroups();
-				EMChatManager.getInstance().loadAllConversations();
+			    EMClient.getInstance().groupManager().loadAllGroups();
+			    EMClient.getInstance().chatManager().loadAllConversations();
 				
 				// 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
-				boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
+				boolean updatenick = EMClient.getInstance().updateCurrentUserNick(
 						DemoApplication.currentUserNick.trim());
 				if (!updatenick) {
 					Log.e("LoginActivity", "update current user nick fail");

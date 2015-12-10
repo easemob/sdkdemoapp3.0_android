@@ -1,5 +1,11 @@
 package com.easemob.chatuidemo.ui;
 
+import com.easemob.EMError;
+import com.easemob.chat.EMClient;
+import com.easemob.chat.EMGroup;
+import com.easemob.chatuidemo.R;
+import com.easemob.exceptions.EaseMobException;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,13 +15,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.easemob.EMError;
-import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
-import com.easemob.chatuidemo.R;
-import com.easemob.exceptions.EaseMobException;
 
 public class PublicGroupsSeachActivity extends BaseActivity{
     private RelativeLayout containerLayout;
@@ -53,7 +52,7 @@ public class PublicGroupsSeachActivity extends BaseActivity{
 
             public void run() {
                 try {
-                    searchedGroup = EMGroupManager.getInstance().getGroupFromServer(idET.getText().toString());
+                    searchedGroup = EMClient.getInstance().groupManager().getGroupFromServer(idET.getText().toString());
                     runOnUiThread(new Runnable() {
                         public void run() {
                             pd.dismiss();
