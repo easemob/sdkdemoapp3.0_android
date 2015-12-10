@@ -19,6 +19,7 @@ import java.util.List;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMClient;
 import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
@@ -310,7 +311,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	 */
 	private void clearGroupHistory() {
 
-		EMConversation conversation = EMClient.getInstance().chatManager().getConversation(group.getGroupId());
+		EMConversation conversation = EMClient.getInstance().chatManager().getConversation(group.getGroupId(), EMConversationType.GroupChat);
 		if (conversation != null) {
 			conversation.clearAllMessages();
 		}

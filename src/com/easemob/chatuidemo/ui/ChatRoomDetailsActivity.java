@@ -39,6 +39,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
 import com.easemob.chat.EMClient;
 import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.easeui.widget.EaseAlertDialog;
@@ -228,7 +229,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	 * 清空群聊天记录
 	 */
 	public void clearGroupHistory() {
-		EMConversation conversation = EMClient.getInstance().chatManager().getConversation(room.getId());
+		EMConversation conversation = EMClient.getInstance().chatManager().getConversation(room.getId(), EMConversationType.ChatRoom);
 		if (conversation != null) {
 			conversation.clearAllMessages();
 		}
