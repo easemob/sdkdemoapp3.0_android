@@ -431,6 +431,7 @@ public class DemoHelper {
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
             msg.addBody(new EMTextMessageBody(inviter + " " +st3));
+            msg.setStatus(EMMessage.Status.SUCCESS);
             // 保存邀请消息
             EMClient.getInstance().chatManager().saveMessage(msg);
             // 提醒新消息
