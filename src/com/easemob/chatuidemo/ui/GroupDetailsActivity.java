@@ -16,12 +16,11 @@ package com.easemob.chatuidemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.easemob.chat.EMChatManager;
+import com.easemob.EMGroupChangeListener;
 import com.easemob.chat.EMClient;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMGroup;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.ui.EaseGroupRemoveListener;
 import com.easemob.easeui.utils.EaseUserUtils;
@@ -83,7 +82,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
     private RelativeLayout idLayout;
     private TextView idText;
 	private EaseSwitchButton switchButton;
-    private GroupRemoveListener groupRemoveListener;
+    private GroupChangeListener groupChangeListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -134,8 +133,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			deleteBtn.setVisibility(View.VISIBLE);
 		}
 		
-		groupRemoveListener = new GroupRemoveListener();
-		EMClient.getInstance().groupManager().addGroupChangeListener(groupRemoveListener);
+		groupChangeListener = new GroupChangeListener();
+		EMClient.getInstance().groupManager().addGroupChangeListener(groupChangeListener);
 		
 		((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getAffiliationsCount() + st);
 		
@@ -277,7 +276,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 	private void refreshMembers(){
 	    adapter.clear();
-        
         List<String> members = new ArrayList<String>();
         members.addAll(group.getMembers());
         adapter.addAll(members);
@@ -796,23 +794,69 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	    TextView textView;
 	    ImageView badgeDeleteView;
 	}
-	
-	/**
-     * 监测群组解散或者被T事件
-     * 
-     */
-    private class GroupRemoveListener extends EaseGroupRemoveListener {
+    
+    private class GroupChangeListener implements EMGroupChangeListener{
 
-        @Override
-        public void onUserRemoved(final String groupId, String groupName) {
-            finish();
-        }
+		@Override
+		public void onInvitationReceived(String groupId, String groupName,
+				String inviter, String reason) {
+			// TODO Auto-generated method stub
+			
+		}
 
-        @Override
-        public void onGroupDestroy(final String groupId, String groupName) {
-            finish();
-        }
+		@Override
+		public void onApplicationReceived(String groupId, String groupName,
+				String applyer, String reason) {
+			// TODO Auto-generated method stub
+			
+		}
 
+		@Override
+		public void onApplicationAccept(String groupId, String groupName,
+				String accepter) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onApplicationDeclined(String groupId, String groupName,
+				String decliner, String reason) {
+			
+		}
+
+		@Override
+		public void onInvitationAccpted(String groupId, String inviter,
+				String reason) {
+			runOnUiThread(new Runnable(){
+
+				@Override
+				public void run() {
+					refreshMembers();
+				}
+        		
+        	});
+			
+		}
+
+		@Override
+		public void onInvitationDeclined(String groupId, String invitee,
+				String reason) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onUserRemoved(String groupId, String groupName) {
+			finish();
+			
+		}
+
+		@Override
+		public void onGroupDestroy(String groupId, String groupName) {
+			finish();
+			
+		}
+    	
     }
 
 }
