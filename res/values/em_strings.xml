@@ -114,6 +114,7 @@
     <string name="unable_to_connect">Unable to connect to the server</string>
     <string name="newchat">Create new group</string>
     <string name="agree">Agree</string>
+    <string name="refuse">Refuse</string>
     <string name="Group_chat">Group chat</string>
     <string name="chat_room">Chat room</string>
     <string name="not_download">Did not download:</string>
@@ -247,9 +248,11 @@
     <string name="Has_agreed_to">Accepted</string>
     <string name="Has_refused_to">Refused</string>
     <string name="Are_agree_with">Accepting</string>
+    <string name="Are_refuse_with">Refusing</string>
     <string name="direct_call">Direct</string>
     <string name="relay_call">Relay</string>
     <string name="Agree_with_failure">Failed to accept</string>
+    <string name="Refuse_with_failure">Failed to refuse</string>
     <string name="Is_download_voice_click_later">Downloading the voice message, click later</string>
     <string name="Send_the_following_pictures">Send the following pictures?</string>
     <string name="search_new">Search</string>
