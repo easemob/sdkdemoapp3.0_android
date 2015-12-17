@@ -208,6 +208,13 @@ public class DemoModel {
         return PreferenceManager.getInstance().getSettingAllowChatroomOwnerLeave();
     }
    
+    public void setDeleteMessagesAsExitGroup(boolean value) {
+        PreferenceManager.getInstance().setDeleteMessagesAsExitGroup(value);
+    }
+    
+    public boolean isDeleteMessagesAsExitGroup() {
+        return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
+    }
     
     enum Key{
         VibrateAndPlayToneOn,
