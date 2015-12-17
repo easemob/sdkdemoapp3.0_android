@@ -266,6 +266,7 @@
     <string name= "no_more_messages">no more messages</string>
     <string name="join_public_group">Join public group</string>
     <string name="chatroom_allow_owner_leave">Allow chatroom owner leave</string>
+    <string name="delete_msg_when_exit_group">Delete messages when exit group</string>
     <string name="group_id">Group ID</string>
     <string name="move_out_backlist">Remove from blacklist</string>
     <string name="input_new_nick_hint">Input a new nick</string>
