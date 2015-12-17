@@ -78,6 +78,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 
 	private RelativeLayout rl_switch_chatroom_leave;
 	
+    private RelativeLayout rl_switch_delete_msg_when_exit_group;
  
 	/**
 	 * 诊断
@@ -93,6 +94,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton vibrateSwitch;
     private EaseSwitchButton speakerSwitch;
     private EaseSwitchButton ownerLeaveSwitch;
+    private EaseSwitchButton switch_delete_msg_when_exit_group;
     private DemoModel settingsModel;
     private EMOptions chatOptions;
 	
@@ -111,13 +113,16 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_vibrate = (RelativeLayout) getView().findViewById(R.id.rl_switch_vibrate);
 		rl_switch_speaker = (RelativeLayout) getView().findViewById(R.id.rl_switch_speaker);
 		rl_switch_chatroom_leave = (RelativeLayout) getView().findViewById(R.id.rl_switch_chatroom_owner_leave);
-
+		rl_switch_delete_msg_when_exit_group = (RelativeLayout) getView().findViewById(R.id.rl_switch_delete_msg_when_exit_group);
+		
 		
 		notifiSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
 		soundSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_sound);
 		vibrateSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_vibrate);
 		speakerSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_speaker);
 		ownerLeaveSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_owner_leave);
+		switch_delete_msg_when_exit_group = (EaseSwitchButton) getView().findViewById(R.id.switch_delete_msg_when_exit_group);
+		
 		
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
 		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
@@ -145,6 +150,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		llDiagnose.setOnClickListener(this);
 		pushNick.setOnClickListener(this);
 		rl_switch_chatroom_leave.setOnClickListener(this);
+		rl_switch_delete_msg_when_exit_group.setOnClickListener(this);
 		
 		
 		// 震动和声音总开关，来消息时，是否允许此开关打开
@@ -246,6 +252,17 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		        settingsModel.allowChatroomOwnerLeave(true);
 		        chatOptions.allowChatroomOwnerLeave(true);
 		    }
+		    break;
+		case R.id.rl_switch_delete_msg_when_exit_group:
+            if(switch_delete_msg_when_exit_group.isSwitchOpen()){
+                switch_delete_msg_when_exit_group.closeSwitch();
+                settingsModel.setDeleteMessagesAsExitGroup(false);
+                chatOptions.setDeleteMessagesAsExitGroup(false);
+            }else{
+                switch_delete_msg_when_exit_group.openSwitch();
+                settingsModel.setDeleteMessagesAsExitGroup(true);
+                chatOptions.setDeleteMessagesAsExitGroup(true);
+            }
 		    break;
 		case R.id.btn_logout: //退出登陆
 			logout();
