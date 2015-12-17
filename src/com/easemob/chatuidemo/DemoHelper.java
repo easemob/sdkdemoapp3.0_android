@@ -18,6 +18,7 @@ import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.chat.EMMessage.Status;
 import com.easemob.chat.EMMessage.Type;
 import com.easemob.chat.EMOptions;
 import com.easemob.chat.EMTextMessageBody;
@@ -487,6 +488,7 @@ public class DemoHelper {
             msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
             msg.addBody(new EMTextMessageBody(accepter + " " +st4));
+            msg.setStatus(Status.SUCCESS);
             // 保存同意消息
             EMClient.getInstance().chatManager().saveMessage(msg);
             // 提醒新消息

@@ -4,6 +4,7 @@ import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMClient;
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMMessage.Status;
 import com.easemob.chat.EMTextMessageBody;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
@@ -168,6 +169,7 @@ public class CallActivity extends BaseActivity {
         // 设置消息body
         message.addBody(txtBody);
         message.setMsgId(msgid);
+        message.setStatus(Status.SUCCESS);
 
         // 保存
         EMClient.getInstance().chatManager().saveMessage(message);
