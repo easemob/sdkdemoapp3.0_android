@@ -14,9 +14,7 @@
 package com.easemob.chatuidemo.ui;
 
 import com.easemob.EMCallBack;
-import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMClient;
-import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
