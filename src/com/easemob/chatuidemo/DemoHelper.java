@@ -148,6 +148,9 @@ public class DemoHelper {
 	public void init(Context context) {
 		if (EaseUI.getInstance().init(context)) {
 		    appContext = context;
+		    
+		    contactList = new HashMap<String, EaseUser>();
+		    
 		    //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
 		    EMClient.getInstance().setDebugMode(true);
 		    //get easeui instance
@@ -620,10 +623,6 @@ public class DemoHelper {
     }
 	
 	private EaseUser getUserInfo(String username){
-		if(contactList == null){
-			return null;
-		}
-		
 	    //获取user信息，demo是从内存的好友列表里获取，
         //实际开发中，可能还需要从服务器获取用户信息,
         //从服务器获取的数据，最好缓存起来，避免频繁的网络请求
@@ -774,8 +773,13 @@ public class DemoHelper {
 	 * 
 	 * @param contactList
 	 */
-	public void setContactList(Map<String, EaseUser> contactList) {
-		this.contactList = contactList;
+	public void setContactList(Map<String, EaseUser> aContactList) {
+		if(aContactList == null){
+			contactList.clear();
+			return;
+		}
+		
+		contactList = aContactList;
 	}
 	
 	/**
