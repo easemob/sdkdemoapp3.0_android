@@ -150,8 +150,6 @@ public class DemoHelper {
 		if (EaseUI.getInstance().init(context)) {
 		    appContext = context;
 		    
-		    contactList = new HashMap<String, EaseUser>();
-		    
 		    //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
 		    EMClient.getInstance().setDebugMode(true);
 		    //get easeui instance
@@ -800,6 +798,11 @@ public class DemoHelper {
     public Map<String, EaseUser> getContactList() {
         if (isLoggedIn() && contactList == null) {
             contactList = demoModel.getContactList();
+        }
+        
+        // return a empty non-null object to avoid app crash
+        if(contactList == null){
+        	return new HashMap<String, EaseUser>();
         }
         
         return contactList;
