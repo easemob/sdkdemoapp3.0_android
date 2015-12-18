@@ -78,6 +78,7 @@
             android:layout_above="@+id/ll_surface_baseline"
             android:layout_alignParentRight="true" />
 
+        
         <LinearLayout
             android:id="@+id/ll_surface_baseline"
             android:layout_width="match_parent"
