@@ -117,7 +117,7 @@ public class LoginActivity extends BaseActivity {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				Log.d(TAG, "onCancel, call logout");
-				EMClient.getInstance().logout();
+				EMClient.getInstance().logout(null);
 				progressShow = false;
 			}
 		});
