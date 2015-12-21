@@ -81,7 +81,7 @@
         <!-- 聊天页面 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.ChatActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize" >
