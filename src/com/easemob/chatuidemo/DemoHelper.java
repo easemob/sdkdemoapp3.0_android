@@ -174,7 +174,8 @@ public class DemoHelper {
 	private void setChatOptions(){
 	    //easeui库默认设置了一些options，可以覆盖
 	    EMOptions options = EMClient.getInstance().getOptions();
-	    options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());  
+	    options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
+	    options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
 	}
 
     protected void setEaseUIProviders() {
