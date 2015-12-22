@@ -121,8 +121,6 @@ public class MainActivity extends BaseActivity {
 				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
 				.commit();
 		
-		// 注册群组和联系人监听
-        DemoHelper.getInstance().registerGroupAndContactListener();
 		registerBroadcastReceiver();
 		
 		
