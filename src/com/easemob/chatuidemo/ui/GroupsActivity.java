@@ -153,8 +153,8 @@ public class GroupsActivity extends BaseActivity {
 
 	@Override
 	public void onResume() {
+        refresh();
 		super.onResume();
-		refresh();
 	}
 	
 	private void refresh(){
