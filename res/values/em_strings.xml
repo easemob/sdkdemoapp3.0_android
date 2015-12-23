@@ -298,4 +298,5 @@
     <string name="user_already_in_contactlist">This user already is your friend, only need remove out from the black list</string>
     <string name="group_nick">Group Nick:</string>
     <string name="group_owner">Group Owner:</string>
+    <string name="chatroom_not_support_forward">Chatroom does not support forward message</string>
 </resources>

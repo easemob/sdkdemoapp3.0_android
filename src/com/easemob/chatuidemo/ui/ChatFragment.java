@@ -29,6 +29,7 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.EmojiconExampleGroupData;
 import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
+import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.ui.EaseChatFragment;
 import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
@@ -105,6 +106,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 break;
 
             case ContextMenuActivity.RESULT_CODE_FORWARD: // 转发消息
+                if(chatType == EaseConstant.CHATTYPE_CHATROOM){
+                    Toast.makeText(getActivity(), R.string.chatroom_not_support_forward, 1).show();
+                    return;
+                }
                 Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
                 intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
                 startActivity(intent);
