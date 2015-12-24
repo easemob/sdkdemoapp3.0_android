@@ -116,8 +116,7 @@ public class LoginActivity extends BaseActivity {
 
 			@Override
 			public void onCancel(DialogInterface dialog) {
-				Log.d(TAG, "onCancel, call logout");
-				EMClient.getInstance().logout(null);
+				Log.d(TAG, "EMClient.getInstance().onCancel");
 				progressShow = false;
 			}
 		});
@@ -126,12 +125,15 @@ public class LoginActivity extends BaseActivity {
 
 		final long start = System.currentTimeMillis();
 		// 调用sdk登陆方法登陆聊天服务器
+		Log.d(TAG, "EMClient.getInstance().login");
 		EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
 
 			@Override
 			public void onSuccess() {
-				if (!progressShow) {
-					return;
+				Log.d(TAG, "login: onSuccess");
+
+				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
+					pd.dismiss();
 				}
 				// 登陆成功，保存用户名
 				DemoHelper.getInstance().setCurrentUserName(currentUsername);
@@ -151,24 +153,23 @@ public class LoginActivity extends BaseActivity {
 				}
 				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-				
-				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
-					pd.dismiss();
-				}
+
 				// 进入主页面
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);
 				startActivity(intent);
-				
+
 				finish();
 			}
 
 			@Override
 			public void onProgress(int progress, String status) {
+				Log.d(TAG, "login: onProgress");
 			}
 
 			@Override
 			public void onError(final int code, final String message) {
+				Log.d(TAG, "login: onError: " + code);
 				if (!progressShow) {
 					return;
 				}
