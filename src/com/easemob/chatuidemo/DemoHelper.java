@@ -730,10 +730,12 @@ public class DemoHelper {
 	 */
 	public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
 		endCall();
+		Log.d(TAG, "logout: " + unbindDeviceToken);
 		EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
 			@Override
 			public void onSuccess() {
+				Log.d(TAG, "logout: onSuccess");
 			    reset();
 				if (callback != null) {
 					callback.onSuccess();
@@ -750,6 +752,7 @@ public class DemoHelper {
 
 			@Override
 			public void onError(int code, String error) {
+				Log.d(TAG, "logout: onSuccess");
 				if (callback != null) {
 					callback.onError(code, error);
 				}
