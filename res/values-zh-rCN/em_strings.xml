@@ -119,6 +119,7 @@
     <string name="unable_to_connect">不能连接到服务器</string>
     <string name="newchat">新建聊天</string>
     <string name="agree">同意</string>
+    <string name="refuse">拒绝</string>
     <string name="Group_chat">群聊:</string>
     <string name="not_download">未下载:</string>
 	<string name="Please_enter_a_username">请输入用户名</string>
@@ -251,9 +252,11 @@
     <string name="Has_agreed_to">已同意</string>
     <string name="Has_refused_to">已拒绝</string>
     <string name="Are_agree_with">正在同意...</string>
+    <string name="Are_refuse_with">正在拒绝...</string>    
     <string name="direct_call">Direct</string>
     <string name="relay_call">Relay</string>
     <string name="Agree_with_failure">同意失败:</string>
+    <string name="Refuse_with_failure">拒绝失败:</string>
     <string name="Is_download_voice_click_later">正在下载语音，稍后点击</string>
     <string name="Send_the_following_pictures">发送以下图片？</string>
     <string name="search_new">搜</string>
@@ -273,7 +276,8 @@
     
     <string name= "no_more_messages">没有更多的消息了</string>
     <string name="gorup_not_found">找不到这个群组</string>
-    <string name= "chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
+    <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
+    <string name="delete_msg_when_exit_group">退出群组时删除聊天数据</string>
     <string name="group_id">群ID</string>
     <string name="move_out_backlist">移出黑名单</string>
     <string name="input_new_nick_hint">输入新昵称</string>

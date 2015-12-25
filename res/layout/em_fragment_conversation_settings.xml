@@ -5,7 +5,7 @@
     android:background="@color/common_bg"
     android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.easemob.easeui.widget.EaseTitleBar
+    <com.hyphenate.easeui.widget.EaseTitleBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleBarTitle="@string/set"
@@ -65,7 +65,7 @@
                         android:textSize="14sp"
                         android:typeface="serif" />
 
-                    <com.easemob.easeui.widget.EaseSwitchButton
+                    <com.hyphenate.easeui.widget.EaseSwitchButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/switch_notification"
@@ -98,7 +98,7 @@
                         android:textSize="14sp"
                         android:typeface="serif" />
 
-                    <com.easemob.easeui.widget.EaseSwitchButton
+                    <com.hyphenate.easeui.widget.EaseSwitchButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/switch_sound"
@@ -131,7 +131,7 @@
                         android:textSize="14sp"
                         android:typeface="serif" />
 
-                    <com.easemob.easeui.widget.EaseSwitchButton
+                    <com.hyphenate.easeui.widget.EaseSwitchButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/switch_vibrate"
@@ -178,7 +178,7 @@
                         android:textSize="14sp"
                         android:typeface="serif" />
 
-                    <com.easemob.easeui.widget.EaseSwitchButton
+                    <com.hyphenate.easeui.widget.EaseSwitchButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/switch_speaker"
@@ -308,7 +308,7 @@
                     android:textSize="14sp"
                     android:typeface="serif" />
 
-                <com.easemob.easeui.widget.EaseSwitchButton
+                <com.hyphenate.easeui.widget.EaseSwitchButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/switch_owner_leave"
@@ -316,6 +316,32 @@
                     android:layout_centerVertical="true" />
             </RelativeLayout>
 
+            
+            <RelativeLayout
+                android:id="@+id/rl_switch_delete_msg_when_exit_group"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:background="@drawable/em_btn_bottom_selector"
+                android:padding="10dip" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="10dip"
+                    android:text="@string/delete_msg_when_exit_group"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:typeface="serif" />
+
+                <com.hyphenate.easeui.widget.EaseSwitchButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/switch_delete_msg_when_exit_group"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
