@@ -14,12 +14,11 @@
 
 package com.hyphenate.chatuidemo.ui;
 
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -79,7 +78,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 							showGroupDetail();
 						}
 					});
-				} catch (final EaseMobException e) {
+				} catch (final HyphenateException e) {
 					e.printStackTrace();
 					final String st1 = getResources().getString(R.string.Failed_to_get_group_chat_information);
 					runOnUiThread(new Runnable() {
@@ -126,7 +125,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 							btn_add_group.setEnabled(false);
 						}
 					});
-				} catch (final EaseMobException e) {
+				} catch (final HyphenateException e) {
 					e.printStackTrace();
 					runOnUiThread(new Runnable() {
 						public void run() {

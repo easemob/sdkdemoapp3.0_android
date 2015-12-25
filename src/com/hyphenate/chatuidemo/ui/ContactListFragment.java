@@ -14,7 +14,6 @@
 package com.hyphenate.chatuidemo.ui;
 
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMContactManager;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.DemoHelper.DataSyncListener;
 import com.hyphenate.chatuidemo.R;
@@ -23,7 +22,6 @@ import com.hyphenate.chatuidemo.db.UserDao;
 import com.hyphenate.chatuidemo.widget.ContactItemView;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseContactListFragment;
-import com.hyphenate.exceptions.EaseMobException;
 import com.hyphenate.util.EMLog;
 
 import android.app.ProgressDialog;

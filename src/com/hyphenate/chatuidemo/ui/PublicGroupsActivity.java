@@ -17,6 +17,12 @@ package com.hyphenate.chatuidemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCursorResult;
+import com.hyphenate.chat.EMGroupInfo;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,13 +40,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCursorResult;
-import com.hyphenate.chat.EMGroupInfo;
-import com.hyphenate.chat.EMGroupManager;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EaseMobException;
 
 public class PublicGroupsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -156,7 +155,7 @@ public class PublicGroupsActivity extends BaseActivity {
                             isLoading = false;
                         }
                     });
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
                         public void run() {

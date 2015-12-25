@@ -17,7 +17,7 @@ import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -90,7 +90,7 @@ public class RegisterActivity extends BaseActivity {
 								finish();
 							}
 						});
-					} catch (final EaseMobException e) {
+					} catch (final HyphenateException e) {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								if (!RegisterActivity.this.isFinishing())

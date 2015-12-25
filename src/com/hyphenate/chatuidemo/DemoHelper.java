@@ -8,13 +8,13 @@ import java.util.UUID;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
 import com.hyphenate.EMGroupChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
-import com.hyphenate.chat.EMContactListener;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
@@ -47,7 +47,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
 import android.app.Activity;
@@ -961,7 +961,7 @@ public class DemoHelper {
                    if(callback != null){
                        callback.onSuccess();
                    }
-               } catch (EaseMobException e) {
+               } catch (HyphenateException e) {
                    demoModel.setGroupsSynced(false);
                    isGroupsSyncedWithServer = false;
                    isSyncingGroupsWithServer = false;
@@ -1041,7 +1041,7 @@ public class DemoHelper {
                    if(callback != null){
                        callback.onSuccess(usernames);
                    }
-               } catch (EaseMobException e) {
+               } catch (HyphenateException e) {
                    demoModel.setContactSynced(false);
                    isContactsSyncedWithServer = false;
                    isSyncingContactsWithServer = false;
@@ -1090,7 +1090,7 @@ public class DemoHelper {
                    if(callback != null){
                        callback.onSuccess(usernames);
                    }
-               } catch (EaseMobException e) {
+               } catch (HyphenateException e) {
                    demoModel.setBlacklistSynced(false);
                    
                    isBlackListSyncedWithServer = false;

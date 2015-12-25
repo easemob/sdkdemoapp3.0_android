@@ -22,13 +22,12 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.easeui.ui.EaseGroupRemoveListener;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseExpandGridView;
 import com.hyphenate.easeui.widget.EaseSwitchButton;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.NetUtils;
 
@@ -227,7 +226,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 									}
 								});
 								
-							} catch (EaseMobException e) {
+							} catch (HyphenateException e) {
 								e.printStackTrace();
 								runOnUiThread(new Runnable() {
 									public void run() {
@@ -262,7 +261,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         					Toast.makeText(getApplicationContext(), R.string.Move_into_blacklist_success, 0).show();
         				}
         			});
-        		} catch (EaseMobException e) {
+        		} catch (HyphenateException e) {
         			runOnUiThread(new Runnable() {
         				public void run() {
         				    pd.dismiss();

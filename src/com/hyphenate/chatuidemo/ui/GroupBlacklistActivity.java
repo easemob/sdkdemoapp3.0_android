@@ -3,6 +3,10 @@ package com.hyphenate.chatuidemo.ui;
 import java.util.Collections;
 import java.util.List;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -16,11 +20,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMGroupManager;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EaseMobException;
 
 public class GroupBlacklistActivity extends BaseActivity {
 	private ListView listView;
@@ -55,7 +54,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 							}
 						});
 					}
-				} catch (EaseMobException e) {
+				} catch (HyphenateException e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
 							Toast.makeText(getApplicationContext(), st1, 1).show();
@@ -96,7 +95,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 			// 移出黑民单
 		    EMClient.getInstance().groupManager().unblockUser(groupId, tobeRemoveUser);
 			adapter.remove(tobeRemoveUser);
-		} catch (EaseMobException e) {
+		} catch (HyphenateException e) {
 			e.printStackTrace();
 			runOnUiThread(new Runnable() {
 				public void run() {

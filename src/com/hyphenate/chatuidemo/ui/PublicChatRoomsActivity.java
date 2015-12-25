@@ -18,12 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hyphenate.EMChatRoomChangeListener;
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -242,7 +241,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
                             isLoading = false;
                         }
                     });
-                } catch (EaseMobException e) {
+                } catch (HyphenateException e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
                         public void run() {

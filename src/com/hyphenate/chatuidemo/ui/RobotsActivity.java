@@ -25,7 +25,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.UserDao;
 import com.hyphenate.chatuidemo.domain.RobotUser;
-import com.hyphenate.exceptions.EaseMobException;
+import com.hyphenate.exceptions.HyphenateException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -158,7 +158,7 @@ public class RobotsActivity extends BaseActivity {
 				try {
 					List<EMContact> mList = EMClient.getInstance().getRobotsFromServer();
 					callback.onSuccess(mList);
-				} catch (EaseMobException e) {
+				} catch (HyphenateException e) {
 					e.printStackTrace();
 					callback.onError(e.getErrorCode(), e.toString());
 				}
