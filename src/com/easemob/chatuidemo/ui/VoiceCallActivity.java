@@ -283,13 +283,13 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 
                     break;
                     
-                case NETWORK_UNSTABLE:
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(getApplicationContext(), R.string.network_unstable, 0).show();
-                        }
-                    });
-                    break;
+//                case NETWORK_UNSTABLE:
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            Toast.makeText(getApplicationContext(), R.string.network_unstable, 0).show();
+//                        }
+//                    });
+//                    break;
 
                 default:
                     break;
