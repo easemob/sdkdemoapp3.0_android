@@ -17,5 +17,5 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 PB_LITE=1
-#libeasemob.so
+#libhyphenate.so
 include $(LOCAL_PATH)/../../emclient-linux/Android.mk
