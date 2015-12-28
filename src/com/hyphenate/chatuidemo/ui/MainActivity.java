@@ -470,7 +470,9 @@ public class MainActivity extends BaseActivity {
 						dialog.dismiss();
 						conflictBuilder = null;
 						finish();
-						startActivity(new Intent(MainActivity.this, LoginActivity.class));
+						Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(intent);
 					}
 				});
 				conflictBuilder.setCancelable(false);
