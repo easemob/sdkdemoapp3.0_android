@@ -16,6 +16,7 @@ package com.hyphenate.chatuidemo.ui;
 import java.util.List;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -47,6 +48,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
 
@@ -124,6 +126,7 @@ public class MainActivity extends BaseActivity {
 		registerBroadcastReceiver();
 		
 		
+		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 		//内部测试方法，请忽略
         registerInternalDebugReceiver();
 	}
@@ -252,6 +255,34 @@ public class MainActivity extends BaseActivity {
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
+	
+	public class MyContactListener implements EMContactListener {
+        @Override
+        public void onContactAdded(List<String> usernameList) {}
+        @Override
+        public void onContactDeleted(final List<String> usernameList) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    for (String deleted : usernameList) {
+                        if (ChatActivity.activityInstance != null && ChatActivity.activityInstance.toChatUsername != null &&
+                                deleted.equals(ChatActivity.activityInstance.toChatUsername)) {
+                            String st10 = getResources().getString(R.string.have_you_removed);
+                            Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, 1)
+                            .show();
+                            ChatActivity.activityInstance.finish();
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+        @Override
+        public void onContactInvited(String username, String reason) {}
+        @Override
+        public void onContactAgreed(String username) {}
+        @Override
+        public void onContactRefused(String username) {}
+	}
 	
 	private void unregisterBroadcastReceiver(){
 	    broadcastManager.unregisterReceiver(broadcastReceiver);
