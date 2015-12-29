@@ -3,8 +3,8 @@
         android:id="@+id/delete_conversation"
         android:title="@string/delete_conversation"/>
     
-    <!-- <item
+    <item
         android:id="@+id/delete_message"
-        android:title="@string/delete_conversation_messages"/> -->
+        android:title="@string/delete_conversation_messages"/>
     
 </menu>
