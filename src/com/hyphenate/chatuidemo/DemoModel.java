@@ -216,6 +216,14 @@ public class DemoModel {
         return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
     }
     
+    public void setAutoAcceptGroupInvitation(boolean value) {
+        PreferenceManager.getInstance().setAutoAcceptGroupInvitation(value);
+    }
+    
+    public boolean isAutoAcceptGroupInvitation() {
+        return PreferenceManager.getInstance().isAutoAcceptGroupInvitation();
+    }
+    
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,

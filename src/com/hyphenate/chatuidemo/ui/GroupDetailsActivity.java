@@ -855,6 +855,12 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			finish();
 			
 		}
+
+        @Override
+        public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
+            // TODO Auto-generated method stub
+            
+        }
     	
     }
 

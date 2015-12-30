@@ -121,6 +121,8 @@
     <string name="is_down_please_wait">Downloading video, please try again later</string>
     <string name="Exit_the_group_chat">Exit the group</string>
     <string name="Please_enter_a_username">Please enter a username</string>
+    <string name="accept_join_group">accept join group:</string>
+    <string name="refuse_join_group">refuse join group:</string>
     
     <string name="not_add_myself">"Can't add myself"</string>
     <string name="This_user_is_already_your_friend">This user is already your friend</string>
@@ -267,6 +269,7 @@
     <string name="join_public_group">Join public group</string>
     <string name="chatroom_allow_owner_leave">Allow chatroom owner leave</string>
     <string name="delete_msg_when_exit_group">Delete messages when exit group</string>
+    <string name="auto_accept_group_invitation">Auto accept group invitation</string>    
     <string name="group_id">Group ID</string>
     <string name="move_out_backlist">Remove from blacklist</string>
     <string name="input_new_nick_hint">Input a new nick</string>
