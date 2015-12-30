@@ -22,7 +22,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 
 public class DbOpenHelper extends SQLiteOpenHelper{
 
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 6;
 	private static DbOpenHelper instance;
 
 	private static final String USERNAME_TABLE_CREATE = "CREATE TABLE "
@@ -41,7 +41,8 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 			+ InviteMessgeDao.COLUMN_NAME_STATUS + " INTEGER, "
 			+ InviteMessgeDao.COLUMN_NAME_ISINVITEFROMME + " INTEGER, "
 			+ InviteMessgeDao.COLUMN_NAME_UNREAD_MSG_COUNT + " INTEGER, "
-			+ InviteMessgeDao.COLUMN_NAME_TIME + " TEXT); ";
+			+ InviteMessgeDao.COLUMN_NAME_TIME + " TEXT, "
+	        + InviteMessgeDao.COLUMN_NAME_GROUPINVITER + " TEXT); ";
 			
 	private static final String ROBOT_TABLE_CREATE = "CREATE TABLE "
 			+ UserDao.ROBOT_TABLE_NAME + " ("
@@ -94,6 +95,10 @@ public class DbOpenHelper extends SQLiteOpenHelper{
 		if(oldVersion < 5){
 		    db.execSQL("ALTER TABLE " + InviteMessgeDao.TABLE_NAME + " ADD COLUMN " + 
 		            InviteMessgeDao.COLUMN_NAME_UNREAD_MSG_COUNT + " INTEGER ;");
+		}
+		if (oldVersion < 6) {
+		    db.execSQL("ALTER TABLE " + InviteMessgeDao.TABLE_NAME + " ADD COLUMN " + 
+		            InviteMessgeDao.COLUMN_NAME_GROUPINVITER + " TEXT;");
 		}
 	}
 	

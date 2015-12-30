@@ -176,6 +176,7 @@ public class DemoHelper {
 	    EMOptions options = EMClient.getInstance().getOptions();
 	    options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
 	    options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
+	    options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
 	}
 
     protected void setEaseUIProviders() {
@@ -416,7 +417,59 @@ public class DemoHelper {
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
             
+            new InviteMessgeDao(appContext).deleteMessage(groupId);
+            
+            // 用户申请加入群聊
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(groupId);
+            msg.setTime(System.currentTimeMillis());
+            msg.setGroupId(groupId);
+            msg.setGroupName(groupName);
+            msg.setReason(reason);
+            msg.setGroupInviter(inviter);
+            Log.d(TAG, "收到邀请加入群聊：" + groupName);
+            msg.setStatus(InviteMesageStatus.GROUPINVITATION);
+            notifyNewIviteMessage(msg);
+        }
+
+        @Override
+        public void onInvitationAccpted(String groupId, String invitee, String reason) {
+            
+            new InviteMessgeDao(appContext).deleteMessage(groupId);
+            
+            // 对方同意加群邀请
             boolean hasGroup = false;
+            EMGroup _group = null;
+            for (EMGroup group : EMClient.getInstance().groupManager().getAllGroups()) {
+                if (group.getGroupId().equals(groupId)) {
+                    hasGroup = true;
+                    _group = group;
+                    break;
+                }
+            }
+            if (!hasGroup)
+                return;
+            
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(groupId);
+            msg.setTime(System.currentTimeMillis());
+            msg.setGroupId(groupId);
+            msg.setGroupName(_group == null ? groupId : _group.getGroupName());
+            msg.setReason(reason);
+            msg.setGroupInviter(invitee);
+            Log.d(TAG, invitee + "同意加入群聊：" + _group == null ? groupId : _group.getGroupName());
+            msg.setStatus(InviteMesageStatus.GROUPINVITATION_ACCEPTED);
+            notifyNewIviteMessage(msg);
+        }
+        
+        @Override
+        public void onInvitationDeclined(String groupId, String invitee, String reason) {
+            
+            new InviteMessgeDao(appContext).deleteMessage(groupId);
+            
+            // 对方同意加群邀请
+            boolean hasGroup = false;
+            EMGroup _group = null;
             for (EMGroup group : EMClient.getInstance().groupManager().getAllGroups()) {
                 if (group.getGroupId().equals(groupId)) {
                     hasGroup = true;
@@ -425,29 +478,17 @@ public class DemoHelper {
             }
             if (!hasGroup)
                 return;
-
-            // 被邀请
-            String st3 = appContext.getString(R.string.Invite_you_to_join_a_group_chat);
-            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
-            msg.setChatType(ChatType.GroupChat);
-            msg.setFrom(inviter);
-            msg.setTo(groupId);
-            msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new EMTextMessageBody(inviter + " " +st3));
-            msg.setStatus(EMMessage.Status.SUCCESS);
-            // 保存邀请消息
-            EMClient.getInstance().chatManager().saveMessage(msg);
-            // 提醒新消息
-            getNotifier().viberateAndPlayTone(msg);
-            //发送local广播
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-        }
-
-        @Override
-        public void onInvitationAccpted(String groupId, String inviter, String reason) {
-        }
-        @Override
-        public void onInvitationDeclined(String groupId, String invitee, String reason) {
+            
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(groupId);
+            msg.setTime(System.currentTimeMillis());
+            msg.setGroupId(groupId);
+            msg.setGroupName(_group == null ? groupId : _group.getGroupName());
+            msg.setReason(reason);
+            msg.setGroupInviter(invitee);
+            Log.d(TAG, invitee + "拒绝加入群聊：" + _group == null ? groupId : _group.getGroupName());
+            msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
+            notifyNewIviteMessage(msg);
         }
 
         @Override
@@ -501,6 +542,26 @@ public class DemoHelper {
         @Override
         public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
             // 加群申请被拒绝，demo未实现
+        }
+
+        @Override
+        public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
+            // 被邀请
+            String st3 = appContext.getString(R.string.Invite_you_to_join_a_group_chat);
+            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
+            msg.setChatType(ChatType.GroupChat);
+            msg.setFrom(inviter);
+            msg.setTo(groupId);
+            msg.setMsgId(UUID.randomUUID().toString());
+            msg.addBody(new EMTextMessageBody(inviter + " " +st3));
+            msg.setStatus(EMMessage.Status.SUCCESS);
+            // 保存邀请消息
+            EMClient.getInstance().chatManager().saveMessage(msg);
+            // 提醒新消息
+            getNotifier().viberateAndPlayTone(msg);
+            EMLog.d(TAG, "onAutoAcceptInvitationFromGroup groupId:" + groupId);
+            //发送local广播
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
     }
     

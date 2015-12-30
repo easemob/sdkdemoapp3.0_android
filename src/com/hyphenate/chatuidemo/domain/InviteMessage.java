@@ -26,6 +26,8 @@ public class InviteMessage {
 	private String groupId;
 	//群名称
 	private String groupName;
+	//群邀请者
+	private String groupInviter;
 	
 
 	private int id;
@@ -88,23 +90,42 @@ public class InviteMessage {
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
+	
+	public void setGroupInviter(String inviter) {
+	    groupInviter = inviter;
+	}
+	
+	public String getGroupInviter() {
+	    return groupInviter;	    
+	}
 
 
 
 	public enum InviteMesageStatus{
+	    
+	    //==好友
 		/**被邀请*/
 		BEINVITEED,
 		/**被拒绝*/
 		BEREFUSED,
 		/**对方同意*/
 		BEAGREED,
-		/**对方申请*/
+		
+		//==群组
+		/**对方申请进入群*/
 		BEAPPLYED,
 		/**我同意了对方的请求*/
 		AGREED,
 		/**我拒绝了对方的请求*/
-		REFUSED
+		REFUSED,
 		
+		//==群邀请
+		/**收到对方的群邀请**/
+		GROUPINVITATION,
+		/**收到对方同意群邀请的通知**/
+		GROUPINVITATION_ACCEPTED,
+        /**收到对方拒绝群邀请的通知**/
+		GROUPINVITATION_DECLINED
 	}
 	
 }
