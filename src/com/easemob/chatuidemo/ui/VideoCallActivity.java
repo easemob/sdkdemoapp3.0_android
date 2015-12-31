@@ -79,6 +79,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private LinearLayout topContainer;
     private LinearLayout bottomContainer;
     private TextView monitorTextView;
+    private TextView netwrokStatusVeiw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +112,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         topContainer = (LinearLayout) findViewById(R.id.ll_top_container);
         bottomContainer = (LinearLayout) findViewById(R.id.ll_bottom_container);
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
+        netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         
 
         refuseBtn.setOnClickListener(this);
@@ -237,7 +239,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         callStateListener = new EMCallStateChangeListener() {
 
             @Override
-            public void onCallStateChanged(CallState callState, CallError error) {
+            public void onCallStateChanged(CallState callState, final CallError error) {
                 // Message msg = handler.obtainMessage();
                 switch (callState) {
 
@@ -364,13 +366,24 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     });
 
                     break;
-//                case NETWORK_UNSTABLE:
-//                    runOnUiThread(new Runnable() {
-//                        public void run() {
-//                            Toast.makeText(getApplicationContext(), R.string.network_unstable, 0).show();
-//                        }
-//                    });
-//                    break;
+                case NETWORK_UNSTABLE:
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            netwrokStatusVeiw.setVisibility(View.VISIBLE);
+                            if(error == CallError.ERROR_NO_DATA){
+                                netwrokStatusVeiw.setText(R.string.no_call_data);
+                            }else{
+                                netwrokStatusVeiw.setText(R.string.network_unstable);
+                            }
+                        }
+                    });
+                    break;
+                case NETWORK_NORMAL:
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            netwrokStatusVeiw.setVisibility(View.INVISIBLE);
+                        }
+                    });
 
                 default:
                     break;
