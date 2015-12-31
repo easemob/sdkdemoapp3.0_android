@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
+import com.hyphenate.EMGroupChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -127,6 +128,7 @@ public class MainActivity extends BaseActivity {
 		
 		
 		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
+		EMClient.getInstance().groupManager().addGroupChangeListener(groupChangeListener);
 		//内部测试方法，请忽略
         registerInternalDebugReceiver();
 	}
@@ -302,6 +304,10 @@ public class MainActivity extends BaseActivity {
             unregisterReceiver(internalDebugReceiver);
         } catch (Exception e) {
         }
+		
+		if(groupChangeListener != null){
+			EMClient.getInstance().groupManager().removeGroupChangeListener(groupChangeListener);
+		}
 	}
 
 	/**
@@ -570,4 +576,76 @@ public class MainActivity extends BaseActivity {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		//getMenuInflater().inflate(R.menu.context_tab_contact, menu);
 	}
+	
+	// simply a demo showing the group change
+	EMGroupChangeListener groupChangeListener = new EMGroupChangeListener(){
+
+		@Override
+		public void onInvitationReceived(String groupId, String groupName,
+				String inviter, String reason) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onApplicationReceived(String groupId, String groupName,
+				String applyer, String reason) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onApplicationAccept(String groupId, String groupName,
+				String accepter) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onApplicationDeclined(String groupId, String groupName,
+				String decliner, String reason) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onInvitationAccpted(String groupId, String invitee,
+				String reason) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onInvitationDeclined(String groupId, String invitee,
+				String reason) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onUserRemoved(final String groupId, final String groupName) {
+			runOnUiThread(new Runnable(){
+
+				@Override
+				public void run() {
+					Toast.makeText(MainActivity.this, getResources().getString(R.string.user_removed_from_group) + " id : " + groupId + " " + groupName, Toast.LENGTH_LONG).show();					
+				}
+				
+			});
+		}
+
+		@Override
+		public void onGroupDestroy(String groupId, String groupName) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onAutoAcceptInvitationFromGroup(String groupId,
+				String inviter, String inviteMessage) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
 }
