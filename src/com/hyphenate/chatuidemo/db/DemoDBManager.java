@@ -205,6 +205,7 @@ public class DemoDBManager {
             values.put(InviteMessgeDao.COLUMN_NAME_REASON, message.getReason());
             values.put(InviteMessgeDao.COLUMN_NAME_TIME, message.getTime());
             values.put(InviteMessgeDao.COLUMN_NAME_STATUS, message.getStatus().ordinal());
+            values.put(InviteMessgeDao.COLUMN_NAME_GROUPINVITER, message.getGroupInviter());
             db.insert(InviteMessgeDao.TABLE_NAME, null, values);
             
             Cursor cursor = db.rawQuery("select last_insert_rowid() from " + InviteMessgeDao.TABLE_NAME,null); 
@@ -247,6 +248,7 @@ public class DemoDBManager {
                 String reason = cursor.getString(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_REASON));
                 long time = cursor.getLong(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_TIME));
                 int status = cursor.getInt(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_STATUS));
+                String groupInviter = cursor.getString(cursor.getColumnIndex(InviteMessgeDao.COLUMN_NAME_GROUPINVITER));
                 
                 msg.setId(id);
                 msg.setFrom(from);
@@ -254,6 +256,8 @@ public class DemoDBManager {
                 msg.setGroupName(groupname);
                 msg.setReason(reason);
                 msg.setTime(time);
+                msg.setGroupInviter(groupInviter);
+                
                 if(status == InviteMesageStatus.BEINVITEED.ordinal())
                     msg.setStatus(InviteMesageStatus.BEINVITEED);
                 else if(status == InviteMesageStatus.BEAGREED.ordinal())
@@ -264,9 +268,15 @@ public class DemoDBManager {
                     msg.setStatus(InviteMesageStatus.AGREED);
                 else if(status == InviteMesageStatus.REFUSED.ordinal())
                     msg.setStatus(InviteMesageStatus.REFUSED);
-                else if(status == InviteMesageStatus.BEAPPLYED.ordinal()){
+                else if(status == InviteMesageStatus.BEAPPLYED.ordinal())
                     msg.setStatus(InviteMesageStatus.BEAPPLYED);
-                }
+                else if(status == InviteMesageStatus.GROUPINVITATION.ordinal())
+                    msg.setStatus(InviteMesageStatus.GROUPINVITATION);
+                else if(status == InviteMesageStatus.GROUPINVITATION_ACCEPTED.ordinal())
+                    msg.setStatus(InviteMesageStatus.GROUPINVITATION_ACCEPTED);
+                else if(status == InviteMesageStatus.GROUPINVITATION_DECLINED.ordinal())
+                    msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
+                
                 msgs.add(msg);
             }
             cursor.close();

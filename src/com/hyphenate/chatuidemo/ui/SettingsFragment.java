@@ -79,6 +79,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	private RelativeLayout rl_switch_chatroom_leave;
 	
     private RelativeLayout rl_switch_delete_msg_when_exit_group;
+    private RelativeLayout rl_switch_auto_accept_group_invitation;
  
 	/**
 	 * 诊断
@@ -95,6 +96,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton speakerSwitch;
     private EaseSwitchButton ownerLeaveSwitch;
     private EaseSwitchButton switch_delete_msg_when_exit_group;
+    private EaseSwitchButton switch_auto_accept_group_invitation;
     private DemoModel settingsModel;
     private EMOptions chatOptions;
 	
@@ -114,7 +116,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_speaker = (RelativeLayout) getView().findViewById(R.id.rl_switch_speaker);
 		rl_switch_chatroom_leave = (RelativeLayout) getView().findViewById(R.id.rl_switch_chatroom_owner_leave);
 		rl_switch_delete_msg_when_exit_group = (RelativeLayout) getView().findViewById(R.id.rl_switch_delete_msg_when_exit_group);
-		
+		rl_switch_auto_accept_group_invitation = (RelativeLayout) getView().findViewById(R.id.rl_switch_auto_accept_group_invitation);
 		
 		notifiSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
 		soundSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_sound);
@@ -122,6 +124,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		speakerSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_speaker);
 		ownerLeaveSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_owner_leave);
 		switch_delete_msg_when_exit_group = (EaseSwitchButton) getView().findViewById(R.id.switch_delete_msg_when_exit_group);
+		switch_auto_accept_group_invitation = (EaseSwitchButton) getView().findViewById(R.id.switch_auto_accept_group_invitation);
 		
 		
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
@@ -151,7 +154,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pushNick.setOnClickListener(this);
 		rl_switch_chatroom_leave.setOnClickListener(this);
 		rl_switch_delete_msg_when_exit_group.setOnClickListener(this);
-		
+		rl_switch_auto_accept_group_invitation.setOnClickListener(this);
 		
 		// 震动和声音总开关，来消息时，是否允许此开关打开
 		// the vibrate and sound notification are allowed or not?
@@ -197,6 +200,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		    switch_delete_msg_when_exit_group.openSwitch();
 		} else {
 		    switch_delete_msg_when_exit_group.closeSwitch();
+		}
+		
+		if (settingsModel.isAutoAcceptGroupInvitation()) {
+		    switch_auto_accept_group_invitation.openSwitch();
+		} else {
+		    switch_auto_accept_group_invitation.closeSwitch();
 		}
 	}
 
@@ -271,6 +280,17 @@ public class SettingsFragment extends Fragment implements OnClickListener {
                 chatOptions.setDeleteMessagesAsExitGroup(true);
             }
 		    break;
+        case R.id.rl_switch_auto_accept_group_invitation:
+            if(switch_auto_accept_group_invitation.isSwitchOpen()){
+                switch_auto_accept_group_invitation.closeSwitch();
+                settingsModel.setAutoAcceptGroupInvitation(false);
+                chatOptions.setAutoAcceptGroupInvitation(false);
+            }else{
+                switch_auto_accept_group_invitation.openSwitch();
+                settingsModel.setAutoAcceptGroupInvitation(true);
+                chatOptions.setAutoAcceptGroupInvitation(true);
+            }
+            break;		    
 		case R.id.btn_logout: //退出登陆
 			logout();
 			break;

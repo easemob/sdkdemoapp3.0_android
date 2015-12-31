@@ -85,21 +85,21 @@ public class ConversationListFragment extends EaseConversationListFragment{
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        boolean handled = false;
         boolean deleteMessage = false;
-        /*if (item.getItemId() == R.id.delete_message) {
+        if (item.getItemId() == R.id.delete_message) {
             deleteMessage = true;
-            handled = true;
-        } else*/ if (item.getItemId() == R.id.delete_conversation) {
-        	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-            // 删除此会话
-            EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
-            InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
-            inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
-            refresh();
+        } else if (item.getItemId() == R.id.delete_conversation) {
+            deleteMessage = false;
+        }
+    	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+        // 删除此会话
+        EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
+        InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
+        inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
+        refresh();
 
-            // 更新消息未读数
-            ((MainActivity) getActivity()).updateUnreadLabel();        }
+        // 更新消息未读数
+        ((MainActivity) getActivity()).updateUnreadLabel();
         return true;
     }
 
