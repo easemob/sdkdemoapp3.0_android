@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
+import com.easemob.chat.EMCallStateChangeListener.CallError;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.exceptions.EMServiceNotReadyException;
@@ -66,6 +67,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	String st1;
 	private boolean isAnswered;
 	private LinearLayout voiceContronlLayout;
+	 private TextView netwrokStatusVeiw;
+	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,6 +91,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		durationTextView = (TextView) findViewById(R.id.tv_calling_duration);
 		chronometer = (Chronometer) findViewById(R.id.chronometer);
 		voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
+		netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
 
 		refuseBtn.setOnClickListener(this);
 		answerBtn.setOnClickListener(this);
@@ -151,7 +155,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	    callStateListener = new EMCallStateChangeListener() {
             
             @Override
-            public void onCallStateChanged(CallState callState, CallError error) {
+            public void onCallStateChanged(CallState callState, final CallError error) {
                 // Message msg = handler.obtainMessage();
                 switch (callState) {
                 
@@ -283,13 +287,24 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 
                     break;
                     
-//                case NETWORK_UNSTABLE:
-//                    runOnUiThread(new Runnable() {
-//                        public void run() {
-//                            Toast.makeText(getApplicationContext(), R.string.network_unstable, 0).show();
-//                        }
-//                    });
-//                    break;
+                case NETWORK_UNSTABLE:
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            netwrokStatusVeiw.setVisibility(View.VISIBLE);
+                            if(error == CallError.ERROR_NO_DATA){
+                                netwrokStatusVeiw.setText(R.string.no_call_data);
+                            }else{
+                                netwrokStatusVeiw.setText(R.string.network_unstable);
+                            }
+                        }
+                    });
+                    break;
+                case NETWORK_NORMAL:
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            netwrokStatusVeiw.setVisibility(View.INVISIBLE);
+                        }
+                    });
 
                 default:
                     break;

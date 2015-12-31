@@ -299,4 +299,7 @@
     <string name="group_nick">Group Nick:</string>
     <string name="group_owner">Group Owner:</string>
     <string name="chatroom_not_support_forward">Chatroom does not support forward message</string>
+    
+     <string name="network_unstable">Network unstable</string>
+    <string name="no_call_data">No call data</string>
 </resources>
