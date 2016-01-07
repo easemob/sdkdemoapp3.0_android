@@ -469,9 +469,10 @@ public class DemoHelper {
             
             // 对方同意加群邀请
             boolean hasGroup = false;
-            EMGroup _group = null;
-            for (EMGroup group : EMClient.getInstance().groupManager().getAllGroups()) {
-                if (group.getGroupId().equals(groupId)) {
+            EMGroup group = null;
+            for (EMGroup _group : EMClient.getInstance().groupManager().getAllGroups()) {
+                if (_group.getGroupId().equals(groupId)) {
+                    group = _group;
                     hasGroup = true;
                     break;
                 }
@@ -483,10 +484,10 @@ public class DemoHelper {
             msg.setFrom(groupId);
             msg.setTime(System.currentTimeMillis());
             msg.setGroupId(groupId);
-            msg.setGroupName(_group == null ? groupId : _group.getGroupName());
+            msg.setGroupName(group == null ? groupId : group.getGroupName());
             msg.setReason(reason);
             msg.setGroupInviter(invitee);
-            Log.d(TAG, invitee + "拒绝加入群聊：" + _group == null ? groupId : _group.getGroupName());
+            Log.d(TAG, invitee + "拒绝加入群聊：" + group == null ? groupId : group.getGroupName());
             msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
             notifyNewIviteMessage(msg);
         }
