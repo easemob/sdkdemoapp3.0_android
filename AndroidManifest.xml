@@ -32,9 +32,6 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
-    <permission android:name="com.hyphenate.chatuidemo.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
     <uses-permission android:name="com.hyphenate.chatuidemo.permission.C2D_MESSAGE" />
     
     
@@ -295,7 +292,7 @@
 		    ></activity>
 
         <!-- 开机自启动服务 -->
-        <receiver android:name="com.hyphenate.chat.StartServiceReceiver" >
+        <receiver android:name="com.hyphenate.chatuidemo.receiver.StartServiceReceiver" >
             <intent-filter android:priority="1000" >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
