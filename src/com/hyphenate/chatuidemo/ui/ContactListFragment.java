@@ -128,10 +128,10 @@ public class ContactListFragment extends EaseContactListFragment {
         contactInfoSyncListener = new ContactInfoSyncListener();
         DemoHelper.getInstance().getUserProfileManager().addSyncContactInfoListener(contactInfoSyncListener);
         
-        if (!DemoHelper.getInstance().isContactsSyncedWithServer()) {
-            loadingView.setVisibility(View.VISIBLE);
-        } else {
+        if (DemoHelper.getInstance().isContactsSyncedWithServer()) {
             loadingView.setVisibility(View.GONE);
+        } else if (DemoHelper.getInstance().isSyncingContactsWithServer()) {
+            loadingView.setVisibility(View.VISIBLE);
         }
     }
     
