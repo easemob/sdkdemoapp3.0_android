@@ -1007,6 +1007,10 @@ public class DemoHelper {
                    
                    // in case that logout already before server returns, we should return immediately
                    if(!isLoggedIn()){
+                       isGroupsSyncedWithServer = false;
+                       isSyncingGroupsWithServer = false;
+                       //通知listener同步群组完毕
+                       noitifyGroupSyncListeners(false);
                        return;
                    }
                    
@@ -1058,6 +1062,10 @@ public class DemoHelper {
                    usernames = EMClient.getInstance().contactManager().getAllContacts();
                    // in case that logout already before server returns, we should return immediately
                    if(!isLoggedIn()){
+                       isContactsSyncedWithServer = false;
+                       isSyncingContactsWithServer = false;
+                       //通知listeners联系人同步完毕
+                       notifyContactsSyncListener(false);
                        return;
                    }
                   
@@ -1107,7 +1115,7 @@ public class DemoHelper {
                    demoModel.setContactSynced(false);
                    isContactsSyncedWithServer = false;
                    isSyncingContactsWithServer = false;
-                   noitifyGroupSyncListeners(false);
+                   notifyContactsSyncListener(false);
                    e.printStackTrace();
                    if(callback != null){
                        callback.onError(e.getErrorCode(), e.toString());
@@ -1140,6 +1148,9 @@ public class DemoHelper {
                    
                    // in case that logout already before server returns, we should return immediately
                    if(!isLoggedIn()){
+                       isBlackListSyncedWithServer = false;
+                       isSyncingBlackListWithServer = false;
+                       notifyBlackListSyncListener(false);
                        return;
                    }
                    
