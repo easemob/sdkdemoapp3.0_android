@@ -37,7 +37,6 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chat.EMCallStateChangeListener.CallError;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.exceptions.EMServiceNotReadyException;
@@ -268,8 +267,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                     }
                                 } else {
                                     if (isInComingCall) {
-                                        callingState = CallingState.UNANSWERED;
-                                        callStateTextView.setText(st9);
+                                        if(callingState == CallingState.REFUESD){
+                                            callStateTextView.setText(R.string.Refused);
+                                        }else{
+                                            callingState = CallingState.UNANSWERED;
+                                            callStateTextView.setText(st9);
+                                        }
                                     } else {
                                         if (callingState != CallingState.NORMAL) {
                                             callingState = CallingState.CANCED;

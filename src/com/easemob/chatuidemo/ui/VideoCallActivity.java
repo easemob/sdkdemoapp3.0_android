@@ -40,7 +40,6 @@ import android.widget.Toast;
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMVideoCallHelper;
-import com.easemob.chat.EMVideoCallHelper.EMVideoOrientation;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.utils.CameraHelper;
@@ -348,8 +347,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     }
                                 } else {
                                     if (isInComingCall) {
-                                        callingState = CallingState.UNANSWERED;
-                                        callStateTextView.setText(s8);
+                                        if(callingState == CallingState.REFUESD){
+                                            callStateTextView.setText(R.string.Refused);
+                                        }else{
+                                            callingState = CallingState.UNANSWERED;
+                                            callStateTextView.setText(s8);
+                                        }
                                     } else {
                                         if (callingState != CallingState.NORMAL) {
                                             callingState = CallingState.CANCED;
