@@ -15,6 +15,14 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.UUID;
 
+import com.easemob.media.EMLocalSurfaceView;
+import com.easemob.media.EMOppositeSurfaceView;
+import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
+import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
@@ -22,8 +30,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -35,36 +41,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.hyphenate.chat.EMCallStateChangeListener;
-import com.hyphenate.chat.EMChatManager;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMVideoCallHelper;
-import com.hyphenate.chat.EMVideoCallHelper.EMVideoOrientation;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.utils.CameraHelper;
-import com.hyphenate.exceptions.EMServiceNotReadyException;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
-
-    private SurfaceView localSurface;
-    private SurfaceHolder localSurfaceHolder;
-    private static SurfaceView oppositeSurface;
-    private SurfaceHolder oppositeSurfaceHolder;
 
     private boolean isMuteState;
     private boolean isHandsfreeState;
     private boolean isAnswered;
-    private int streamID;
     private boolean endCallTriggerByMe = false;
     private boolean monitor = true;
 
-    EMVideoCallHelper callHelper;
     private TextView callStateTextView;
 
-    private Handler handler = new Handler();
     private LinearLayout comingBtnContainer;
     private Button refuseBtn;
     private Button answerBtn;
@@ -76,10 +63,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private LinearLayout voiceContronlLayout;
     private RelativeLayout rootContainer;
     private RelativeLayout btnsContainer;
-    private CameraHelper cameraHelper;
     private LinearLayout topContainer;
     private LinearLayout bottomContainer;
     private TextView monitorTextView;
+    
+    private Handler uiHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +83,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                         | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+
+        uiHandler = new Handler();
 
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
         comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
@@ -130,23 +120,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         nickTextView.setText(username);
 
         // 显示本地图像的surfaceview
-        localSurface = (SurfaceView) findViewById(R.id.local_surface);
+        localSurface = (EMLocalSurfaceView) findViewById(R.id.local_surface);
         localSurface.setZOrderMediaOverlay(true);
         localSurface.setZOrderOnTop(true);
-        localSurfaceHolder = localSurface.getHolder(); 
-
-        // 获取callHelper,cameraHelper
-        callHelper = EMVideoCallHelper.getInstance();
-        cameraHelper = new CameraHelper(callHelper, localSurfaceHolder);
 
         // 显示对方图像的surfaceview
-        oppositeSurface = (SurfaceView) findViewById(R.id.opposite_surface);
-        oppositeSurfaceHolder = oppositeSurface.getHolder();
-        // 设置显示对方图像的surfaceview
-        callHelper.setSurfaceView(oppositeSurface);
-
-        localSurfaceHolder.addCallback(new LocalCallback());
-        oppositeSurfaceHolder.addCallback(new OppositeCallback());
+        oppositeSurface = (EMOppositeSurfaceView) findViewById(R.id.opposite_surface);
 
         // 设置通话监听
         addCallStateListener();
@@ -158,12 +137,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             hangupBtn.setVisibility(View.VISIBLE);
             String st = getResources().getString(R.string.Are_connected_to_each_other);
             callStateTextView.setText(st);
-
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    streamID = playMakeCallSounds();
-                }
-            }, 300);
+            EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
+            handler.sendEmptyMessage(MSG_CALL_MAKE_VIDEO);
         } else { // 有电话进来
             voiceContronlLayout.setVisibility(View.INVISIBLE);
             localSurface.setVisibility(View.INVISIBLE);
@@ -172,63 +147,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             audioManager.setSpeakerphoneOn(true);
             ringtone = RingtoneManager.getRingtone(this, ringUri);
             ringtone.play();
+            EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
         }
-    }
-
-    /**
-     * 本地SurfaceHolder callback
-     * 
-     */
-    class LocalCallback implements SurfaceHolder.Callback {
-
-        @Override
-        public void surfaceCreated(SurfaceHolder holder) {
-        }
-
-        @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            cameraHelper.startCapture();
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder holder) {
-        }
-    }
-
-    /**
-     * 对方SurfaceHolder callback
-     */
-    class OppositeCallback implements SurfaceHolder.Callback {
-
-        @Override
-        public void surfaceCreated(SurfaceHolder holder) {
-            holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
-            callHelper.setRenderFlag(true);
-        }
-
-        @Override
-        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            callHelper.onWindowResize(width, height, format);
-            if (!cameraHelper.isStarted()) {
-                if (!isInComingCall) {
-                    try {
-                        // 拨打视频通话
-                        EMClient.getInstance().callManager().makeVideoCall(username);
-                        // 通知cameraHelper可以写入数据
-                        cameraHelper.setStartFlag(true);
-                    } catch (EMServiceNotReadyException e) {
-                        Toast.makeText(VideoCallActivity.this, R.string.Is_not_yet_connected_to_the_server , 1).show();
-                    }
-                }
-
-            } 
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder holder) {
-            callHelper.setRenderFlag(false);
-        }
-
     }
 
     /**
@@ -294,7 +214,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     final CallError fError = error;
                     runOnUiThread(new Runnable() {
                         private void postDelayedCloseMsg() {
-                            handler.postDelayed(new Runnable() {
+                            uiHandler.postDelayed(new Runnable() {
 
                                 @Override
                                 public void run() {
@@ -400,7 +320,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 try {
                     callStateTextView.setText("正在接听...");
                     EMClient.getInstance().callManager().answerCall();
-                    cameraHelper.setStartFlag(true);
 
                     openSpeakerOn();
                     handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
@@ -422,8 +341,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
         case R.id.btn_hangup_call: // 挂断电话
             hangupBtn.setEnabled(false);
-            if (soundPool != null)
-                soundPool.stop(streamID);
             chronometer.stop();
             endCallTriggerByMe = true;
             callStateTextView.setText(getResources().getString(R.string.hanging_up));
@@ -485,22 +402,15 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     protected void onDestroy() {
         DemoHelper.getInstance().isVideoCalling = false;
         stopMonitor();
-        try {
-			callHelper.setSurfaceView(null);
-			cameraHelper.stopCapture();
-			oppositeSurface = null;
-			cameraHelper = null;
-		} catch (Exception e) {
-		}
+        localSurface = null;
+		oppositeSurface = null;
         super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
-        EMClient.getInstance().callManager().endCall();
         callDruationText = chronometer.getText().toString();
-        saveCallRecord(1);
-        finish();
+        super.onBackPressed();
     }
     
     /**
@@ -512,6 +422,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 while(monitor){
                     runOnUiThread(new Runnable() {
                         public void run() {
+                            EMVideoCallHelper callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
                             monitorTextView.setText("宽x高："+callHelper.getVideoWidth()+"x"+callHelper.getVideoHeight()
                                     + "\n延迟：" + callHelper.getVideoTimedelay()
                                     + "\n帧率：" + callHelper.getVideoFramerate()

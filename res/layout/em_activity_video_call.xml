@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true" >
 
-    <SurfaceView
+    <com.easemob.media.EMOppositeSurfaceView
         android:id="@+id/opposite_surface"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -71,7 +71,7 @@
             android:textSize="12sp"
             android:layout_marginBottom="6dp"
             />
-        <SurfaceView
+        <com.easemob.media.EMLocalSurfaceView
             android:id="@+id/local_surface"
             android:layout_width="100dp"
             android:layout_height="120dp"
