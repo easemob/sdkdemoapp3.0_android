@@ -124,11 +124,11 @@ public class MainActivity extends BaseActivity {
 				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
 				.commit();
 		
+		//注册local广播接收者，用于接收demohelper中发出的群组联系人的变动通知
 		registerBroadcastReceiver();
 		
 		
 		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
-		EMClient.getInstance().groupManager().addGroupChangeListener(groupChangeListener);
 		//内部测试方法，请忽略
         registerInternalDebugReceiver();
 	}
@@ -305,9 +305,6 @@ public class MainActivity extends BaseActivity {
         } catch (Exception e) {
         }
 		
-		if(groupChangeListener != null){
-			EMClient.getInstance().groupManager().removeGroupChangeListener(groupChangeListener);
-		}
 	}
 
 	/**
@@ -577,75 +574,4 @@ public class MainActivity extends BaseActivity {
 		//getMenuInflater().inflate(R.menu.context_tab_contact, menu);
 	}
 	
-	// simply a demo showing the group change
-	EMGroupChangeListener groupChangeListener = new EMGroupChangeListener(){
-
-		@Override
-		public void onInvitationReceived(String groupId, String groupName,
-				String inviter, String reason) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onApplicationReceived(String groupId, String groupName,
-				String applyer, String reason) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onApplicationAccept(String groupId, String groupName,
-				String accepter) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onApplicationDeclined(String groupId, String groupName,
-				String decliner, String reason) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onInvitationAccpted(String groupId, String invitee,
-				String reason) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onInvitationDeclined(String groupId, String invitee,
-				String reason) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onUserRemoved(final String groupId, final String groupName) {
-			runOnUiThread(new Runnable(){
-
-				@Override
-				public void run() {
-					Toast.makeText(MainActivity.this, getResources().getString(R.string.user_removed_from_group) + " id : " + groupId + " " + groupName, Toast.LENGTH_LONG).show();					
-				}
-				
-			});
-		}
-
-		@Override
-		public void onGroupDestroy(String groupId, String groupName) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onAutoAcceptInvitationFromGroup(String groupId,
-				String inviter, String inviteMessage) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	};
 }
