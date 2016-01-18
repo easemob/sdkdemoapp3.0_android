@@ -188,7 +188,7 @@ public class DemoHelper {
         
         //使用gcm和mipush时，把里面的参数替换成自己app申请的
         //设置google推送，需要的GCM的app可以设置此参数
-        options.setGCMNumber("562451699741");
+        options.setGCMNumber("324169311137");
         //在小米手机上当app被kill时使用小米推送进行消息提示，同GCM一样不是必须的
         options.setMipushConfig("2882303761517426801", "5381742660801");
         
