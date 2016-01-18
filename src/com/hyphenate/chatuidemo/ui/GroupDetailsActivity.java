@@ -731,8 +731,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			public void run() {
 				try {
 					final EMGroup returnGroup = EMClient.getInstance().groupManager().getGroupFromServer(groupId);
-					// 更新本地数据
-					EMClient.getInstance().groupManager().createOrUpdateLocalGroup(returnGroup);
 
 					runOnUiThread(new Runnable() {
 						public void run() {
