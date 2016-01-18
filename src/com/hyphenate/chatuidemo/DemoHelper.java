@@ -1024,7 +1024,7 @@ public class DemoHelper {
            @Override
            public void run(){
                try {
-                   EMClient.getInstance().groupManager().getGroupsFromServer();
+                   EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
                    
                    // in case that logout already before server returns, we should return immediately
                    if(!isLoggedIn()){
