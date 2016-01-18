@@ -96,13 +96,13 @@ public class RegisterActivity extends BaseActivity {
 								if (!RegisterActivity.this.isFinishing())
 									pd.dismiss();
 								int errorCode=e.getErrorCode();
-								if(errorCode==EMError.NONETWORK_ERROR){
+								if(errorCode==EMError.NETWORK_ERROR){
 									Toast.makeText(getApplicationContext(), getResources().getString(R.string.network_anomalies), Toast.LENGTH_SHORT).show();
-								}else if(errorCode == EMError.USER_ALREADY_EXISTS){
+								}else if(errorCode == EMError.USER_ALREADY_EXIST){
 									Toast.makeText(getApplicationContext(), getResources().getString(R.string.User_already_exists), Toast.LENGTH_SHORT).show();
-								}else if(errorCode == EMError.UNAUTHORIZED){
+								}else if(errorCode == EMError.USER_AUTHENTICATION_FAILED){
 									Toast.makeText(getApplicationContext(), getResources().getString(R.string.registration_failed_without_permission), Toast.LENGTH_SHORT).show();
-								}else if(errorCode == EMError.ILLEGAL_USER_NAME){
+								}else if(errorCode == EMError.USER_ILLEGAL_ARGUMENT){
 								    Toast.makeText(getApplicationContext(), getResources().getString(R.string.illegal_user_name),Toast.LENGTH_SHORT).show();
 								}else{
 									Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed) + e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -362,7 +362,7 @@ public class DemoHelper {
             public void onDisconnected(int error) {
                 if (error == EMError.USER_REMOVED) {
                     onCurrentAccountRemoved();
-                }else if (error == EMError.CONNECTION_CONFLICT) {
+                }else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     onConnectionConflict();
                 }
             }
