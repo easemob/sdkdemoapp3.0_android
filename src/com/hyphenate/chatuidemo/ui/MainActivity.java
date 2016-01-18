@@ -494,7 +494,7 @@ public class MainActivity extends BaseActivity {
 	 */
 	private void showAccountRemovedDialog() {
 		isAccountRemovedDialogShow = true;
-		DemoHelper.getInstance().logout(true,null);
+		DemoHelper.getInstance().logout(false,null);
 		String st5 = getResources().getString(R.string.Remove_the_notification);
 		if (!MainActivity.this.isFinishing()) {
 			// clear up global variables
@@ -542,7 +542,7 @@ public class MainActivity extends BaseActivity {
             
             @Override
             public void onReceive(Context context, Intent intent) {
-                DemoHelper.getInstance().logout(true,new EMCallBack() {
+                DemoHelper.getInstance().logout(false,new EMCallBack() {
                     
                     @Override
                     public void onSuccess() {
