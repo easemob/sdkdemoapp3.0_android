@@ -836,6 +836,7 @@ public class DemoHelper {
 			@Override
 			public void onError(int code, String error) {
 				Log.d(TAG, "logout: onSuccess");
+                reset();
 				if (callback != null) {
 					callback.onError(code, error);
 				}
