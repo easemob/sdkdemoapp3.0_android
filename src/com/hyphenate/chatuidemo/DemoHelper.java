@@ -451,6 +451,7 @@ public class DemoHelper {
             Log.d(TAG, "收到邀请加入群聊：" + groupName);
             msg.setStatus(InviteMesageStatus.GROUPINVITATION);
             notifyNewIviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
 
         @Override
@@ -481,6 +482,7 @@ public class DemoHelper {
             Log.d(TAG, invitee + "同意加入群聊：" + _group == null ? groupId : _group.getGroupName());
             msg.setStatus(InviteMesageStatus.GROUPINVITATION_ACCEPTED);
             notifyNewIviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
         
         @Override
@@ -511,6 +513,7 @@ public class DemoHelper {
             Log.d(TAG, invitee + "拒绝加入群聊：" + group == null ? groupId : group.getGroupName());
             msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
             notifyNewIviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
 
         @Override
@@ -558,6 +561,7 @@ public class DemoHelper {
             EMClient.getInstance().chatManager().saveMessage(msg);
             // 提醒新消息
             getNotifier().viberateAndPlayTone(msg);
+
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
 
