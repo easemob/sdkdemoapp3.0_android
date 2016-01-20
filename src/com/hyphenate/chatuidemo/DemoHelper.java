@@ -594,32 +594,31 @@ public class DemoHelper {
     public class MyContactListener implements EMContactListener {
 
         @Override
-        public void onContactAdded(List<String> usernameList) {         
+        public void onContactAdded(String username) {
             // 保存增加的联系人
             Map<String, EaseUser> localUsers = getContactList();
             Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
-            for (String username : usernameList) {
-                EaseUser user = new EaseUser(username);
-                // 添加好友时可能会回调added方法两次
-                if (!localUsers.containsKey(username)) {
-                    userDao.saveContact(user);
-                }
-                toAddUsers.put(username, user);
+            EaseUser user = new EaseUser(username);
+            // 添加好友时可能会回调added方法两次
+            if (!localUsers.containsKey(username)) {
+                userDao.saveContact(user);
             }
+            toAddUsers.put(username, user);
             localUsers.putAll(toAddUsers);
-            //发送好友变动广播
+
+           //发送好友变动广播
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
         @Override
-        public void onContactDeleted(final List<String> usernameList) {
+        public void onContactDeleted(final String username) {
             // 被删除
             Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
-            for (String username : usernameList) {
-                localUsers.remove(username);
-                userDao.deleteContact(username);
-                inviteMessgeDao.deleteMessage(username);
-            }
+            localUsers.remove(username);
+            userDao.deleteContact(username);
+            inviteMessgeDao.deleteMessage(username);
+
+            //发送好友变动广播
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
@@ -668,7 +667,6 @@ public class DemoHelper {
             // 参考同意，被邀请实现此功能,demo未实现
             Log.d(username, username + "拒绝了你的好友请求");
         }
-
     }
     
     /**
