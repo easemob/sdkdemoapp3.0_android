@@ -260,21 +260,18 @@ public class MainActivity extends BaseActivity {
 	
 	public class MyContactListener implements EMContactListener {
         @Override
-        public void onContactAdded(List<String> usernameList) {}
+        public void onContactAdded(String username) {}
         @Override
-        public void onContactDeleted(final List<String> usernameList) {
+        public void onContactDeleted(final String username) {
             runOnUiThread(new Runnable() {
                 public void run() {
-                    for (String deleted : usernameList) {
-                        if (ChatActivity.activityInstance != null && ChatActivity.activityInstance.toChatUsername != null &&
-                                deleted.equals(ChatActivity.activityInstance.toChatUsername)) {
-                            String st10 = getResources().getString(R.string.have_you_removed);
-                            Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, 1)
-                            .show();
-                            ChatActivity.activityInstance.finish();
-                            break;
-                        }
-                    }
+					if (ChatActivity.activityInstance != null && ChatActivity.activityInstance.toChatUsername != null &&
+							username.equals(ChatActivity.activityInstance.toChatUsername)) {
+					    String st10 = getResources().getString(R.string.have_you_removed);
+					    Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, 1)
+					    .show();
+					    ChatActivity.activityInstance.finish();
+					}
                 }
             });
         }
