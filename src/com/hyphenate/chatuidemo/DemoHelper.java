@@ -188,7 +188,7 @@ public class DemoHelper {
         
         //使用gcm和mipush时，把里面的参数替换成自己app申请的
         //设置google推送，需要的GCM的app可以设置此参数
-        options.setGCMNumber("562451699741");
+        options.setGCMNumber("324169311137");
         //在小米手机上当app被kill时使用小米推送进行消息提示，同GCM一样不是必须的
         options.setMipushConfig("2882303761517426801", "5381742660801");
         
@@ -362,7 +362,7 @@ public class DemoHelper {
             public void onDisconnected(int error) {
                 if (error == EMError.USER_REMOVED) {
                     onCurrentAccountRemoved();
-                }else if (error == EMError.CONNECTION_CONFLICT) {
+                }else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     onConnectionConflict();
                 }
             }
@@ -834,6 +834,7 @@ public class DemoHelper {
 			@Override
 			public void onError(int code, String error) {
 				Log.d(TAG, "logout: onSuccess");
+                reset();
 				if (callback != null) {
 					callback.onError(code, error);
 				}
@@ -1022,7 +1023,7 @@ public class DemoHelper {
            @Override
            public void run(){
                try {
-                   EMClient.getInstance().groupManager().getGroupsFromServer();
+                   EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
                    
                    // in case that logout already before server returns, we should return immediately
                    if(!isLoggedIn()){
@@ -1078,7 +1079,7 @@ public class DemoHelper {
            public void run(){
                List<String> usernames = null;
                try {
-                   usernames = EMClient.getInstance().contactManager().getAllContacts();
+                   usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
                    // in case that logout already before server returns, we should return immediately
                    if(!isLoggedIn()){
                        isContactsSyncedWithServer = false;

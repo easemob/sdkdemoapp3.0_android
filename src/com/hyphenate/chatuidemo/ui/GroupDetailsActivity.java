@@ -325,7 +325,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					EMClient.getInstance().groupManager().exitFromGroup(groupId);
+					EMClient.getInstance().groupManager().leaveGroup(groupId);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
@@ -357,7 +357,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					EMClient.getInstance().groupManager().exitAndDeleteGroup(groupId);
+					EMClient.getInstance().groupManager().destroyGroup(groupId);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
@@ -730,10 +730,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					final EMGroup returnGroup = EMClient.getInstance().groupManager().getGroupFromServer(groupId);
-					// 更新本地数据
-					EMClient.getInstance().groupManager().createOrUpdateLocalGroup(returnGroup);
-
+				    EMClient.getInstance().groupManager().getGroupFromServer(groupId);
+					
 					runOnUiThread(new Runnable() {
 						public void run() {
 							((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getAffiliationsCount()

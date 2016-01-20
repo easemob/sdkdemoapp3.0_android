@@ -68,7 +68,7 @@ public class PublicGroupsSeachActivity extends BaseActivity{
                             pd.dismiss();
                             searchedGroup = null;
                             containerLayout.setVisibility(View.GONE);
-                            if(e.getErrorCode() == EMError.GROUP_NOT_EXIST){
+                            if(e.getErrorCode() == EMError.GROUP_INVALID_ID){
                                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.group_not_existed), 0).show();
                             }else{
                                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.group_search_failed) + " : " + getString(R.string.connect_failuer_toast), 0).show();

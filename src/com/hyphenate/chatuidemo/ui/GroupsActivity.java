@@ -21,6 +21,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.adapter.GroupAdapter;
+import com.hyphenate.exceptions.HyphenateException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -88,18 +89,18 @@ public class GroupsActivity extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-			    EMClient.getInstance().groupManager().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
-                    
-                    @Override
-                    public void onSuccess(List<EMGroup> value) {
-                        handler.sendEmptyMessage(0);
-                    }
-                    
-                    @Override
-                    public void onError(int error, String errorMsg) {
-                        handler.sendEmptyMessage(1);
-                    }
-                });
+				new Thread(){
+					@Override
+					public void run(){
+						try {
+							EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
+							handler.sendEmptyMessage(0);
+						} catch (HyphenateException e) {
+							e.printStackTrace();
+							handler.sendEmptyMessage(1);
+						}
+					}
+				}.start();
 			}
 		});
 		
