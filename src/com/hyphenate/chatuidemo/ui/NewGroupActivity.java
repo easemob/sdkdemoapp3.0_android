@@ -92,7 +92,7 @@ public class NewGroupActivity extends BaseActivity {
 				@Override
 				public void run() {
 					// 调用sdk创建群组方法
-					String groupName = groupNameEditText.getText().toString().trim();
+					final String groupName = groupNameEditText.getText().toString().trim();
 					String desc = introductionEditText.getText().toString();
 					String[] members = data.getStringArrayExtra("newmembers");
 					try {
@@ -100,7 +100,10 @@ public class NewGroupActivity extends BaseActivity {
 					    option.maxUsers = 200;
 					    option.style = EMGroupStyle.EMGroupStylePublicOpenJoin;
 					    
-					    String reason = "welcome";
+					    
+					    String reason = NewGroupActivity.this.getString(R.string.invite_join_group);
+					    reason  = EMClient.getInstance().getCurrentUser() + reason + groupName;
+					    
 						if(checkBox.isChecked()){
 							//创建公开群，此种方式创建的群，可以自由加入
 							//创建公开群，此种方式创建的群，用户需要申请，等群主同意后才能加入此群
