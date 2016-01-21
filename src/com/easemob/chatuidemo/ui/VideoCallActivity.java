@@ -79,6 +79,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private LinearLayout bottomContainer;
     private TextView monitorTextView;
     private TextView netwrokStatusVeiw;
+    
+    /**
+     * 正在通话中
+     */
+    private boolean isInCalling;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,6 +283,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     ? R.string.direct_call : R.string.relay_call);
                             handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
                             isHandsfreeState = true;
+                            isInCalling = true;
                             chronometer.setVisibility(View.VISIBLE);
                             chronometer.setBase(SystemClock.elapsedRealtime());
                             // 开始记时
@@ -556,4 +562,19 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         monitor = false;
     }
 
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        if(isInCalling){
+            EMChatManager.getInstance().pauseVideoTransfer();
+        }
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(isInCalling){
+            EMChatManager.getInstance().resumeVideoTransfer();
+        }
+    }
 }
