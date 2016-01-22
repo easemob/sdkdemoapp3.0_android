@@ -616,7 +616,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onContactDeleted(final String username) {
+        public void onContactDeleted(String username) {
             // 被删除
             Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
             localUsers.remove(username);
