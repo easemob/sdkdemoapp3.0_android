@@ -2,15 +2,9 @@ package com.hyphenate.chatuidemo.db;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-
-import android.R.integer;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
 
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoApplication;
@@ -19,6 +13,11 @@ import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.util.HanziToPinyin;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 public class DemoDBManager {
     static private DemoDBManager dbMgr = new DemoDBManager();
@@ -63,7 +62,7 @@ public class DemoDBManager {
      */
     synchronized public Map<String, EaseUser> getContactList() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Map<String, EaseUser> users = new HashMap<String, EaseUser>();
+        Map<String, EaseUser> users = new Hashtable<String, EaseUser>();
         if (db.isOpen()) {
             Cursor cursor = db.rawQuery("select * from " + UserDao.TABLE_NAME /* + " desc" */, null);
             while (cursor.moveToNext()) {
@@ -354,7 +353,7 @@ public class DemoDBManager {
 		if (db.isOpen()) {
 			Cursor cursor = db.rawQuery("select * from " + UserDao.ROBOT_TABLE_NAME, null);
 			if(cursor.getCount()>0){
-				users = new HashMap<String, RobotUser>();
+				users = new Hashtable<String, RobotUser>();
 			};
 			while (cursor.moveToNext()) {
 				String username = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_ID));

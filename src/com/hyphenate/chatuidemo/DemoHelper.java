@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -892,7 +893,7 @@ public class DemoHelper {
         
         // return a empty non-null object to avoid app crash
         if(contactList == null){
-        	return new HashMap<String, EaseUser>();
+        	return new Hashtable<String, EaseUser>();
         }
         
         return contactList;
