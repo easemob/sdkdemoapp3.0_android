@@ -36,9 +36,8 @@ public class NewGroupActivity extends BaseActivity {
 	private EditText groupNameEditText;
 	private ProgressDialog progressDialog;
 	private EditText introductionEditText;
-	private CheckBox checkBox;
+	private CheckBox publibCheckBox;
 	private CheckBox memberCheckbox;
-	private LinearLayout openInviteContainer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +45,8 @@ public class NewGroupActivity extends BaseActivity {
 		setContentView(R.layout.em_activity_new_group);
 		groupNameEditText = (EditText) findViewById(R.id.edit_group_name);
 		introductionEditText = (EditText) findViewById(R.id.edit_group_introduction);
-		checkBox = (CheckBox) findViewById(R.id.cb_public);
+		publibCheckBox = (CheckBox) findViewById(R.id.cb_public);
 		memberCheckbox = (CheckBox) findViewById(R.id.cb_member_inviter);
-		openInviteContainer = (LinearLayout) findViewById(R.id.ll_open_invite);
-		
-		checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if(isChecked){
-					openInviteContainer.setVisibility(View.INVISIBLE);
-				}else{
-					openInviteContainer.setVisibility(View.VISIBLE);
-				}
-			}
-		});
 	}
 
 	/**
@@ -98,20 +84,16 @@ public class NewGroupActivity extends BaseActivity {
 					try {
 						EMGroupOptions option = new EMGroupOptions();
 					    option.maxUsers = 200;
-					    option.style = EMGroupStyle.EMGroupStylePublicOpenJoin;
-					    
 					    
 					    String reason = NewGroupActivity.this.getString(R.string.invite_join_group);
 					    reason  = EMClient.getInstance().getCurrentUser() + reason + groupName;
 					    
-						if(checkBox.isChecked()){
-							//创建公开群，此种方式创建的群，可以自由加入
-							//创建公开群，此种方式创建的群，用户需要申请，等群主同意后才能加入此群
-						    EMClient.getInstance().groupManager().createGroup(groupName, desc, members, reason, option);
+						if(publibCheckBox.isChecked()){
+						    option.style = memberCheckbox.isChecked() ? EMGroupStyle.EMGroupStylePublicOpenJoin : EMGroupStyle.EMGroupStylePublicJoinNeedApproval;
 						}else{
 						    option.style = memberCheckbox.isChecked()?EMGroupStyle.EMGroupStylePrivateMemberCanInvite:EMGroupStyle.EMGroupStylePrivateOnlyOwnerInvite;
-						    EMClient.getInstance().groupManager().createGroup(groupName, desc, members, reason, option);
 						}
+                        EMClient.getInstance().groupManager().createGroup(groupName, desc, members, reason, option);
 						runOnUiThread(new Runnable() {
 							public void run() {
 								progressDialog.dismiss();
