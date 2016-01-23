@@ -18,6 +18,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import android.app.ProgressDialog;
@@ -123,6 +124,10 @@ public class LoginActivity extends BaseActivity {
 		pd.setMessage(getString(R.string.Is_landing));
 		pd.show();
 
+		// After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
+		// close it before login to make sure DemoDB not overlap
+        DemoDBManager.getInstance().closeDB();
+        
 		final long start = System.currentTimeMillis();
 		// 调用sdk登陆方法登陆聊天服务器
 		Log.d(TAG, "EMClient.getInstance().login");
