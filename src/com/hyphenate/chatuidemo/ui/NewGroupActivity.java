@@ -30,6 +30,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewGroupActivity extends BaseActivity {
@@ -38,6 +39,7 @@ public class NewGroupActivity extends BaseActivity {
 	private EditText introductionEditText;
 	private CheckBox publibCheckBox;
 	private CheckBox memberCheckbox;
+	private TextView secondTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,19 @@ public class NewGroupActivity extends BaseActivity {
 		introductionEditText = (EditText) findViewById(R.id.edit_group_introduction);
 		publibCheckBox = (CheckBox) findViewById(R.id.cb_public);
 		memberCheckbox = (CheckBox) findViewById(R.id.cb_member_inviter);
+		secondTextView = (TextView) findViewById(R.id.second_desc);
+		
+		publibCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+		    @Override
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		        if(isChecked){
+		            secondTextView.setText(R.string.join_need_owner_approval);
+		        }else{
+                    secondTextView.setText(R.string.Open_group_members_invited);
+		        }
+		    }
+		});
 	}
 
 	/**
