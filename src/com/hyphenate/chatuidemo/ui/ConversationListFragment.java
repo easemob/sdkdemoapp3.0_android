@@ -92,6 +92,9 @@ public class ConversationListFragment extends EaseConversationListFragment{
             deleteMessage = false;
         }
     	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+    	if (tobeDeleteCons == null) {
+    	    return true;
+    	}
         // 删除此会话
         EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
         InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
