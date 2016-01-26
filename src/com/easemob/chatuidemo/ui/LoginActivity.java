@@ -142,12 +142,6 @@ public class LoginActivity extends BaseActivity {
 			    EMGroupManager.getInstance().loadAllGroups();
 				EMChatManager.getInstance().loadAllConversations();
 				
-				// 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
-				boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
-						DemoApplication.currentUserNick.trim());
-				if (!updatenick) {
-					Log.e("LoginActivity", "update current user nick fail");
-				}
 				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
 				

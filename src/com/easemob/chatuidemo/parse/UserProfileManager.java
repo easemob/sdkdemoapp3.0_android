@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.easemob.EMValueCallBack;
 import com.easemob.chat.EMChat;
@@ -144,10 +145,23 @@ public class UserProfileManager {
 		ParseManager.getInstance().asyncGetCurrentUserInfo(new EMValueCallBack<EaseUser>() {
 
 			@Override
-			public void onSuccess(EaseUser value) {
+			public void onSuccess(final EaseUser value) {
 			    if(value != null){
     				setCurrentUserNick(value.getNick());
     				setCurrentUserAvatar(value.getAvatar());
+    				
+    				new Thread(new Runnable() {
+                        
+                        @Override
+                        public void run() {
+                            // 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
+                            boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
+                                    value.getNick(), true);
+                            if (!updatenick) {
+                                Log.e("user", "update current user nick fail");
+                            }
+                        }
+                    }).start();
 			    }
 			}
 
