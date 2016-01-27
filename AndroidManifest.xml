@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hyphenate.chatuidemo"
     android:versionCode="24"
-    android:versionName="3.0.1" >
+    android:versionName="3.0.0" >
 
     <uses-sdk
         android:minSdkVersion="9"
