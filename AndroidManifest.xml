@@ -371,7 +371,7 @@
         <!-- 设置环信应用的appkey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
-            android:value="easemob-demo#no1" />
+            android:value="easemob-demo#chatdemoui" />
         <!-- 声明sdk所需的service -->
         <service android:name="com.hyphenate.chat.EMChatService"
             android:exported="true"
