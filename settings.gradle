@@ -1,5 +1,0 @@
-include ':EaseUI'
-project(':EaseUI').projectDir = new File('../easeui')
-
-include ':easemobchatsdk'
-project(':easemobchatsdk').projectDir = new File('../emclient-android/easemobchatsdk')
