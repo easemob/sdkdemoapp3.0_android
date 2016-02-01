@@ -189,7 +189,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         
     }
 
-	@Override
+    @Override
     public void onSetMessageAttributes(EMMessage message) {
         if(isRobot){
             //设置消息扩展属性

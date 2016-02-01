@@ -35,7 +35,7 @@ public class DemoApplication extends Application {
 	@Override
 	public void onCreate() {
 		MultiDex.install(this);
-		super.onCreate();
+		super.onCreate();  
         applicationContext = this;
         instance = this;
 
