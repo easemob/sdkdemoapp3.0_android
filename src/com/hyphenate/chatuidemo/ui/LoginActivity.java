@@ -127,6 +127,9 @@ public class LoginActivity extends BaseActivity {
 		// After logout，the DemoDB may still be accessed due to async callback, so the DemoDB will be re-opened again.
 		// close it before login to make sure DemoDB not overlap
         DemoDBManager.getInstance().closeDB();
+
+        // reset current user name before login
+        DemoHelper.getInstance().setCurrentUserName(currentUsername);
         
 		final long start = System.currentTimeMillis();
 		// 调用sdk登陆方法登陆聊天服务器
@@ -140,8 +143,6 @@ public class LoginActivity extends BaseActivity {
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 					pd.dismiss();
 				}
-				// 登陆成功，保存用户名
-				DemoHelper.getInstance().setCurrentUserName(currentUsername);
 
 				// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 				// ** manually load all local groups and
