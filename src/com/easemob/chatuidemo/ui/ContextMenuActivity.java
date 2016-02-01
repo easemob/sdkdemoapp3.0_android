@@ -34,24 +34,24 @@ public class ContextMenuActivity extends BaseActivity {
 
 		int type = message.getType().ordinal();
 		if (type == EMMessage.Type.TXT.ordinal()) {
-			if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
-					|| message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
-				setContentView(R.layout.em_context_menu_for_delete);
-			} else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
-				setContentView(R.layout.em_context_menu_for_image);
-			} else {
-				setContentView(R.layout.em_context_menu_for_text);
-			}
+		    if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
+		            || message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
+		        setContentView(R.layout.em_context_menu_for_delete);
+		        } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
+		        setContentView(R.layout.em_context_menu_for_image);
+		    } else {
+		        setContentView(R.layout.em_context_menu_for_text);
+		    }
 		} else if (type == EMMessage.Type.LOCATION.ordinal()) {
-			setContentView(R.layout.em_context_menu_for_location);
+		    setContentView(R.layout.em_context_menu_for_location);
 		} else if (type == EMMessage.Type.IMAGE.ordinal()) {
-			setContentView(R.layout.em_context_menu_for_image);
+		    setContentView(R.layout.em_context_menu_for_image);
 		} else if (type == EMMessage.Type.VOICE.ordinal()) {
-			setContentView(R.layout.em_context_menu_for_voice);
+		    setContentView(R.layout.em_context_menu_for_voice);
 		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
-			setContentView(R.layout.em_context_menu_for_video);
+		    setContentView(R.layout.em_context_menu_for_video);
 		} else if (type == EMMessage.Type.FILE.ordinal()) {
-			setContentView(R.layout.em_context_menu_for_location);
+		    setContentView(R.layout.em_context_menu_for_location);
 		}
 		// 这里根据消息是发送方还是接收放判断是否显示撤回菜单项
 		if (message.direct == EMMessage.Direct.RECEIVE) {

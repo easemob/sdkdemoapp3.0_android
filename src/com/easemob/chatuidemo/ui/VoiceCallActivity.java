@@ -379,12 +379,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			if (isMuteState) {
 				// 关闭静音
 				muteImage.setImageResource(R.drawable.em_icon_mute_normal);
-				EMChatManager.getInstance().resumeVoiceTransfer();
+				audioManager.setMicrophoneMute(false);
 				isMuteState = false;
 			} else {
 				// 打开静音
 				muteImage.setImageResource(R.drawable.em_icon_mute_on);
-				EMChatManager.getInstance().pauseVoiceTransfer();
+				audioManager.setMicrophoneMute(true);
 				isMuteState = true;
 			}
 			break;

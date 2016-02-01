@@ -318,7 +318,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
         @Override
         public int getCustomChatRowTypeCount() {
-            //音、视频通话发送、接收共4种，再加一个撤回类型
+            //音、视频通话发送、接收共4种
             return 4;
         }
 
