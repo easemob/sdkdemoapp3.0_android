@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
 			// 防止被移除后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
 			// 三个fragment里加的判断同理
-		    DemoHelper.getInstance().logout(true,null);
+		    DemoHelper.getInstance().logout(false,null);
 			finish();
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
@@ -201,7 +201,9 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		    refreshUIWithMessage();
 		    break;
 		}
-		
+		case EventNewCMDMessage:
+			refreshUIWithMessage();
+			break;
 		default:
 			break;
 		}
@@ -389,7 +391,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 		// register the event listener when enter the foreground
 		EMChatManager.getInstance().registerEventListener(this,
-				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage ,EMNotifierEvent.Event.EventOfflineMessage, EMNotifierEvent.Event.EventConversationListChanged});
+				new EMNotifierEvent.Event[] { 
+						EMNotifierEvent.Event.EventNewMessage,
+						EMNotifierEvent.Event.EventOfflineMessage, 
+						EMNotifierEvent.Event.EventConversationListChanged,
+						EMNotifierEvent.Event.EventNewCMDMessage
+						});
 	}
 
 	@Override
@@ -466,7 +473,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 */
 	private void showAccountRemovedDialog() {
 		isAccountRemovedDialogShow = true;
-		DemoHelper.getInstance().logout(true,null);
+		DemoHelper.getInstance().logout(false,null);
 		String st5 = getResources().getString(R.string.Remove_the_notification);
 		if (!MainActivity.this.isFinishing()) {
 			// clear up global variables
@@ -514,7 +521,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             
             @Override
             public void onReceive(Context context, Intent intent) {
-                DemoHelper.getInstance().logout(true,new EMCallBack() {
+                DemoHelper.getInstance().logout(false,new EMCallBack() {
                     
                     @Override
                     public void onSuccess() {

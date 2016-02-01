@@ -25,4 +25,10 @@ public class Constant extends EaseConstant{
 	public static final String MESSAGE_ATTR_ROBOT_MSGTYPE = "msgtype";
 	public static final String ACTION_GROUP_CHANAGED = "action_group_changed";
 	public static final String ACTION_CONTACT_CHANAGED = "action_contact_changed";
+
+    // 设置消息中 msgId 扩展的 key
+    public static final String EM_ATTR_MSG_ID = "msg_id";
+    // 设置自己扩展的消息类型的 key
+    public static final String EM_ATTR_TYPE = "msg_type";
+    public static final String EM_ATTR_TYPE_RECALL = "recall";
 }

@@ -30,5 +30,18 @@
         android:layout_height="1px"
         android:background="@android:color/darker_gray" />
 
+    <TextView
+        android:id="@+id/text_recall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/em_context_menu_item_bg"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:onClick="recall"
+        android:padding="10dp"
+        android:text="@string/recall"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
 
 </LinearLayout>
