@@ -23,9 +23,7 @@
 #*.project
 *.settings
 
-#gradle file
-*build/
-.gradle
+
 
 
 #*.properties
