@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hyphenate.chatuidemo"
-    android:versionCode="24"
-    android:versionName="3.0.0" >
+    android:versionCode="31"
+    android:versionName="3.0.1" >
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -397,7 +397,7 @@
         <!-- umeng appkey，可忽略 -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="53912a3156240b01a7075ed1" >
+            android:value="56aefe07e0f55a250d001a7c" >
         </meta-data>
         <meta-data android:value="hyphenate" android:name="UMENG_CHANNEL"/>
         <meta-data
