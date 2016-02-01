@@ -680,13 +680,13 @@ public class DemoHelper {
                 // below is just giving a example to show a cmd toast, the app should not follow this
                 // so be careful of this
                 case EventNewCMDMessage:
-                { 
-                    
                     EMLog.d(TAG, "收到透传消息");
                     //获取消息body
                     CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action;//获取自定义action
-                    
+                    if(action.equals(Constant.EM_ATTR_TYPE_RECALL)){
+                    	EaseCommonUtils.receiveRecallMessage(message);
+                    }
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
                     EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
@@ -714,7 +714,6 @@ public class DemoHelper {
                     appContext.sendBroadcast(broadcastIntent, null);
                     
                     break;
-                }
                 case EventDeliveryAck:
                     message.setDelivered(true);
                     break;
@@ -731,7 +730,7 @@ public class DemoHelper {
         
         EMChatManager.getInstance().registerEventListener(eventListener);
     }
-
+    
 	/**
 	 * 是否登录成功过
 	 * 

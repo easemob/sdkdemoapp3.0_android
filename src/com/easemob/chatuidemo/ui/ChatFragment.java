@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
+import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
@@ -32,6 +34,7 @@ import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.ui.EaseChatFragment;
 import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
+import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.easemob.easeui.widget.emojicon.EaseEmojiconMenu;
@@ -54,8 +57,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
     private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3; 
     private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
-    
-    
+     
     /**
      * 是否为环信小助手
      */
@@ -77,6 +79,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         }
         super.setUpView();
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
+        
     }
     
     @Override
@@ -115,7 +118,39 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 startActivity(intent);
                 
                 break;
+            case ContextMenuActivity.RESULT_CODE_RECALL:
+            	// 显示撤回消息操作的 dialog
+                final ProgressDialog pd = new ProgressDialog(getActivity());
+                pd.setMessage("正在撤回 请稍候……");
+                pd.show();
+                EaseCommonUtils.sendRecallMessage(contextMenuMessage, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        pd.dismiss();
+                        messageList.refresh();
+                    }
 
+                    @Override
+                    public void onError(final int i, final String s) {
+                        pd.dismiss();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (s.equals("maxtime")) {
+                                    Toast.makeText(getActivity(), "消息已经超过两分钟 无法撤回", Toast.LENGTH_LONG).show();
+                                } else {
+                                	Toast.makeText(getActivity(), "撤回失败 失败错误码（" + i + " " + s + ")", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onProgress(int i, String s) {
+
+                    }
+                });
+            	break;
             default:
                 break;
             }
@@ -153,12 +188,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         }
         
     }
-    
-    @Override
+
+	@Override
     public void onSetMessageAttributes(EMMessage message) {
         if(isRobot){
             //设置消息扩展属性
             message.setAttribute("em_robot_message", isRobot);
+        }
+        // 根据当前状态是否是阅后即焚状态来设置发送消息的扩展
+        if(isDestroy){
+        	message.setAttribute(EaseConstant.EASE_ATTR_TYPE, EaseConstant.EASE_ATTR_TYPE_DESTROY);
         }
     }
     
@@ -168,7 +207,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         return new CustomChatRowProvider();
     }
   
-
     @Override
     public void onEnterToChatDetails() {
         if (chatType == Constant.CHATTYPE_GROUP) {
@@ -223,14 +261,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         case ITEM_VIDEO_CALL: //视频通话
             startVideoCall();
             break;
-
         default:
             break;
         }
         //不覆盖已有的点击事件
         return false;
     }
-    
     /**
      * 选择文件
      */
@@ -282,7 +318,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
         @Override
         public int getCustomChatRowTypeCount() {
-            //音、视频通话发送、接收共4种
+            //音、视频通话发送、接收共4种，再加一个撤回类型
             return 4;
         }
 
