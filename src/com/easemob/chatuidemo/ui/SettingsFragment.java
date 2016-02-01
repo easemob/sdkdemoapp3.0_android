@@ -276,7 +276,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pd.setMessage(st);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
-		DemoHelper.getInstance().logout(true,new EMCallBack() {
+		DemoHelper.getInstance().logout(false,new EMCallBack() {
 			
 			@Override
 			public void onSuccess() {

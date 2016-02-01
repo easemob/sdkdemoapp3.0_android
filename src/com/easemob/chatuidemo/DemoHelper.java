@@ -522,16 +522,13 @@ public class DemoHelper {
         public void onContactAdded(List<String> usernameList) {         
             // 保存增加的联系人
             Map<String, EaseUser> localUsers = getContactList();
-            Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
             for (String username : usernameList) {
                 EaseUser user = new EaseUser(username);
                 // 添加好友时可能会回调added方法两次
                 if (!localUsers.containsKey(username)) {
-                    userDao.saveContact(user);
+                    saveContact(user);
                 }
-                toAddUsers.put(username, user);
             }
-            localUsers.putAll(toAddUsers);
             //发送好友变动广播
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
