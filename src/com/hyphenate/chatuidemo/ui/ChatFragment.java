@@ -42,19 +42,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     //避免和基类定义的常量可能发生的冲突，常量从11开始定义
     private static final int ITEM_VIDEO = 11;
     private static final int ITEM_FILE = 12;
-    private static final int ITEM_VOICE_CALL = 13;
-    private static final int ITEM_VIDEO_CALL = 14;
     
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
     private static final int REQUEST_CODE_GROUP_DETAIL = 13;
     private static final int REQUEST_CODE_CONTEXT_MENU = 14;
-    
-    private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 1;
-    private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
-    private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3; 
-    private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
-    
     
     /**
      * 是否为环信小助手
@@ -86,10 +78,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         //增加扩展item
         inputMenu.registerExtendMenuItem(R.string.attach_video, R.drawable.em_chat_video_selector, ITEM_VIDEO, extendMenuItemClickListener);
         inputMenu.registerExtendMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, ITEM_FILE, extendMenuItemClickListener);
-        if(chatType == Constant.CHATTYPE_SINGLE){
-            inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, ITEM_VOICE_CALL, extendMenuItemClickListener);
-            inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL, extendMenuItemClickListener);
-        }
     }
     
     @Override
@@ -157,13 +145,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             message.setAttribute("em_robot_message", isRobot);
         }
     }
-    
-    @Override
-    public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
-        //设置自定义listview item提供者
-        return new CustomChatRowProvider();
-    }
-  
 
     @Override
     public void onEnterToChatDetails() {
@@ -213,12 +194,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             //demo这里是通过系统api选择文件，实际app中最好是做成qq那种选择发送文件
             selectFileFromLocal();
             break;
-        case ITEM_VOICE_CALL: //音频通话
-            startVoiceCall();
-            break;
-        case ITEM_VIDEO_CALL: //视频通话
-            startVideoCall();
-            break;
 
         default:
             break;
@@ -242,71 +217,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         }
         startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
     }
-    
-    /**
-     * 拨打语音电话
-     */
-    protected void startVoiceCall() {
-        if (!EMClient.getInstance().isConnected()) {
-            Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
-        } else {
-            startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
-                    .putExtra("isComingCall", false));
-            // voiceCallBtn.setEnabled(false);
-            inputMenu.hideExtendMenuContainer();
-        }
-    }
-    
-    /**
-     * 拨打视频电话
-     */
-    protected void startVideoCall() {
-        if (!EMClient.getInstance().isConnected())
-            Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
-        else {
-            startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
-                    .putExtra("isComingCall", false));
-            // videoCallBtn.setEnabled(false);
-            inputMenu.hideExtendMenuContainer();
-        }
-    }
-    
-    /**
-     * chat row provider 
-     *
-     */
-    private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
-        @Override
-        public int getCustomChatRowTypeCount() {
-            //音、视频通话发送、接收共4种
-            return 4;
-        }
 
-        @Override
-        public int getCustomChatRowType(EMMessage message) {
-            if(message.getType() == EMMessage.Type.TXT){
-                //语音通话类型
-                if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL : MESSAGE_TYPE_SENT_VOICE_CALL;
-                }else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
-                    //视频通话
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO_CALL : MESSAGE_TYPE_SENT_VIDEO_CALL;
-                }
-            }
-            return 0;
-        }
-
-        @Override
-        public EaseChatRow getCustomChatRow(EMMessage message, int position, BaseAdapter adapter) {
-            if(message.getType() == EMMessage.Type.TXT){
-                // 语音通话,  视频通话
-                if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
-                    message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
-                    return new ChatRowVoiceCall(getActivity(), message, position, adapter);
-                }
-            }
-            return null;
-        }
+    @Override
+    public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }
