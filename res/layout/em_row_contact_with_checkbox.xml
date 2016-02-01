@@ -30,7 +30,7 @@
             android:focusable="false"
             android:button="@drawable/em_checkbox_bg_selector" />
 
-        <ImageView
+        <com.easemob.easeui.widget.EaseImageView
             android:id="@+id/avatar"
             android:layout_width="45dp"
             android:layout_height="45dp"
