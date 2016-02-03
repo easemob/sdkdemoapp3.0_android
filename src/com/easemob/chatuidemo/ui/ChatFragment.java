@@ -47,6 +47,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     private static final int ITEM_FILE = 12;
     private static final int ITEM_VOICE_CALL = 13;
     private static final int ITEM_VIDEO_CALL = 14;
+    private static final int ITEM_READFIRE = 15;
     
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
@@ -93,6 +94,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, ITEM_VOICE_CALL, extendMenuItemClickListener);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL, extendMenuItemClickListener);
         }
+        inputMenu.registerExtendMenuItem(R.string.attach_destroy, R.drawable.ease_destroy, ITEM_READFIRE, extendMenuItemClickListener);
     }
     
     @Override
@@ -197,7 +199,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         }
         // 根据当前状态是否是阅后即焚状态来设置发送消息的扩展
         if(isDestroy){
-        	message.setAttribute(EaseConstant.EASE_ATTR_TYPE, EaseConstant.EASE_ATTR_TYPE_DESTROY);
+        	message.setAttribute(EaseConstant.EASE_ATTR_READFIRE, true);
         }
     }
     
@@ -261,6 +263,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         case ITEM_VIDEO_CALL: //视频通话
             startVideoCall();
             break;
+        case ITEM_READFIRE:
+        	onReadFireOnOff(true);
+        	break;
         default:
             break;
         }
