@@ -268,8 +268,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                     }
                                 } else {
                                     if (isInComingCall) {
-                                        callingState = CallingState.UNANSWERED;
-                                        callStateTextView.setText(st9);
+                                        if(callingState == CallingState.REFUESD){
+                                            callStateTextView.setText(R.string.Refused);
+                                        }else{
+                                            callingState = CallingState.UNANSWERED;
+                                            callStateTextView.setText(st9);
+                                        }
                                     } else {
                                         if (callingState != CallingState.NORMAL) {
                                             callingState = CallingState.CANCED;
