@@ -845,7 +845,9 @@ public class DemoHelper {
 	 */
 	public void setContactList(Map<String, EaseUser> aContactList) {
 		if(aContactList == null){
-			contactList.clear();
+		    if (contactList != null) {
+		        contactList.clear();
+		    }
 			return;
 		}
 		
