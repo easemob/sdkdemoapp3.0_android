@@ -1,7 +1,13 @@
 package com.hyphenate.chatuidemo.ui;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.test.SingleLaunchActivityTestCase;
+
+import java.util.List;
 
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.ui.EaseChatFragment;
@@ -48,9 +54,20 @@ public class ChatActivity extends BaseActivity{
         }
 
     }
+    
+    private boolean isSingleActivity() {
+        ActivityManager activityManager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
+        List<RunningTaskInfo> tasks = activityManager.getRunningTasks(1);
+        return tasks.get(0).numRunning == 1;
+    }
+    
     @Override
     public void onBackPressed() {
         chatFragment.onBackPressed();
+        if (isSingleActivity()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
     
     public String getToChatUsername(){
