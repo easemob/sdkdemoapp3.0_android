@@ -632,10 +632,15 @@ public class DemoHelper {
 	    //获取user信息，demo是从内存的好友列表里获取，
         //实际开发中，可能还需要从服务器获取用户信息,
         //从服务器获取的数据，最好缓存起来，避免频繁的网络请求
+	    if(username == null){
+	        EMLog.d(TAG, "username is null when get user info");
+	        return null;
+	    }
         EaseUser user = null;
         if(username.equals(EMChatManager.getInstance().getCurrentUser()))
             return getUserProfileManager().getCurrentUserInfo();
-        user = getContactList().get(username);
+        if(getContactList() != null)
+            user = getContactList().get(username);
         //TODO 获取不在好友列表里的群成员具体信息，即陌生人信息，demo未实现
         if(user == null && getRobotList() != null){
             user = getRobotList().get(username);

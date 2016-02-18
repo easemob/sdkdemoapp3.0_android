@@ -60,6 +60,16 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
         </LinearLayout>
+        
+        <!-- 演示视频录制功能 -->
+        <Button 
+            android:id="@+id/btn_record_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recording_video"
+            android:layout_below="@id/ll_top_container"
+            android:visibility="gone"
+            />
 
         <TextView 
             android:id="@+id/tv_call_monitor"

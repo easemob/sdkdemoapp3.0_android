@@ -43,6 +43,8 @@
     <string name="location_recv">[%1$s location]</string>
     <string name="location_message">The location information</string>
     <string name="recording_video">Record video</string>
+    <string name="stop_record">Stop record</string>
+    <string name="record_finish_toast">recording finish, file saved in %s</string>
     <string name="location_prefix">[my location]</string>
     <string name="voice">Voice</string>
     <string name="picture">[Picture]</string>

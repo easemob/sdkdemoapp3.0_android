@@ -152,6 +152,11 @@ public class ParseManager {
 					if(callback!=null ){
 					    if(DemoHelper.getInstance().getContactList() == null){
 					        callback.onError(-1, "contactlist is null");
+					        return;
+					    }
+					    if(username == null){
+					        callback.onError(-1, "username is null");
+					        return;
 					    }
 					    EaseUser user = DemoHelper.getInstance().getContactList().get(username);
 						if(user!=null){
