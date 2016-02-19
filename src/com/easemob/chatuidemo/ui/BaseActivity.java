@@ -18,6 +18,7 @@ import android.os.Bundle;
 
 import com.easemob.easeui.ui.EaseBaseActivity;
 import com.umeng.analytics.MobclickAgent;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 public class BaseActivity extends EaseBaseActivity {
 

@@ -46,6 +46,7 @@ import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
+import com.xiaomi.mipush.sdk.MiPushClient;
 
 public class MainActivity extends BaseActivity implements EMEventListener {
 
@@ -80,11 +81,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		MiPushClient.clearNotification(this);
 		
 		if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
 			// 防止被移除后，没点确定按钮然后按了home键，长期在后台又进app导致的crash
 			// 三个fragment里加的判断同理
-		    DemoHelper.getInstance().logout(true,null);
+		    DemoHelper.getInstance().logout(false,null);
 			finish();
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
@@ -466,7 +468,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	 */
 	private void showAccountRemovedDialog() {
 		isAccountRemovedDialogShow = true;
-		DemoHelper.getInstance().logout(true,null);
+		DemoHelper.getInstance().logout(false,null);
 		String st5 = getResources().getString(R.string.Remove_the_notification);
 		if (!MainActivity.this.isFinishing()) {
 			// clear up global variables
@@ -514,7 +516,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             
             @Override
             public void onReceive(Context context, Intent intent) {
-                DemoHelper.getInstance().logout(true,new EMCallBack() {
+                DemoHelper.getInstance().logout(false,new EMCallBack() {
                     
                     @Override
                     public void onSuccess() {
