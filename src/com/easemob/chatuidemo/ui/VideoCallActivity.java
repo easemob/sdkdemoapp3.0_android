@@ -462,6 +462,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             chronometer.stop();
             endCallTriggerByMe = true;
             callStateTextView.setText(getResources().getString(R.string.hanging_up));
+            if(isRecording){
+                callHelper.stopVideoRecord();
+            }
             try {
                 EMChatManager.getInstance().endCall();
             } catch (Exception e) {
@@ -536,7 +539,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 			callHelper.setSurfaceView(null);
 			cameraHelper.stopCapture();
 			oppositeSurface = null;
-			callHelper.stopVideoRecord();
+			if(isRecording){
+			    callHelper.stopVideoRecord();
+			    isRecording = false;
+			}
 			cameraHelper = null;
 		} catch (Exception e) {
 		}
