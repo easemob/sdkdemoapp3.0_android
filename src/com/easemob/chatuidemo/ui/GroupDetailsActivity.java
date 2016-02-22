@@ -519,8 +519,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	/**
 	 * 群组成员gridadapter
 	 * 
-	 * @author admin_new
-	 * 
 	 */
 	private class GridAdapter extends ArrayAdapter<String> {
 
@@ -622,8 +620,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					convertView.findViewById(R.id.badge_delete).setVisibility(View.INVISIBLE);
 				}
 				final String st12 = getResources().getString(R.string.not_delete_myself);
-				final String st13 = getResources().getString(R.string.Are_removed);
-				final String st14 = getResources().getString(R.string.Delete_failed);
 				final String st15 = getResources().getString(R.string.confirm_the_members);
 				button.setOnClickListener(new OnClickListener() {
 					@Override
@@ -650,46 +646,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						}
 					}
 
-					/**
-					 * 删除群成员
-					 * 
-					 * @param username
-					 */
-					protected void deleteMembersFromGroup(final String username) {
-						final ProgressDialog deleteDialog = new ProgressDialog(GroupDetailsActivity.this);
-						deleteDialog.setMessage(st13);
-						deleteDialog.setCanceledOnTouchOutside(false);
-						deleteDialog.show();
-						new Thread(new Runnable() {
-
-							@Override
-							public void run() {
-								try {
-									// 删除被选中的成员
-								    EMGroupManager.getInstance().removeUserFromGroup(groupId, username);
-									isInDeleteMode = false;
-									runOnUiThread(new Runnable() {
-
-										@Override
-										public void run() {
-											deleteDialog.dismiss();
-											refreshMembers();
-											((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "("
-													+ group.getAffiliationsCount() + st);
-										}
-									});
-								} catch (final Exception e) {
-									deleteDialog.dismiss();
-									runOnUiThread(new Runnable() {
-										public void run() {
-											Toast.makeText(getApplicationContext(), st14 + e.getMessage(), 1).show();
-										}
-									});
-								}
-
-							}
-						}).start();
-					}
+					
 				});
 
 				button.setOnLongClickListener(new OnLongClickListener() {
@@ -719,8 +676,53 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 		@Override
 		public int getCount() {
+		    if(super.getCount() == 0)
+		        return 0;
 			return super.getCount() + 2;
 		}
+		
+		/**
+         * 删除群成员
+         * 
+         * @param username
+         */
+        private void deleteMembersFromGroup(final String username) {
+            final String st13 = getResources().getString(R.string.Are_removed);
+            final String st14 = getResources().getString(R.string.Delete_failed);
+            final ProgressDialog deleteDialog = new ProgressDialog(GroupDetailsActivity.this);
+            deleteDialog.setMessage(st13);
+            deleteDialog.setCanceledOnTouchOutside(false);
+            deleteDialog.show();
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        // 删除被选中的成员
+                        EMGroupManager.getInstance().removeUserFromGroup(groupId, username);
+                        isInDeleteMode = false;
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                deleteDialog.dismiss();
+                                refreshMembers();
+                                ((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "("
+                                        + group.getAffiliationsCount() + st);
+                            }
+                        });
+                    } catch (final Exception e) {
+                        deleteDialog.dismiss();
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), st14 + e.getMessage(), 1).show();
+                            }
+                        });
+                    }
+
+                }
+            }).start();
+        }
 	}
 
 	protected void updateGroup() {

@@ -45,6 +45,8 @@
     <string name="location_recv">[%1$s location]</string>
     <string name="location_message">The location information</string>
     <string name="recording_video">Record video</string>
+    <string name="stop_record">Stop record</string>
+    <string name="record_finish_toast">recording finish, file saved in %s</string>
     <string name="location_prefix">[my location]</string>
     <string name="voice">Voice</string>
     <string name="picture">[Picture]</string>
@@ -135,6 +137,7 @@
     <string name="Removed_from_the_failure">Removed fail</string>
     <string name="be_removing">Be removing</string>
     <string name="call_duration">call duration</string>
+    <string name="refuse">refuse</string>
     <string name="Refused">Refused</string>
     <string name="The_other_party_has_refused_to">Call was refused</string>
     <string name="The_other_is_not_online">The peer is not online</string>
