@@ -8,6 +8,9 @@
 # Java class files
 *.class
 
+# idea
+.idea
+
 # generated files
 *bin/
 *gen/
@@ -23,7 +26,9 @@
 #*.project
 *.settings
 
-
+#gradle file
+*build/
+.gradle
 
 
 #*.properties
