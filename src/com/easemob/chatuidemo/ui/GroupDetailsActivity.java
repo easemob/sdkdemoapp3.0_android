@@ -785,6 +785,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	protected void onDestroy() {
 		super.onDestroy();
 		instance = null;
+		if(groupRemoveListener != null){
+		    EMGroupManager.getInstance().removeGroupChangeListener(groupRemoveListener);
+		}
 	}
 	
 	private static class ViewHolder{
