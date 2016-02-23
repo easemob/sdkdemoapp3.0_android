@@ -92,6 +92,7 @@
     <string name="The_new_group_chat">新建群组</string>
     <string name="add_public_group_chat">添加公开群</string>
     <string name="add_public_chat_room">添加聊天室</string>
+    <string name="group_not_found">找不到这个群组</string>
     <string name="group_name">群聊名称</string>
     <string name="Group_chat_profile">群聊简介</string>
     <string name="Whether_the_public">是否公开</string>
@@ -121,9 +122,8 @@
     <string name="newchat">新建聊天</string>
     <string name="agree">同意</string>
     <string name="refuse">拒绝</string>
-    <string name="Group_chat">群聊:</string>
     <string name="not_download">未下载:</string>
-	<string name="Please_enter_a_username">请输入用户名</string>
+    <string name="Please_enter_a_username">请输入用户名</string>
     <string name="is_down_please_wait">正在下载视频请稍候</string>
     <string name="Exit_the_group_chat">退出群聊</string>
     <string name="accept_join_group">同意加入群：</string>
@@ -279,7 +279,7 @@
     <string name="update_groups_failed">更新群聊失败</string>
     
     <string name= "no_more_messages">没有更多的消息了</string>
-    <string name="gorup_not_found">找不到这个群组</string>
+    <string name="join_public_group">加入公开群</string>
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
     <string name="delete_msg_when_exit_group">退出群组时删除聊天数据</string>
     <string name="auto_accept_group_invitation">自动同意群组加群邀请</string>
