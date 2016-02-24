@@ -81,15 +81,6 @@ public class SplashActivity extends BaseActivity {
 	 * 获取当前应用程序的版本号
 	 */
 	private String getVersion() {
-		String st = getResources().getString(R.string.Version_number_is_wrong);
-		PackageManager pm = getPackageManager();
-		try {
-			PackageInfo packinfo = pm.getPackageInfo(getPackageName(), 0);
-			String version = packinfo.versionName;
-			return version;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-			return st;
-		}
+	    return EMClient.getInstance().getChatConfig().getVersion();
 	}
 }
