@@ -95,10 +95,14 @@ public class ConversationListFragment extends EaseConversationListFragment{
     	if (tobeDeleteCons == null) {
     	    return true;
     	}
-        // 删除此会话
-        EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
-        InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
-        inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
+        try {
+            // 删除此会话
+            EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
+            InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
+            inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         refresh();
 
         // 更新消息未读数
