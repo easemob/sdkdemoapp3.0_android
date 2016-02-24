@@ -95,9 +95,13 @@ public class ConversationListFragment extends EaseConversationListFragment{
         }
         EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
         // 删除此会话
-        EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
-        InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
-        inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
+        try {
+            EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
+            InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
+            inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         refresh();
 
         // 更新消息未读数
