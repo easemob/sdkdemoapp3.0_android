@@ -48,6 +48,7 @@ import com.easemob.chatuidemo.ui.MainActivity;
 import com.easemob.chatuidemo.ui.VideoCallActivity;
 import com.easemob.chatuidemo.ui.VoiceCallActivity;
 import com.easemob.chatuidemo.utils.PreferenceManager;
+import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.R;
 import com.easemob.easeui.controller.EaseUI;
 import com.easemob.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
@@ -686,8 +687,8 @@ public class DemoHelper {
                     //获取消息body
                     CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action;//获取自定义action
-                    if(action.equals(Constant.EM_ATTR_TYPE_RECALL)){
-                    	EaseCommonUtils.receiveRecallMessage(message);
+                    if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
+                    	EaseCommonUtils.receiveRevokeMessage(message);
                     }
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");

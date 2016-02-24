@@ -15,6 +15,7 @@ package com.easemob.chatuidemo;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 
 public class DemoApplication extends Application {
@@ -33,6 +34,7 @@ public class DemoApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();  
+		MultiDex.install(this);
         applicationContext = this;
         instance = this;
 
@@ -44,6 +46,7 @@ public class DemoApplication extends Application {
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
+		MultiDex.install(this);
 	}
 
 

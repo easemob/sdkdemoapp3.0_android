@@ -25,7 +25,7 @@ public class ContextMenuActivity extends BaseActivity {
 	public static final int RESULT_CODE_COPY = 1;
 	public static final int RESULT_CODE_DELETE = 2;
 	public static final int RESULT_CODE_FORWARD = 3;
-	public static final int RESULT_CODE_RECALL = 4;
+	public static final int RESULT_CODE_REVOKE = 4;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class ContextMenuActivity extends BaseActivity {
 		}
 		// 这里根据消息是发送方还是接收放判断是否显示撤回菜单项
 		if (message.direct == EMMessage.Direct.RECEIVE) {
-			findViewById(R.id.text_recall).setVisibility(View.GONE);
+			findViewById(R.id.text_revoke).setVisibility(View.GONE);
 		}
 	}
 
@@ -81,8 +81,8 @@ public class ContextMenuActivity extends BaseActivity {
 	}
 
 	// 添加撤回菜单项点击事件
-	public void recall(View view) {
-		setResult(RESULT_CODE_RECALL);
+	public void revoke(View view) {
+		setResult(RESULT_CODE_REVOKE);
 		finish();
 	}
 
