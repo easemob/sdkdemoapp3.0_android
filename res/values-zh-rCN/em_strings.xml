@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">环信DEMO</string>
+    <string name="app_slogon">即时通讯云领导者</string>
     <string name="text_ack_msg">已读</string>
     <string name="text_delivered_msg">送达</string>
     <string name="back">返回</string>

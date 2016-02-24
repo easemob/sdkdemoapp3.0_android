@@ -116,7 +116,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		 roomId = getIntent().getStringExtra("roomId");
 		 
 		 showChatRoomIdLayout.setVisibility(View.VISIBLE);
-		 chatRoomIdTextView.setText("聊天室ID："+roomId);
+		 chatRoomIdTextView.setText(getResources().getString(R.string.chat_room) + " ID："+roomId);
 		 showChatRoomNickLayout.setVisibility(View.VISIBLE);
 		 showChatRoomOwnerLayout.setVisibility(View.VISIBLE);
 		 

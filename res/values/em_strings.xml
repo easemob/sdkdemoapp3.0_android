@@ -2,6 +2,7 @@
 <resources>
     
     <string name="app_name">Hyphenate Demo</string>
+    <string name="app_slogon">IM as a service</string>
     <string name="text_ack_msg">Read</string>
     <string name="text_delivered_msg">Delivered</string>
     <string name="back">Back</string>
@@ -301,9 +302,9 @@
     <string name="nickname">NickName</string>
     <string name="dl_title_upload_photo">Upload Photo</string>
     <string name="dl_msg_local_upload">Local Upload</string>
-    <string name="dl_msg_take_photo">Task Photo</string>
+    <string name="dl_msg_take_photo">Take Photo</string>
     <string name="toast_no_support">No Support!</string>
-    <string name="setting_nickname">Setting nickname</string>
+    <string name="setting_nickname">Set nickname</string>
     <string name="dl_ok">OK</string>
     <string name="dl_cancel">Cancel</string>
     <string name="toast_nick_not_isnull">nick cannot be empty!</string>
