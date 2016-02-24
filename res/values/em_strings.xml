@@ -79,7 +79,7 @@
     <string name="now_refresh_list">Loading data</string>
     <string name="Application_and_notify">Invitation and notification</string>
     <string name="save_new_nickname">Save new nickname</string>
-    <string name="nickname_description">Once this nick is set, this nick will be used in push notification (by default this is user ID ) when the receiver is using the IOS device.</string>
+    <string name="nickname_description">Once this nickname is set, it will be used in push notification (by default this is user ID ) when the receiver is using the iOS device.</string>
     <string name="group_chat">Group chat</string>
     <string name="chat_room">Chat room</string>
     <string name="add_friend">Add friends</string>
@@ -98,7 +98,7 @@
     <string name="Group_chat_profile">Group profile</string>
     <string name="Whether_the_public">Is public</string>
     <string name="Open_group_members_invited">Allow members to invite</string>
-    <string name="Open_group_chat">Public group</string>
+    <string name="Open_group_chat">Public groups</string>
     <string name="join_need_owner_approval">Join need group owner approval</string>
     <string name="blacklist">Black list</string>
     <string name="Empty_the_chat_record">Clear conversation</string>
@@ -286,7 +286,7 @@
     <string name="auto_accept_group_invitation">Auto accept group invitation</string>    
     <string name="group_id">Group ID</string>
     <string name="move_out_backlist">Remove from blacklist</string>
-    <string name="input_new_nick_hint">Input a new nick</string>
+    <string name="input_new_nick_hint">Input a new nickname</string>
     <string name="search_pubic_group">Search public group</string>
     <string name="group_not_existed">The group does not exist</string>
     <string name="group_search_failed">Search failed</string>
@@ -299,15 +299,15 @@
     <string name="illegal_user_name">Illegal user name</string>
     <string name="robot_chat">Robot chat</string>
     <string name="title_user_profile">User Profile</string>
-    <string name="nickname">NickName</string>
+    <string name="nickname">Nickname</string>
     <string name="dl_title_upload_photo">Upload Photo</string>
-    <string name="dl_msg_local_upload">Local Upload</string>
+    <string name="dl_msg_local_upload">Upload photo</string>
     <string name="dl_msg_take_photo">Take Photo</string>
     <string name="toast_no_support">No Support!</string>
     <string name="setting_nickname">Set nickname</string>
     <string name="dl_ok">OK</string>
     <string name="dl_cancel">Cancel</string>
-    <string name="toast_nick_not_isnull">nick cannot be empty!</string>
+    <string name="toast_nick_not_isnull">nickname cannot be empty!</string>
     <string name="dl_update_nick">update nickname</string>
     <string name="dl_update_photo">update photo</string>
     <string name="dl_waiting">waiting...</string>
@@ -316,7 +316,7 @@
     <string name="toast_updatephoto_success">update photo success!</string>
     <string name="toast_updatephoto_fail">update photo fail!</string>
     <string name="user_already_in_contactlist">This user already is your friend, only need remove out from the black list</string>
-    <string name="group_nick">Group Nick:</string>
+    <string name="group_nick">Group Nickname:</string>
     <string name="group_owner">Group Owner:</string>
     <string name="user_removed_from_group">You are removed from the group</string>
 </resources>
