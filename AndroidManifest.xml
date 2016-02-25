@@ -154,6 +154,10 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" >
         </activity>
+        <activity 
+            android:name="com.easemob.chatuidemo.ui.PickAtMemberActivity"
+            android:screenOrientation="portrait" 
+            android:theme="@style/horizontal_slide"/>
         <!-- 地图 -->
         <activity
             android:name="com.easemob.easeui.ui.EaseBaiduMapActivity"

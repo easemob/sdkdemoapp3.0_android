@@ -13,11 +13,14 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
@@ -54,6 +57,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     private static final int REQUEST_CODE_SELECT_FILE = 12;
     private static final int REQUEST_CODE_GROUP_DETAIL = 13;
     private static final int REQUEST_CODE_CONTEXT_MENU = 14;
+    // 跳转到At用户选择列表
+    private static final int REQUEST_CODE_AT_MEMBER= 15;
     
     private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 1;
     private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
@@ -82,6 +87,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         super.setUpView();
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
         
+        setEditTextMessageListener();
     }
     
     @Override
@@ -193,6 +199,58 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             }
         }
         
+    }
+    
+    /**
+     * 设置输入框内容的监听 
+     */
+    private void setEditTextMessageListener(){
+        EditText editText = (EditText) getView().findViewById(R.id.et_sendmessage);
+        editText.addTextChangedListener(new TextWatcher() {
+
+            /**
+             * 输入框内容改变之前
+             * params s         输入框内容改变前的内容
+             * params start     输入框内容开始变化的索引位置，从0开始计数
+             * params count     输入框内容将要减少的变化的字符数
+             * params after     输入框内容将要增加的文本的长度，
+             */
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d("melove", String.format("beforeTextChanged s-%s, start-%d, count-%d, after-%d", s, start, count, after));
+            }
+            
+            /**
+             * 输入框内容改变
+             * params s         输入框内容改变后的内容
+             * params start     输入框内容开始变化的索引位置，从0开始计数
+             * params before    输入框内容减少的文本的长度
+             * params count     输入框内容增加的字符数量
+             */
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("melove", String.format("onTextChanged s-%s, start-%d, before-%d, count-%d", s, start, before, count));
+                // 当新增内容长度为1时采取判断增加的字符是否为@符号
+                if(count == 1){
+                    String str = String.valueOf(s.charAt(start));
+                    if(str.equals("@")){
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), PickAtMemberActivity.class);
+                        intent.putExtra("groupId", conversation.getUserName());
+                        startActivityForResult(intent, REQUEST_CODE_AT_MEMBER);
+                    }
+                }
+            }
+            
+            /**
+             * 输入框内容改变之后
+             * params s 输入框最终的内容
+             */
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d("melove", "afterTextChanged s-" + s);
+            }
+        });
     }
     
     public void refreshUI(){
