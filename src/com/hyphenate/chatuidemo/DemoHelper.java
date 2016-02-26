@@ -31,8 +31,11 @@ import com.hyphenate.chatuidemo.domain.InviteMessage;
 import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.parse.UserProfileManager;
+import com.hyphenate.chatuidemo.receiver.CallReceiver;
 import com.hyphenate.chatuidemo.ui.ChatActivity;
 import com.hyphenate.chatuidemo.ui.MainActivity;
+import com.hyphenate.chatuidemo.ui.VideoCallActivity;
+import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.controller.EaseUI;
@@ -110,9 +113,14 @@ public class DemoHelper {
     
     private boolean alreadyNotified = false;
 	
+	public boolean isVoiceCalling;
+    public boolean isVideoCalling;
+
 	private String username;
 
     private Context appContext;
+
+    private CallReceiver callReceiver;
 
     private EMConnectionListener connectionListener;
 
@@ -312,7 +320,11 @@ public class DemoHelper {
                 //设置点击通知栏跳转事件
                 Intent intent = new Intent(appContext, ChatActivity.class);
                 //有电话时优先跳转到通话页面
-                {
+                if(isVideoCalling){
+                    intent = new Intent(appContext, VideoCallActivity.class);
+                }else if(isVoiceCalling){
+                    intent = new Intent(appContext, VoiceCallActivity.class);
+                }else{
                     ChatType chatType = message.getChatType();
                     if (chatType == ChatType.Chat) { // 单聊信息
                         intent.putExtra("userId", message.getFrom());
@@ -383,6 +395,14 @@ public class DemoHelper {
             }
         };
         
+        
+        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
+        if(callReceiver == null){
+            callReceiver = new CallReceiver();
+        }
+
+        //注册通话广播接收者
+        appContext.registerReceiver(callReceiver, callFilter);    
         //注册连接监听
         EMClient.getInstance().addConnectionListener(connectionListener);       
         //注册群组和联系人监听
@@ -795,6 +815,7 @@ public class DemoHelper {
 	 *            callback
 	 */
 	public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
+		endCall();
 		Log.d(TAG, "logout: " + unbindDeviceToken);
 		EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
@@ -930,6 +951,13 @@ public class DemoHelper {
 		return userProManager;
 	}
 
+	void endCall() {
+		try {
+			EMClient.getInstance().callManager().endCall();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	  public void addSyncGroupListener(DataSyncListener listener) {
 	        if (listener == null) {

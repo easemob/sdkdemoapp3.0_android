@@ -213,6 +213,21 @@
             android:windowSoftInputMode="adjustPan" >
         </activity>
         
+        <!-- 语音通话 -->
+        <activity
+            android:name="com.hyphenate.chatuidemo.ui.VoiceCallActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:theme="@style/nornal_style" >
+        </activity>
+        <!-- 视频通话 -->
+        <activity
+            android:name="com.hyphenate.chatuidemo.ui.VideoCallActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:theme="@style/horizontal_slide" >
+        </activity>
         <!-- 群聊简单信息 -->
         <activity
             android:name="com.hyphenate.chatuidemo.ui.GroupSimpleDetailActivity"
