@@ -45,8 +45,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -131,8 +133,23 @@ public class MainActivity extends BaseActivity {
 		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 		//内部测试方法，请忽略
         registerInternalDebugReceiver();
+        
+        EMLog.d(TAG, "width:" + getScreenWidth(this) + "  height:" + getScreenHeight(this));
 	}
 
+	public static int getScreenWidth(Context context) {    
+	    WindowManager manager = (WindowManager) context    
+	            .getSystemService(Context.WINDOW_SERVICE);    
+	    Display display = manager.getDefaultDisplay();    
+	    return display.getWidth();    
+	}    
+	//获取屏幕的高度    
+	public static int getScreenHeight(Context context) {    
+	    WindowManager manager = (WindowManager) context    
+	            .getSystemService(Context.WINDOW_SERVICE);    
+	    Display display = manager.getDefaultDisplay();    
+	    return display.getHeight();    
+	} 
 	
 	/**
 	 * 初始化组件

@@ -96,7 +96,9 @@ public class PublicChatRoomsActivity extends BaseActivity {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				adapter.getFilter().filter(s);
+			    if (adapter != null) {
+			        adapter.getFilter().filter(s);
+			    }
 				if(s.length()>0){
 					ibClean.setVisibility(View.VISIBLE);
 				}else{

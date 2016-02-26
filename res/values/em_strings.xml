@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <string name="app_name">HuanXin UI Demo</string>
+    <string name="app_name">Hyphenate Demo</string>
+    <string name="app_slogon">IM as a service</string>
     <string name="text_ack_msg">Read</string>
     <string name="text_delivered_msg">Delivered</string>
     <string name="back">Back</string>
@@ -44,7 +45,6 @@
     <string name="location_message">The location information</string>
     <string name="recording_video">Record video</string>
     <string name="location_prefix">[my location]</string>
-    <string name="voice">Voice</string>
     <string name="picture">[Picture]</string>
     <string name="video">[Video]</string>
     <string name="file">[file]</string>
@@ -68,7 +68,8 @@
     <string name="set">Settings</string>
     <string name="notify">New message notification</string>
     <string name="newnotify">Receiving a new message</string>
-    <string name="shake">Shake</string>
+    <string name="voice">Voice</string>
+    <string name="shake">Vibrate</string>
     <string name="chatset">Chat settings</string>
     <string name="yangshengqi">Use speaker</string>
     <string name="book_black">Black list</string>
@@ -78,25 +79,31 @@
     <string name="now_refresh_list">Loading data</string>
     <string name="Application_and_notify">Invitation and notification</string>
     <string name="save_new_nickname">Save new nickname</string>
+    <string name="nickname_description">Once this nickname is set, it will be used in push notification (by default this is user ID ) when the receiver is using the iOS device.</string>
     <string name="group_chat">Group chat</string>
+    <string name="chat_room">Chat room</string>
     <string name="add_friend">Add friends</string>
     <string name="search">Search</string>
     <string name="black_item">Black list</string>
     <string name="diagnose">Diagnose</string>
-    <string name="push_nick">IOS offline push nick</string>
+    <string name="push_nick">nickname for APNS </string>
     <string name="Current_version">Current version</string>
     <string name="Not_Set">Not set</string>
     <string name="Upload_the_log">Uploading the log</string>
     <string name="The_new_group_chat">Create new group</string>
+    <string name="add_public_group_chat">Add public group</string>
+    <string name="add_public_chat_room">Add public chatroom</string>
+    <string name="group_not_found">Can not find this group</string>
     <string name="group_name">Group name</string>
     <string name="Group_chat_profile">Group profile</string>
     <string name="Whether_the_public">Is public</string>
     <string name="Open_group_members_invited">Allow members to invite</string>
-    <string name="Open_group_chat">Public group</string>
+    <string name="Open_group_chat">Public groups</string>
     <string name="join_need_owner_approval">Join need group owner approval</string>
     <string name="blacklist">Black list</string>
     <string name="Empty_the_chat_record">Clear conversation</string>
     <string name="Shielding_of_the_message">Block message</string>
+    <string name="dismiss_group">Dismiss group</string>
     <string name="Select_the_contact">Select the contact</string>
     <string name="Group_chat_information">The group description</string>
     <string name="Group_of_Lord">The group owner</string>
@@ -109,23 +116,21 @@
     <string name="confirmpassword">Confirm password</string>
     <string name="downwaiting">Downloading the file, please try again later</string>
     <string name="mute">Mute</string>
-    <string name="Hands_free">Hands free</string>
+    <string name="Hands_free">Handsfree</string>
     <string name="hang_up">Hang up</string>
     <string name="answer">Answer</string>
     <string name="unable_to_connect">Unable to connect to the server</string>
     <string name="newchat">Create new group</string>
     <string name="agree">Agree</string>
     <string name="refuse">Refuse</string>
-    <string name="Group_chat">Group chat</string>
-    <string name="chat_room">Chat room</string>
     <string name="not_download">Did not download:</string>
+    <string name="Please_enter_a_username">Please enter a username</string>
     <string name="is_down_please_wait">Downloading video, please try again later</string>
     <string name="Exit_the_group_chat">Exit the group</string>
-    <string name="Please_enter_a_username">Please enter a username</string>
     <string name="accept_join_group">accept join group:</string>
     <string name="refuse_join_group">refuse join group:</string>
     
-    <string name="not_add_myself">"Can't add myself"</string>
+    <string name="not_add_myself">"Can't add yourself"</string>
     <string name="This_user_is_already_your_friend">This user is already your friend</string>
     <string name="Add_a_friend">Let me to be your friend!</string>
     <string name="send_successful">Request was sent, waiting for the peer to accept</string>
@@ -171,11 +176,11 @@
     <string name="is_quit_the_group_chat">Exiting group</string>
     <string name="chatting_is_dissolution">Dismissing group</string>
     <string name="are_empty_group_of_news">Clearing messages</string>
+    <string name="messages_are_empty">Messages has been cleared</string>
     <string name="is_modify_the_group_name">Modifying the group name..</string>
     <string name="Modify_the_group_name_successful">Modify the group name successful</string>
     <string name="change_the_group_name_failed_please">Failed to change the group name, please check the network or try again later</string>
     <string name="Are_moving_to_blacklist">Moving to blacklist</string>
-    <string name="messages_are_empty">Messages has been cleared</string>
     <string name="failed_to_move_into">Failed to move to the blacklist, please check the network or try again later</string>
     <string name="Exit_the_group_chat_failure">Failed to exit the group:</string>
     <string name="Dissolve_group_chat_tofail">Failed to dismiss the group:</string>
@@ -248,6 +253,7 @@
     <string name="Has_agreed_to_your_friend_request">Accepted your request</string>
     <string name="Request_to_add_you_as_a_friend">You got a friend request</string>
     <string name="Apply_to_the_group_of">Apply to join the group</string>
+    <string name="invite_join_group">Invite to join the group</string>
     <string name="Has_agreed_to">Accepted</string>
     <string name="Has_refused_to">Refused</string>
     <string name="Are_agree_with">Accepting</string>
@@ -263,21 +269,27 @@
     <string name="Delete_the_contact">Delete the contact</string>
     <string name="Move_into_the_blacklist_new">Move into the blacklist</string>
     <string name="Change_the_group_name">Change group name</string>
-    <string name="dismiss_group">Dismiss group</string>
-    <string name="add_public_group_chat">Add public group</string>
-    <string name="gorup_not_found">Can not find this group</string>
-    <string name= "no_more_messages">no more messages</string>
+    <string name="Sync_Groups_From_Server">Sync groups with server</string>
+    
+    <string name="update_contact_list">Update contact list</string>
+    <string name="update_black_list">Update black list</string>
+    <string name="update_groups">Update groups</string>
+    
+    <string name="update_contact_list_failed">Update contact list failed</string>
+    <string name="update_black_list_failed">Update black list failed</string>
+    <string name="update_groups_failed">Update groups failed</string>
+
+    <string name="no_more_messages">no more messages</string>
     <string name="join_public_group">Join public group</string>
     <string name="chatroom_allow_owner_leave">Allow chatroom owner leave</string>
     <string name="delete_msg_when_exit_group">Delete messages when exit group</string>
     <string name="auto_accept_group_invitation">Auto accept group invitation</string>    
     <string name="group_id">Group ID</string>
     <string name="move_out_backlist">Remove from blacklist</string>
-    <string name="input_new_nick_hint">Input a new nick</string>
+    <string name="input_new_nick_hint">Input a new nickname</string>
     <string name="search_pubic_group">Search public group</string>
     <string name="group_not_existed">The group does not exist</string>
     <string name="group_search_failed">Search failed</string>
-    <string name="nickname_description">Once this nick is set, this nick will be used in push notification (by default this is HuanXin ID ) when the receiver is using the IOS device.</string>
     <string name="error_send_invalid_content">The message content is not allowed to be sent!</string>
     <string name="error_send_not_in_the_group">You already were not in the group</string>
     <string name="refreshing_group_list">Refreshing group list</string>
@@ -287,15 +299,15 @@
     <string name="illegal_user_name">Illegal user name</string>
     <string name="robot_chat">Robot chat</string>
     <string name="title_user_profile">User Profile</string>
-    <string name="nickname">NickName</string>
+    <string name="nickname">Nickname</string>
     <string name="dl_title_upload_photo">Upload Photo</string>
-    <string name="dl_msg_local_upload">Local Upload</string>
-    <string name="dl_msg_take_photo">Task Photo</string>
+    <string name="dl_msg_local_upload">Upload photo</string>
+    <string name="dl_msg_take_photo">Take Photo</string>
     <string name="toast_no_support">No Support!</string>
-    <string name="setting_nickname">Setting nickname</string>
+    <string name="setting_nickname">Set nickname</string>
     <string name="dl_ok">OK</string>
     <string name="dl_cancel">Cancel</string>
-    <string name="toast_nick_not_isnull">nick cannot be empty!</string>
+    <string name="toast_nick_not_isnull">nickname cannot be empty!</string>
     <string name="dl_update_nick">update nickname</string>
     <string name="dl_update_photo">update photo</string>
     <string name="dl_waiting">waiting...</string>
@@ -304,7 +316,7 @@
     <string name="toast_updatephoto_success">update photo success!</string>
     <string name="toast_updatephoto_fail">update photo fail!</string>
     <string name="user_already_in_contactlist">This user already is your friend, only need remove out from the black list</string>
-    <string name="group_nick">Group Nick:</string>
+    <string name="group_nick">Group Nickname:</string>
     <string name="group_owner">Group Owner:</string>
     <string name="user_removed_from_group">You are removed from the group</string>
 </resources>

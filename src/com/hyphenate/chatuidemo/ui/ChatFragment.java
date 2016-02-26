@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
 
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
@@ -21,6 +19,7 @@ import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
+import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
 
 import android.app.Activity;
@@ -33,6 +32,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
@@ -76,6 +76,18 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             }
         }
         super.setUpView();
+        // 设置标题栏点击事件
+        titleBar.setLeftLayoutClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (EasyUtils.isSingleActivity(getActivity())) {
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
+                }
+                getActivity().finish();
+            }
+        });
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
     }
     
@@ -307,6 +319,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             }
             return null;
         }
+
     }
     
 }

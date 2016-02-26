@@ -866,7 +866,9 @@ public class DemoHelper {
 	 */
 	public void setContactList(Map<String, EaseUser> aContactList) {
 		if(aContactList == null){
-			contactList.clear();
+		    if (contactList != null) {
+		        contactList.clear();
+		    }
 			return;
 		}
 		
@@ -1240,7 +1242,6 @@ public class DemoHelper {
         }
         
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
-        EMClient.getInstance().setAppInited();
         alreadyNotified = true;
     }
 	

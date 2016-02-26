@@ -1,10 +1,11 @@
 package com.hyphenate.chatuidemo.ui;
 
-import android.content.Intent;
-import android.os.Bundle;
-
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.ui.EaseChatFragment;
+import com.hyphenate.util.EasyUtils;
+
+import android.content.Intent;
+import android.os.Bundle;
 
 /**
  * 聊天页面，需要fragment的使用{@link #EaseChatFragment}
@@ -48,9 +49,14 @@ public class ChatActivity extends BaseActivity{
         }
 
     }
+    
     @Override
     public void onBackPressed() {
         chatFragment.onBackPressed();
+        if (EasyUtils.isSingleActivity(this)) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
     
     public String getToChatUsername(){

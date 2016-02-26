@@ -16,12 +16,21 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.UUID;
 
+import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.EMServiceNotReadyException;
+import com.hyphenate.util.EMLog;
+
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,13 +43,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.hyphenate.chat.EMCallStateChangeListener;
-import com.hyphenate.chat.EMChatManager;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EMServiceNotReadyException;
 
 /**
  * 语音通话页面
@@ -58,15 +60,14 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	private boolean isHandsfreeState;
 	
 	private TextView callStateTextView;
-	private int streamID;
 	private boolean endCallTriggerByMe = false;
-	private Handler handler = new Handler();
 	private TextView nickTextView;
 	private TextView durationTextView;
 	private Chronometer chronometer;
 	String st1;
 	private boolean isAnswered;
 	private LinearLayout voiceContronlLayout;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -118,23 +119,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			hangupBtn.setVisibility(View.VISIBLE);
 			st1 = getResources().getString(R.string.Are_connected_to_each_other);
 			callStateTextView.setText(st1);
-			handler.postDelayed(new Runnable() {
-				public void run() {
-					streamID = playMakeCallSounds();
-				}
-			}, 300);
-			try {
-				// 拨打语音电话
-				EMClient.getInstance().callManager().makeVoiceCall(username);
-			} catch (EMServiceNotReadyException e) {
-				e.printStackTrace();
-				final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
-				runOnUiThread(new Runnable() {
-					public void run() {
-						Toast.makeText(VoiceCallActivity.this, st2, 0).show();
-					}
-				});
-			}
+			handler.sendEmptyMessage(MSG_CALL_MAKE_VOICE);
 		} else { // 有电话进来
 			voiceContronlLayout.setVisibility(View.INVISIBLE);
 			Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
@@ -154,6 +139,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
             @Override
             public void onCallStateChanged(CallState callState, CallError error) {
                 // Message msg = handler.obtainMessage();
+                EMLog.d("EMCallManager", "onCallStateChanged:" + callState);
                 switch (callState) {
                 
                 case CONNECTING: // 正在连接对方
@@ -161,10 +147,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                         
                         @Override
                         public void run() {
-                            // TODO Auto-generated method stub
                             callStateTextView.setText(st1);
                         }
-
                     });
                     break;
                 case CONNECTED: // 双方已经建立连接
@@ -172,11 +156,9 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 
                         @Override
                         public void run() {
-                            // TODO Auto-generated method stub
                             String st3 = getResources().getString(R.string.have_connected_with);
                             callStateTextView.setText(st3);
                         }
-
                     });
                     break;
 
@@ -203,7 +185,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             callStateTextView.setText(str4);
                             callingState = CallingState.NORMAL;
                         }
-
                     });
                     break;
                 case DISCONNNECTED: // 电话断了
@@ -214,13 +195,17 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 
                                 @Override
                                 public void run() {
-                                    saveCallRecord(0);
-                                    Animation animation = new AlphaAnimation(1.0f, 0.0f);
-                                    animation.setDuration(800);
-                                    findViewById(R.id.root_layout).startAnimation(animation);
-                                    finish();
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            saveCallRecord(0);
+                                            Animation animation = new AlphaAnimation(1.0f, 0.0f);
+                                            animation.setDuration(800);
+                                            findViewById(R.id.root_layout).startAnimation(animation);
+                                            finish();
+                                        }
+                                    });
                                 }
-
                             }, 200);
                         }
 
@@ -298,55 +283,24 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btn_refuse_call: // 拒绝接听
 		    refuseBtn.setEnabled(false);
-			if (ringtone != null)
-				ringtone.stop();
-			try {
-				EMClient.getInstance().callManager().rejectCall();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-				saveCallRecord(0);
-				finish();
-			}
-			callingState = CallingState.REFUESD;
+		    handler.sendEmptyMessage(MSG_CALL_REJECT);
 			break;
 
 		case R.id.btn_answer_call: // 接听电话
 		    answerBtn.setEnabled(false);
-		    if (ringtone != null)
-                ringtone.stop();
-			if (isInComingCall) {
-				try {
-				    callStateTextView.setText("正在接听...");
-				    EMClient.getInstance().callManager().answerCall();
-					isAnswered = true;
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					saveCallRecord(0);
-					finish();
-					return;
-				}
-			}
+            callStateTextView.setText("正在接听...");
+            handler.sendEmptyMessage(MSG_CALL_ANSWER);
 			comingBtnContainer.setVisibility(View.INVISIBLE);
             hangupBtn.setVisibility(View.VISIBLE);
             voiceContronlLayout.setVisibility(View.VISIBLE);
-            closeSpeakerOn();
 			break;
 
 		case R.id.btn_hangup_call: // 挂断电话
 		    hangupBtn.setEnabled(false);
-			if (soundPool != null)
-				soundPool.stop(streamID);
 			chronometer.stop();
 			endCallTriggerByMe = true;
 			callStateTextView.setText(getResources().getString(R.string.hanging_up));
-			try {
-				EMClient.getInstance().callManager().endCall();
-			} catch (Exception e) {
-				e.printStackTrace();
-				saveCallRecord(0);
-				finish();
-			}
+			handler.sendEmptyMessage(MSG_CALL_END);
 			break;
 
 		case R.id.iv_mute: // 静音开关
@@ -379,20 +333,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		}
 	}
 
-	
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		DemoHelper.getInstance().isVoiceCalling = false;
-	}
-
 	@Override
 	public void onBackPressed() {
-		EMClient.getInstance().callManager().endCall();
 		callDruationText = chronometer.getText().toString();
-		saveCallRecord(0);
-		finish();
 	}
-		
 }
