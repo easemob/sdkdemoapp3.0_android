@@ -63,13 +63,7 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 
 	private String getVersionName() throws Exception {
 		// 获取packagemanager的实例
-		PackageManager packageManager = getPackageManager();
-		// getPackageName()是你当前类的包名，0代表是获取版本信息
-		PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(),
-				0);
-		String version = packInfo.versionName;
-		return version;
-
+		return EMClient.getInstance().getVersion().getChatConfig().getVersion();
 	}
 
 	@Override
