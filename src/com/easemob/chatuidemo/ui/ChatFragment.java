@@ -2,6 +2,7 @@ package com.easemob.chatuidemo.ui;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -76,6 +81,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     
     // 临时保存要 @ 的群成员
     private List<String> atMembers;
+    private EditText mMessageEditText;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +102,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         
         // 判断下当前聊天模式，只有为群聊才检测输入框内容
         if(chatType == Constant.CHATTYPE_GROUP){
-            setEditTextMessageListener();    
+            atMembers = new ArrayList<String>();
+            mMessageEditText = (EditText) getView().findViewById(R.id.et_sendmessage);
+            // 设置输入框的内容变化简体呢
+            setEditTextContentListener();
+            // 设置输入框点击监听，主要是为了设置光标位置
+            setEditTextOnClickListener();
         }
         
     }
@@ -146,7 +157,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 final ProgressDialog pd = new ProgressDialog(getActivity());
                 pd.setMessage(getString(R.string.revoking));
                 pd.show();
-                EaseCommonUtils.sendRevokeMessage(contextMenuMessage, new EMCallBack() {
+                EaseCommonUtils.sendRevokeMessage(getActivity(), contextMenuMessage, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         pd.dismiss();
@@ -207,6 +218,23 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             case REQUEST_CODE_AT_MEMBER: // 选择要 @ 的群成员加入到list中
                 String username = data.getStringExtra(EaseConstant.EXTRA_USER_ID);
                 atMembers.add(username);
+                // 获取光标位置
+                int index = mMessageEditText.getSelectionStart();
+                // 获取输入框内容，然后根据光标位置将 @成员插入到输入框
+                Editable editable = mMessageEditText.getEditableText();
+                if (index < 0 || index >= editable.length()){
+                    editable.append(username + " ");
+                } else {
+                    editable.insert(index, username + " ");
+                }
+                // 将@的对方的名字用蓝色高亮表示
+                Spannable span = new SpannableString(mMessageEditText.getText());
+                span.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.holo_blue_bright)), 
+                        index - 1, 
+                        index + username.length(), 
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                mMessageEditText.setText(span);
+                
                 break;
             default:
                 break;
@@ -218,9 +246,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     /**
      * 设置输入框内容的监听 在调用此方法的地方要加一个判断，只有当聊天为群聊时才需要监视
      */
-    private void setEditTextMessageListener(){
-        EditText editText = (EditText) getView().findViewById(R.id.et_sendmessage);
-        editText.addTextChangedListener(new TextWatcher() {
+    private void setEditTextContentListener(){
+        mMessageEditText.addTextChangedListener(new TextWatcher() {
 
             /**
              * 输入框内容改变之前
@@ -263,6 +290,21 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             @Override
             public void afterTextChanged(Editable s) {
                 Log.d("melove", "afterTextChanged s-" + s);
+            }
+        });
+    }
+    
+    /**
+     * 设置聊天内容输入框的点击监听，主要是为了判断 在输入内容有@ 成员的情况下光标的设置
+     */
+    private void setEditTextOnClickListener(){
+        mMessageEditText.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                // 获取当前点击后的光标位置
+                int selectionStart = ((EditText) v).getSelectionStart();
+                
             }
         });
     }
