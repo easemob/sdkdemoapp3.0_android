@@ -48,7 +48,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     private static final int ITEM_FILE = 12;
     private static final int ITEM_VOICE_CALL = 13;
     private static final int ITEM_VIDEO_CALL = 14;
-    private static final int ITEM_READFIRE = 15;
     
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
