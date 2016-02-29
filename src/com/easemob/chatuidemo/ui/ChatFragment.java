@@ -129,7 +129,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 final ProgressDialog pd = new ProgressDialog(getActivity());
                 pd.setMessage(getString(R.string.revoking));
                 pd.show();
-                EaseCommonUtils.sendRevokeMessage(contextMenuMessage, new EMCallBack() {
+                EaseCommonUtils.sendRevokeMessage(getActivity(), contextMenuMessage, new EMCallBack() {
                     @Override
                     public void onSuccess() {
                         pd.dismiss();

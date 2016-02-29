@@ -688,7 +688,7 @@ public class DemoHelper {
                     CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action;//获取自定义action
                     if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
-                    	EaseCommonUtils.receiveRevokeMessage(message);
+                    	EaseCommonUtils.receiveRevokeMessage(appContext, message);
                     }
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
