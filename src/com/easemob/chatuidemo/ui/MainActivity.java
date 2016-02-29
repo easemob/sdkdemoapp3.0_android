@@ -29,12 +29,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.easemob.EMCallBack;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
+import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
@@ -42,7 +47,9 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
+import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.utils.EaseCommonUtils;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -184,16 +191,43 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	public void onEvent(EMNotifierEvent event) {
 		switch (event.getEvent()) {
 		case EventNewMessage: // 普通消息
-		{
+		    /**
+		     * 定义添加到Conversation对象的扩展内容
+             * {
+             *   "at": {    // 这里表示@ 类型的扩展
+             *      "msgId": "132423423425"
+             *   }   
+             *   "top": 1   // 这里表示会话置顶扩展
+             * }
+             */
 			EMMessage message = (EMMessage) event.getData();
+			// 首先判断当前消息是否是群聊的消息，然后判断是否有 @ 类型的扩展
+			if(message.getChatType() == ChatType.GroupChat){
+	            try {
+	                JSONArray jsonArray= message.getJSONArrayAttribute(EaseConstant.EASE_ATTR_AT);
+	                String currUser = EMChatManager.getInstance().getCurrentUser();
+	                for(int i=0; i<jsonArray.length(); i++){
+	                    if(jsonArray.getString(i).equals(currUser)){
+	                        
+	                    }
+	                }
+	                
+	                EMConversation conversation = EMChatManager.getInstance().getConversation(message.getTo(), true);
+	                JSONObject obj = new JSONObject(conversation.getExtField());
+	                obj.put(EaseConstant.EASE_ATTR_AT, 0);
+	            } catch (EaseMobException e) {
+	                e.printStackTrace();
+	            } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+			}
 
 			// 提示新消息
 			DemoHelper.getInstance().getNotifier().onNewMsg(message);
 
 			refreshUIWithMessage();
 			break;
-		}
-
 		case EventOfflineMessage: {
 		    refreshUIWithMessage();
 			break;

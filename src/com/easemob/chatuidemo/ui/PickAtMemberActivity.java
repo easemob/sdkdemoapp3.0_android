@@ -41,6 +41,7 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.adapter.EaseContactAdapter;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.widget.EaseSidebar;
@@ -80,12 +81,13 @@ public class PickAtMemberActivity extends BaseActivity {
 
 	protected void onListItemClick(int position) {
 //		if (position != 0) {
-			setResult(RESULT_OK, new Intent().putExtra("username", members.get(position)));
+			setResult(RESULT_OK, getIntent().putExtra(EaseConstant.EXTRA_USER_ID, members.get(position)));
 			finish();
 //		}
 	}
 
 	public void back(View view) {
+	    setResult(RESULT_OK);
 		finish();
 	}
 

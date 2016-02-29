@@ -2,7 +2,11 @@ package com.easemob.chatuidemo.ui;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.List;
 import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -70,6 +74,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
      */
     private boolean isRobot;
     
+    // 临时保存要 @ 的群成员
+    private List<String> atMembers;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -87,7 +94,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         super.setUpView();
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
         
-        setEditTextMessageListener();
+        // 判断下当前聊天模式，只有为群聊才检测输入框内容
+        if(chatType == Constant.CHATTYPE_GROUP){
+            setEditTextMessageListener();    
+        }
+        
     }
     
     @Override
@@ -193,7 +204,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                     }
                 }
                 break;
-
+            case REQUEST_CODE_AT_MEMBER: // 选择要 @ 的群成员加入到list中
+                String username = data.getStringExtra(EaseConstant.EXTRA_USER_ID);
+                atMembers.add(username);
+                break;
             default:
                 break;
             }
@@ -202,7 +216,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     }
     
     /**
-     * 设置输入框内容的监听 
+     * 设置输入框内容的监听 在调用此方法的地方要加一个判断，只有当聊天为群聊时才需要监视
      */
     private void setEditTextMessageListener(){
         EditText editText = (EditText) getView().findViewById(R.id.et_sendmessage);
@@ -257,6 +271,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         messageList.refresh();
     }
 
+    /**
+     * 为消息对象添加扩展字段
+     * params message   需要处理的消息对象
+     */
     @Override
     public void onSetMessageAttributes(EMMessage message) {
         if(isRobot){
@@ -266,6 +284,23 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         // 根据当前状态是否是阅后即焚状态来设置发送消息的扩展
         if(isReadFire){
         	message.setAttribute(EaseConstant.EASE_ATTR_READFIRE, true);
+        }
+        // 判断是否存在需要 @ 的群成员
+        if(atMembers != null && atMembers.size() > 0){
+            /*
+             * {
+             *   "at": ["lz0", "lz1"] // 这里表示@ 类型的扩展
+             * }
+             */
+            try {
+                JSONObject atJson = new JSONObject();
+                String[] memberArray = new String[atMembers.size()];
+                atMembers.toArray(memberArray);
+                atJson.put(EaseConstant.EASE_ATTR_AT, memberArray);
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
     
