@@ -22,6 +22,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -233,7 +234,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                         index - 1, 
                         index + username.length(), 
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                span.setSpan(new BackgroundColorSpan(getActivity().getResources().getColor(R.color.common_bg)),
+                        index - 1,
+                        index + username.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 mMessageEditText.setText(span);
+                mMessageEditText.setSelection(span.length());
                 
                 break;
             default:
@@ -304,6 +310,19 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             public void onClick(View v) {
                 // 获取当前点击后的光标位置
                 int selectionStart = ((EditText) v).getSelectionStart();
+                int selectionEnd = 0;
+                String tempContent = mMessageEditText.getText().toString();
+                for(int i=0; i<atMembers.size(); i++){
+                    selectionEnd = tempContent.indexOf(atMembers.get(i), selectionEnd) - 1;
+                    if(selectionEnd != -1){
+                        // 判断当前点击处是否在被 @用户的中间
+                        if(selectionStart > selectionEnd && selectionStart < (selectionEnd + atMembers.get(i).length())){
+                            mMessageEditText.setSelection(selectionEnd + atMembers.get(i).length() + 2);
+                        }
+                    }else{
+                        selectionEnd += atMembers.get(i).length();
+                    }
+                }
                 
             }
         });
