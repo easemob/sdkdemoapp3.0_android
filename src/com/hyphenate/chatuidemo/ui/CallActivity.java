@@ -1,7 +1,7 @@
 package com.hyphenate.chatuidemo.ui;
 
-import com.easemob.media.EMLocalSurfaceView;
-import com.easemob.media.EMOppositeSurfaceView;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;

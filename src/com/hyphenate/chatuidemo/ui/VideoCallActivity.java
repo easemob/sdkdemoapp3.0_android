@@ -15,13 +15,14 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.UUID;
 
-import com.easemob.media.EMLocalSurfaceView;
-import com.easemob.media.EMOppositeSurfaceView;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.util.EMLog;
 
 import android.media.AudioManager;
 import android.media.RingtoneManager;
