@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,9 +26,11 @@ import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -109,6 +112,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             setEditTextContentListener();
             // 设置输入框点击监听，主要是为了设置光标位置
             setEditTextOnClickListener();
+            // 设置输入框按键监听，主要为了监听删除按键
+            setEditTextOnKeyListener();
         }
         
     }
@@ -216,7 +221,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                     }
                 }
                 break;
-            case REQUEST_CODE_AT_MEMBER: // 选择要 @ 的群成员加入到list中
+            case REQUEST_CODE_AT_MEMBER: // 选择要 @ 的群成员加入到list中并设置特殊状态显示
                 String username = data.getStringExtra(EaseConstant.EXTRA_USER_ID);
                 atMembers.add(username);
                 // 获取光标位置
@@ -228,17 +233,20 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 } else {
                     editable.insert(index, username + " ");
                 }
-                // 将@的对方的名字用蓝色高亮表示
+                // 将被@成员的名字用蓝色高亮表示
                 Spannable span = new SpannableString(mMessageEditText.getText());
-                span.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.holo_blue_bright)), 
-                        index - 1, 
-                        index + username.length(), 
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                span.setSpan(new BackgroundColorSpan(getActivity().getResources().getColor(R.color.common_bg)),
+                // 设置被@成员名字颜色
+//                span.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.holo_blue_bright)), 
+//                        index - 1, 
+//                        index + username.length(), 
+//                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                // 设置被@群成员名字背景颜色
+                span.setSpan(new BackgroundColorSpan(getActivity().getResources().getColor(R.color.holo_blue_bright)),
                         index - 1,
                         index + username.length(),
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 mMessageEditText.setText(span);
+                // 设置当前光标在输入框最后
                 mMessageEditText.setSelection(span.length());
                 
                 break;
@@ -283,7 +291,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                     if(str.equals("@")){
                         Intent intent = new Intent();
                         intent.setClass(getActivity(), PickAtMemberActivity.class);
+                        // 这里将群组id传递过去，为了在@用户列表选择界面显示群成员
                         intent.putExtra("groupId", conversation.getUserName());
+                        // 跳转Activity 并定义请求码为@类型
                         startActivityForResult(intent, REQUEST_CODE_AT_MEMBER);
                     }
                 }
@@ -305,29 +315,62 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
      */
     private void setEditTextOnClickListener(){
         mMessageEditText.setOnClickListener(new OnClickListener() {
-            
             @Override
             public void onClick(View v) {
                 // 获取当前点击后的光标位置
                 int selectionStart = ((EditText) v).getSelectionStart();
-                int selectionEnd = 0;
+                int position = 0;
                 String tempContent = mMessageEditText.getText().toString();
                 for(int i=0; i<atMembers.size(); i++){
-                    selectionEnd = tempContent.indexOf(atMembers.get(i), selectionEnd) - 1;
-                    if(selectionEnd != -1){
-                        // 判断当前点击处是否在被 @用户的中间
-                        if(selectionStart > selectionEnd && selectionStart < (selectionEnd + atMembers.get(i).length())){
-                            mMessageEditText.setSelection(selectionEnd + atMembers.get(i).length() + 2);
-                        }
+                    position = tempContent.indexOf(atMembers.get(i), position);
+                    // 判断当前点击处是否在被 @用户的中间
+                    if(position != -1
+                            && selectionStart > position 
+                            && selectionStart <= (position + atMembers.get(i).length())){
+                        mMessageEditText.setSelection(position + atMembers.get(i).length() + 1);
                     }else{
-                        selectionEnd += atMembers.get(i).length();
+                        position += atMembers.get(i).length();
                     }
                 }
-                
             }
         });
     }
     
+    /**
+     * 设置聊天输入框键盘按键监听，主要是为了监听在输入内容有@某成员的情况下，点击了删除按钮的判断
+     */
+    private void setEditTextOnKeyListener(){
+        mMessageEditText.setOnKeyListener(new OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN){
+                    int selectionStart = mMessageEditText.getSelectionStart();
+                    int position = 0;
+                    String tempContent = mMessageEditText.getText().toString();
+                    for(int i=0; i<atMembers.size(); i++){
+                        position = tempContent.indexOf(atMembers.get(i), position);
+                        // 判断点击删除按键时光标是否正好在被 @用户的末尾
+                        if(position != -1 
+                                && selectionStart > position 
+                                && selectionStart <= (position + atMembers.get(i).length() + 1)){
+                            // 删除被@ 的成员
+                            Editable editable = mMessageEditText.getText();
+                            editable.delete(position - 1, position + atMembers.get(i).length());
+                            atMembers.remove(i);
+                            return true;
+                        }else{
+                            position += atMembers.get(i).length();
+                        }
+                    }
+                }
+                return false;
+            }
+        });
+    }
+    
+    /**
+     * 刷新UI界面
+     */
     public void refreshUI(){
         messageList.refresh();
     }
@@ -349,19 +392,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         // 判断是否存在需要 @ 的群成员
         if(atMembers != null && atMembers.size() > 0){
             /*
-             * {
-             *   "at": ["lz0", "lz1"] // 这里表示@ 类型的扩展
+             * -------------------------------------------------------
+             * "ext":{
+             *   "em_at": ["lz0", "lz1"] // 这里表示@ 类型的扩展
              * }
              */
-            try {
-                JSONObject atJson = new JSONObject();
-                String[] memberArray = new String[atMembers.size()];
-                atMembers.toArray(memberArray);
-                atJson.put(EaseConstant.EASE_ATTR_AT, memberArray);
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            JSONArray atJson = new JSONArray(atMembers);
+            message.setAttribute(EaseConstant.EASE_ATTR_AT, atJson);
         }
     }
     

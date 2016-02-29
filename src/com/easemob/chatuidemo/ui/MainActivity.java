@@ -195,7 +195,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		     * 定义添加到Conversation对象的扩展内容
              * {
              *   "at": {    // 这里表示@ 类型的扩展
-             *      "msgId": "132423423425"
+             *      "msgId": "132423423425",
+             *      "msgTime": 14566789231
              *   }   
              *   "top": 1   // 这里表示会话置顶扩展
              * }
@@ -208,17 +209,19 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	                String currUser = EMChatManager.getInstance().getCurrentUser();
 	                for(int i=0; i<jsonArray.length(); i++){
 	                    if(jsonArray.getString(i).equals(currUser)){
+	                        // 获取当前群组会话，因为是群组，所以要根据getTo() 获取群组id
+	                        EMConversation conversation = EMChatManager.getInstance().getConversation(message.getTo(), true);
+	                        JSONObject obj = new JSONObject(conversation.getExtField());
+	                        JSONObject atObj = obj.optJSONObject(EaseConstant.EASE_ATTR_AT);
+	                        if(atObj != null){
+	                            String msgId = atObj.optString(EaseConstant.EASE_ATTR_MSG_ID);
+	                        }
 	                        
 	                    }
 	                }
-	                
-	                EMConversation conversation = EMChatManager.getInstance().getConversation(message.getTo(), true);
-	                JSONObject obj = new JSONObject(conversation.getExtField());
-	                obj.put(EaseConstant.EASE_ATTR_AT, 0);
 	            } catch (EaseMobException e) {
 	                e.printStackTrace();
 	            } catch (JSONException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 			}
