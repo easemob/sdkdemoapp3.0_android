@@ -15,13 +15,14 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.UUID;
 
-import com.easemob.media.EMLocalSurfaceView;
-import com.easemob.media.EMOppositeSurfaceView;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.util.EMLog;
 
 import android.media.AudioManager;
 import android.media.RingtoneManager;
@@ -184,6 +185,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     break;
 
                 case ACCEPTED: // 电话接通成功
+                    handler.removeCallbacks(timeoutHangup);
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -211,6 +213,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     });
                     break;
                 case DISCONNNECTED: // 电话断了
+                    handler.removeCallbacks(timeoutHangup);
                     final CallError fError = error;
                     runOnUiThread(new Runnable() {
                         private void postDelayedCloseMsg() {

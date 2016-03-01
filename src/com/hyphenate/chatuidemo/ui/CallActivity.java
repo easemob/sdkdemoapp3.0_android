@@ -1,7 +1,7 @@
 package com.hyphenate.chatuidemo.ui;
 
-import com.easemob.media.EMLocalSurfaceView;
-import com.easemob.media.EMOppositeSurfaceView;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -74,6 +74,13 @@ public class CallActivity extends BaseActivity {
         super.onBackPressed();
     }
     
+    Runnable timeoutHangup = new Runnable() {
+        
+        @Override
+        public void run() {
+            handler.sendEmptyMessage(MSG_CALL_END);
+        }
+    };
 
     HandlerThread callHandlerThread = new HandlerThread("callHandlerThread");
     { callHandlerThread.start(); }
@@ -91,6 +98,10 @@ public class CallActivity extends BaseActivity {
                     } else { 
                         EMClient.getInstance().callManager().makeVoiceCall(username);
                     }
+                    
+                    final int MAKE_CALL_TIMEOUT = 50 * 1000;
+                    handler.removeCallbacks(timeoutHangup);
+                    handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
                 } catch (EMServiceNotReadyException e) {
                     e.printStackTrace();
                     final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
@@ -143,6 +154,7 @@ public class CallActivity extends BaseActivity {
                 break;
             case MSG_CALL_RLEASE_HANDLER:
                 EMClient.getInstance().callManager().endCall();
+                handler.removeCallbacks(timeoutHangup);
                 handler.removeMessages(MSG_CALL_MAKE_VIDEO);
                 handler.removeMessages(MSG_CALL_MAKE_VOICE);
                 handler.removeMessages(MSG_CALL_ANSWER);
