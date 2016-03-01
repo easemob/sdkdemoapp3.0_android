@@ -185,6 +185,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     break;
 
                 case ACCEPTED: // 电话接通成功
+                    handler.removeCallbacks(timeoutHangup);
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -212,6 +213,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     });
                     break;
                 case DISCONNNECTED: // 电话断了
+                    handler.removeCallbacks(timeoutHangup);
                     final CallError fError = error;
                     runOnUiThread(new Runnable() {
                         private void postDelayedCloseMsg() {
