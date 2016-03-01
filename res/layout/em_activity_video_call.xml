@@ -59,6 +59,13 @@
                 android:text="张三"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
+            <TextView
+                android:id="@+id/tv_network_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="@android:color/white"
+                 />
         </LinearLayout>
         
         <!-- 演示视频录制功能 -->

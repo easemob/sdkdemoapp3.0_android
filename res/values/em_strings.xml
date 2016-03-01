@@ -13,6 +13,7 @@
     <string name="attach_take_pic">Capture</string>
     <string name="attach_location">Location</string>
     <string name="attach_video">Video</string>
+    <string name="attach_read_fire">Burn After Reading</string>
     <string name="attach_file">File</string>
     <string name="attach_voice_call">Voice call</string>
     <string name="attach_video_call">Video call</string>
@@ -33,6 +34,10 @@
     <string name="network_unavailable">The network connection is not available, please check the network</string>
     <string name="copy">Copy</string>
     <string name="forward">Forward</string>
+    <string name="revoke">Revoke</string>
+    <string name="revoking">Revoking</string>
+    <string name="revoke_error_maxtime">Message has been more than two minutes can not be revoke</string>
+    <string name="revoke_error">Revoke failed with error code </string>
     <string name="button_logout">Logout</string>
     <string name="button_uploadlog">Upload the log</string>
     <string name="ok">OK</string>

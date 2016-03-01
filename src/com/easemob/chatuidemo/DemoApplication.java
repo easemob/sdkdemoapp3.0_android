@@ -17,6 +17,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+
 public class DemoApplication extends Application {
 
 	public static Context applicationContext;
@@ -32,8 +33,8 @@ public class DemoApplication extends Application {
 
 	@Override
 	public void onCreate() {
+		super.onCreate();  
 		MultiDex.install(this);
-		super.onCreate();
         applicationContext = this;
         instance = this;
 

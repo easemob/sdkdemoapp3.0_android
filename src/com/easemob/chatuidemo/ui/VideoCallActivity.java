@@ -122,7 +122,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         recordBtn = (Button) findViewById(R.id.btn_record_video);
-        
 
         refuseBtn.setOnClickListener(this);
         answerBtn.setOnClickListener(this);

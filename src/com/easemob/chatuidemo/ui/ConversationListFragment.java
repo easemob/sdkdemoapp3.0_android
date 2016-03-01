@@ -91,23 +91,16 @@ public class ConversationListFragment extends EaseConversationListFragment{
             handled = true;
         } else*/ if (item.getItemId() == R.id.delete_conversation) {
             deleteMessage = true;
-            handled = true;
-        }
-        EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-        // 删除此会话
-        try {
+        	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+            // 删除此会话
             EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
             InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
             inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        refresh();
+            refresh();
 
-        // 更新消息未读数
-        ((MainActivity) getActivity()).updateUnreadLabel();
-        
-        return handled ? true : super.onContextItemSelected(item);
+            // 更新消息未读数
+            ((MainActivity) getActivity()).updateUnreadLabel();        }
+        return true;
     }
 
 }
