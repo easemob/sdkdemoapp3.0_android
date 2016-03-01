@@ -398,7 +398,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
              * }
              */
             JSONArray atJson = new JSONArray(atMembers);
-            message.setAttribute(EaseConstant.EASE_ATTR_AT, atJson);
+            message.setAttribute(EaseConstant.EASE_ATTR_GROUP_AT, atJson);
+            atMembers.clear();
         }
     }
     

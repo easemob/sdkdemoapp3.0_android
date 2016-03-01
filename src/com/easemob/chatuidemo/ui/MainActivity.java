@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -191,39 +192,10 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	public void onEvent(EMNotifierEvent event) {
 		switch (event.getEvent()) {
 		case EventNewMessage: // 普通消息
-		    /**
-		     * 定义添加到Conversation对象的扩展内容
-             * {
-             *   "at": {    // 这里表示@ 类型的扩展
-             *      "msgId": "132423423425",
-             *      "msgTime": 14566789231
-             *   }   
-             *   "top": 1   // 这里表示会话置顶扩展
-             * }
-             */
 			EMMessage message = (EMMessage) event.getData();
 			// 首先判断当前消息是否是群聊的消息，然后判断是否有 @ 类型的扩展
 			if(message.getChatType() == ChatType.GroupChat){
-	            try {
-	                JSONArray jsonArray= message.getJSONArrayAttribute(EaseConstant.EASE_ATTR_AT);
-	                String currUser = EMChatManager.getInstance().getCurrentUser();
-	                for(int i=0; i<jsonArray.length(); i++){
-	                    if(jsonArray.getString(i).equals(currUser)){
-	                        // 获取当前群组会话，因为是群组，所以要根据getTo() 获取群组id
-	                        EMConversation conversation = EMChatManager.getInstance().getConversation(message.getTo(), true);
-	                        JSONObject obj = new JSONObject(conversation.getExtField());
-	                        JSONObject atObj = obj.optJSONObject(EaseConstant.EASE_ATTR_AT);
-	                        if(atObj != null){
-	                            String msgId = atObj.optString(EaseConstant.EASE_ATTR_MSG_ID);
-	                        }
-	                        
-	                    }
-	                }
-	            } catch (EaseMobException e) {
-	                e.printStackTrace();
-	            } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+	            setConversation(message);
 			}
 
 			// 提示新消息
@@ -261,6 +233,62 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 				}
 			}
 		});
+	}
+	
+	/**
+     * 根据得到的消息设置会话的扩展
+	 * 定义添加到Conversation对象的扩展内容
+     * {
+     *   "ease_group_at": {    // 这里表示@ 类型的扩展
+     *      "ease_msg_id": "132423423425",
+     *      "ease_msg_time": 14567823801
+     *   }
+     *   "ease_top": 1   // TODO 这里表示会话置顶扩展
+     * }
+	 * 
+	 * @param message  接收到的消息
+	 */
+	private void setConversation(EMMessage message){
+	    try {
+            // 解析消息扩展，判断当前消息是否有@群成员的扩展，如果没有会直接进入catch
+            JSONArray jsonArray= message.getJSONArrayAttribute(EaseConstant.EASE_ATTR_GROUP_AT);
+            // 获取当前登录账户的 username
+            String currUser = EMChatManager.getInstance().getCurrentUser();
+            for(int i=0; i<jsonArray.length(); i++){
+                // 循环遍历数组，判断是否有@当前账户的 username，如果有则进一步处理
+                if(jsonArray.getString(i).equals(currUser)){
+                    // 获取当前群组会话，因为是群组，所以要根据getTo() 获取群组id
+                    EMConversation conversation = EMChatManager.getInstance().getConversation(message.getTo(), true);
+                    // 获取会话的扩展
+                    String extField = conversation.getExtField();
+                    JSONObject obj = null;
+                    if(extField == null){
+                        // 如果扩展内容为空，这直接新建JSONObject对象，添加设置数据
+                        obj = new JSONObject();
+                        JSONObject atObj = new JSONObject();
+                        atObj.put(EaseConstant.EASE_ATTR_MSG_ID, message.getMsgId());
+                        obj.put(EaseConstant.EASE_ATTR_GROUP_AT, atObj);
+                        conversation.setExtField(obj.toString());
+                    }else{
+                        obj = new JSONObject(extField);
+                        JSONObject atObj = obj.optJSONObject(EaseConstant.EASE_ATTR_GROUP_AT);
+                        if(atObj == null){
+                            atObj = new JSONObject();
+                            atObj.put(EaseConstant.EASE_ATTR_MSG_ID, message.getMsgId());
+                            obj.put(EaseConstant.EASE_ATTR_GROUP_AT, atObj);
+                            conversation.setExtField(obj.toString());
+                        }
+                    }
+                }
+            }
+        } catch (EaseMobException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d("melove", e.getMessage());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 	}
 
 	@Override
