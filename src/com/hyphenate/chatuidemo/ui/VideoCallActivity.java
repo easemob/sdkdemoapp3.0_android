@@ -319,10 +319,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             answerBtn.setEnabled(false);
             if (ringtone != null)
                 ringtone.stop();
+            
             if (isInComingCall) {
                 try {
                     callStateTextView.setText("正在接听...");
-                    EMClient.getInstance().callManager().answerCall();
+                    handler.sendEmptyMessage(MSG_CALL_ANSWER);
 
                     openSpeakerOn();
                     handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
