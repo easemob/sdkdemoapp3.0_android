@@ -1,7 +1,5 @@
 package com.hyphenate.chatuidemo.ui;
 
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -10,7 +8,10 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.util.NetUtils;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -104,9 +105,9 @@ public class CallActivity extends BaseActivity {
                     handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
                 } catch (EMServiceNotReadyException e) {
                     e.printStackTrace();
-                    final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
                     runOnUiThread(new Runnable() {
                         public void run() {
+                            final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
                             Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -117,8 +118,18 @@ public class CallActivity extends BaseActivity {
                     ringtone.stop();
                 if (isInComingCall) {
                     try {
-                        EMClient.getInstance().callManager().answerCall();
-                        isAnswered = true;
+                        if (NetUtils.hasDataConnection(CallActivity.this)) {
+                            EMClient.getInstance().callManager().answerCall();
+                            isAnswered = true;
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+                                    Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            throw new Exception();
+                        }
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
