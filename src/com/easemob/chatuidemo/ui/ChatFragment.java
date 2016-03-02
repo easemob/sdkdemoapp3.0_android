@@ -322,13 +322,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 int position = 0;
                 String tempContent = mMessageEditText.getText().toString();
                 for(int i=0; i<atMembers.size(); i++){
+                    // 从当前位置开始搜索被@的成员的位置
                     position = tempContent.indexOf(atMembers.get(i), position);
                     // 判断当前点击处是否在被 @用户的中间
                     if(position != -1
-                            && selectionStart > position 
+                            && selectionStart > position - 1 
                             && selectionStart <= (position + atMembers.get(i).length())){
+                        // 设置光标位置为被@的成员的末尾
                         mMessageEditText.setSelection(position + atMembers.get(i).length() + 1);
                     }else{
+                        // 如果当前点击的被@成员不是当前搜索到的，设置搜索位置为当前成员后，继续搜索下一个
                         position += atMembers.get(i).length();
                     }
                 }
@@ -344,21 +347,25 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if(keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN){
+                    // 获取当前光标位置
                     int selectionStart = mMessageEditText.getSelectionStart();
                     int position = 0;
                     String tempContent = mMessageEditText.getText().toString();
                     for(int i=0; i<atMembers.size(); i++){
+                        // 搜索被@成员在输入框的位置
                         position = tempContent.indexOf(atMembers.get(i), position);
                         // 判断点击删除按键时光标是否正好在被 @用户的末尾
                         if(position != -1 
                                 && selectionStart > position 
                                 && selectionStart <= (position + atMembers.get(i).length() + 1)){
-                            // 删除被@ 的成员
+                            // 删除输入框内被@ 的成员 
                             Editable editable = mMessageEditText.getText();
                             editable.delete(position - 1, position + atMembers.get(i).length());
+                            // 同时删除集合中保存的群成员
                             atMembers.remove(i);
                             return true;
                         }else{
+                            // 如果当前搜索到的群成员不符合删除监听的条件，则设置搜索位置为当前成员后，继续搜索下一个
                             position += atMembers.get(i).length();
                         }
                     }
@@ -394,11 +401,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             /*
              * -------------------------------------------------------
              * "ext":{
-             *   "em_at": ["lz0", "lz1"] // 这里表示@ 类型的扩展
+             *   "ease_group_at_members": ["lz0", "lz1"] // 这里表示@ 类型的扩展
              * }
              */
             JSONArray atJson = new JSONArray(atMembers);
-            message.setAttribute(EaseConstant.EASE_ATTR_GROUP_AT, atJson);
+            // 设置消息的扩展为@群成员类型
+            message.setAttribute(EaseConstant.EASE_ATTR_GROUP_AT_MEMBERS, atJson);
+            // 设置万扩展消息之后要清除atMembers，为下一次@别人做准备
             atMembers.clear();
         }
     }

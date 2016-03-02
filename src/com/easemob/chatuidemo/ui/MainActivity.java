@@ -239,7 +239,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
      * 根据得到的消息设置会话的扩展
 	 * 定义添加到Conversation对象的扩展内容
      * {
-     *   "ease_group_at": {    // 这里表示@ 类型的扩展
+     *   "ease_group_at_members": {    // 这里表示@ 类型的扩展
      *      "ease_msg_id": "132423423425",
      *      "ease_msg_time": 14567823801
      *   }
@@ -251,7 +251,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	private void setConversation(EMMessage message){
 	    try {
             // 解析消息扩展，判断当前消息是否有@群成员的扩展，如果没有会直接进入catch
-            JSONArray jsonArray= message.getJSONArrayAttribute(EaseConstant.EASE_ATTR_GROUP_AT);
+            JSONArray jsonArray= message.getJSONArrayAttribute(EaseConstant.EASE_ATTR_GROUP_AT_MEMBERS);
             // 获取当前登录账户的 username
             String currUser = EMChatManager.getInstance().getCurrentUser();
             for(int i=0; i<jsonArray.length(); i++){
@@ -266,16 +266,23 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                         // 如果扩展内容为空，这直接新建JSONObject对象，添加设置数据
                         obj = new JSONObject();
                         JSONObject atObj = new JSONObject();
+                        // 设置conversation 扩展中@ 类型扩展为当前消息id
                         atObj.put(EaseConstant.EASE_ATTR_MSG_ID, message.getMsgId());
-                        obj.put(EaseConstant.EASE_ATTR_GROUP_AT, atObj);
+                        // 将内层@类型的json数据设置给外层obj json对象
+                        obj.put(EaseConstant.EASE_KEY_HAVE_AT, atObj);
+                        // 将json对象转为String保存在conversation的ext扩展中
                         conversation.setExtField(obj.toString());
                     }else{
                         obj = new JSONObject(extField);
-                        JSONObject atObj = obj.optJSONObject(EaseConstant.EASE_ATTR_GROUP_AT);
+                        // 在conversation的扩展不为空的情况下，直接根据@类型的key获取包含@的json对象，并判断对象是否为空
+                        JSONObject atObj = obj.optJSONObject(EaseConstant.EASE_KEY_HAVE_AT);
                         if(atObj == null){
                             atObj = new JSONObject();
+                            // 设置conversation 扩展中@ 类型扩展为当前消息id
                             atObj.put(EaseConstant.EASE_ATTR_MSG_ID, message.getMsgId());
-                            obj.put(EaseConstant.EASE_ATTR_GROUP_AT, atObj);
+                            // 将内层@类型的json数据设置给外层obj json对象
+                            obj.put(EaseConstant.EASE_KEY_HAVE_AT, atObj);
+                            // 将json对象转为String保存在conversation的ext扩展中
                             conversation.setExtField(obj.toString());
                         }
                     }
