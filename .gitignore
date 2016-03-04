@@ -12,7 +12,6 @@
 *bin/
 *gen/
 #*/assets/
-*/libs/easemobchat_2.0.0.jar
 
 
 # Local configuration file (sdk path, etc)
@@ -23,6 +22,10 @@
 #*.project
 *.settings
 
-
+#gradle file
+*build/
+.gradle
+.idea/
+*.iml
 
 #*.properties

@@ -15,6 +15,7 @@ package com.hyphenate.chatuidemo;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDex;
 
 import com.hyphenate.EMCallBack;
 
@@ -32,6 +33,7 @@ public class DemoApplication extends Application {
 
 	@Override
 	public void onCreate() {
+		MultiDex.install(this);
 		super.onCreate();
         applicationContext = this;
         instance = this;
@@ -43,7 +45,10 @@ public class DemoApplication extends Application {
 	public static DemoApplication getInstance() {
 		return instance;
 	}
- 
 
-
+	@Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		MultiDex.install(this);
+	}
 }

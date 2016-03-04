@@ -15,21 +15,13 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.UUID;
 
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
-import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
-import com.hyphenate.chat.EMCallStateChangeListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.util.EMLog;
-
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,6 +34,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
+import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
 
@@ -80,6 +80,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         setContentView(R.layout.em_activity_video_call);
         
         DemoHelper.getInstance().isVideoCalling = true;
+        callType = 1;
+        
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
@@ -221,7 +223,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                                 @Override
                                 public void run() {
-                                    saveCallRecord(1);
+                                    saveCallRecord();
                                     Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                     animation.setDuration(800);
                                     rootContainer.startAnimation(animation);
@@ -303,39 +305,20 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         switch (v.getId()) {
         case R.id.btn_refuse_call: // 拒绝接听
             refuseBtn.setEnabled(false);
-            if (ringtone != null)
-                ringtone.stop();
-            try {
-                EMClient.getInstance().callManager().rejectCall();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                saveCallRecord(1);
-                finish();
-            }
-            callingState = CallingState.REFUESD;
+            handler.sendEmptyMessage(MSG_CALL_REJECT);
             break;
 
         case R.id.btn_answer_call: // 接听电话
             answerBtn.setEnabled(false);
+            openSpeakerOn();
             if (ringtone != null)
                 ringtone.stop();
-            if (isInComingCall) {
-                try {
-                    callStateTextView.setText("正在接听...");
-                    EMClient.getInstance().callManager().answerCall();
-
-                    openSpeakerOn();
-                    handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
-                    isAnswered = true;
-                    isHandsfreeState = true;
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    saveCallRecord(1);
-                    finish();
-                    return;
-                }
-            }
+            
+            callStateTextView.setText("正在接听...");
+            handler.sendEmptyMessage(MSG_CALL_ANSWER);
+            handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
+            isAnswered = true;
+            isHandsfreeState = true;
             comingBtnContainer.setVisibility(View.INVISIBLE);
             hangupBtn.setVisibility(View.VISIBLE);
             voiceContronlLayout.setVisibility(View.VISIBLE);
@@ -347,13 +330,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             chronometer.stop();
             endCallTriggerByMe = true;
             callStateTextView.setText(getResources().getString(R.string.hanging_up));
-            try {
-                EMClient.getInstance().callManager().endCall();
-            } catch (Exception e) {
-                e.printStackTrace();
-                saveCallRecord(1);
-                finish();
-            }
+            handler.sendEmptyMessage(MSG_CALL_END);
             break;
 
         case R.id.iv_mute: // 静音开关

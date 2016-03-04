@@ -1,16 +1,18 @@
 package com.hyphenate.chatuidemo.ui;
 
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMCallManager.EMVideoCallHelper.CallType;
 import com.hyphenate.chat.EMMessage.Status;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.util.NetUtils;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -45,6 +47,11 @@ public class CallActivity extends BaseActivity {
     protected boolean isAnswered = false;
     protected int streamID = -1;
     
+    /**
+     * 0：音频，1：视频
+     */
+    protected int callType = 0;
+    
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
@@ -69,7 +76,7 @@ public class CallActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         handler.sendEmptyMessage(MSG_CALL_END);
-        saveCallRecord(0);
+        saveCallRecord();
         finish();
         super.onBackPressed();
     }
@@ -104,12 +111,12 @@ public class CallActivity extends BaseActivity {
                     handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
                 } catch (EMServiceNotReadyException e) {
                     e.printStackTrace();
-                    final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+//                            Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                 }
                 break;
             case MSG_CALL_ANSWER:
@@ -117,17 +124,27 @@ public class CallActivity extends BaseActivity {
                     ringtone.stop();
                 if (isInComingCall) {
                     try {
-                        EMClient.getInstance().callManager().answerCall();
-                        isAnswered = true;
+                        if (NetUtils.hasDataConnection(CallActivity.this)) {
+                            EMClient.getInstance().callManager().answerCall();
+                            isAnswered = true;
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+                                    final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+                                    Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
+                                    CallActivity.this.finish();
+                                }
+                            });
+                            throw new Exception();
+                        }
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
-                        saveCallRecord(0);
+                        saveCallRecord();
                         finish();
                         return;
                     }
                 }
-                closeSpeakerOn();
                 break;
             case MSG_CALL_REJECT:
                 if (ringtone != null)
@@ -136,7 +153,7 @@ public class CallActivity extends BaseActivity {
                     EMClient.getInstance().callManager().rejectCall();
                 } catch (Exception e1) {
                     e1.printStackTrace();
-                    saveCallRecord(0);
+                    saveCallRecord();
                     finish();
                 }
                 callingState = CallingState.REFUESD;
@@ -148,7 +165,7 @@ public class CallActivity extends BaseActivity {
                     EMClient.getInstance().callManager().endCall();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    saveCallRecord(0);
+                    saveCallRecord();
                     finish();
                 }
                 break;
@@ -238,7 +255,7 @@ public class CallActivity extends BaseActivity {
      * 保存通话消息记录
      * @param type 0：音频，1：视频
      */
-    protected void saveCallRecord(int type) {
+    protected void saveCallRecord() {
         EMMessage message = null;
         EMTextMessageBody txtBody = null;
         if (!isInComingCall) { // 打出去的通话
@@ -284,7 +301,7 @@ public class CallActivity extends BaseActivity {
             break;
         }
         // 设置扩展属性
-        if(type == 0)
+        if(callType == 0)
             message.setAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, true);
         else
             message.setAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, true);

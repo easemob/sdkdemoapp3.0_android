@@ -16,22 +16,13 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.UUID;
 
-import com.hyphenate.chat.EMCallStateChangeListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EMServiceNotReadyException;
-import com.hyphenate.util.EMLog;
-
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -42,7 +33,12 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.util.EMLog;
 
 /**
  * 语音通话页面
@@ -78,6 +74,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		setContentView(R.layout.em_activity_voice_call);
 		
 		DemoHelper.getInstance().isVoiceCalling = true;
+		callType = 0;
 
 		comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
 		refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
@@ -200,7 +197,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            saveCallRecord(0);
+                                            Log.d("AAA", "CALL DISCONNETED");
+                                            saveCallRecord();
                                             Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                             animation.setDuration(800);
                                             findViewById(R.id.root_layout).startAnimation(animation);
@@ -290,11 +288,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 
 		case R.id.btn_answer_call: // 接听电话
 		    answerBtn.setEnabled(false);
+		    closeSpeakerOn();
             callStateTextView.setText("正在接听...");
-            handler.sendEmptyMessage(MSG_CALL_ANSWER);
 			comingBtnContainer.setVisibility(View.INVISIBLE);
             hangupBtn.setVisibility(View.VISIBLE);
             voiceContronlLayout.setVisibility(View.VISIBLE);
+            handler.sendEmptyMessage(MSG_CALL_ANSWER);
 			break;
 
 		case R.id.btn_hangup_call: // 挂断电话
@@ -302,7 +301,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			chronometer.stop();
 			endCallTriggerByMe = true;
 			callStateTextView.setText(getResources().getString(R.string.hanging_up));
-			handler.sendEmptyMessage(MSG_CALL_END);
+            handler.sendEmptyMessage(MSG_CALL_END);
 			break;
 
 		case R.id.iv_mute: // 静音开关
