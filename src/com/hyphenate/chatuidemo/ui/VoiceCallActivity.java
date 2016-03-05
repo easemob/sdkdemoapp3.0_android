@@ -333,6 +333,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			break;
 		}
 	}
+	
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DemoHelper.getInstance().isVoiceCalling = false;
+    }
 
 	@Override
 	public void onBackPressed() {
