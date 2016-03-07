@@ -148,6 +148,7 @@
     <string name="The_other_party_did_not_answer">The peer did not answer</string>
     <string name="did_not_answer">did not answer</string>
     <string name="Has_been_cancelled">Cancelled</string>
+    <string name="call_version_inconsistent">Both call version are inconsistent</string>
     <string name="unable_to_get_loaction">Unable to get to your location information!</string>
     <string name="not_connect_to_server">Not connect to server, please try again later</string>
     <string name="sd_card_does_not_exist">"SD card does not exist, can't take pictures"</string>

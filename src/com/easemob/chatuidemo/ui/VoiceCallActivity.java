@@ -258,6 +258,9 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             } else if (fError == CallError.ERROR_NORESPONSE) {
                                 callingState = CallingState.NORESPONSE;
                                 callStateTextView.setText(st6);
+                            } else if (fError == CallError.ERROR_LOCAL_VERSION_SMALLER || fError == CallError.ERROR_PEER_VERSION_SMALLER){
+                                callingState = CallingState.VERSION_NOT_SAME;
+                                callStateTextView.setText(R.string.call_version_inconsistent);
                             } else {
                                 if (isAnswered) {
                                     callingState = CallingState.NORMAL;
@@ -309,7 +312,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             netwrokStatusVeiw.setVisibility(View.INVISIBLE);
                         }
                     });
-
                 default:
                     break;
                 }
