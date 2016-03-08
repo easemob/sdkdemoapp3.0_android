@@ -28,6 +28,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMContactManager;
+import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
@@ -683,16 +684,14 @@ public class DemoHelper {
                 // below is just giving a example to show a cmd toast, the app should not follow this
                 // so be careful of this
                 case EventNewCMDMessage:
-                    EMLog.d(TAG, "收到透传消息");
                     //获取消息body
                     CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action;//获取自定义action
                     if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
-                    	EaseCommonUtils.receiveRevokeMessage(appContext, message);
+                        EaseCommonUtils.receiveRevokeMessage(appContext, message);
                     }
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
-                    EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
                     final String str = appContext.getString(R.string.receive_the_passthrough);
                     
                     final String CMD_TOAST_BROADCAST = "easemob.demo.cmd.toast";
@@ -722,6 +721,12 @@ public class DemoHelper {
                     break;
                 case EventReadAck:
                     message.setAcked(true);
+//                    EMMessage ackMessage = (EMMessage) event.getData();
+                    // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
+                    if(message.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
+                            && (message.getType() == Type.TXT || message.getType() == Type.VOICE || message.getType() == Type.IMAGE)){
+                        EMChatManager.getInstance().getConversation(message.getTo()).removeMessage(message.getMsgId());
+                    }
                     break;
                 // add other events in case you are interested in
                 default:

@@ -41,6 +41,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.chat.EMMessage.Type;
 import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
@@ -197,7 +198,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			if(message.getChatType() == ChatType.GroupChat){
 	            setConversation(message);
 			}
-
 			// 提示新消息
 			DemoHelper.getInstance().getNotifier().onNewMsg(message);
 
@@ -215,6 +215,17 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		case EventNewCMDMessage:
 			refreshUIWithMessage();
 			break;
+		case EventReadAck:
+		    EMMessage ackMessage = (EMMessage) event.getData();
+            // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
+            if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
+                    && (ackMessage.getType() == Type.TXT 
+                    || ackMessage.getType() == Type.VOICE 
+                    || ackMessage.getType() == Type.IMAGE)){
+                EMChatManager.getInstance().getConversation(ackMessage.getTo()).removeMessage(ackMessage.getMsgId());
+            }
+            refreshUIWithMessage();
+		    break;
 		default:
 			break;
 		}
@@ -469,7 +480,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 						EMNotifierEvent.Event.EventNewMessage,
 						EMNotifierEvent.Event.EventOfflineMessage, 
 						EMNotifierEvent.Event.EventConversationListChanged,
-						EMNotifierEvent.Event.EventNewCMDMessage
+						EMNotifierEvent.Event.EventNewCMDMessage,
+						EMNotifierEvent.Event.EventReadAck
 						});
 	}
 
