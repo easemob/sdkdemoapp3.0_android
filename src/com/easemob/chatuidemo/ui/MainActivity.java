@@ -216,6 +216,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			refreshUIWithMessage();
 			break;
 		case EventReadAck:
+            // TODO 这里当此消息未加载到内存中时，ackMessage会为null，消息的删除会失败
 		    EMMessage ackMessage = (EMMessage) event.getData();
             // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
             if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 

@@ -2,8 +2,11 @@ package com.easemob.chatuidemo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -60,6 +63,7 @@ import com.easemob.easeui.domain.EaseEmojiconGroupEntity;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.model.EaseNotifier;
 import com.easemob.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
+import com.easemob.easeui.utils.EaseACKUtil;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
@@ -381,6 +385,9 @@ public class DemoHelper {
                         asyncFetchBlackListFromServer(null);
                     }
                 }
+                // 当连接到服务器之后，这里开始检查是否有没有发送的ack回执消息，
+                EaseACKUtil.getInstance(appContext).checkACKData();
+                
             }
         };
         
@@ -720,11 +727,14 @@ public class DemoHelper {
                     message.setDelivered(true);
                     break;
                 case EventReadAck:
+                    // TODO 这里当此消息未加载到内存中时，ackMessage会为null，消息的删除会失败
                     message.setAcked(true);
-//                    EMMessage ackMessage = (EMMessage) event.getData();
+                    EMMessage ackMessage = (EMMessage) event.getData();
                     // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
                     if(message.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
-                            && (message.getType() == Type.TXT || message.getType() == Type.VOICE || message.getType() == Type.IMAGE)){
+                            && (message.getType() == Type.TXT 
+                            || message.getType() == Type.VOICE 
+                            || message.getType() == Type.IMAGE)){
                         EMChatManager.getInstance().getConversation(message.getTo()).removeMessage(message.getMsgId());
                     }
                     break;
