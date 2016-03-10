@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import com.easemob.EMCallBack;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
+import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
@@ -213,18 +214,34 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		    break;
 		}
 		case EventNewCMDMessage:
+			EMMessage cmdMessage = (EMMessage) event.getData();
+			//获取消息body
+            CmdMessageBody cmdMsgBody = (CmdMessageBody) cmdMessage.getBody();
+            final String action = cmdMsgBody.action;//获取自定义action
+            if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
+                EaseCommonUtils.receiveRevokeMessage(this, cmdMessage);
+            }
 			refreshUIWithMessage();
 			break;
 		case EventReadAck:
             // TODO 这里当此消息未加载到内存中时，ackMessage会为null，消息的删除会失败
 		    EMMessage ackMessage = (EMMessage) event.getData();
-            // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
-            if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
-                    && (ackMessage.getType() == Type.TXT 
-                    || ackMessage.getType() == Type.VOICE 
-                    || ackMessage.getType() == Type.IMAGE)){
-                EMChatManager.getInstance().getConversation(ackMessage.getTo()).removeMessage(ackMessage.getMsgId());
-            }
+		    EMConversation conversation = EMChatManager.getInstance().getConversation(ackMessage.getTo());
+		    
+	        // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
+	        if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
+	                && (ackMessage.getType() == Type.TXT 
+	                || ackMessage.getType() == Type.VOICE 
+	                || ackMessage.getType() == Type.IMAGE)){
+	        	if(conversation.getAllMessages().size() == 1){
+	                if (ackMessage.getChatType() == ChatType.Chat) {
+		                conversation.loadMoreMsgFromDB(ackMessage.getMsgId(), 1);
+		            } else {
+		                conversation.loadMoreGroupMsgFromDB(ackMessage.getMsgId(), 1);
+		            }
+	            }
+	            conversation.removeMessage(ackMessage.getMsgId());
+		    }
             refreshUIWithMessage();
 		    break;
 		default:
