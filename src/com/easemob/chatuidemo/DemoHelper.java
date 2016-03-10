@@ -691,10 +691,10 @@ public class DemoHelper {
                 // below is just giving a example to show a cmd toast, the app should not follow this
                 // so be careful of this
                 case EventNewCMDMessage:
+                    //获取消息body
+                    CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+                    final String action = cmdMsgBody.action;//获取自定义action
                 	if(!easeUI.hasForegroundActivies()){
-                        //获取消息body
-                        CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
-                        final String action = cmdMsgBody.action;//获取自定义action
                         if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
                             EaseCommonUtils.receiveRevokeMessage(appContext, message);
                         }
