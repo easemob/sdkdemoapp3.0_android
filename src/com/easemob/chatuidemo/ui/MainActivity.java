@@ -227,21 +227,25 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             // TODO 这里当此消息未加载到内存中时，ackMessage会为null，消息的删除会失败
 		    EMMessage ackMessage = (EMMessage) event.getData();
 		    EMConversation conversation = EMChatManager.getInstance().getConversation(ackMessage.getTo());
-		    
-	        // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
-	        if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
-	                && (ackMessage.getType() == Type.TXT 
-	                || ackMessage.getType() == Type.VOICE 
-	                || ackMessage.getType() == Type.IMAGE)){
-	        	if(conversation.getAllMessages().size() == 1){
-	                if (ackMessage.getChatType() == ChatType.Chat) {
-		                conversation.loadMoreMsgFromDB(ackMessage.getMsgId(), 1);
-		            } else {
-		                conversation.loadMoreGroupMsgFromDB(ackMessage.getMsgId(), 1);
-		            }
-	            }
-	            conversation.removeMessage(ackMessage.getMsgId());
-		    }
+		    // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
+            if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
+                    && (ackMessage.getType() == Type.TXT 
+                    || ackMessage.getType() == Type.VOICE 
+                    || ackMessage.getType() == Type.IMAGE)){
+                // 判断当前会话是不是只有一条消息，如果只有一条消息，并且这条消息也是阅后即焚类型，当对方阅读后，这边要删除，会话会被过滤掉，因此要加载上一条消息
+                if(conversation.getAllMessages().size() == 1 && conversation.getLastMessage().getMsgId().equals(ackMessage.getMsgId())){
+                    if (ackMessage.getChatType() == ChatType.Chat) {
+                        conversation.loadMoreMsgFromDB(ackMessage.getMsgId(), 1);
+                    } else {
+                        conversation.loadMoreGroupMsgFromDB(ackMessage.getMsgId(), 1);
+                    }
+                }
+                if(conversation.getMessage(ackMessage.getMsgId()) != null){
+                    conversation.removeMessage(ackMessage.getMsgId());
+                }else{
+                    EMChatManager.getInstance().deleteMessage(ackMessage.getMsgId());
+                }
+            }
             refreshUIWithMessage();
 		    break;
 		default:

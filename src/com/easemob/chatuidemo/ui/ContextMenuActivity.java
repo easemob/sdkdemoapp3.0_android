@@ -20,6 +20,7 @@ import android.view.View;
 import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
+import com.easemob.easeui.EaseConstant;
 
 public class ContextMenuActivity extends BaseActivity {
 	public static final int RESULT_CODE_COPY = 1;
@@ -33,25 +34,29 @@ public class ContextMenuActivity extends BaseActivity {
 		EMMessage message = getIntent().getParcelableExtra("message");
 
 		int type = message.getType().ordinal();
-		if (type == EMMessage.Type.TXT.ordinal()) {
-		    if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
-		            || message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
-		        setContentView(R.layout.em_context_menu_for_delete);
-		    } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
-		        setContentView(R.layout.em_context_menu_for_image);
-		    } else {
-		        setContentView(R.layout.em_context_menu_for_text);
-		    }
-		} else if (type == EMMessage.Type.LOCATION.ordinal()) {
-		    setContentView(R.layout.em_context_menu_for_location);
-		} else if (type == EMMessage.Type.IMAGE.ordinal()) {
-		    setContentView(R.layout.em_context_menu_for_image);
-		} else if (type == EMMessage.Type.VOICE.ordinal()) {
-		    setContentView(R.layout.em_context_menu_for_voice);
-		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
-		    setContentView(R.layout.em_context_menu_for_video);
-		} else if (type == EMMessage.Type.FILE.ordinal()) {
-		    setContentView(R.layout.em_context_menu_for_location);
+		if(message.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false)){
+		    setContentView(R.layout.em_context_menu_for_common);
+		}else{
+    		if (type == EMMessage.Type.TXT.ordinal()) {
+    		    if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
+    		            || message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
+    		        setContentView(R.layout.em_context_menu_for_delete);
+    		    } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
+    		        setContentView(R.layout.em_context_menu_for_image);
+    		    } else {
+    		        setContentView(R.layout.em_context_menu_for_text);
+    		    }
+    		} else if (type == EMMessage.Type.LOCATION.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_location);
+    		} else if (type == EMMessage.Type.IMAGE.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_image);
+    		} else if (type == EMMessage.Type.VOICE.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_voice);
+    		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_video);
+    		} else if (type == EMMessage.Type.FILE.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_location);
+    		}
 		}
 		// 这里根据消息是发送方还是接收放判断是否显示撤回菜单项
 		if (message.direct == EMMessage.Direct.RECEIVE) {
