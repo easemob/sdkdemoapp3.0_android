@@ -2,9 +2,16 @@ package com.easemob.chatuidemo.ui;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -12,12 +19,24 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextWatcher;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
@@ -32,6 +51,7 @@ import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.ui.EaseChatFragment;
 import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
+import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.easemob.easeui.widget.emojicon.EaseEmojiconMenu;
@@ -44,6 +64,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     private static final int ITEM_FILE = 12;
     private static final int ITEM_VOICE_CALL = 13;
     private static final int ITEM_VIDEO_CALL = 14;
+    private static final int ITEM_READFIRE = 15;
     
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
@@ -54,8 +75,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
     private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3; 
     private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
-    
-    
+     
     /**
      * 是否为环信小助手
      */
@@ -77,6 +97,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         }
         super.setUpView();
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
+        
     }
     
     @Override
@@ -89,12 +110,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         if(chatType == Constant.CHATTYPE_SINGLE){
             inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, ITEM_VOICE_CALL, extendMenuItemClickListener);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL, extendMenuItemClickListener);
+            // 阅后即焚开关菜单
+            inputMenu.registerExtendMenuItem(R.string.attach_read_fire, R.drawable.ease_read_fire, ITEM_READFIRE, extendMenuItemClickListener);
         }
+        
     }
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("lzan13", "ChatFragment - onActivityResult - "+requestCode);
         if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
             switch (resultCode) {
             case ContextMenuActivity.RESULT_CODE_COPY: // 复制消息
@@ -102,7 +127,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 break;
             case ContextMenuActivity.RESULT_CODE_DELETE: // 删除消息
                 conversation.removeMessage(contextMenuMessage.getMsgId());
-                messageList.refresh();
+                refreshUI();
                 break;
 
             case ContextMenuActivity.RESULT_CODE_FORWARD: // 转发消息
@@ -115,7 +140,39 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 startActivity(intent);
                 
                 break;
+            case ContextMenuActivity.RESULT_CODE_REVOKE:
+            	// 显示撤回消息操作的 dialog
+                final ProgressDialog pd = new ProgressDialog(getActivity());
+                pd.setMessage(getString(R.string.revoking));
+                pd.show();
+                EaseCommonUtils.sendRevokeMessage(getActivity(), contextMenuMessage, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        pd.dismiss();
+                        refreshUI();
+                    }
 
+                    @Override
+                    public void onError(final int i, final String s) {
+                        pd.dismiss();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (s.equals("maxtime")) {
+                                    Toast.makeText(getActivity(), R.string.revoke_error_maxtime, Toast.LENGTH_LONG).show();
+                                } else {
+                                	Toast.makeText(getActivity(), getString(R.string.revoke_error) + i + " " + s + "", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onProgress(int i, String s) {
+
+                    }
+                });
+            	break;
             default:
                 break;
             }
@@ -146,7 +203,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                     }
                 }
                 break;
-
             default:
                 break;
             }
@@ -154,12 +210,28 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         
     }
     
+    /**
+     * 刷新UI界面
+     */
+    public void refreshUI(){
+        messageList.refresh();
+    }
+
+    /**
+     * 为消息对象添加扩展字段
+     * params message   需要处理的消息对象
+     */
     @Override
     public void onSetMessageAttributes(EMMessage message) {
         if(isRobot){
             //设置消息扩展属性
             message.setAttribute("em_robot_message", isRobot);
         }
+        // 根据当前状态是否是阅后即焚状态来设置发送消息的扩展
+        if(isReadFire){
+        	message.setAttribute(EaseConstant.EASE_ATTR_READFIRE, true);
+        }
+        
     }
     
     @Override
@@ -168,7 +240,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         return new CustomChatRowProvider();
     }
   
-
     @Override
     public void onEnterToChatDetails() {
         if (chatType == Constant.CHATTYPE_GROUP) {
@@ -223,14 +294,15 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         case ITEM_VIDEO_CALL: //视频通话
             startVideoCall();
             break;
-
+        case ITEM_READFIRE:
+            setReadFire(true);
+            break;
         default:
             break;
         }
         //不覆盖已有的点击事件
         return false;
     }
-    
     /**
      * 选择文件
      */

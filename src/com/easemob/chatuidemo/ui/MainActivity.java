@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -29,12 +30,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.easemob.EMCallBack;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
+import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
+import com.easemob.chat.EMMessage.ChatType;
+import com.easemob.chat.EMMessage.Type;
 import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
@@ -42,7 +50,9 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
+import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.utils.EaseCommonUtils;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -184,16 +194,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	public void onEvent(EMNotifierEvent event) {
 		switch (event.getEvent()) {
 		case EventNewMessage: // 普通消息
-		{
 			EMMessage message = (EMMessage) event.getData();
-
 			// 提示新消息
 			DemoHelper.getInstance().getNotifier().onNewMsg(message);
 
 			refreshUIWithMessage();
 			break;
-		}
-
 		case EventOfflineMessage: {
 		    refreshUIWithMessage();
 			break;
@@ -203,7 +209,41 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		    refreshUIWithMessage();
 		    break;
 		}
-		
+		case EventNewCMDMessage:
+			EMMessage cmdMessage = (EMMessage) event.getData();
+			//获取消息body
+            CmdMessageBody cmdMsgBody = (CmdMessageBody) cmdMessage.getBody();
+            final String action = cmdMsgBody.action;//获取自定义action
+            if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
+                EaseCommonUtils.receiveRevokeMessage(this, cmdMessage);
+            }
+			refreshUIWithMessage();
+			break;
+		case EventReadAck:
+            // TODO 这里当此消息未加载到内存中时，ackMessage会为null，消息的删除会失败
+		    EMMessage ackMessage = (EMMessage) event.getData();
+		    EMConversation conversation = EMChatManager.getInstance().getConversation(ackMessage.getTo());
+		    // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
+            if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
+                    && (ackMessage.getType() == Type.TXT 
+                    || ackMessage.getType() == Type.VOICE 
+                    || ackMessage.getType() == Type.IMAGE)){
+                // 判断当前会话是不是只有一条消息，如果只有一条消息，并且这条消息也是阅后即焚类型，当对方阅读后，这边要删除，会话会被过滤掉，因此要加载上一条消息
+                if(conversation.getAllMessages().size() == 1 && conversation.getLastMessage().getMsgId().equals(ackMessage.getMsgId())){
+                    if (ackMessage.getChatType() == ChatType.Chat) {
+                        conversation.loadMoreMsgFromDB(ackMessage.getMsgId(), 1);
+                    } else {
+                        conversation.loadMoreGroupMsgFromDB(ackMessage.getMsgId(), 1);
+                    }
+                }
+                if(conversation.getMessage(ackMessage.getMsgId()) != null){
+                    conversation.removeMessage(ackMessage.getMsgId());
+                }else{
+                    EMChatManager.getInstance().deleteMessage(ackMessage.getMsgId());
+                }
+            }
+            refreshUIWithMessage();
+		    break;
 		default:
 			break;
 		}
@@ -223,7 +263,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			}
 		});
 	}
-
+	
 	@Override
 	public void back(View view) {
 		super.back(view);
@@ -391,7 +431,13 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 
 		// register the event listener when enter the foreground
 		EMChatManager.getInstance().registerEventListener(this,
-				new EMNotifierEvent.Event[] { EMNotifierEvent.Event.EventNewMessage ,EMNotifierEvent.Event.EventOfflineMessage, EMNotifierEvent.Event.EventConversationListChanged});
+				new EMNotifierEvent.Event[] { 
+						EMNotifierEvent.Event.EventNewMessage,
+						EMNotifierEvent.Event.EventOfflineMessage, 
+						EMNotifierEvent.Event.EventConversationListChanged,
+						EMNotifierEvent.Event.EventNewCMDMessage,
+						EMNotifierEvent.Event.EventReadAck
+						});
 	}
 
 	@Override

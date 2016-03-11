@@ -20,39 +20,51 @@ import android.view.View;
 import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
+import com.easemob.easeui.EaseConstant;
 
 public class ContextMenuActivity extends BaseActivity {
-    public static final int RESULT_CODE_COPY = 1;
-    public static final int RESULT_CODE_DELETE = 2;
-    public static final int RESULT_CODE_FORWARD = 3;
-    
+	public static final int RESULT_CODE_COPY = 1;
+	public static final int RESULT_CODE_DELETE = 2;
+	public static final int RESULT_CODE_FORWARD = 3;
+	public static final int RESULT_CODE_REVOKE = 4;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		EMMessage message = getIntent().getParcelableExtra("message");
-		
+
 		int type = message.getType().ordinal();
-		if (type == EMMessage.Type.TXT.ordinal()) {
-		    if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false) ||
-		            message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
-		        setContentView(R.layout.em_context_menu_for_location);
-		    }else if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
-		        setContentView(R.layout.em_context_menu_for_image);
-		    }else{
-		        setContentView(R.layout.em_context_menu_for_text);
-		    }
-		} else if (type == EMMessage.Type.LOCATION.ordinal()) {
-		    setContentView(R.layout.em_context_menu_for_location);
-		} else if (type == EMMessage.Type.IMAGE.ordinal()) {
-		    setContentView(R.layout.em_context_menu_for_image);
-		} else if (type == EMMessage.Type.VOICE.ordinal()) {
-		    setContentView(R.layout.em_context_menu_for_voice);
-		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
-			setContentView(R.layout.em_context_menu_for_video);
-		} else if (type == EMMessage.Type.FILE.ordinal()) {
-		    setContentView(R.layout.em_context_menu_for_location);
+		if(message.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false)){
+		    setContentView(R.layout.em_context_menu_for_common);
+		}else{
+    		if (type == EMMessage.Type.TXT.ordinal()) {
+    		    if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
+    		            || message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
+    		        setContentView(R.layout.em_context_menu_for_delete);
+    		    } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
+    		        setContentView(R.layout.em_context_menu_for_image);
+    		    } else {
+    		        setContentView(R.layout.em_context_menu_for_text);
+    		    }
+    		} else if (type == EMMessage.Type.LOCATION.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_location);
+    		} else if (type == EMMessage.Type.IMAGE.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_image);
+    		} else if (type == EMMessage.Type.VOICE.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_voice);
+    		} else if (type == EMMessage.Type.VIDEO.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_video);
+    		} else if (type == EMMessage.Type.FILE.ordinal()) {
+    		    setContentView(R.layout.em_context_menu_for_location);
+    		}
 		}
-		    
+		// 这里根据消息是发送方还是接收放判断是否显示撤回菜单项
+		if (message.direct == EMMessage.Direct.RECEIVE) {
+		    View view = findViewById(R.id.text_revoke);
+			if(view != null){
+			    view.setVisibility(View.GONE);
+			}
+		}
 	}
 
 	@Override
@@ -61,17 +73,25 @@ public class ContextMenuActivity extends BaseActivity {
 		return true;
 	}
 
-	public void copy(View view){
+	public void copy(View view) {
 		setResult(RESULT_CODE_COPY);
 		finish();
 	}
-	public void delete(View view){
+
+	public void delete(View view) {
 		setResult(RESULT_CODE_DELETE);
 		finish();
 	}
-	public void forward(View view){
+
+	public void forward(View view) {
 		setResult(RESULT_CODE_FORWARD);
 		finish();
 	}
-	
+
+	// 添加撤回菜单项点击事件
+	public void revoke(View view) {
+		setResult(RESULT_CODE_REVOKE);
+		finish();
+	}
+
 }

@@ -40,8 +40,10 @@ import android.widget.Toast;
 import com.easemob.chat.EMCallStateChangeListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMVideoCallHelper;
+import com.easemob.chat.EMCallStateChangeListener.CallError;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.ui.CallActivity.CallingState;
 import com.easemob.chatuidemo.utils.CameraHelper;
 import com.easemob.exceptions.EMServiceNotReadyException;
 import com.easemob.util.PathUtil;
@@ -349,6 +351,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             } else if (fError == CallError.ERROR_NORESPONSE) {
                                 callingState = CallingState.NORESPONSE;
                                 callStateTextView.setText(s5);
+                            } else if (fError == CallError.ERROR_LOCAL_VERSION_SMALLER || fError == CallError.ERROR_PEER_VERSION_SMALLER){
+                                callingState = CallingState.VERSION_NOT_SAME;
+                                callStateTextView.setText(R.string.call_version_inconsistent);
                             } else {
                                 if (isAnswered) {
                                     callingState = CallingState.NORMAL;
@@ -477,12 +482,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             if (isMuteState) {
                 // 关闭静音
                 muteImage.setImageResource(R.drawable.em_icon_mute_normal);
-                audioManager.setMicrophoneMute(false);
+                EMChatManager.getInstance().resumeVoiceTransfer();
                 isMuteState = false;
             } else {
                 // 打开静音
                 muteImage.setImageResource(R.drawable.em_icon_mute_on);
-                audioManager.setMicrophoneMute(true);
+                EMChatManager.getInstance().pauseVoiceTransfer();
                 isMuteState = true;
             }
             break;

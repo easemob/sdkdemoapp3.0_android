@@ -154,6 +154,8 @@ public class CallActivity extends BaseActivity {
         case UNANSWERED:
             txtBody = new TextMessageBody(st7);
             break;
+        case VERSION_NOT_SAME:
+            txtBody = new TextMessageBody(getString(R.string.call_version_inconsistent));
         default:
             txtBody = new TextMessageBody(st8);
             break;
@@ -173,6 +175,6 @@ public class CallActivity extends BaseActivity {
     }
 
     enum CallingState {
-        CANCED, NORMAL, REFUESD, BEREFUESD, UNANSWERED, OFFLINE, NORESPONSE, BUSY
+        CANCED, NORMAL, REFUESD, BEREFUESD, UNANSWERED, OFFLINE, NORESPONSE, BUSY, VERSION_NOT_SAME
     }
 }

@@ -90,6 +90,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
             deleteMessage = true;
             handled = true;
         } else*/ if (item.getItemId() == R.id.delete_conversation) {
+            deleteMessage = true;
         	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
             // 删除此会话
             EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);

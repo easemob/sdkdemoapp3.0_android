@@ -14,6 +14,7 @@
     <string name="attach_location">位置</string>
     <string name="attach_video">视频</string>
     <string name="attach_file">文件</string>
+    <string name="attach_read_fire">阅后即焚</string>
     <string name="attach_voice_call">语音电话</string>
     <string name="attach_video_call">视频通话</string>
     <string name="user_card">名片</string>
@@ -33,6 +34,10 @@
     <string name="network_unavailable">网络连接不可用，请检查网络</string>
     <string name="copy">复制</string>
     <string name="forward">转发</string>
+    <string name="revoke">撤回</string>
+    <string name="revokeing">正在撤回 请稍候……</string>
+    <string name="revoke_error_maxtime">消息已经超过两分钟 无法撤回</string>
+    <string name="revoke_error">撤回失败 失败错误码 </string>
     <string name="button_logout">退出登录</string>
     <string name="button_uploadlog">上传运行日志</string>
     <string name="ok">确定</string>
@@ -147,6 +152,7 @@
     <string name="The_other_party_did_not_answer">对方未接听</string>
     <string name="did_not_answer">未接听</string>
     <string name="Has_been_cancelled">已取消</string>
+    <string name="call_version_inconsistent">通话协议版本不一致</string>
     <string name="unable_to_get_loaction">无法获取到您的位置信息!</string>
     <string name="not_connect_to_server">尚未连接至服务器，请稍后重试</string>
     <string name="sd_card_does_not_exist">SD卡不存在，不能拍照</string>
