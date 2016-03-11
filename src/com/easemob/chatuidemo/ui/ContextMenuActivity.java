@@ -60,7 +60,10 @@ public class ContextMenuActivity extends BaseActivity {
 		}
 		// 这里根据消息是发送方还是接收放判断是否显示撤回菜单项
 		if (message.direct == EMMessage.Direct.RECEIVE) {
-			findViewById(R.id.text_revoke).setVisibility(View.GONE);
+		    View view = findViewById(R.id.text_revoke);
+			if(view != null){
+			    view.setVisibility(View.GONE);
+			}
 		}
 	}
 

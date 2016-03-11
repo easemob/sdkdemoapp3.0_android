@@ -70,8 +70,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     private static final int REQUEST_CODE_SELECT_FILE = 12;
     private static final int REQUEST_CODE_GROUP_DETAIL = 13;
     private static final int REQUEST_CODE_CONTEXT_MENU = 14;
-    // 跳转到At用户选择列表
-    private static final int REQUEST_CODE_AT_MEMBER= 15;
     
     private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 1;
     private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
@@ -82,10 +80,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
      * 是否为环信小助手
      */
     private boolean isRobot;
-    
-    // 临时保存要 @ 的群成员
-    private List<String> atMembers;
-    private EditText mMessageEditText;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,18 +97,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         }
         super.setUpView();
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
-        
-        // 判断下当前聊天模式，只有为群聊才检测输入框内容
-        if(chatType == Constant.CHATTYPE_GROUP){
-            atMembers = new ArrayList<String>();
-            mMessageEditText = (EditText) getView().findViewById(R.id.et_sendmessage);
-            // 设置输入框的内容变化简体呢
-            setEditTextContentListener();
-            // 设置输入框点击监听，主要是为了设置光标位置
-            setEditTextOnClickListener();
-            // 设置输入框按键监听，主要为了监听删除按键
-            setEditTextOnKeyListener();
-        }
         
     }
     
@@ -221,158 +203,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                     }
                 }
                 break;
-            case REQUEST_CODE_AT_MEMBER: // 选择要 @ 的群成员加入到list中并设置特殊状态显示
-                String username = data.getStringExtra(EaseConstant.EXTRA_USER_ID);
-                atMembers.add(username);
-                // 获取光标位置
-                int index = mMessageEditText.getSelectionStart();
-                // 获取输入框内容，然后根据光标位置将 @成员插入到输入框
-                Editable editable = mMessageEditText.getEditableText();
-                if (index < 0 || index >= editable.length()){
-                    editable.append(username + " ");
-                } else {
-                    editable.insert(index, username + " ");
-                }
-                // 将被@成员的名字用蓝色高亮表示
-                Spannable span = new SpannableString(mMessageEditText.getText());
-                // 设置被@成员名字颜色
-//                span.setSpan(new ForegroundColorSpan(getActivity().getResources().getColor(R.color.holo_blue_bright)), 
-//                        index - 1, 
-//                        index + username.length(), 
-//                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                // 设置被@群成员名字背景颜色
-                span.setSpan(new BackgroundColorSpan(getActivity().getResources().getColor(R.color.holo_blue_bright)),
-                        index - 1,
-                        index + username.length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                mMessageEditText.setText(span);
-                // 设置当前光标在输入框最后
-                mMessageEditText.setSelection(span.length());
-                
-                break;
             default:
                 break;
             }
         }
         
-    }
-    
-    /**
-     * 设置输入框内容的监听 在调用此方法的地方要加一个判断，只有当聊天为群聊时才需要监视
-     */
-    private void setEditTextContentListener(){
-        mMessageEditText.addTextChangedListener(new TextWatcher() {
-
-            /**
-             * 输入框内容改变之前
-             * params s         输入框内容改变前的内容
-             * params start     输入框内容开始变化的索引位置，从0开始计数
-             * params count     输入框内容将要减少的变化的字符数
-             * params after     输入框内容将要增加的文本的长度，
-             */
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.d("melove", String.format("beforeTextChanged s-%s, start-%d, count-%d, after-%d", s, start, count, after));
-            }
-            
-            /**
-             * 输入框内容改变
-             * params s         输入框内容改变后的内容
-             * params start     输入框内容开始变化的索引位置，从0开始计数
-             * params before    输入框内容减少的文本的长度
-             * params count     输入框内容增加的字符数量
-             */
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d("melove", String.format("onTextChanged s-%s, start-%d, before-%d, count-%d", s, start, before, count));
-                // 当新增内容长度为1时采取判断增加的字符是否为@符号
-                if(count == 1){
-                    String str = String.valueOf(s.charAt(start));
-                    if(str.equals("@")){
-                        Intent intent = new Intent();
-                        intent.setClass(getActivity(), PickAtMemberActivity.class);
-                        // 这里将群组id传递过去，为了在@用户列表选择界面显示群成员
-                        intent.putExtra("groupId", conversation.getUserName());
-                        // 跳转Activity 并定义请求码为@类型
-                        startActivityForResult(intent, REQUEST_CODE_AT_MEMBER);
-                    }
-                }
-            }
-            
-            /**
-             * 输入框内容改变之后
-             * params s 输入框最终的内容
-             */
-            @Override
-            public void afterTextChanged(Editable s) {
-                Log.d("melove", "afterTextChanged s-" + s);
-            }
-        });
-    }
-    
-    /**
-     * 设置聊天内容输入框的点击监听，主要是为了判断 在输入内容有@ 成员的情况下光标的设置
-     */
-    private void setEditTextOnClickListener(){
-        mMessageEditText.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 获取当前点击后的光标位置
-                int selectionStart = ((EditText) v).getSelectionStart();
-                int position = 0;
-                String tempContent = mMessageEditText.getText().toString();
-                for(int i=0; i<atMembers.size(); i++){
-                    // 从当前位置开始搜索被@的成员的位置
-                    position = tempContent.indexOf(atMembers.get(i), position);
-                    // 判断当前点击处是否在被 @用户的中间
-                    if(position != -1
-                            && selectionStart > position - 1 
-                            && selectionStart <= (position + atMembers.get(i).length())){
-                        // 设置光标位置为被@的成员的末尾
-                        mMessageEditText.setSelection(position + atMembers.get(i).length() + 1);
-                    }else{
-                        // 如果当前点击的被@成员不是当前搜索到的，设置搜索位置为当前成员后，继续搜索下一个
-                        position += atMembers.get(i).length();
-                    }
-                }
-            }
-        });
-    }
-    
-    /**
-     * 设置聊天输入框键盘按键监听，主要是为了监听在输入内容有@某成员的情况下，点击了删除按钮的判断
-     */
-    private void setEditTextOnKeyListener(){
-        mMessageEditText.setOnKeyListener(new OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN){
-                    // 获取当前光标位置
-                    int selectionStart = mMessageEditText.getSelectionStart();
-                    int position = 0;
-                    String tempContent = mMessageEditText.getText().toString();
-                    for(int i=0; i<atMembers.size(); i++){
-                        // 搜索被@成员在输入框的位置
-                        position = tempContent.indexOf(atMembers.get(i), position);
-                        // 判断点击删除按键时光标是否正好在被 @用户的末尾
-                        if(position != -1 
-                                && selectionStart > position 
-                                && selectionStart <= (position + atMembers.get(i).length() + 1)){
-                            // 删除输入框内被@ 的成员 
-                            Editable editable = mMessageEditText.getText();
-                            editable.delete(position - 1, position + atMembers.get(i).length());
-                            // 同时删除集合中保存的群成员
-                            atMembers.remove(i);
-                            return true;
-                        }else{
-                            // 如果当前搜索到的群成员不符合删除监听的条件，则设置搜索位置为当前成员后，继续搜索下一个
-                            position += atMembers.get(i).length();
-                        }
-                    }
-                }
-                return false;
-            }
-        });
     }
     
     /**
@@ -396,20 +231,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         if(isReadFire){
         	message.setAttribute(EaseConstant.EASE_ATTR_READFIRE, true);
         }
-        // 判断是否存在需要 @ 的群成员
-        if(atMembers != null && atMembers.size() > 0){
-            /*
-             * -------------------------------------------------------
-             * "ext":{
-             *   "ease_group_at_members": ["lz0", "lz1"] // 这里表示@ 类型的扩展
-             * }
-             */
-            JSONArray atJson = new JSONArray(atMembers);
-            // 设置消息的扩展为@群成员类型
-            message.setAttribute(EaseConstant.EASE_ATTR_GROUP_AT_MEMBERS, atJson);
-            // 设置万扩展消息之后要清除atMembers，为下一次@别人做准备
-            atMembers.clear();
-        }
+        
     }
     
     @Override
