@@ -2,8 +2,11 @@ package com.easemob.chatuidemo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -28,6 +31,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import com.easemob.chat.EMContactListener;
 import com.easemob.chat.EMContactManager;
+import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chat.EMMessage;
@@ -59,6 +63,7 @@ import com.easemob.easeui.domain.EaseEmojiconGroupEntity;
 import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.model.EaseNotifier;
 import com.easemob.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
+import com.easemob.easeui.utils.EaseACKUtil;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
@@ -380,6 +385,9 @@ public class DemoHelper {
                         asyncFetchBlackListFromServer(null);
                     }
                 }
+                // 当连接到服务器之后，这里开始检查是否有没有发送的ack回执消息，
+                EaseACKUtil.getInstance(appContext).checkACKData();
+                
             }
         };
         
@@ -683,16 +691,16 @@ public class DemoHelper {
                 // below is just giving a example to show a cmd toast, the app should not follow this
                 // so be careful of this
                 case EventNewCMDMessage:
-                    EMLog.d(TAG, "收到透传消息");
                     //获取消息body
                     CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action;//获取自定义action
-                    if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
-                    	EaseCommonUtils.receiveRevokeMessage(appContext, message);
-                    }
+                	if(!easeUI.hasForegroundActivies()){
+                        if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
+                            EaseCommonUtils.receiveRevokeMessage(appContext, message);
+                        }
+                	}
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
-                    EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
                     final String str = appContext.getString(R.string.receive_the_passthrough);
                     
                     final String CMD_TOAST_BROADCAST = "easemob.demo.cmd.toast";
@@ -721,7 +729,25 @@ public class DemoHelper {
                     message.setDelivered(true);
                     break;
                 case EventReadAck:
+                    // TODO 这里当此消息未加载到内存中时，ackMessage会为null，消息的删除会失败
                     message.setAcked(true);
+                    EMMessage ackMessage = (EMMessage) event.getData();
+                    EMConversation conversation = EMChatManager.getInstance().getConversation(ackMessage.getTo());
+                    // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
+                    if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
+                            && (ackMessage.getType() == Type.TXT 
+                            || ackMessage.getType() == Type.VOICE 
+                            || ackMessage.getType() == Type.IMAGE)){
+                        // 判断当前会话是不是只有一条消息，如果只有一条消息，并且这条消息也是阅后即焚类型，当对方阅读后，这边要删除，会话会被过滤掉，因此要加载上一条消息
+                        if(conversation.getAllMessages().size() == 1 && conversation.getLastMessage().getMsgId().equals(ackMessage.getMsgId())){
+                            if (ackMessage.getChatType() == ChatType.Chat) {
+                                conversation.loadMoreMsgFromDB(ackMessage.getMsgId(), 1);
+                            } else {
+                                conversation.loadMoreGroupMsgFromDB(ackMessage.getMsgId(), 1);
+                            }
+                        }
+                        conversation.removeMessage(ackMessage.getMsgId());
+                    }
                     break;
                 // add other events in case you are interested in
                 default:
@@ -761,7 +787,6 @@ public class DemoHelper {
 				if (callback != null) {
 					callback.onSuccess();
 				}
-
 			}
 
 			@Override

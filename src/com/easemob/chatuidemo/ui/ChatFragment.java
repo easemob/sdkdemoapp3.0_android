@@ -2,7 +2,13 @@ package com.easemob.chatuidemo.ui;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -13,11 +19,21 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextWatcher;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
@@ -187,7 +203,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                     }
                 }
                 break;
-
             default:
                 break;
             }
@@ -195,10 +210,17 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         
     }
     
+    /**
+     * 刷新UI界面
+     */
     public void refreshUI(){
         messageList.refresh();
     }
 
+    /**
+     * 为消息对象添加扩展字段
+     * params message   需要处理的消息对象
+     */
     @Override
     public void onSetMessageAttributes(EMMessage message) {
         if(isRobot){
@@ -209,6 +231,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         if(isReadFire){
         	message.setAttribute(EaseConstant.EASE_ATTR_READFIRE, true);
         }
+        
     }
     
     @Override
