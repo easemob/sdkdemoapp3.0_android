@@ -73,7 +73,12 @@ public class DemoDBManager {
                 EaseUser user = new EaseUser(username);
                 user.setNick(nick);
                 user.setAvatar(avatar);
-                EaseCommonUtils.setUserInitialLetter(user);
+                if (username.equals(Constant.NEW_FRIENDS_USERNAME) || username.equals(Constant.GROUP_USERNAME)
+                        || username.equals(Constant.CHAT_ROOM)|| username.equals(Constant.CHAT_ROBOT)) {
+                        user.setInitialLetter("");
+                } else {
+                    EaseCommonUtils.setUserInitialLetter(user);
+                }
                 users.put(username, user);
             }
             cursor.close();
