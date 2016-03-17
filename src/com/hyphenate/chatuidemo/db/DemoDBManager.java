@@ -12,6 +12,7 @@ import com.hyphenate.chatuidemo.domain.InviteMessage;
 import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMesageStatus;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.HanziToPinyin;
 
 import android.content.ContentValues;
@@ -72,26 +73,7 @@ public class DemoDBManager {
                 EaseUser user = new EaseUser(username);
                 user.setNick(nick);
                 user.setAvatar(avatar);
-                String headerName = null;
-                if (!TextUtils.isEmpty(user.getNick())) {
-                    headerName = user.getNick();
-                } else {
-                    headerName = user.getUsername();
-                }
-                
-                if (username.equals(Constant.NEW_FRIENDS_USERNAME) || username.equals(Constant.GROUP_USERNAME)
-                        || username.equals(Constant.CHAT_ROOM)|| username.equals(Constant.CHAT_ROBOT)) {
-                    user.setInitialLetter("");
-                } else if (Character.isDigit(headerName.charAt(0))) {
-                    user.setInitialLetter("#");
-                } else {
-                    user.setInitialLetter(HanziToPinyin.getInstance().get(headerName.substring(0, 1))
-                            .get(0).target.substring(0, 1).toUpperCase());
-                    char header = user.getInitialLetter().toLowerCase().charAt(0);
-                    if (header < 'a' || header > 'z') {
-                        user.setInitialLetter("#");
-                    }
-                }
+                EaseCommonUtils.setUserInitialLetter(user);
                 users.put(username, user);
             }
             cursor.close();
