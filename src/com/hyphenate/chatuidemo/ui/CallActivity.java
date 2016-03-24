@@ -169,7 +169,11 @@ public class CallActivity extends BaseActivity {
                 }
                 break;
             case MSG_CALL_RLEASE_HANDLER:
-                EMClient.getInstance().callManager().endCall();
+                try {
+                    EMClient.getInstance().callManager().endCall();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 handler.removeCallbacks(timeoutHangup);
                 handler.removeMessages(MSG_CALL_MAKE_VIDEO);
                 handler.removeMessages(MSG_CALL_MAKE_VOICE);
@@ -295,6 +299,8 @@ public class CallActivity extends BaseActivity {
         case UNANSWERED:
             txtBody = new EMTextMessageBody(st7);
             break;
+        case VERSION_NOT_SAME:
+            txtBody = new EMTextMessageBody(getString(R.string.call_version_inconsistent));
         default:
             txtBody = new EMTextMessageBody(st8);
             break;
@@ -315,6 +321,6 @@ public class CallActivity extends BaseActivity {
     }
 
     enum CallingState {
-        CANCED, NORMAL, REFUESD, BEREFUESD, UNANSWERED, OFFLINE, NORESPONSE, BUSY
+        CANCED, NORMAL, REFUESD, BEREFUESD, UNANSWERED, OFFLINE, NORESPONSE, BUSY, VERSION_NOT_SAME
     }
 }
