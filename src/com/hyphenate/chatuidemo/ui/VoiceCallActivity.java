@@ -313,10 +313,10 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		    answerBtn.setEnabled(false);
 		    closeSpeakerOn();
             callStateTextView.setText("正在接听...");
-            handler.sendEmptyMessage(MSG_CALL_ANSWER);
 			comingBtnContainer.setVisibility(View.INVISIBLE);
             hangupBtn.setVisibility(View.VISIBLE);
             voiceContronlLayout.setVisibility(View.VISIBLE);
+            handler.sendEmptyMessage(MSG_CALL_ANSWER);
 			break;
 
 		case R.id.btn_hangup_call: // 挂断电话
@@ -356,6 +356,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			break;
 		}
 	}
+	
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DemoHelper.getInstance().isVoiceCalling = false;
+    }
 
 	@Override
 	public void onBackPressed() {

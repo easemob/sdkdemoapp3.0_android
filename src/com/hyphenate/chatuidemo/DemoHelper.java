@@ -184,8 +184,6 @@ public class DemoHelper {
         options.setRequireAck(true);
         // 设置是否需要已送达回执
         options.setRequireDeliveryAck(false);
-        // 设置从db初始化加载时, 每个conversation需要加载msg的个数
-        options.setNumberOfMessagesLoaded(1);
         
         //使用gcm和mipush时，把里面的参数替换成自己app申请的
         //设置google推送，需要的GCM的app可以设置此参数

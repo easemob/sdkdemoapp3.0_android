@@ -13,6 +13,9 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
+import java.util.Hashtable;
+import java.util.Map;
+
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.DemoHelper.DataSyncListener;
@@ -72,6 +75,11 @@ public class ContactListFragment extends EaseContactListFragment {
     
     @Override
     public void refresh() {
+        Map<String, EaseUser> m = DemoHelper.getInstance().getContactList();
+        if (m instanceof Hashtable<?, ?>) {
+            m = (Map<String, EaseUser>) ((Hashtable<String, EaseUser>)m).clone();
+        }
+        setContactsMap(m);
         super.refresh();
         if(inviteMessgeDao == null){
             inviteMessgeDao = new InviteMessgeDao(getActivity());
@@ -84,6 +92,7 @@ public class ContactListFragment extends EaseContactListFragment {
     }
     
     
+    @SuppressWarnings("unchecked")
     @Override
     protected void setUpView() {
         titleBar.setRightImageResource(R.drawable.em_add);
@@ -94,9 +103,12 @@ public class ContactListFragment extends EaseContactListFragment {
                 startActivity(new Intent(getActivity(), AddContactActivity.class));
             }
         });
-        
         //设置联系人数据
-        setContactsMap(DemoHelper.getInstance().getContactList());
+        Map<String, EaseUser> m = DemoHelper.getInstance().getContactList();
+        if (m instanceof Hashtable<?, ?>) {
+            m = (Map<String, EaseUser>) ((Hashtable<String, EaseUser>)m).clone();
+        }
+        setContactsMap(m);
         super.setUpView();
         listView.setOnItemClickListener(new OnItemClickListener() {
 

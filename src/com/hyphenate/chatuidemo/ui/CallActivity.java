@@ -111,12 +111,12 @@ public class CallActivity extends BaseActivity {
                     handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
                 } catch (EMServiceNotReadyException e) {
                     e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
-                            Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//                    runOnUiThread(new Runnable() {
+//                        public void run() {
+//                            final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+//                            Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                 }
                 break;
             case MSG_CALL_ANSWER:
@@ -132,6 +132,7 @@ public class CallActivity extends BaseActivity {
                                 public void run() {
                                     final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
                                     Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
+                                    CallActivity.this.finish();
                                 }
                             });
                             throw new Exception();
