@@ -87,7 +87,7 @@ public class PickAtMemberActivity extends BaseActivity {
 	}
 
 	public void back(View view) {
-	    setResult(RESULT_OK);
+//	    setResult(RESULT_OK);
 		finish();
 	}
 
