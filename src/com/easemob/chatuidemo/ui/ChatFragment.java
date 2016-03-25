@@ -51,14 +51,14 @@ import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.ui.EaseChatFragment;
-import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
+import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.easemob.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.easemob.util.PathUtil;
 
-public class ChatFragment extends EaseChatFragment implements EaseChatFragmentListener{
+public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper{
 
     //避免和基类定义的常量可能发生的冲突，常量从11开始定义
     private static final int ITEM_VIDEO = 11;
@@ -95,7 +95,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
 
     @Override
     protected void setUpView() {
-        setChatFragmentListener(this);
+        setChatFragmentHelper(this);
         if (chatType == Constant.CHATTYPE_SINGLE) { 
             Map<String,RobotUser> robotMap = DemoHelper.getInstance().getRobotList();
             if(robotMap!=null && robotMap.containsKey(toChatUsername)){

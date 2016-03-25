@@ -14,11 +14,13 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
+import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.easeui.ui.EaseConversationListFragment;
+import com.easemob.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.easemob.util.NetUtils;
 
 public class ConversationListFragment extends EaseConversationListFragment{
