@@ -30,6 +30,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -195,6 +197,10 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		switch (event.getEvent()) {
 		case EventNewMessage: // 普通消息
 			EMMessage message = (EMMessage) event.getData();
+			// 首先判断当前消息是否是群聊的消息，然后判断是否有 @ 类型的扩展
+            if(message.getChatType() == ChatType.GroupChat){
+                EaseCommonUtils.saveAtToConversationExt(message);
+            }
 			// 提示新消息
 			DemoHelper.getInstance().getNotifier().onNewMsg(message);
 
@@ -202,6 +208,13 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			break;
 		case EventOfflineMessage: {
 		    refreshUIWithMessage();
+		    List<EMMessage> messages = (List<EMMessage>) event.getData();
+            for(int i=0; i<messages.size(); i++){
+                // 首先判断当前消息是否是群聊的消息，然后判断是否有 @ 类型的扩展
+                if(messages.get(i).getChatType() == ChatType.GroupChat){
+                    EaseCommonUtils.saveAtToConversationExt(messages.get(i));
+                }
+            }
 			break;
 		}
 

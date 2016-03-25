@@ -679,6 +679,10 @@ public class DemoHelper {
                     //应用在后台，不需要刷新UI,通知栏提示新消息
                     if(!easeUI.hasForegroundActivies()){
                         getNotifier().onNewMsg(message);
+                        // 首先判断当前消息是否是群聊的消息，然后判断是否有 @ 类型的扩展
+                        if(message.getChatType() == ChatType.GroupChat){
+                            EaseCommonUtils.saveAtToConversationExt(message);
+                        }
                     }
                     break;
                 case EventOfflineMessage:
@@ -686,6 +690,12 @@ public class DemoHelper {
                         EMLog.d(TAG, "received offline messages");
                         List<EMMessage> messages = (List<EMMessage>) event.getData();
                         getNotifier().onNewMesg(messages);
+                        for(int i=0; i<messages.size(); i++){
+                            // 首先判断当前消息是否是群聊的消息，然后判断是否有 @ 类型的扩展
+                            if(messages.get(i).getChatType() == ChatType.GroupChat){
+                                EaseCommonUtils.saveAtToConversationExt(messages.get(i));
+                            }
+                        }
                     }
                     break;
                 // below is just giving a example to show a cmd toast, the app should not follow this
