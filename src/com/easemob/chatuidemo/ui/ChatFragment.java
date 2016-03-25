@@ -233,17 +233,18 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                     // 获取输入框内容，然后根据光标位置将 @成员插入到输入框
                     Editable editable = mMessageEditText.getEditableText();
                     editable.delete(index - 1, index);
+                    index--;
                     if (index < 0 || index >= editable.length()){
-                        editable.append(" @" + username + " ");
+                        editable.append(" @" + username + "  ");
                     } else {
-                        editable.insert(index, " @" + username + " ");
+                        editable.insert(index, " @" + username + "  ");
                     }
                     // 将被@成员的名字用蓝色高亮表示
                     Spannable span = new SpannableString(mMessageEditText.getText());
                     // 设置被@群成员名字背景颜色
                     span.setSpan(new BackgroundColorSpan(getActivity().getResources().getColor(R.color.holo_blue_bright)),
                             index,
-                            index + username.length() + 1,
+                            index + username.length() + 3,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     mMessageEditText.setText(span);
                     // 设置当前光标在输入框最后
@@ -261,13 +262,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
      */
     private void setEditTextContentListener(){
         mMessageEditText.addTextChangedListener(new TextWatcher() {
-
             /**
              * 输入框内容改变之前
              * params s         输入框内容改变前的内容
              * params start     输入框内容开始变化的索引位置，从0开始计数
-             * params count     输入框内容将要减少的变化的字符数
-             * params after     输入框内容将要增加的文本的长度，
+             * params count     输入框内容将要减少的变化的字符数 大于0 表示删除字符
+             * params after     输入框内容将要增加的文本的长度，大于0 表示增加字符
              */
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -279,7 +279,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
              * params s         输入框内容改变后的内容
              * params start     输入框内容开始变化的索引位置，从0开始计数
              * params before    输入框内容减少的文本的长度
-             * params count     输入框内容增加的字符数量
+             * params count     输入框内容改变的字符数量
              */
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -330,12 +330,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 for(int i=0; i<atMembers.size(); i++){
                     // 从当前位置开始搜索被@的成员的位置
                     position = tempContent.indexOf(atMembers.get(i), position);
-                    // 判断当前点击处是否在被 @用户的中间
+                    // 判断当前点击处是否在被 @用户的中间，这里被@ 的账户包含前边的@符号和后边的空格
                     if(position != -1
-                            && selectionStart > position - 1 
+                            && selectionStart > position - 2
                             && selectionStart <= (position + atMembers.get(i).length() + 1)){
                         // 设置光标位置为被@的成员的末尾
-                        mMessageEditText.setSelection(position + atMembers.get(i).length() + 1);
+                        mMessageEditText.setSelection(position + atMembers.get(i).length() + 2);
                     }else{
                         // 如果当前点击的被@成员不是当前搜索到的，设置搜索位置为当前成员后，继续搜索下一个
                         position += atMembers.get(i).length();
@@ -363,11 +363,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                             position = tempContent.indexOf(atMembers.get(i), position);
                             // 判断点击删除按键时光标是否正好在被 @用户的末尾
                             if(position != -1 
-                                    && selectionStart > position - 1
+                                    && selectionStart > position - 2
                                     && selectionStart <= (position + atMembers.get(i).length() + 1)){
                                 // 删除输入框内被@ 的成员 
                                 Editable editable = mMessageEditText.getText();
-                                editable.delete(position - 1, position + atMembers.get(i).length() + 1);
+                                editable.delete(position - 2, position + atMembers.get(i).length() + 1);
                                 // 同时删除集合中保存的群成员
                                 atMembers.remove(i);
                                 return true;

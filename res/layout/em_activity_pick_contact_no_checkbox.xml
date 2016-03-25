@@ -24,7 +24,9 @@
             android:textSize="18sp" />
 
     </RelativeLayout>
-
+    <!-- 搜索框 -->
+    <include layout="@layout/ease_search_bar" />
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
