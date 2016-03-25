@@ -286,7 +286,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                 Log.d("melove", String.format("onTextChanged s-%s, start-%d, before-%d, count-%d", s, start, before, count));
                 // 当新增内容长度为1时采取判断增加的字符是否为@符号
                  if(chatType == Constant.CHATTYPE_GROUP){
-                     if(count == 1){
+                     if(count == 1 && before == 0){
                         String str = String.valueOf(s.charAt(start));
                         if(str.equals("@")){
                             Intent intent = new Intent();
@@ -376,12 +376,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
                                 position += atMembers.get(i).length();
                             }
                         }
-                    }else{
-                        if((System.currentTimeMillis() - oldTime) > EaseConstant.EASE_ATTR_INPUT_STATUS_TIME){
-                            oldTime = System.currentTimeMillis();
-                            EaseCommonUtils.sendInputStatus(toChatUsername);
-                        }
-                    }
+                     }
+//                    }else{
+//                        if((System.currentTimeMillis() - oldTime) > EaseConstant.EASE_ATTR_INPUT_STATUS_TIME){
+//                            if(mMessageEditText.getText().length() == 0){
+//                                return true;
+//                            }
+//                            oldTime = System.currentTimeMillis();
+//                            EaseCommonUtils.sendInputStatus(toChatUsername);
+//                        }
+//                    }
                 }
                 return false;
             }
