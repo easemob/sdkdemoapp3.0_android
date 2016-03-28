@@ -156,7 +156,7 @@ public class UserProfileManager {
                         public void run() {
                             // 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
                             boolean updatenick = EMChatManager.getInstance().updateCurrentUserNick(
-                                    value.getNick(), true);
+                                    value.getNick());
                             if (!updatenick) {
                                 Log.e("user", "update current user nick fail");
                             }

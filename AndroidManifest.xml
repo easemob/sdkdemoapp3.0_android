@@ -299,6 +299,11 @@
 		    android:screenOrientation="portrait"
 		    android:theme="@style/horizontal_slide"
 		    ></activity>
+		<activity 
+		    android:name="com.easemob.chatuidemo.ui.PickAtMemberActivity"
+		    android:screenOrientation="portrait"
+		    android:theme="@style/horizontal_slide"
+		    ></activity>
 
         <!-- 开机自启动服务 -->
         <receiver android:name="com.easemob.chat.StartServiceReceiver" >
