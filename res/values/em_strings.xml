@@ -44,6 +44,8 @@
     <string name="location_recv">[%1$s location]</string>
     <string name="location_message">The location information</string>
     <string name="recording_video">Record video</string>
+    <string name="stop_record">Stop record</string>
+    <string name="record_finish_toast">Recording finish, file saved in %s</string>
     <string name="location_prefix">[my location]</string>
     <string name="picture">[Picture]</string>
     <string name="video">[Video]</string>
@@ -149,6 +151,7 @@
     <string name="The_other_party_did_not_answer">The peer did not answer</string>
     <string name="did_not_answer">did not answer</string>
     <string name="Has_been_cancelled">Cancelled</string>
+    <string name="call_version_inconsistent">Both call version are inconsistent</string>
     <string name="unable_to_get_loaction">Unable to get to your location information!</string>
     <string name="not_connect_to_server">Not connect to server, please try again later</string>
     <string name="sd_card_does_not_exist">"SD card does not exist, can't take pictures"</string>
@@ -319,4 +322,7 @@
     <string name="group_nick">Group Nickname:</string>
     <string name="group_owner">Group Owner:</string>
     <string name="user_removed_from_group">You are removed from the group</string>
+    
+    <string name="network_unstable">Network unstable</string>
+    <string name="no_call_data">No call data</string>
 </resources>

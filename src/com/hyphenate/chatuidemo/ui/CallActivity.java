@@ -111,12 +111,12 @@ public class CallActivity extends BaseActivity {
                     handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
                 } catch (EMServiceNotReadyException e) {
                     e.printStackTrace();
-//                    runOnUiThread(new Runnable() {
-//                        public void run() {
-//                            final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
-//                            Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+                            Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
                 break;
             case MSG_CALL_ANSWER:
@@ -132,13 +132,11 @@ public class CallActivity extends BaseActivity {
                                 public void run() {
                                     final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
                                     Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
-                                    CallActivity.this.finish();
                                 }
                             });
                             throw new Exception();
                         }
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                         saveCallRecord();
                         finish();
@@ -164,13 +162,16 @@ public class CallActivity extends BaseActivity {
                 try {
                     EMClient.getInstance().callManager().endCall();
                 } catch (Exception e) {
-                    e.printStackTrace();
                     saveCallRecord();
                     finish();
                 }
+                
                 break;
             case MSG_CALL_RLEASE_HANDLER:
-                EMClient.getInstance().callManager().endCall();
+                try {
+                    EMClient.getInstance().callManager().endCall();
+                } catch (Exception e) {
+                }
                 handler.removeCallbacks(timeoutHangup);
                 handler.removeMessages(MSG_CALL_MAKE_VIDEO);
                 handler.removeMessages(MSG_CALL_MAKE_VOICE);
@@ -296,6 +297,8 @@ public class CallActivity extends BaseActivity {
         case UNANSWERED:
             txtBody = new EMTextMessageBody(st7);
             break;
+        case VERSION_NOT_SAME:
+            txtBody = new EMTextMessageBody(getString(R.string.call_version_inconsistent));
         default:
             txtBody = new EMTextMessageBody(st8);
             break;
@@ -316,6 +319,6 @@ public class CallActivity extends BaseActivity {
     }
 
     enum CallingState {
-        CANCED, NORMAL, REFUESD, BEREFUESD, UNANSWERED, OFFLINE, NORESPONSE, BUSY
+        CANCED, NORMAL, REFUESD, BEREFUESD, UNANSWERED, OFFLINE, NORESPONSE, BUSY, VERSION_NOT_SAME
     }
 }
