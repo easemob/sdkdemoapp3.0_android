@@ -80,6 +80,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     boolean isRecording = false;
     private Button recordBtn;
     private EMVideoCallHelper callHelper;
+    private Button toggleVideoBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +119,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         recordBtn = (Button) findViewById(R.id.btn_record_video);
+//        toggleVideoBtn = (Button) findViewById(R.id.btn_toggle_video_stream);
         
 
         refuseBtn.setOnClickListener(this);
@@ -127,6 +129,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         handsFreeImage.setOnClickListener(this);
         rootContainer.setOnClickListener(this);
         recordBtn.setOnClickListener(this);
+//        toggleVideoBtn.setOnClickListener(this);
 
         msgid = UUID.randomUUID().toString();
         // 获取通话是否为接收方向的
@@ -441,6 +444,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 Toast.makeText(getApplicationContext(), String.format(getString(R.string.record_finish_toast), filepath), 1).show();
             }
             break;
+//        case R.id.btn_toggle_video_stream:
+//            EMClient.getInstance().callManager().pauseVideoTransfer();
+//            break;
         case R.id.root_layout:
             if (callingState == CallingState.NORMAL) {
                 if (bottomContainer.getVisibility() == View.VISIBLE) {
