@@ -61,7 +61,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	private TextView durationTextView;
 	private Chronometer chronometer;
 	String st1;
-	private boolean isAnswered;
 	private LinearLayout voiceContronlLayout;
     private TextView netwrokStatusVeiw;
 	
@@ -205,6 +204,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             netwrokStatusVeiw.setVisibility(View.INVISIBLE);
                         }
                     });
+                    break;
                 case DISCONNNECTED: // 电话断了
                     handler.removeCallbacks(timeoutHangup);
                     final CallError fError = error;

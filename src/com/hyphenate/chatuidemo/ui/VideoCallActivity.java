@@ -136,8 +136,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         // 设置通话人
         nickTextView.setText(username);
 
-        callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
-        
         // 显示本地图像的surfaceview
         localSurface = (EMLocalSurfaceView) findViewById(R.id.local_surface);
         localSurface.setZOrderMediaOverlay(true);
@@ -168,6 +166,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             ringtone.play();
             EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
         }
+        //获取callhelper对象，需要写在callManager().setSurfaceView方法后面
+        callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
     }
 
     /**
@@ -408,12 +408,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             if (isMuteState) {
                 // 关闭静音
                 muteImage.setImageResource(R.drawable.em_icon_mute_normal);
-                EMClient.getInstance().callManager().resumeVideoTransfer();
+                EMClient.getInstance().callManager().resumeVoiceTransfer();
                 isMuteState = false;
             } else {
                 // 打开静音
                 muteImage.setImageResource(R.drawable.em_icon_mute_on);
-                EMClient.getInstance().callManager().pauseVideoTransfer();
+                EMClient.getInstance().callManager().pauseVoiceTransfer();
                 isMuteState = true;
             }
             break;
