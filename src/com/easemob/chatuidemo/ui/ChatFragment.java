@@ -232,19 +232,17 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     int index = mMessageEditText.getSelectionStart();
                     // 获取输入框内容，然后根据光标位置将 @成员插入到输入框
                     Editable editable = mMessageEditText.getEditableText();
-                    editable.delete(index - 1, index);
-                    index--;
                     if (index < 0 || index >= editable.length()){
-                        editable.append(" @" + username + "  ");
+                        editable.append(username + "  ");
                     } else {
-                        editable.insert(index, " @" + username + "  ");
+                        editable.insert(index, username + "  ");
                     }
                     // 将被@成员的名字用蓝色高亮表示
                     Spannable span = new SpannableString(mMessageEditText.getText());
                     // 设置被@群成员名字背景颜色
                     span.setSpan(new BackgroundColorSpan(getActivity().getResources().getColor(R.color.holo_blue_bright)),
-                            index,
-                            index + username.length() + 3,
+                            index - 1,
+                            index + username.length() + 1,
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     mMessageEditText.setText(span);
                     // 设置当前光标在输入框最后
@@ -332,7 +330,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     position = tempContent.indexOf(atMembers.get(i), position);
                     // 判断当前点击处是否在被 @用户的中间，这里被@ 的账户包含前边的@符号和后边的空格
                     if(position != -1
-                            && selectionStart > position - 2
+                            && selectionStart > position - 1
                             && selectionStart <= (position + atMembers.get(i).length() + 1)){
                         // 设置光标位置为被@的成员的末尾
                         mMessageEditText.setSelection(position + atMembers.get(i).length() + 2);
@@ -363,7 +361,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                             position = tempContent.indexOf(atMembers.get(i), position);
                             // 判断点击删除按键时光标是否正好在被 @用户的末尾
                             if(position != -1 
-                                    && selectionStart > position - 2
+                                    && selectionStart > position - 1
                                     && selectionStart <= (position + atMembers.get(i).length() + 1)){
                                 // 删除输入框内被@ 的成员 
                                 Editable editable = mMessageEditText.getText();
@@ -376,16 +374,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                                 position += atMembers.get(i).length();
                             }
                         }
-                     }
-//                    }else{
-//                        if((System.currentTimeMillis() - oldTime) > EaseConstant.EASE_ATTR_INPUT_STATUS_TIME){
-//                            if(mMessageEditText.getText().length() == 0){
-//                                return true;
-//                            }
-//                            oldTime = System.currentTimeMillis();
-//                            EaseCommonUtils.sendInputStatus(toChatUsername);
-//                        }
-//                    }
+                    }
                 }
                 return false;
             }
