@@ -365,7 +365,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                                     && selectionStart <= (position + atMembers.get(i).length() + 1)){
                                 // 删除输入框内被@ 的成员 
                                 Editable editable = mMessageEditText.getText();
-                                editable.delete(position - 2, position + atMembers.get(i).length() + 1);
+                                editable.delete(position - 1, position + atMembers.get(i).length() + 1);
                                 // 同时删除集合中保存的群成员
                                 atMembers.remove(i);
                                 return true;
