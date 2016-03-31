@@ -33,6 +33,7 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
@@ -202,6 +203,20 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             netwrokStatusVeiw.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    break;
+                case VOICE_PAUSE:
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "VOICE_PAUSE", 0).show();
+                        }
+                    });
+                    break;
+                case VOICE_RESUME:
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "VOICE_RESUME", 0).show();
                         }
                     });
                     break;
