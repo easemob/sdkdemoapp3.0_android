@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,6 @@ import com.hyphenate.easeui.domain.EaseUser;
 
 public class RobotUser extends EaseUser{
 	public RobotUser(String username) {
-        super(username);
+        super(username.toLowerCase());
     }
 }
