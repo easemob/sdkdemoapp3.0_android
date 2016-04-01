@@ -366,7 +366,7 @@ public class DemoDBManager {
 					}
 				}
 				
-				users.put(username, user);
+				users.put(username.toLowerCase(), user);
 			}
 			cursor.close();
 		}
