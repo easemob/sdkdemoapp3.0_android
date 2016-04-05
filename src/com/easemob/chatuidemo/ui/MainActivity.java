@@ -13,27 +13,6 @@
  */
 package com.easemob.chatuidemo.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.easemob.EMCallBack;
 import com.easemob.EMEventListener;
 import com.easemob.EMNotifierEvent;
@@ -41,9 +20,9 @@ import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
+import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
@@ -52,11 +31,30 @@ import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.utils.EaseCommonUtils;
-import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
+
+import android.R.anim;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.PowerManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends BaseActivity implements EMEventListener {
 
@@ -91,6 +89,21 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+	    
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String packageName = getPackageName();
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                Intent intent = new Intent();
+                intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                //intent.setAction(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                intent.setData(Uri.parse("package:" + packageName));
+                startActivity(intent);
+            }
+        }
+       
+
 		MiPushClient.clearNotification(this);
 		
 		if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
