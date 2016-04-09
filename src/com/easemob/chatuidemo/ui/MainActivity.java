@@ -54,6 +54,7 @@ import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
+import com.easemob.util.NetUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -434,6 +435,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 						EMNotifierEvent.Event.EventNewCMDMessage,
 						EMNotifierEvent.Event.EventReadAck
 						});
+		
+		// if push service available, connect will be disconnected after app in background
+		// after activity restore to foreground, reconnect 
+		if (!EMChatManager.getInstance().isConnected() && NetUtils.hasNetwork(this)) {
+		    EMChatManager.getInstance().reconnect();
+		}
 	}
 
 	@Override
