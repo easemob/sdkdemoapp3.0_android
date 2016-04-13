@@ -15,14 +15,26 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.UUID;
 
+import com.hyphenate.chat.EMCallManager.EMCameraDataProcessor;
+import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
+import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
+import com.hyphenate.util.EMLog;
+import com.hyphenate.util.PathUtil;
+
+import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -33,17 +45,9 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
-import com.hyphenate.chat.EMCallStateChangeListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
-import com.hyphenate.util.PathUtil;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
 
@@ -80,8 +84,30 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     boolean isRecording = false;
     private Button recordBtn;
     private Button switchCameraBtn;
+    private SeekBar YDeltaSeekBar;
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
+    
+    private BrightnessDataProcess dataProcessor = new BrightnessDataProcess();
+    
+    class BrightnessDataProcess implements EMCameraDataProcessor {
+        byte yDelta = 0;
+        synchronized void setYDelta(byte yDelta) {
+            Log.d("VideoCallActivity", "brigntness uDelta:" + yDelta);
+            this.yDelta = yDelta;
+        }
+
+        @Override
+        public synchronized void onProcessData(byte[] data, Camera camera, int width, int height) {
+            int wh = width * height;
+            for (int i = 0; i < wh; i++) {
+                int d = (data[i] & 0xFF) + yDelta;
+                d = d < 16 ? 16 : d;
+                d = d > 235 ? 235 : d;
+                data[i] = (byte)d;
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +147,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         recordBtn = (Button) findViewById(R.id.btn_record_video);
         switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
+        YDeltaSeekBar = (SeekBar) findViewById(R.id.seekbar_y_detal);
 //        toggleVideoBtn = (Button) findViewById(R.id.btn_toggle_video_stream);
         
 
@@ -133,6 +160,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         recordBtn.setOnClickListener(this);
         switchCameraBtn.setOnClickListener(this);
 //        toggleVideoBtn.setOnClickListener(this);
+        YDeltaSeekBar.setOnSeekBarChangeListener(new YDeltaSeekBarListener());
 
         msgid = UUID.randomUUID().toString();
         // 获取通话是否为接收方向的
@@ -174,6 +202,25 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         }
         //获取callhelper对象，需要写在callManager().setSurfaceView方法后面
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
+        
+        EMClient.getInstance().callManager().setCameraDataProcessor(dataProcessor);
+    }
+    
+    class YDeltaSeekBarListener implements SeekBar.OnSeekBarChangeListener {
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            dataProcessor.setYDelta((byte)(20.0f * (progress - 50) / 50.0f)); 
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
+        
     }
 
     /**
