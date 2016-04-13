@@ -71,7 +71,14 @@
             android:visibility="gone"
             />
         
-    <!--     <Button 
+        <Button 
+            android:id="@+id/btn_switch_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/switch_camera"
+            android:layout_below="@id/btn_record_video"
+            />
+        <!--     <Button 
             android:layout_marginTop="3dp"
             android:id="@+id/btn_toggle_video_stream"
             android:layout_width="wrap_content"

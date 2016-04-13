@@ -79,6 +79,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private boolean isInCalling;
     boolean isRecording = false;
     private Button recordBtn;
+    private Button switchCameraBtn;
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
 
@@ -119,6 +120,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         recordBtn = (Button) findViewById(R.id.btn_record_video);
+        switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
 //        toggleVideoBtn = (Button) findViewById(R.id.btn_toggle_video_stream);
         
 
@@ -129,6 +131,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         handsFreeImage.setOnClickListener(this);
         rootContainer.setOnClickListener(this);
         recordBtn.setOnClickListener(this);
+        switchCameraBtn.setOnClickListener(this);
 //        toggleVideoBtn.setOnClickListener(this);
 
         msgid = UUID.randomUUID().toString();
@@ -459,8 +462,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                 }
             }
-
             break;
+        case R.id.btn_switch_camera: //切换摄像头
+            handler.sendEmptyMessage(MSG_CALL_SWITCH_CAMERA);
         default:
             break;
         }

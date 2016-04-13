@@ -31,6 +31,7 @@ public class CallActivity extends BaseActivity {
     protected final int MSG_CALL_REJECT = 3;
     protected final int MSG_CALL_END = 4;
     protected final int MSG_CALL_RLEASE_HANDLER = 5;
+    protected final int MSG_CALL_SWITCH_CAMERA = 6;
 
     protected boolean isInComingCall;
     protected String username;
@@ -179,6 +180,9 @@ public class CallActivity extends BaseActivity {
                 handler.removeMessages(MSG_CALL_REJECT);
                 handler.removeMessages(MSG_CALL_END);
                 callHandlerThread.quit();
+                break;
+            case MSG_CALL_SWITCH_CAMERA:
+                EMClient.getInstance().callManager().switchCamera();
                 break;
             default:
                 break;
