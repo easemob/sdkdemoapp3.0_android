@@ -45,6 +45,7 @@
     <string name="location_message">The location information</string>
     <string name="recording_video">Record video</string>
     <string name="stop_record">Stop record</string>
+    <string name="switch_camera">Switch camera</string>
     <string name="record_finish_toast">Recording finish, file saved in %s</string>
     <string name="location_prefix">[my location]</string>
     <string name="picture">[Picture]</string>
