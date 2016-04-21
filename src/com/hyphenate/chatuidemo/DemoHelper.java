@@ -52,6 +52,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -190,13 +191,14 @@ public class DemoHelper {
         options.setGCMNumber("324169311137");
         //在小米手机上当app被kill时使用小米推送进行消息提示，同GCM一样不是必须的
         options.setMipushConfig("2882303761517426801", "5381742660801");
+        //集成华为推送时需要设置
+//        options.setHuaweiPushAppId("10492024");
         
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
         
         return options;
-//        notifier.setNotificationInfoProvider(getNotificationListener());
     }
 
     protected void setEaseUIProviders() {

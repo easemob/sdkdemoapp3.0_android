@@ -17,8 +17,6 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.hyphenate.EMCallBack;
-
 public class DemoApplication extends Application {
 
 	public static Context applicationContext;

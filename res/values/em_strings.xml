@@ -104,6 +104,7 @@
     <string name="Open_group_chat">Public groups</string>
     <string name="join_need_owner_approval">Join need group owner approval</string>
     <string name="blacklist">Black list</string>
+    <string name="serach_group_message">Search messages</string>
     <string name="Empty_the_chat_record">Clear conversation</string>
     <string name="Shielding_of_the_message">Block message</string>
     <string name="dismiss_group">Dismiss group</string>

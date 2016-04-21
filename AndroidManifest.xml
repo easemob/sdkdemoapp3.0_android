@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hyphenate.chatuidemo"
-    android:versionCode="33" >
+    android:versionName="3.1.2"
+    android:versionCode="34" >
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -240,6 +241,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
         </activity>
+        <activity 
+            android:name="com.hyphenate.chatuidemo.ui.GroupSearchMessageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateVisible"
+            ></activity>
+        
         <activity
             android:name="com.hyphenate.chatuidemo.ui.PublicGroupsSeachActivity"
             android:screenOrientation="portrait"
@@ -357,6 +365,39 @@
             </intent-filter>
         </receiver>
         <!-- mi push end -->
+        
+        <!-- huawei push -->
+    <!-- 第三方相关 :接收Push消息（注册、Push消息、Push连接状态、标签，LBS上报结果）广播 -->
+        <!-- <receiver android:name="com.hyphenate.chat.EMHuaweiPushReceiver" >
+            <intent-filter>
+                必须,用于接收token
+                <action android:name="com.huawei.android.push.intent.REGISTRATION" />
+                必须，用于接收消息
+                <action android:name="com.huawei.android.push.intent.RECEIVE" />
+            </intent-filter>
+            />
+            <meta-data android:name="CS_cloud_ablitity" android:value="successRateAnalytics"/>
+        </receiver>
+
+        PushSDK:PushSDK接收外部请求事件入口
+        <receiver
+            android:name="com.huawei.android.pushagent.PushEventReceiver"
+            android:process=":pushservice" >
+            <intent-filter>
+                <action android:name="com.huawei.android.push.intent.REFRESH_PUSH_CHANNEL" />
+                <action android:name="com.huawei.intent.action.PUSH" />
+                <action android:name="com.huawei.intent.action.PUSH_ON" />
+                <action android:name="com.huawei.android.push.PLUGIN" />
+            </intent-filter>
+        </receiver>
+
+        PushSDK:Push服务
+        <service
+            android:name="com.huawei.android.pushagent.PushService"
+            android:process=":pushservice" >
+        </service> -->
+
+        <!-- huawei push end -->
         
         <service
    			 android:name="com.umeng.update.net.DownloadingService"

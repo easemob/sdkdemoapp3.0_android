@@ -82,6 +82,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
     private TextView idText;
 	private EaseSwitchButton switchButton;
     private GroupChangeListener groupChangeListener;
+    private RelativeLayout searchLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +114,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		
 		rl_switch_block_groupmsg = (RelativeLayout) findViewById(R.id.rl_switch_block_groupmsg);
 		switchButton = (EaseSwitchButton) findViewById(R.id.switch_btn);
-
-
-		rl_switch_block_groupmsg.setOnClickListener(this);
+		searchLayout = (RelativeLayout) findViewById(R.id.rl_search); 
 
 
 		idText.setText(groupId);
@@ -169,7 +168,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		clearAllHistory.setOnClickListener(this);
 		blacklistLayout.setOnClickListener(this);
 		changeGroupNameLayout.setOnClickListener(this);
-
+		rl_switch_block_groupmsg.setOnClickListener(this);
+        searchLayout.setOnClickListener(this);
 	}
 
 	@Override
@@ -445,7 +445,10 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		case R.id.rl_change_group_name:
 			startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", group.getGroupName()), REQUEST_CODE_EDIT_GROUPNAME);
 			break;
-
+		case R.id.rl_search:
+            startActivity(new Intent(this, GroupSearchMessageActivity.class).putExtra("groupId", groupId));
+            
+            break;
 		default:
 			break;
 		}

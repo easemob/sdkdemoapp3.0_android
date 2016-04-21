@@ -39,6 +39,7 @@
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="prompt">提示</string>
+    <string name="search_contanier">搜索："%s"</string>
     <string name="clear_records">清空记录</string>
     <string name="clear_all_records">是否清空所有聊天记录？</string>
     <string name="location_recv">[%1$s的位置]</string>
@@ -104,6 +105,7 @@
     <string name="Open_group_chat">公开的群聊</string>
     <string name="join_need_owner_approval">加入公开群需要群主同意</string>
     <string name="blacklist">黑名单列表</string>
+    <string name="serach_group_message">消息搜索</string>
     <string name="Empty_the_chat_record">清空聊天记录</string>
     <string name="Shielding_of_the_message">屏蔽群消息</string>
     <string name="dismiss_group">解散群聊</string>

@@ -198,13 +198,6 @@ public class PublicChatRoomsActivity extends BaseActivity {
         
 	}
 	
-	void hideSoftKeyboard(){
-		if(getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN){
-			if(getCurrentFocus() != null){
-				inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-			}
-		}
-	}
 	private void loadAndShowData(){
 		new Thread(new Runnable() {
 
