@@ -8,9 +8,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -18,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -77,6 +80,19 @@ public class GroupSearchMessageActivity extends BaseActivity implements OnClickL
                 searchView.setVisibility(View.VISIBLE);
                 listView.setVisibility(View.INVISIBLE);
                 searchView.setText(String.format(getString(R.string.search_contanier), s));
+            }
+        });
+        
+        query.setOnEditorActionListener(new OnEditorActionListener() {
+            
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    searchMessages();
+                    hideSoftKeyboard();
+                    return true;
+                }
+                return false;
             }
         });
         clearSearch.setOnClickListener(new OnClickListener() {
