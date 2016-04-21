@@ -288,6 +288,7 @@
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
     <string name="delete_msg_when_exit_group">退出群组时删除聊天数据</string>
     <string name="auto_accept_group_invitation">自动同意群组加群邀请</string>
+    <string name="adaptive_video_encode">视频自适应码率编码</string>    
     <string name="group_id">群ID</string>
     <string name="move_out_backlist">移出黑名单</string>
     <string name="input_new_nick_hint">输入新昵称</string>
