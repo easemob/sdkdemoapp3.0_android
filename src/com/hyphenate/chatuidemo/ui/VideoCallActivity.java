@@ -90,6 +90,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     
     private BrightnessDataProcess dataProcessor = new BrightnessDataProcess();
     
+    // dynamic adjust brightness
     class BrightnessDataProcess implements EMCameraDataProcessor {
         byte yDelta = 0;
         synchronized void setYDelta(byte yDelta) {
@@ -97,6 +98,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             this.yDelta = yDelta;
         }
 
+        // data size is width*height*2
+        // the first width*height is Y, second part is UV
+        // the storage layout detailed please refer 2.x demo CameraHelper.onPreviewFrame
         @Override
         public synchronized void onProcessData(byte[] data, Camera camera, int width, int height) {
             int wh = width * height;
