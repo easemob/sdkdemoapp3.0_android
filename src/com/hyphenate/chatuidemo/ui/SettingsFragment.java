@@ -80,6 +80,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	
     private RelativeLayout rl_switch_delete_msg_when_exit_group;
     private RelativeLayout rl_switch_auto_accept_group_invitation;
+    private RelativeLayout rl_switch_adaptive_video_encode;
  
 	/**
 	 * 诊断
@@ -97,6 +98,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton ownerLeaveSwitch;
     private EaseSwitchButton switch_delete_msg_when_exit_group;
     private EaseSwitchButton switch_auto_accept_group_invitation;
+    private EaseSwitchButton switch_adaptive_video_encode;
     private DemoModel settingsModel;
     private EMOptions chatOptions;
 	
@@ -117,6 +119,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_chatroom_leave = (RelativeLayout) getView().findViewById(R.id.rl_switch_chatroom_owner_leave);
 		rl_switch_delete_msg_when_exit_group = (RelativeLayout) getView().findViewById(R.id.rl_switch_delete_msg_when_exit_group);
 		rl_switch_auto_accept_group_invitation = (RelativeLayout) getView().findViewById(R.id.rl_switch_auto_accept_group_invitation);
+		rl_switch_adaptive_video_encode = (RelativeLayout) getView().findViewById(R.id.rl_switch_adaptive_video_encode);
 		
 		notifiSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
 		soundSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_sound);
@@ -125,7 +128,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		ownerLeaveSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_owner_leave);
 		switch_delete_msg_when_exit_group = (EaseSwitchButton) getView().findViewById(R.id.switch_delete_msg_when_exit_group);
 		switch_auto_accept_group_invitation = (EaseSwitchButton) getView().findViewById(R.id.switch_auto_accept_group_invitation);
-		
+		switch_adaptive_video_encode = (EaseSwitchButton) getView().findViewById(R.id.switch_adaptive_video_encode);
 		
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
 		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
@@ -155,6 +158,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_chatroom_leave.setOnClickListener(this);
 		rl_switch_delete_msg_when_exit_group.setOnClickListener(this);
 		rl_switch_auto_accept_group_invitation.setOnClickListener(this);
+		rl_switch_adaptive_video_encode.setOnClickListener(this);
 		
 		// 震动和声音总开关，来消息时，是否允许此开关打开
 		// the vibrate and sound notification are allowed or not?
@@ -207,6 +211,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		} else {
 		    switch_auto_accept_group_invitation.closeSwitch();
 		}
+		
+		if (settingsModel.isAdaptiveVideoEncode()) {
+            switch_adaptive_video_encode.openSwitch();
+        } else {
+            switch_adaptive_video_encode.closeSwitch();
+        }
 	}
 
 	
@@ -290,7 +300,18 @@ public class SettingsFragment extends Fragment implements OnClickListener {
                 settingsModel.setAutoAcceptGroupInvitation(true);
                 chatOptions.setAutoAcceptGroupInvitation(true);
             }
-            break;		    
+            break;
+        case R.id.rl_switch_adaptive_video_encode:
+            if (switch_adaptive_video_encode.isSwitchOpen()){
+                switch_adaptive_video_encode.closeSwitch();
+                settingsModel.setAdaptiveVideoEncode(false);
+                EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(false);
+            }else{
+                switch_adaptive_video_encode.openSwitch();
+                settingsModel.setAdaptiveVideoEncode(true);
+                EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(true);
+            }
+            break;
 		case R.id.btn_logout: //退出登陆
 			logout();
 			break;
