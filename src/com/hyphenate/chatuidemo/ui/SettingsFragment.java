@@ -21,6 +21,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.DemoModel;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.widget.EaseSwitchButton;
+import com.hyphenate.util.EMLog;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -214,8 +215,10 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		
 		if (settingsModel.isAdaptiveVideoEncode()) {
             switch_adaptive_video_encode.openSwitch();
+            EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(true);
         } else {
             switch_adaptive_video_encode.closeSwitch();
+            EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(false);
         }
 	}
 
@@ -302,6 +305,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
             }
             break;
         case R.id.rl_switch_adaptive_video_encode:
+            EMLog.d("switch", "" + !switch_adaptive_video_encode.isSwitchOpen());
             if (switch_adaptive_video_encode.isSwitchOpen()){
                 switch_adaptive_video_encode.closeSwitch();
                 settingsModel.setAdaptiveVideoEncode(false);
