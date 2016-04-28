@@ -214,8 +214,10 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		
 		if (settingsModel.isAdaptiveVideoEncode()) {
             switch_adaptive_video_encode.openSwitch();
+            EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(true);
         } else {
             switch_adaptive_video_encode.closeSwitch();
+            EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(false);
         }
 	}
 
