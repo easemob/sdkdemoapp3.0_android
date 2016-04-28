@@ -379,7 +379,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:paddingLeft="10dip"
-                    android:text="@string/auto_accept_group_invitation"
+                    android:text="@string/adaptive_video_encode"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:typeface="serif" />
