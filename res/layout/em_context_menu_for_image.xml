@@ -45,6 +45,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/forward"
         android:background="@drawable/em_context_menu_item_bg"
         android:clickable="true"
         android:gravity="center_vertical"

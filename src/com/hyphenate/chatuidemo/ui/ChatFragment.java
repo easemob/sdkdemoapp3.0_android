@@ -14,6 +14,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.domain.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.widget.ChatRowVoiceCall;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
@@ -210,7 +211,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
     @Override
     public void onMessageBubbleLongClick(EMMessage message) {
         //消息框长按
-        startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message",message),
+        startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message",message)
+                .putExtra("ischatroom", chatType == EaseConstant.CHATTYPE_CHATROOM),
                 REQUEST_CODE_CONTEXT_MENU);
     }
 
