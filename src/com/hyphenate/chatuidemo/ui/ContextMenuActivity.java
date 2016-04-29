@@ -30,6 +30,7 @@ public class ContextMenuActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		EMMessage message = getIntent().getParcelableExtra("message");
+		boolean isChatroom = getIntent().getBooleanExtra("ischatroom", false); 
 		
 		int type = message.getType().ordinal();
 		if (type == EMMessage.Type.TXT.ordinal()) {
@@ -52,7 +53,12 @@ public class ContextMenuActivity extends BaseActivity {
 		} else if (type == EMMessage.Type.FILE.ordinal()) {
 		    setContentView(R.layout.em_context_menu_for_location);
 		}
-		    
+		if (isChatroom) {
+	        View v = (View) findViewById(R.id.forward);
+	        if (v != null) {
+	            v.setVisibility(View.GONE);
+	        }
+		}
 	}
 
 	@Override
