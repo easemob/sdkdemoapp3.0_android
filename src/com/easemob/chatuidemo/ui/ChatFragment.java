@@ -228,8 +228,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
             message.setAttribute("em_robot_message", isRobot);
         }
         // 根据当前状态是否是阅后即焚状态来设置发送消息的扩展
-        if(isReadFire){
-        	message.setAttribute(EaseConstant.EASE_ATTR_READFIRE, true);
+        if(isReadFire && (message.getType() == EMMessage.Type.TXT
+                || message.getType() == EMMessage.Type.IMAGE
+                || message.getType() == EMMessage.Type.VOICE)){
+            message.setAttribute(EaseConstant.EASE_ATTR_READFIRE, true);
         }
         
     }
