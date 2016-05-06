@@ -321,4 +321,5 @@
     
     <string name="network_unstable">网络不稳定</string>
      <string name="no_call_data">没有通话数据</string>
+     <string name="adaptive_video_encode">视频自适应码率编码</string>
 </resources>

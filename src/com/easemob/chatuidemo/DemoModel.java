@@ -207,6 +207,14 @@ public class DemoModel {
     public boolean isChatroomOwnerLeaveAllowed(){
         return PreferenceManager.getInstance().getSettingAllowChatroomOwnerLeave();
     }
+    
+    public void setAdaptiveVideoEncode(boolean value) {
+        PreferenceManager.getInstance().setAdaptiveVideoEncode(value);
+    }
+    
+    public boolean isAdaptiveVideoEncode() {
+        return PreferenceManager.getInstance().isAdaptiveVideoEncode();
+    }
    
     
     enum Key{
