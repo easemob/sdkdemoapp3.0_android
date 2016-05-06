@@ -13,10 +13,11 @@
 *gen/
 #*/assets/
 */libs/easemobchat_2.0.0.jar
+*/libs/MiPush_SDK_Client_2_2_21.jar
 
 
 # Local configuration file (sdk path, etc)
-#local.properties
+local.properties
 
 # Eclipse project files
 *.classpath
@@ -25,6 +26,7 @@
 
 #gradle file
 *build/
+build.gradle
 .gradle
 .idea/
 *.iml

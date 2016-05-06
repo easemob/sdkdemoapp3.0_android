@@ -236,11 +236,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                         conversation.loadMoreGroupMsgFromDB(ackMessage.getMsgId(), 1);
                     }
                 }
-                if(conversation.getMessage(ackMessage.getMsgId()) != null){
-                    conversation.removeMessage(ackMessage.getMsgId());
-                }else{
-                    EMChatManager.getInstance().deleteMessage(ackMessage.getMsgId());
-                }
+                conversation.removeMessage(ackMessage.getMsgId());
             }
             refreshUIWithMessage();
 		    break;
