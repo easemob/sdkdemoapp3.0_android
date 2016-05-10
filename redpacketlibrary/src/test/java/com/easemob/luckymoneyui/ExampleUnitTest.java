@@ -1,4 +1,4 @@
-package com.easemob.redpacketlibrary;
+package com.easemob.luckymoneyui;
 
 import org.junit.Test;
 
