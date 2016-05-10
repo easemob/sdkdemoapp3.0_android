@@ -75,6 +75,7 @@
     <string name="set">设置</string>
     <string name="notify">新消息提醒</string>
     <string name="newnotify">接收新消息通知</string>
+    <string name="change">零钱</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>
     <string name="chatset">聊天设置</string>
