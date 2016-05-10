@@ -1,71 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.easemob.chatuidemo"
-    android:versionCode="28"
-    android:versionName="2.2.8" >
+<manifest package="com.easemob.chatuidemo"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:versionCode="28"
+          android:versionName="2.2.8"
+    >
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="19"
+        />
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
+    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
     <!-- 使用时把com.easemob.chatuidemo替换成自己的包名 -->
-    <permission android:name="com.easemob.chatuidemo.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="com.easemob.chatuidemo.permission.C2D_MESSAGE" />
-     <permission
+    <permission
+        android:name="com.easemob.chatuidemo.permission.C2D_MESSAGE"
+        android:protectionLevel="signature"
+        />
+    <uses-permission android:name="com.easemob.chatuidemo.permission.C2D_MESSAGE"/>
+    <permission
         android:name="com.easemob.chatuidemo.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"
+        />
 
-    <uses-permission android:name="com.easemob.chatuidemo.permission.MIPUSH_RECEIVE" />
-    
-    
+    <uses-permission android:name="com.easemob.chatuidemo.permission.MIPUSH_RECEIVE"/>
+
+
     <application
         android:name="DemoApplication"
         android:allowBackup="true"
         android:icon="@drawable/em_logo_uidemo"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        >
         <activity
             android:name="com.easemob.chatuidemo.ui.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            >
         </activity>
 
         <!-- 开屏页 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
@@ -73,16 +81,18 @@
         <activity
             android:name="com.easemob.chatuidemo.ui.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" 
-            android:windowSoftInputMode="adjustResize|stateVisible">
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            >
         </activity>
 
         <!-- 注册 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.RegisterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" 
-            android:windowSoftInputMode="adjustResize|stateVisible">
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            >
         </activity>
         <!-- 聊天页面 -->
         <activity
@@ -90,7 +100,8 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize"
+            >
         </activity>
         <!-- 聊天页面 -->
         <activity
@@ -98,105 +109,121 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize"
+            >
         </activity>
         <!-- 添加好友 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.AddContactActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateVisible"
-            android:theme="@style/horizontal_slide" >
+            >
         </activity>
         <!-- 群组详情 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.GroupDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
         <!-- 群组列表 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.GroupsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            >
         </activity>
-        
+
         <activity
             android:name="com.easemob.chatuidemo.ui.ChatRoomActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            >
         </activity>
         <!-- 聊天室详情 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.ChatRoomDetailsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
-        
+
         <!-- 新建群组 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.NewGroupActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            >
         </activity>
         <!-- 退出群组提示框 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.ExitGroupDialog"
             android:screenOrientation="portrait"
-            android:theme="@style/MyDialogStyleBottom" >
+            android:theme="@style/MyDialogStyleBottom"
+            >
         </activity>
         <!-- 群组选人 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.GroupPickContactsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            >
         </activity>
         <!-- 地图 -->
         <activity
             android:name="com.easemob.easeui.ui.EaseBaiduMapActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
 
         <!-- 新的朋友邀请消息页面 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.NewFriendsMsgActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
         <!-- 转发消息用户列表页面 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.ForwardMessageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            >
         </activity>
         <!-- 自定义的contextmenu -->
         <activity
             android:name="com.easemob.chatuidemo.ui.ContextMenuActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyDialogStyle" >
+            android:theme="@style/MyDialogStyle"
+            >
         </activity>
         <!-- 显示下载大图页面 -->
         <activity
             android:name="com.easemob.easeui.ui.EaseShowBigImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
         <!-- 下载文件 -->
         <activity
             android:name="com.easemob.easeui.ui.EaseShowNormalFileActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
         <!-- 黑名单 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.BlacklistActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
 
         <!-- 公开的群聊列表 -->
@@ -204,79 +231,91 @@
             android:name="com.easemob.chatuidemo.ui.PublicGroupsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            >
         </activity>
-        
+
         <activity
             android:name="com.easemob.chatuidemo.ui.PublicChatRoomsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan"
+            >
         </activity>
-        
+
         <!-- 语音通话 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.VoiceCallActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:theme="@style/nornal_style" >
+            android:screenOrientation="portrait"
+            android:theme="@style/nornal_style"
+            >
         </activity>
         <!-- 视频通话 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.VideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:theme="@style/horizontal_slide" >
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
         <!-- 群聊简单信息 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.GroupSimpleDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
         <!-- 群组黑名单用户列表 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.GroupBlacklistActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
         <activity
             android:name="com.easemob.chatuidemo.ui.PublicGroupsSeachActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
+            android:theme="@style/horizontal_slide"
+            >
         </activity>
         <activity
             android:name="com.easemob.chatuidemo.ui.EditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="stateVisible" >
+            android:windowSoftInputMode="stateVisible"
+            >
         </activity>
         <activity
             android:name="com.easemob.easeui.ui.EaseShowVideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="stateAlwaysHidden" >
+            android:windowSoftInputMode="stateAlwaysHidden"
+            >
         </activity>
         <!-- choose video -->
         <activity
             android:name="com.easemob.chatuidemo.ui.ImageGridActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="stateAlwaysHidden" >
+            android:windowSoftInputMode="stateAlwaysHidden"
+            >
         </activity>
         <activity
             android:name="com.easemob.chatuidemo.ui.RecorderVideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="stateAlwaysHidden" >
+            android:windowSoftInputMode="stateAlwaysHidden"
+            >
         </activity>
         <!-- upload error log -->
         <activity
             android:name="com.easemob.chatuidemo.ui.DiagnoseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="stateAlwaysHidden" >
+            android:windowSoftInputMode="stateAlwaysHidden"
+            >
         </activity>
 
         <!-- iOS offline push nick -->
@@ -284,71 +323,120 @@
             android:name="com.easemob.chatuidemo.ui.OfflinePushNickActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="stateAlwaysHidden" >
+            android:windowSoftInputMode="stateAlwaysHidden"
+            >
         </activity>
         <!-- robots list -->
-        <activity 
+        <activity
             android:name="com.easemob.chatuidemo.ui.RobotsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden"
             ></activity>
         <!-- user profile -->
-		<activity 
-		    android:name="com.easemob.chatuidemo.ui.UserProfileActivity"
-		    android:screenOrientation="portrait"
-		    android:theme="@style/horizontal_slide"
-		    ></activity>
+        <activity
+            android:name="com.easemob.chatuidemo.ui.UserProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            ></activity>
+        <!--红包相关界面-->
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMMoneyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan|stateVisible"
+            />
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan"
+            />
+
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMRecordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan"
+            />
+
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMWebViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMChangeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMBankCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            >
+        </activity>
 
         <!-- 开机自启动服务 -->
-        <receiver android:name="com.easemob.chat.StartServiceReceiver" >
-            <intent-filter android:priority="1000" >
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+        <receiver android:name="com.easemob.chat.StartServiceReceiver">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </receiver>
-        
+
         <!-- gcm start，不需要GCM推送的删掉即可-->
         <receiver
             android:name="com.easemob.chat.EMGCMBroadcastReceiver"
             android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND"
+            >
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.easemob.chatuidemo" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="com.easemob.chatuidemo"/>
             </intent-filter>
         </receiver>
 
-        <service android:name="com.easemob.chat.EMGCMListenerService"
-            android:exported="false" >
+        <service
+            android:name="com.easemob.chat.EMGCMListenerService"
+            android:exported="false"
+            >
         </service>
-        
-        <receiver 
+
+        <receiver
             android:name="com.easemob.chatuidemo.receiver.GCMPushBroadCast"
-            android:exported="false">
-            <intent-filter >
+            android:exported="false"
+            >
+            <intent-filter>
                 <action android:name="com.easemob.sdk.push"/>
                 <category android:name="com.easemob.chatuidemo"/>
             </intent-filter>
         </receiver>
         <!-- gcm end -->
         <service
-   			 android:name="com.umeng.update.net.DownloadingService"
-   			 android:process=":DownloadingService" >
-		</service>
-		<activity 
-		    android:name="com.umeng.update.UpdateDialogActivity"
-		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-		</activity>
+            android:name="com.umeng.update.net.DownloadingService"
+            android:process=":DownloadingService"
+            >
+        </service>
+        <activity
+            android:name="com.umeng.update.UpdateDialogActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            >
+        </activity>
 
         <!-- 设置环信应用的appkey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
-            android:value="easemob-demo#chatdemoui" />
+            android:value="easemob-demo#chatdemoui"
+            />
         <!-- 声明sdk所需的service -->
-        <service android:name="com.easemob.chat.EMChatService"
+        <service
+            android:name="com.easemob.chat.EMChatService"
             android:exported="true"
             />
         <!-- 声明sdk所需的receiver -->
@@ -360,48 +448,58 @@
             <!-- 可选filter -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.USER_PRESENT"/>
             </intent-filter>
         </receiver>
-        
-         <!-- xiaomi push start，不需要删除即可-->
+
+        <!-- xiaomi push start，不需要删除即可-->
         <service
             android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
             android:enabled="true"
-            android:exported="true" />
-        <service android:enabled="true"
-            android:name="com.xiaomi.mipush.sdk.MessageHandleService" />
+            android:exported="true"
+            />
+        <service
+            android:name="com.xiaomi.mipush.sdk.MessageHandleService"
+            android:enabled="true"
+            />
 
         <receiver
             android:name="com.easemob.chat.EMMipushReceiver"
-            android:exported="true" >
+            android:exported="true"
+            >
             <intent-filter>
-                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />
-            </intent-filter>
-             <intent-filter>
-                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED" />
+                <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="com.xiaomi.mipush.ERROR" />
+                <action android:name="com.xiaomi.mipush.MESSAGE_ARRIVED"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.xiaomi.mipush.ERROR"/>
             </intent-filter>
         </receiver>
         <!-- xiaomi push end -->
 
         <!-- 百度地图所需的service -->
         <service
-            android:name="com.baidu.location.f" 
+            android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote" />
+            android:process=":remote"
+            />
         <!-- umeng appkey，可忽略 -->
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="53912a3156240b01a7075ed1" >
+            android:value="53912a3156240b01a7075ed1"
+            >
         </meta-data>
-        <meta-data android:value="easemob" android:name="UMENG_CHANNEL"/>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="easemob"
+            />
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="3ecea51f560650b1ed8a4b99808f52e8" />
-        
+            android:value="3ecea51f560650b1ed8a4b99808f52e8"
+            />
+
     </application>
 
 </manifest>
