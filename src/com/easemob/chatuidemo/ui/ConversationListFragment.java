@@ -38,7 +38,6 @@ public class ConversationListFragment extends EaseConversationListFragment {
 
     @Override
     protected void setUpView() {
-        super.setUpView();
         // 注册上下文菜单
         registerForContextMenu(conversationListView);
         conversationListView.setOnItemClickListener(new OnItemClickListener() {
@@ -93,6 +92,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
                 return null;
             }
         });
+        super.setUpView();
     }
 
     @Override
