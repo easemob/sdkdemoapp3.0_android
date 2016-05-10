@@ -22,17 +22,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMEventListener;
@@ -41,18 +36,18 @@ import com.easemob.chat.CmdMessageBody;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
 import com.easemob.chat.EMConversation.EMConversationType;
+import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.ChatType;
 import com.easemob.chat.EMMessage.Type;
-import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
+import com.easemob.chatuidemo.utils.MoneyUtils;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.utils.EaseCommonUtils;
-import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -218,6 +213,9 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
                 EaseCommonUtils.receiveRevokeMessage(this, cmdMessage);
             }
+			if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION) && cmdMessage.getChatType() ==   ChatType.GroupChat) {
+				MoneyUtils.receiveMoneyMessage(cmdMessage);
+			}
 			refreshUIWithMessage();
 			break;
 		case EventReadAck:
