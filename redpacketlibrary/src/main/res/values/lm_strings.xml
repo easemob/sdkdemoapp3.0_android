@@ -90,7 +90,9 @@
     <string name="title_small_change">零钱</string>
     <string name="title_add_bankcard">添加银行卡</string>
     <string name="title_set_pay_pwd">设置支付密码</string>
-    <string name="title_forget_pay_pwd">忘记支付密码?</string>
+    <string name="title_forget_pay_pwd">忘记支付密码</string>
+    <string name="title_factory_agreement">服务协议</string>
+    <string name="title_common_problem">常见问题</string>
     <string name="money_detail_use">已存入零钱，可用于发红包或提现</string>
     <string name="powered_by_huanxin">Powered By 环信™</string>
     <string name="btn_cancel">取消</string>
@@ -146,7 +148,7 @@
     <string name="input_sms_code">请输入您%1$s手机号收到的验证码</string>
     <string name="forget_pay_pwd">忘记支付密码?</string>
     <string name="resend_sms_code">重新获取</string>
-    <string name="before_tomorrow_24_hour_to_account">明天24点前到账</string>
+    <string name="before_tomorrow_24_hour_to_account">预计明天24点前到账</string>
     <string name="withdraw_bankcard_name">%1$s(%2$s)</string>
     <string name="change_balance_insufficient">(余额不足)</string>
     <string name="id_card_digit">0123456789X</string>
@@ -174,8 +176,8 @@
     <string name="title_change_withdraw">零钱提现</string>
     <string name="withdraw_money_not_null">提现金额不能为空</string>
     <string name="withdraw_money_not_zero">提现金额不能为零</string>
-    <string name="withdraw_money_not_max_change">提现金额大于零钱余额</string>
-    <string name="msg_withdraw_success">提现成功</string>
+    <string name="withdraw_money_not_max_change">提现金额不能大于零钱余额</string>
+    <string name="msg_withdraw_success">提现申请已受理</string>
     <string name="msg_captcha_has_sent">验证码已发送</string>
     <string name="money_received">收到红包</string>
     <string name="money_send">发出红包</string>

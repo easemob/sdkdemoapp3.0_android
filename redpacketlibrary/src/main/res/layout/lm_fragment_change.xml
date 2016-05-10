@@ -60,7 +60,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/size36px"
         android:gravity="center"
-        android:text="@string/powered_by"
+        android:text="@string/insurance_agreement_hint"
         android:textColor="@color/text_light_grey"
         android:textSize="@dimen/font33px" />
 
@@ -69,21 +69,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/tv_powered_by"
-        android:layout_marginBottom="@dimen/font54px"
+        android:layout_marginBottom="@dimen/size36px"
         android:gravity="center"
-        android:text="@string/check_apps"
-        android:textColor="@color/check_blue"
-        android:textSize="@dimen/font36px" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/change_description"
-        android:textSize="@dimen/font33px"
-        android:textColor="@color/text_light_grey"
-        android:gravity="center"
-        android:layout_above="@id/tv_check_apps"
-        android:layout_marginBottom="@dimen/size21px" />
+        android:text="@string/title_common_problem"
+        android:textColor="@color/button_blue"
+        android:textSize="@dimen/font39px" />
     <LinearLayout
         android:id="@+id/target_layout"
         android:layout_width="@dimen/size180px"

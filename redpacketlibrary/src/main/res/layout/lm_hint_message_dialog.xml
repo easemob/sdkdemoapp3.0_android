@@ -46,7 +46,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/button_blue"
-            android:textSize="@dimen/font42px"
+            android:textSize="@dimen/font48px"
             android:text="@string/btn_cancel" />
         <View
             android:id="@+id/dialog_hint_line"
@@ -60,7 +60,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textColor="@color/button_blue"
-            android:textSize="@dimen/font42px"
+            android:textSize="@dimen/font48px"
             android:text="@string/btn_ok" />
     </LinearLayout>
 

@@ -43,8 +43,9 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/right_text_layout"
-        android:layout_width="@dimen/size180px"
+        android:layout_width="@dimen/size216px"
         android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/size45px"
         android:visibility="gone"
         android:layout_alignParentRight="true">
 
@@ -53,8 +54,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:text="零钱明细"
             android:textColor="#ffffff"
-            android:textSize="12sp" />
+            android:textSize="15sp" />
     </RelativeLayout>
 
 </RelativeLayout>
