@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,14 +28,15 @@ import android.widget.Toast;
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
-import com.easemob.chatuidemo.DemoApplication;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.utils.EaseCommonUtils;
+import com.easemob.luckymoneysdk.LMCallback;
+import com.easemob.luckymoneysdk.core.LMMoney;
 
 /**
  * 登陆页面
- * 
+ *
  */
 public class LoginActivity extends BaseActivity {
 	private static final String TAG = "LoginActivity";
@@ -90,7 +90,7 @@ public class LoginActivity extends BaseActivity {
 
 	/**
 	 * 登录
-	 * 
+	 *
 	 * @param view
 	 */
 	public void login(View view) {
@@ -141,10 +141,10 @@ public class LoginActivity extends BaseActivity {
 				// ** manually load all local groups and
 			    EMGroupManager.getInstance().loadAllGroups();
 				EMChatManager.getInstance().loadAllConversations();
-				
+
 				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-				
+
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 					pd.dismiss();
 				}
@@ -152,7 +152,23 @@ public class LoginActivity extends BaseActivity {
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);
 				startActivity(intent);
-				
+				/**
+				 *  @param imUserId 环信userId
+				 *  @param password 环信password
+				 *  @param userId   App中能唯一标识用户的ID
+				 */
+				//登录成功初始化红包token.本示例代码暂时使用环信userId代替APP的userId,接入时请传入App的用户id.
+				LMMoney.getInstance().initToken(currentUsername, currentPassword, currentUsername,
+						new LMCallback() {
+							@Override
+							public void onSuccess() {
+							}
+
+							@Override
+							public void onError(String code, String message) {
+								//错误处理
+							}
+						});
 				finish();
 			}
 
@@ -176,10 +192,10 @@ public class LoginActivity extends BaseActivity {
 		});
 	}
 
-	
+
 	/**
 	 * 注册
-	 * 
+	 *
 	 * @param view
 	 */
 	public void register(View view) {
