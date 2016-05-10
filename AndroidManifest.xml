@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.easemob.chatuidemo"
           xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           android:versionCode="28"
           android:versionName="2.2.8"
     >
@@ -8,6 +9,7 @@
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="19"
+        tools:overrideLibrary="com.easemob.luckymoneyui"
         />
 
     <uses-permission android:name="android.permission.VIBRATE"/>
