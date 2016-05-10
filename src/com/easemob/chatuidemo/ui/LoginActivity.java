@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -145,6 +146,18 @@ public class LoginActivity extends BaseActivity {
 				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
 
+				LMMoney.getInstance().initLMToken(currentUsername, currentUsername, EMChatManager.getInstance().getAccessToken(), new LMCallback() {
+					@Override
+					public void onSuccess() {
+						Log.d("LMToken","init LMToken Success");
+					}
+
+					@Override
+					public void onError(String s, String s1) {
+						Log.d("LMToken","init LMToken Error "+s);
+					}
+				});
+
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 					pd.dismiss();
 				}
@@ -152,23 +165,6 @@ public class LoginActivity extends BaseActivity {
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);
 				startActivity(intent);
-				/**
-				 *  @param imUserId 环信userId
-				 *  @param password 环信password
-				 *  @param userId   App中能唯一标识用户的ID
-				 */
-				//登录成功初始化红包token.本示例代码暂时使用环信userId代替APP的userId,接入时请传入App的用户id.
-				LMMoney.getInstance().initToken(currentUsername, currentPassword, currentUsername,
-						new LMCallback() {
-							@Override
-							public void onSuccess() {
-							}
-
-							@Override
-							public void onError(String code, String message) {
-								//错误处理
-							}
-						});
 				finish();
 			}
 
