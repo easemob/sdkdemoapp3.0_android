@@ -14,27 +14,28 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMConversation.EMConversationType;
+import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.easeui.ui.EaseConversationListFragment;
 import com.easemob.easeui.widget.EaseConversationList.EaseConversationListHelper;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.NetUtils;
 
-public class ConversationListFragment extends EaseConversationListFragment{
+public class ConversationListFragment extends EaseConversationListFragment {
 
     private TextView errorText;
 
     @Override
     protected void initView() {
         super.initView();
-        View errorView = (LinearLayout) View.inflate(getActivity(),R.layout.em_chat_neterror_item, null);
+        View errorView = (LinearLayout) View.inflate(getActivity(), R.layout.em_chat_neterror_item, null);
         errorItemContainer.addView(errorView);
         errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
     }
-    
+
     @Override
     protected void setUpView() {
         super.setUpView();
@@ -51,14 +52,14 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 else {
                     // 进入聊天页面
                     Intent intent = new Intent(getActivity(), ChatActivity.class);
-                    if(conversation.isGroup()){
-                        if(conversation.getType() == EMConversationType.ChatRoom){
+                    if (conversation.isGroup()) {
+                        if (conversation.getType() == EMConversationType.ChatRoom) {
                             // it's group chat
                             intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
-                        }else{
+                        } else {
                             intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
                         }
-                        
+
                     }
                     // it's single chat
                     intent.putExtra(Constant.EXTRA_USER_ID, username);
@@ -66,22 +67,48 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 }
             }
         });
+
+        conversationListView.setConversationListHelper(new EaseConversationListHelper() {
+            @Override
+            public String onSetItemSecondaryText(EMMessage lastMessage) {
+                if (lastMessage.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, false)) {
+                    try {
+                        String sendNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER);
+                        String receiveNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER);
+                        String msg;
+                        if (lastMessage.direct == EMMessage.Direct.RECEIVE) {
+                            msg = receiveNick + "领取了你的红包";
+                        } else {
+                            if (sendNick.equals(receiveNick)) {
+                                msg = "你领取了自己的红包";
+                            } else {
+                                msg = "你领取了" + sendNick + "的红包";
+                            }
+                        }
+                        return msg;
+                    } catch (EaseMobException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
+            }
+        });
     }
 
     @Override
     protected void onConnectionDisconnected() {
         super.onConnectionDisconnected();
-        if (NetUtils.hasNetwork(getActivity())){
-         errorText.setText(R.string.can_not_connect_chat_server_connection);
+        if (NetUtils.hasNetwork(getActivity())) {
+            errorText.setText(R.string.can_not_connect_chat_server_connection);
         } else {
-          errorText.setText(R.string.the_current_network);
+            errorText.setText(R.string.the_current_network);
         }
     }
-    
-    
+
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-        getActivity().getMenuInflater().inflate(R.menu.em_delete_message, menu); 
+        getActivity().getMenuInflater().inflate(R.menu.em_delete_message, menu);
     }
 
     @Override
@@ -91,9 +118,10 @@ public class ConversationListFragment extends EaseConversationListFragment{
         /*if (item.getItemId() == R.id.delete_message) {
             deleteMessage = true;
             handled = true;
-        } else*/ if (item.getItemId() == R.id.delete_conversation) {
+        } else*/
+        if (item.getItemId() == R.id.delete_conversation) {
             deleteMessage = true;
-        	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+            EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
             // 删除此会话
             EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
             InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
@@ -101,7 +129,8 @@ public class ConversationListFragment extends EaseConversationListFragment{
             refresh();
 
             // 更新消息未读数
-            ((MainActivity) getActivity()).updateUnreadLabel();        }
+            ((MainActivity) getActivity()).updateUnreadLabel();
+        }
         return true;
     }
 
