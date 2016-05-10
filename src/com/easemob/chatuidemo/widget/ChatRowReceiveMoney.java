@@ -29,7 +29,7 @@ public class ChatRowReceiveMoney extends EaseChatRow {
 
     @Override
     protected void onFindViewById() {
-        mTvMessage = (TextView) findViewById(com.easemob.easeui.R.id.ease_tv_money_msg);
+        mTvMessage = (TextView) findViewById(R.id.ease_tv_money_msg);
     }
 
     @Override
