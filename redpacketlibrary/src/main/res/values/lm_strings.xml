@@ -41,7 +41,7 @@
 
     <string name="tv_not_receive_message">收不到手机验证码?</string>
     <string name="tv_password_hint_one">请输入6位数字支付密码(1/2)</string>
-    <string name="tv_password_hint_two">请再次输入六位数字支付密码(2/2)</string>
+    <string name="tv_password_hint_two">请再次输入6位数字支付密码(2/2)</string>
     <string name="str_me_agreement">我同意</string>
     <string name="str_your_withdraw_cash_card">您的提现银行卡信息</string>
     <string name="str_add_bank_hint">完善银行卡信息，以便提现更快捷到账</string>
@@ -73,7 +73,7 @@
     <string name="no_network_conected">未连接到网络，请稍后重试</string>
     <string name="name_str_format_received">%1$s共收到</string>
     <string name="name_str_format_send">%1$s共发出</string>
-    <string name="btn_str_resend">重新发送</string>
+    <string name="btn_str_resend">重新获取</string>
     <string name="str_format_send_sms">已发送到尾号%1$s手机号上</string>
     <string name="str_send_sms_code">验证码已发送</string>
     <string name="money_detail_nickname">%1$s的红包</string>
@@ -96,7 +96,7 @@
     <string name="money_detail_use">已存入零钱，可用于发红包或提现</string>
     <string name="powered_by_huanxin">Powered By 环信™</string>
     <string name="btn_cancel">取消</string>
-    <string name="str_input_sms_code">请输入手机验证码</string>
+    <string name="str_input_sms_code">请输入验证码</string>
     <string name="go_real_name">去实名</string>
     <string name="set_pay_password">设置支付密码</string>
     <string name="set_pay_pwd_for_safe">为了账户安全，请设置支付密码</string>
@@ -161,7 +161,7 @@
     <string name="choose_province_plz">请先选择一个省份</string>
     <string name="choose_city_plz">请先选择一个城市</string>
     <string name="choose_bank_branch_name_plz">请先选择一个支行名字</string>
-    <string name="msg_phone_hint">银行预留手机号是您在办理该银行卡时所填的手机号。如忘记、停用或无预留手机号码，请拨打银行客服电话更新处理。</string>
+    <string name="msg_phone_hint">银行预留手机号是您在办理该银行卡时所填的手机号。\n没有预留、已停用或忘记手机号码，请拨打银行客服电话更新处理。</string>
     <string name="msg_no_receive_captcha_hint">短信验证码已发送至银行预留手机\n如未收到：\n1.请确认当时使用的号码是否为银行预留手机号。\n2.请检查短信是否被安全软件拦截。</string>
     <string name="msg_you_are_exit">是否确定退出?</string>
     <string name="give_up_recover_pwd">放弃找回密码?</string>
@@ -194,5 +194,6 @@
     <string name="sms_error_title">验证码输入错误</string>
     <string name="sms_error_msg">重新输入，或者等倒计时结束后重新获取一个再试。</string>
     <string name="change_limit_msg">为了你的账户安全，需要通过添加一张银行卡验证你的身份信息。</string>
+    <string name="withdraw_not_psd_msg">为了你的账户安全，需要通过一张银行卡验证你的身份信息。</string>
     <string name="btn_retry">重试</string>
 </resources>
