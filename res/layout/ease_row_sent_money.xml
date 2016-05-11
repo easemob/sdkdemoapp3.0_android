@@ -32,7 +32,7 @@
 
         <RelativeLayout
             android:id="@+id/bubble"
-            android:layout_width="190dp"
+            android:layout_width="210dp"
             android:layout_height="90dp"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
