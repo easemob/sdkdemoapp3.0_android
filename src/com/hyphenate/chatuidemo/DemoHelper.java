@@ -1,11 +1,13 @@
 package com.hyphenate.chatuidemo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketui.utils.RedPacketUtil;
@@ -53,13 +55,12 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class DemoHelper {
     /**
@@ -162,7 +163,7 @@ public class DemoHelper {
 			//initialize profile manager
 			getUserProfileManager().init(context);
 			
-			EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(getModel().isAdaptiveVideoEncode());
+			EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());			
 
 			setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
@@ -202,7 +203,6 @@ public class DemoHelper {
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
-        
         return options;
     }
 
@@ -729,7 +729,7 @@ public class DemoHelper {
     protected void registerMessageListener() {
     	messageListener = new EMMessageListener() {
             private BroadcastReceiver broadCastReceiver = null;
-			
+
 			@Override
 			public void onMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
@@ -754,6 +754,11 @@ public class DemoHelper {
                             RedPacketUtil.receiveRedPacketAckMessage(message);
                             broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
+                    }
+
+                    if (action.equals("__Call_ReqP2P_ConferencePattern")) {
+                        String title = message.getStringAttribute("em_apns_ext", "conference call");
+                        Toast.makeText(appContext, title, Toast.LENGTH_LONG).show();
                     }
                     //end of red packet code
                     //获取扩展属性 此处省略
@@ -845,7 +850,7 @@ public class DemoHelper {
 	/**
 	 * update contact list
 	 * 
-	 * @param contactList
+	 * @param aContactList
 	 */
 	public void setContactList(Map<String, EaseUser> aContactList) {
 		if(aContactList == null){
@@ -917,7 +922,7 @@ public class DemoHelper {
 	 /**
      * update user list to cache and database
      *
-     * @param contactList
+     * @param contactInfoList
      */
     public void updateContactList(List<EaseUser> contactInfoList) {
          for (EaseUser u : contactInfoList) {
