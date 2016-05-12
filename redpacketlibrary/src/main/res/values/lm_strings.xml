@@ -93,6 +93,7 @@
     <string name="title_forget_pay_pwd">忘记支付密码</string>
     <string name="title_factory_agreement">服务协议</string>
     <string name="title_common_problem">常见问题</string>
+    <string name="title_close">关闭</string>
     <string name="money_detail_use">已存入零钱，可用于发红包或提现</string>
     <string name="powered_by_huanxin">Powered By 环信™</string>
     <string name="btn_cancel">取消</string>
@@ -196,4 +197,5 @@
     <string name="change_limit_msg">为了你的账户安全，需要通过添加一张银行卡验证你的身份信息。</string>
     <string name="withdraw_not_psd_msg">为了你的账户安全，需要通过一张银行卡验证你的身份信息。</string>
     <string name="btn_retry">重试</string>
+    <string name="change_default">￥0.00</string>
 </resources>

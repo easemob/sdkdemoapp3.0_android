@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dialogWidth"
-    android:layout_height="@dimen/dialogHeight"
-    android:orientation="vertical">
+                android:layout_width="@dimen/dialogWidth"
+                android:layout_height="@dimen/dialogHeight"
+                android:orientation="vertical"
+    >
 
     <ImageView
         android:id="@+id/iv_open_bg"
@@ -10,20 +11,23 @@
         android:layout_height="match_parent"
         android:background="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/lm_open_red_money_bg" />
+        android:src="@drawable/lm_open_red_money_bg"
+        />
 
     <RelativeLayout
         android:id="@+id/layout_closed"
         android:layout_width="@dimen/size114px"
         android:layout_height="@dimen/size114px"
-        android:clickable="true">
+        android:clickable="true"
+        >
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@drawable/lm_closed_yellow_icon"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            />
     </RelativeLayout>
 
     <ImageView
@@ -33,7 +37,9 @@
         android:layout_below="@id/layout_closed"
         android:layout_centerInParent="true"
         android:layout_marginTop="@dimen/size36px"
-        android:src="@drawable/lm_avatar" />
+        android:background="@drawable/lm_bg_circular"
+        android:src="@drawable/lm_avatar"
+        />
 
 
     <TextView
@@ -44,7 +50,8 @@
         android:layout_marginTop="@dimen/size30px"
         android:gravity="center"
         android:textColor="@color/money_white"
-        android:textSize="@dimen/font42px" />
+        android:textSize="@dimen/font42px"
+        />
 
     <TextView
         android:id="@+id/tv_open_title"
@@ -55,7 +62,8 @@
         android:gravity="center"
         android:text="@string/send_you_money"
         android:textColor="@color/money_white"
-        android:textSize="@dimen/font42px" />
+        android:textSize="@dimen/font42px"
+        />
 
 
     <TextView
@@ -69,7 +77,8 @@
         android:gravity="center|top"
         android:maxLength="30"
         android:textColor="@color/text_yellow"
-        android:textSize="@dimen/font54px" />
+        android:textSize="@dimen/font54px"
+        />
 
 
     <!--群红包用的到-->
@@ -82,7 +91,8 @@
         android:gravity="center"
         android:text="@string/check_lucky"
         android:textColor="@color/text_yellow"
-        android:textSize="@dimen/font48px" />
+        android:textSize="@dimen/font48px"
+        />
 
     <Button
         android:id="@+id/btn_open_money"
@@ -95,5 +105,6 @@
         android:background="@drawable/lm_btn_open_selector"
         android:text="@string/btn_text_open_money"
         android:textColor="@color/money_red_light"
-        android:textSize="@dimen/font54px" />
+        android:textSize="@dimen/font54px"
+        />
 </RelativeLayout>
