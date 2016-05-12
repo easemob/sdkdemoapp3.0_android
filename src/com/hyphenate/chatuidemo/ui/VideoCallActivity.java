@@ -335,7 +335,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                 public void run() {
                                     saveCallRecord();
                                     Animation animation = new AlphaAnimation(1.0f, 0.0f);
-                                    animation.setDuration(800);
+                                    animation.setDuration(1200);
                                     rootContainer.startAnimation(animation);
                                     finish();
                                 }
@@ -530,6 +530,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
      * for debug & testing, you can remove this when release
      */
     void startMonitor(){
+        monitor = true;
         new Thread(new Runnable() {
             public void run() {
                 while(monitor){

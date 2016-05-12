@@ -15,6 +15,7 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.RunnableFuture;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -67,6 +68,9 @@ public class ContactListFragment extends EaseContactListFragment {
         headerView.findViewById(R.id.group_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.chat_room_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.robot_item).setOnClickListener(clickListener);
+        headerView.findViewById(R.id.create_conference_item).setOnClickListener(clickListener);
+
+        //添加headerview
         listView.addHeaderView(headerView);
         //add loading view
         loadingView = LayoutInflater.from(getActivity()).inflate(R.layout.em_layout_loading_data, null);
@@ -193,14 +197,49 @@ public class ContactListFragment extends EaseContactListFragment {
                 //进入Robot列表页面
                 startActivity(new Intent(getActivity(), RobotsActivity.class));
                 break;
+            case R.id.create_conference_item:
+                startActivityForResult(new Intent(getActivity(), GroupPickContactsActivity.class), 200);
+                break;
 
             default:
                 break;
             }
         }
-	    
 	}
-	
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        switch (requestCode) {
+            case 200:
+                final String[] members = data.getStringArrayExtra("newmembers");
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+                            // create conference
+                            EMClient.getInstance().callManager();
+
+                            // add users
+
+                            // start activity
+                            Intent intent = new Intent(getActivity(), ConferenceActivity.class);
+                            intent.putExtra("invite.members", members);
+                            startActivity(intent);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }).start();
+
+                break;
+            default:
+                break;
+        }
+    }
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {

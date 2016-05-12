@@ -33,4 +33,11 @@
         app:contactItemImage="@drawable/em_groups_icon"
         app:contactItemName="@string/robot_chat" />
 
+    <com.hyphenate.chatuidemo.widget.ContactItemView
+        android:id="@+id/create_conference_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contactItemImage="@drawable/em_groups_icon"
+        app:contactItemName="@string/em_create_conference" />
+
 </LinearLayout>

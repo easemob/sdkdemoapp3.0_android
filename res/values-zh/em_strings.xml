@@ -335,4 +335,7 @@
     <!-- lint -->
     <string name="delete_contact">删除联系人</string>
     <string name="loading_more">正在加载更多...</string>
+    <string name="em_invite_join_conference">%s邀请您加入会议</string>
+    <string name="em_invite_join_conference_confirm">确认加入</string>
+    <string name="em_invite_join_conference_decline">拒绝</string>
 </resources>

@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
@@ -35,6 +38,7 @@ import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.parse.UserProfileManager;
 import com.hyphenate.chatuidemo.receiver.CallReceiver;
 import com.hyphenate.chatuidemo.ui.ChatActivity;
+import com.hyphenate.chatuidemo.ui.ConferenceActivity;
 import com.hyphenate.chatuidemo.ui.MainActivity;
 import com.hyphenate.chatuidemo.ui.VideoCallActivity;
 import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
@@ -60,6 +64,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 public class DemoHelper {
     /**
@@ -718,6 +723,27 @@ public class DemoHelper {
     protected void registerMessageListener() {
     	messageListener = new EMMessageListener() {
             private BroadcastReceiver broadCastReceiver = null;
+            
+            boolean parseConferenceCmd(String cmd) {
+                boolean em_conference_call = false;
+                try {
+                    JSONObject json = new JSONObject(cmd);
+                    em_conference_call = json.getBoolean("em_conference_call");
+                    final String conferenceId = json.getString("conferenceId");
+                    final String password = json.getString("password");
+                    final String creator = json.getString("creator");
+                    if (json.has("password")) {
+                        json.getString("password");
+                    }
+                    if (em_conference_call) {
+                        ConferenceActivity.queryJoinConference(conferenceId, password, creator);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return em_conference_call;
+                }
+                return em_conference_call;
+            }
 			
 			@Override
 			public void onMessageReceived(List<EMMessage> messages) {
@@ -749,6 +775,30 @@ public class DemoHelper {
                     //maybe you need get extension of your message
                     //message.getStringAttribute("");
                     EMLog.d(TAG, String.format("Command：action:%s,message:%s", action,message.toString()));
+                    final String str = appContext.getString(R.string.receive_the_passthrough);
+
+                    final String CMD_TOAST_BROADCAST = "hyphenate.demo.cmd.toast";
+                    IntentFilter cmdFilter = new IntentFilter(CMD_TOAST_BROADCAST);
+
+                    if(broadCastReceiver == null){
+                        broadCastReceiver = new BroadcastReceiver(){
+
+                            @Override
+                            public void onReceive(Context context, Intent intent) {
+                                // TODO Auto-generated method stub
+                                Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
+                            }
+                        };
+
+                        //注册广播接收者
+                        appContext.registerReceiver(broadCastReceiver,cmdFilter);
+                    }
+
+                    Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
+                    broadcastIntent.putExtra("cmd_value", str+action);
+                    appContext.sendBroadcast(broadcastIntent, null);
+
+                    parseConferenceCmd(action);
                 }
 			}
 
@@ -834,7 +884,7 @@ public class DemoHelper {
 	/**
 	 * update contact list
 	 * 
-	 * @param contactList
+	 * @param aContactList
 	 */
 	public void setContactList(Map<String, EaseUser> aContactList) {
 		if(aContactList == null){
@@ -906,7 +956,7 @@ public class DemoHelper {
 	 /**
      * update user list to cache and database
      *
-     * @param contactList
+     * @param contactInfoList
      */
     public void updateContactList(List<EaseUser> contactInfoList) {
          for (EaseUser u : contactInfoList) {

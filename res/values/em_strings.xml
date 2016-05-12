@@ -335,4 +335,8 @@
     <!-- lint -->
     <string name="delete_contact">Delete contact</string>
     <string name="loading_more">loading more...</string>
+    <string name="em_create_conference">Create conference</string>
+    <string name="em_invite_join_conference">%s invite you join conference</string>
+    <string name="em_invite_join_conference_confirm">Confirm join</string>
+    <string name="em_invite_join_conference_decline">Decline</string>
 </resources>

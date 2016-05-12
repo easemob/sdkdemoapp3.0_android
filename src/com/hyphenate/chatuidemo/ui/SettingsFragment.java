@@ -101,7 +101,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton ownerLeaveSwitch;
     private EaseSwitchButton switch_delete_msg_when_exit_group;
     private EaseSwitchButton switch_auto_accept_group_invitation;
-    private EaseSwitchButton switch_adaptive_video_encode;
     private DemoModel settingsModel;
     private EMOptions chatOptions;
 	
@@ -133,6 +132,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		switch_auto_accept_group_invitation = (EaseSwitchButton) getView().findViewById(R.id.switch_auto_accept_group_invitation);
 		switch_adaptive_video_encode = (EaseSwitchButton) getView().findViewById(R.id.switch_adaptive_video_encode);
 		LinearLayout llChange = (LinearLayout) getView().findViewById(R.id.ll_change);
+		
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
 		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
 			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMClient.getInstance().getCurrentUser() + ")");

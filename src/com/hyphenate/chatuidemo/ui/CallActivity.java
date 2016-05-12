@@ -11,6 +11,7 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.widget.Toast;
 
+import com.hyphenate.EMError;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -111,11 +112,20 @@ public class CallActivity extends BaseActivity {
                     final int MAKE_CALL_TIMEOUT = 50 * 1000;
                     handler.removeCallbacks(timeoutHangup);
                     handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
-                } catch (EMServiceNotReadyException e) {
+                } catch (final EMServiceNotReadyException e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
-                        public void run() {
-                            final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+                        public void run() {                            
+                            String st2 = e.getMessage();
+                            if (e.getErrorCode() == EMError.CALL_REMOTE_OFFLINE) {
+                                st2 = getResources().getString(R.string.The_other_is_not_online);
+                            } else if (e.getErrorCode() == EMError.USER_NOT_LOGIN) {
+                                st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+                            } else if (e.getErrorCode() == EMError.INVALID_USER_NAME) {
+                                st2 = getResources().getString(R.string.illegal_user_name);
+                            } else if (e.getErrorCode() == EMError.CALL_BUSY) {
+                                st2 = getResources().getString(R.string.The_other_is_on_the_phone);
+                            }
                             Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -126,18 +136,24 @@ public class CallActivity extends BaseActivity {
                     ringtone.stop();
                 if (isInComingCall) {
                     try {
-                        if (NetUtils.hasDataConnection(CallActivity.this)) {
-                            EMClient.getInstance().callManager().answerCall();
-                            isAnswered = true;
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                public void run() {
-                                    final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
-                                    Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            throw new Exception();
-                        }
+                        EMClient.getInstance().callManager().answerCall();
+                        isAnswered = true;
+                        // meizu MX5 4G, hasDataConnection(context) return status is incorrect
+                        // MX5 con.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected() return false in 4G
+                        // so we will not judge it, App can decide whether judge the network status
+
+//                        if (NetUtils.hasDataConnection(CallActivity.this)) {
+//                            EMClient.getInstance().callManager().answerCall();
+//                            isAnswered = true;
+//                        } else {
+//                            runOnUiThread(new Runnable() {
+//                                public void run() {
+//                                    final String st2 = getResources().getString(R.string.Is_not_yet_connected_to_the_server);
+//                                    Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                            throw new Exception();
+//                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                         saveCallRecord();
