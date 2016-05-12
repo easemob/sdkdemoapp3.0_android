@@ -50,14 +50,14 @@ import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.ui.EaseChatFragment;
-import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
+import com.easemob.easeui.ui.EaseChatFragment.EaseChatFragmentListener;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.easemob.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.easemob.util.PathUtil;
 
-public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper{
+public class ChatFragment extends EaseChatFragment implements EaseChatFragmentListener{
 
     //避免和基类定义的常量可能发生的冲突，常量从11开始定义
     private static final int ITEM_VIDEO = 11;
@@ -88,7 +88,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
     @Override
     protected void setUpView() {
-        setChatFragmentHelper(this);
+        setChatFragmentListener(this);
         if (chatType == Constant.CHATTYPE_SINGLE) { 
             Map<String,RobotUser> robotMap = DemoHelper.getInstance().getRobotList();
             if(robotMap!=null && robotMap.containsKey(toChatUsername)){
@@ -132,7 +132,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
             case ContextMenuActivity.RESULT_CODE_FORWARD: // 转发消息
                 if(chatType == EaseConstant.CHATTYPE_CHATROOM){
-                    Toast.makeText(getActivity(), R.string.chatroom_not_support_forward, 1).show();
+                    Toast.makeText(getActivity(), R.string.chatroom_not_support_forward, Toast.LENGTH_LONG).show();
                     return;
                 }
                 Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
@@ -247,7 +247,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if (chatType == Constant.CHATTYPE_GROUP) {
             EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
             if (group == null) {
-                Toast.makeText(getActivity(), R.string.gorup_not_found, 0).show();
+                Toast.makeText(getActivity(), R.string.gorup_not_found, Toast.LENGTH_SHORT).show();
                 return;
             }
             startActivityForResult(
@@ -326,7 +326,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
      */
     protected void startVoiceCall() {
         if (!EMChatManager.getInstance().isConnected()) {
-            Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
+            Toast.makeText(getActivity(), R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
         } else {
             startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
                     .putExtra("isComingCall", false));
@@ -340,7 +340,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
      */
     protected void startVideoCall() {
         if (!EMChatManager.getInstance().isConnected())
-            Toast.makeText(getActivity(), R.string.not_connect_to_server, 0).show();
+            Toast.makeText(getActivity(), R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
         else {
             startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
                     .putExtra("isComingCall", false));

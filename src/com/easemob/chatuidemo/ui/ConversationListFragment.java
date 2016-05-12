@@ -14,13 +14,11 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMConversation.EMConversationType;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.easeui.ui.EaseConversationListFragment;
-import com.easemob.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.easemob.util.NetUtils;
 
 public class ConversationListFragment extends EaseConversationListFragment{
@@ -47,7 +45,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 EMConversation conversation = conversationListView.getItem(position);
                 String username = conversation.getUserName();
                 if (username.equals(EMChatManager.getInstance().getCurrentUser()))
-                    Toast.makeText(getActivity(), R.string.Cant_chat_with_yourself, 0).show();
+                    Toast.makeText(getActivity(), R.string.Cant_chat_with_yourself, Toast.LENGTH_SHORT).show();
                 else {
                     // 进入聊天页面
                     Intent intent = new Intent(getActivity(), ChatActivity.class);

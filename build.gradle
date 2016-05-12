@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.1.0'
     }
 }
 
@@ -27,7 +27,7 @@ android {
         multiDexEnabled true
     }
 
-    sourceSets {
+	sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
@@ -62,5 +62,6 @@ android {
 
 dependencies {
     compile project(':EaseUI')
-    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-multidex.jar')
+    compile fileTree(include: '*.jar', exclude: 'android-support-multidex.jar', dir: 'libs')
+    compile files('libs/MiPush_SDK_Client_2_2_21.jar')
 }
