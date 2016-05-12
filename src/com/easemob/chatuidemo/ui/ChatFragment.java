@@ -31,7 +31,6 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.domain.EmojiconExampleGroupData;
 import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.utils.MoneyUtils;
-import com.easemob.chatuidemo.video.util.Utils;
 import com.easemob.chatuidemo.widget.ChatRowMoney;
 import com.easemob.chatuidemo.widget.ChatRowReceiveMoney;
 import com.easemob.chatuidemo.widget.ChatRowVoiceCall;
@@ -369,11 +368,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                         msg.setAttribute(LMConstant.EXTRA_LUCKY_MONEY_SENDER, senderNickname);
                         sendMessage(msg);
                     } else {
-                        message.setAttribute(LMConstant.EXTRA_LUCKY_MONEY_SENDER, senderNickname);
-                        message.setAttribute(LMConstant.EXTRA_LUCKY_MONEY_RECEIVER, receiverNickname);
-                        message.setAttribute(LMConstant.EXTRA_LUCKY_MONEY_SENDER_ID, senderId);
-                        message.setAttribute(LMConstant.EXTRA_LUCKY_MONEY_RECEIVER_ID, receiverId);
-                        MoneyUtils.sendMoneyMessage(message, new EMCallBack() {
+                        MoneyUtils.sendMoneyMessage(message, senderId, senderNickname, receiverId, receiverNickname, new EMCallBack() {
                             @Override
                             public void onSuccess() {
                                 messageList.refresh();
