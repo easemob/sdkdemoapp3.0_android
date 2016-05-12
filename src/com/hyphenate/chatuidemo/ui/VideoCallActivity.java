@@ -43,6 +43,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.media.EMLocalSurfaceView;
 import com.hyphenate.media.EMOppositeSurfaceView;
+import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
 import java.util.UUID;
@@ -191,6 +192,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             ringtone.play();
             EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
         }
+        
+        final int MAKE_CALL_TIMEOUT = 50 * 1000;
+        handler.removeCallbacks(timeoutHangup);
+        handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
 
         // get instance of call helper, should be called after setSurfaceView was called
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
@@ -276,6 +281,14 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                     });
                     break;
+                case NETWORK_DISCONNECTED:
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            netwrokStatusVeiw.setVisibility(View.VISIBLE);
+                            netwrokStatusVeiw.setText(R.string.network_unavailable);
+                        }
+                    });
+                    break;
                 case NETWORK_UNSTABLE:
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -323,7 +336,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                         }
                     });
                     break;
-                case DISCONNNECTED: // call is disconnected
+                case DISCONNECTED: // call is disconnected
                     handler.removeCallbacks(timeoutHangup);
                     @SuppressWarnings("UnnecessaryLocalVariable")final CallError fError = error;
                     runOnUiThread(new Runnable() {
@@ -332,9 +345,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                                 @Override
                                 public void run() {
+                                    removeCallStateListener();
                                     saveCallRecord();
                                     Animation animation = new AlphaAnimation(1.0f, 0.0f);
-                                    animation.setDuration(800);
+                                    animation.setDuration(1200);
                                     rootContainer.startAnimation(animation);
                                     finish();
                                 }
@@ -356,9 +370,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             String s7 = getResources().getString(R.string.The_other_is_hang_up);
                             String s8 = getResources().getString(R.string.did_not_answer);
                             String s9 = getResources().getString(R.string.Has_been_cancelled);
+                            String s10 = getResources().getString(R.string.Refused);
                             
                             if (fError == CallError.REJECTED) {
-                                callingState = CallingState.BEREFUESD;
+                                callingState = CallingState.BEREFUSED;
                                 callStateTextView.setText(s1);
                             } else if (fError == CallError.ERROR_TRANSPORT) {
                                 callStateTextView.setText(s2);
@@ -369,13 +384,17 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                 callingState = CallingState.BUSY;
                                 callStateTextView.setText(s4);
                             } else if (fError == CallError.ERROR_NORESPONSE) {
-                                callingState = CallingState.NORESPONSE;
+                                callingState = CallingState.NO_RESPONSE;
                                 callStateTextView.setText(s5);
                             }else if (fError == CallError.ERROR_LOCAL_SDK_VERSION_OUTDATED || fError == CallError.ERROR_REMOTE_SDK_VERSION_OUTDATED){
                                 callingState = CallingState.VERSION_NOT_SAME;
                                 callStateTextView.setText(R.string.call_version_inconsistent);
-                            }  else {
-                                if (isAnswered) {
+                            } else {
+                                if (isRefused) {
+                                    callingState = CallingState.REFUSED;
+                                    callStateTextView.setText(s10);
+                                }
+                                else if (isAnswered) {
                                     callingState = CallingState.NORMAL;
                                     if (endCallTriggerByMe) {
 //                                        callStateTextView.setText(s6);
@@ -388,7 +407,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                         callStateTextView.setText(s8);
                                     } else {
                                         if (callingState != CallingState.NORMAL) {
-                                            callingState = CallingState.CANCED;
+                                            callingState = CallingState.CANCELLED;
                                             callStateTextView.setText(s9);
                                         } else {
                                             callStateTextView.setText(s6);
@@ -411,16 +430,22 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         };
         EMClient.getInstance().callManager().addCallStateChangeListener(callStateListener);
     }
+    
+    void removeCallStateListener() {
+        EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.btn_refuse_call: // decline the call
+            isRefused = true;
             refuseBtn.setEnabled(false);
             handler.sendEmptyMessage(MSG_CALL_REJECT);
             break;
 
         case R.id.btn_answer_call: // answer the call
+            EMLog.d(TAG, "btn_answer_call clicked");
             answerBtn.setEnabled(false);
             openSpeakerOn();
             if (ringtone != null)
@@ -503,9 +528,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         default:
             break;
         }
-
     }
-
+    
     @Override
     protected void onDestroy() {
         DemoHelper.getInstance().isVideoCalling = false;
@@ -529,6 +553,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
      * for debug & testing, you can remove this when release
      */
     void startMonitor(){
+        monitor = true;
         new Thread(new Runnable() {
             public void run() {
                 while(monitor){
@@ -541,6 +566,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     + "\nLocalBitrate：" + callHelper.getLocalBitrate()
                                     + "\nRemoteBitrate：" + callHelper.getRemoteBitrate());
                             
+                            ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
+                                    ? R.string.direct_call : R.string.relay_call);                            
                         }
                     });
                     try {
