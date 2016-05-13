@@ -48,6 +48,7 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
@@ -717,9 +718,14 @@ public class DemoHelper {
         if(username.equals(EMClient.getInstance().getCurrentUser()))
             return getUserProfileManager().getCurrentUserInfo();
         user = getContactList().get(username);
-        //TODO 获取不在好友列表里的群成员具体信息，即陌生人信息，demo未实现
         if(user == null && getRobotList() != null){
             user = getRobotList().get(username);
+        }
+        //TODO 获取不在好友列表里的群成员具体信息，即陌生人信息，
+        //demo这里简单返回只有username的user
+        if(user == null){
+            user = new EaseUser(username);
+            EaseCommonUtils.setUserInitialLetter(user);
         }
         return user;
 	}

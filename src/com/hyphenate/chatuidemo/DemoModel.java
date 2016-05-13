@@ -1,5 +1,8 @@
 package com.hyphenate.chatuidemo;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +13,7 @@ import com.hyphenate.chatuidemo.db.UserDao;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseAtMessageHelper;
 
 public class DemoModel {
     UserDao dao = null;
@@ -133,8 +137,20 @@ public class DemoModel {
             dao = new UserDao(context);
         }
         
-        dao.setDisabledGroups(groups);
-        valueCache.put(Key.DisabledGroups, groups);
+        List<String> list = new ArrayList<String>();
+        list.addAll(groups);
+        //直接删除groups的内容，可能会有并发的错误
+        synchronized (list) {
+            for(int i = 0; i < list.size(); i++){
+                if(EaseAtMessageHelper.get().getAtMeGroups().contains(list.get(i))){
+                    list.remove(i);
+                    i--;
+                }
+            }
+        }
+        
+        dao.setDisabledGroups(list);
+        valueCache.put(Key.DisabledGroups, list);
     }
     
     public List<String> getDisabledGroups(){

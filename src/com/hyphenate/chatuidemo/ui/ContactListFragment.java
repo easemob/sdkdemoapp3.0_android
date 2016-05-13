@@ -26,6 +26,7 @@ import com.hyphenate.chatuidemo.widget.ContactItemView;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.ui.EaseContactListFragment;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.util.NetUtils;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -100,7 +101,8 @@ public class ContactListFragment extends EaseContactListFragment {
             
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), AddContactActivity.class));
+//                startActivity(new Intent(getActivity(), AddContactActivity.class));
+                NetUtils.hasDataConnection(getActivity());
             }
         });
         //设置联系人数据
