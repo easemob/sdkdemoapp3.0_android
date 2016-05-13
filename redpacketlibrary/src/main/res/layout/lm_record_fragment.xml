@@ -16,9 +16,14 @@
 
     <LinearLayout
         android:id="@+id/target_layout"
-        android:layout_width="@dimen/size180px"
-        android:layout_height="@dimen/size180px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:orientation="vertical"
         />
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="@style/LoadingProgressStyle"
+        android:visibility="gone"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

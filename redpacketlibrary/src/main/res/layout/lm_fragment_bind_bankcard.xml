@@ -121,21 +121,27 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/layout_agreement"
+                android:id="@+id/layout_amount_agreement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size30px"
+                android:visibility="gone"
                 android:orientation="horizontal">
-
-                <TextView
-                    style="@style/BindBankCardHintStyle"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/size45px"
-                    android:text="@string/user_agreement" />
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/lm_iv_my_agreement"/>
 
                 <TextView
-                    android:id="@+id/tv_factory_agreement"
                     style="@style/BindBankCardHintStyle"
-                    android:text="@string/factory_agreement"
+                    android:text="@string/operation_tpy_agreement" />
+
+                <TextView
+                    android:id="@+id/tv_amount_agreement"
+                    style="@style/BindBankCardHintStyle"
+                    android:text="@string/amount_agreement"
                     android:textColor="@color/button_blue" />
             </LinearLayout>
         </LinearLayout>
@@ -147,6 +153,25 @@
             android:background="@drawable/lm_btn_blue_selector"
             android:text="@string/btn_next_step" />
 
+        <LinearLayout
+            android:id="@+id/layout_user_agreement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size30px"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/BindBankCardHintStyle"
+                android:layout_marginLeft="@dimen/size45px"
+                android:text="@string/operation_user_agreement" />
+
+            <TextView
+                android:id="@+id/tv_user_agreement"
+                style="@style/BindBankCardHintStyle"
+                android:text="@string/user_agreement"
+                android:textColor="@color/button_blue" />
+        </LinearLayout>
 
     </LinearLayout>
 

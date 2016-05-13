@@ -7,7 +7,9 @@
     <color name="divider_color">#c7c7c7</color>
     <color name="text_light_black">#666666</color>
     <color name="text_light_grey">#9e9e9e</color>
+    <color name="bg_light_grey">#f9f9f9</color>
     <color name="text_grey">#6e6e6e</color>
+    <color name="text_dark_grey">#bcbcbc</color>
     <color name="text_black">#3e3e3e</color>
     <color name="background_white">@color/money_white</color>
     <color name="text_yellow">#FEE94E</color>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/lm_shape_corner"
@@ -46,7 +46,7 @@
             android:background="@null"
             android:text="@string/btn_str_send_sms_code"
             android:textColor="@color/text_blue"
-            android:textSize="@dimen/font51px" />
+            android:textSize="@dimen/font42px" />
     </RelativeLayout>
 
     <com.easemob.luckymoneyui.gridpasswordview.GridPasswordView

@@ -25,19 +25,21 @@
     <string name="real_name">真实姓名</string>
     <string name="id_card">身份证号</string>
     <string name="phone_number">手机号码</string>
-    <string name="user_agreement">该操作代表我同意</string>
-    <string name="factory_agreement">《环信用户服务协议》</string>
+    <string name="operation_user_agreement">该操作代表我同意</string>
+    <string name="operation_tpy_agreement">我愿意免费投保太平洋保险</string>
+    <string name="user_agreement">《环信用户服务协议》</string>
+    <string name="amount_agreement">《个人账户资金损失保险》</string>
     <string name="jd_pay_agreement_hint">银行卡付款业务由京东支付支持</string>
-    <string name="insurance_agreement_hint">账户资金安全由太平洋保险全额承担</string>
+    <string name="insurance_agreement_hint">因账户被盗致的资金损失由太平洋保险提供赔付保障</string>
     <string name="edit_bankcard_hint">请输入您本人的银行卡卡号</string>
     <string name="edit_card_name_hint">持卡人姓名</string>
     <string name="edit_id_card_number_hint">请输入18位的身份证号码</string>
     <string name="edit_phone_number_hint">银行预留手机号</string>
     <string name="btn_next_step">下一步</string>
-    <string name="error_is_bankcard_number">请输入正确的银行卡号</string>
-    <string name="error_is_phone_number">请输入正确的手机号码</string>
-    <string name="error_is_id_card_number">请输入正确的身份证号</string>
-    <string name="error_name_isnull">请输入你的真实姓名</string>
+    <string name="error_is_bankcard_number">银行卡号不正确</string>
+    <string name="error_is_phone_number">手机号不正确</string>
+    <string name="error_is_id_card_number">身份证号不正确</string>
+    <string name="error_name_isnull">姓名不能为空</string>
 
     <string name="tv_not_receive_message">收不到手机验证码?</string>
     <string name="tv_password_hint_one">请输入6位数字支付密码(1/2)</string>
@@ -74,7 +76,7 @@
     <string name="name_str_format_received">%1$s共收到</string>
     <string name="name_str_format_send">%1$s共发出</string>
     <string name="btn_str_resend">重新获取</string>
-    <string name="str_format_send_sms">已发送到尾号%1$s手机号上</string>
+    <string name="str_format_send_sms">已发送到尾号%1$s的手机上</string>
     <string name="str_send_sms_code">验证码已发送</string>
     <string name="money_detail_nickname">%1$s的红包</string>
     <string name="money_detail_money_unit">%1$s元</string>
@@ -97,7 +99,7 @@
     <string name="money_detail_use">已存入零钱，可用于发红包或提现</string>
     <string name="powered_by_huanxin">Powered By 环信™</string>
     <string name="btn_cancel">取消</string>
-    <string name="str_input_sms_code">请输入验证码</string>
+    <string name="str_input_sms_code">请输入短信验证码</string>
     <string name="go_real_name">去实名</string>
     <string name="set_pay_password">设置支付密码</string>
     <string name="set_pay_pwd_for_safe">为了账户安全，请设置支付密码</string>
@@ -198,4 +200,7 @@
     <string name="withdraw_not_psd_msg">为了你的账户安全，需要通过一张银行卡验证你的身份信息。</string>
     <string name="btn_retry">重试</string>
     <string name="change_default">￥0.00</string>
+    <string name="msg_error_page_hint">糟糕，好像哪里出了点问题！</string>
+    <string name="msg_error_retry">点此重试</string>
+    <string name="error_not_net_connect">未连接到网络,请稍后重试</string>
 </resources>
