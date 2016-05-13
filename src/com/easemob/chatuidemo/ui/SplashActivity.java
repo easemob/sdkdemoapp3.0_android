@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,6 +15,7 @@ import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.luckymoneysdk.LMCallback;
 import com.easemob.luckymoneysdk.core.LMMoney;
+import com.easemob.util.EMLog;
 
 /**
  * 开屏页
@@ -67,12 +67,12 @@ public class SplashActivity extends BaseActivity {
 					LMMoney.getInstance().initLMToken(DemoHelper.getInstance().getCurrentUsernName(), DemoHelper.getInstance().getCurrentUsernName(), EMChatManager.getInstance().getAccessToken(), new LMCallback() {
 						@Override
 						public void onSuccess() {
-							Log.d("LMToken","Auto Login init LMToken Success");
+							EMLog.d("LMToken","Auto Login init LMToken Success");
 						}
 
 						@Override
 						public void onError(String s, String s1) {
-							Log.d("LMToken","Auto Login init LMToken Error "+s);
+							EMLog.d("LMToken","Auto Login init LMToken Error "+s);
 						}
 					});
 					startActivity(new Intent(SplashActivity.this, MainActivity.class));

@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,6 +33,7 @@ import com.easemob.chatuidemo.R;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.luckymoneysdk.LMCallback;
 import com.easemob.luckymoneysdk.core.LMMoney;
+import com.easemob.util.EMLog;
 
 /**
  * 登陆页面
@@ -149,12 +149,12 @@ public class LoginActivity extends BaseActivity {
 				LMMoney.getInstance().initLMToken(currentUsername, currentUsername, EMChatManager.getInstance().getAccessToken(), new LMCallback() {
 					@Override
 					public void onSuccess() {
-						Log.d("LMToken","init LMToken Success");
+						EMLog.d("LMToken","init LMToken Success");
 					}
 
 					@Override
 					public void onError(String s, String s1) {
-						Log.d("LMToken","init LMToken Error "+s);
+                        EMLog.d("LMToken","init LMToken Error "+s);
 					}
 				});
 
