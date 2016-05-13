@@ -225,7 +225,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     if (data != null) {
                         String greetings = data.getStringExtra(LMConstant.EXTRA_MONEY_GREETING);
                         String moneyID = data.getStringExtra(LMConstant.EXTRA_CHECK_MONEY_ID);
-                        EMMessage message = EMMessage.createTxtSendMessage(getResources().getString(R.string.hunxin_luckymoney)+"["+greetings+"]", toChatUsername);
+                        EMMessage message = EMMessage.createTxtSendMessage("["+getResources().getString(R.string.hunxin_luckymoney)+"]"+greetings, toChatUsername);
                         message.setAttribute(LMConstant.MESSAGE_ATTR_IS_MONEY_MESSAGE, true);
                         message.setAttribute(LMConstant.EXTRA_SPONSOR_NAME, getResources().getString(R.string.hunxin_luckymoney));
                         message.setAttribute(LMConstant.EXTRA_MONEY_GREETING, greetings);
