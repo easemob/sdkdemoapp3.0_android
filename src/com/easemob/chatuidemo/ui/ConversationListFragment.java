@@ -24,14 +24,14 @@ import com.easemob.easeui.widget.EaseConversationList.EaseConversationListHelper
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.NetUtils;
 
-public class ConversationListFragment extends EaseConversationListFragment {
+public class ConversationListFragment extends EaseConversationListFragment{
 
     private TextView errorText;
 
     @Override
     protected void initView() {
         super.initView();
-        View errorView = (LinearLayout) View.inflate(getActivity(), R.layout.em_chat_neterror_item, null);
+        View errorView = (LinearLayout) View.inflate(getActivity(),R.layout.em_chat_neterror_item, null);
         errorItemContainer.addView(errorView);
         errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
     }
@@ -51,11 +51,11 @@ public class ConversationListFragment extends EaseConversationListFragment {
                 else {
                     // 进入聊天页面
                     Intent intent = new Intent(getActivity(), ChatActivity.class);
-                    if (conversation.isGroup()) {
-                        if (conversation.getType() == EMConversationType.ChatRoom) {
+                    if(conversation.isGroup()){
+                        if(conversation.getType() == EMConversationType.ChatRoom){
                             // it's group chat
                             intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_CHATROOM);
-                        } else {
+                        }else{
                             intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
                         }
 
@@ -98,10 +98,10 @@ public class ConversationListFragment extends EaseConversationListFragment {
     @Override
     protected void onConnectionDisconnected() {
         super.onConnectionDisconnected();
-        if (NetUtils.hasNetwork(getActivity())) {
-            errorText.setText(R.string.can_not_connect_chat_server_connection);
+        if (NetUtils.hasNetwork(getActivity())){
+         errorText.setText(R.string.can_not_connect_chat_server_connection);
         } else {
-            errorText.setText(R.string.the_current_network);
+          errorText.setText(R.string.the_current_network);
         }
     }
 
@@ -118,10 +118,9 @@ public class ConversationListFragment extends EaseConversationListFragment {
         /*if (item.getItemId() == R.id.delete_message) {
             deleteMessage = true;
             handled = true;
-        } else*/
-        if (item.getItemId() == R.id.delete_conversation) {
+        } else*/ if (item.getItemId() == R.id.delete_conversation) {
             deleteMessage = true;
-            EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
+        	EMConversation tobeDeleteCons = conversationListView.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
             // 删除此会话
             EMChatManager.getInstance().deleteConversation(tobeDeleteCons.getUserName(), tobeDeleteCons.isGroup(), deleteMessage);
             InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
@@ -129,8 +128,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
             refresh();
 
             // 更新消息未读数
-            ((MainActivity) getActivity()).updateUnreadLabel();
-        }
+            ((MainActivity) getActivity()).updateUnreadLabel();        }
         return true;
     }
 

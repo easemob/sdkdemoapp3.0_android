@@ -54,7 +54,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Map;
 
-public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper {
+public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper{
 
     //避免和基类定义的常量可能发生的冲突，常量从11开始定义
     private static final int ITEM_VIDEO = 11;
@@ -96,8 +96,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     protected void setUpView() {
         setChatFragmentHelper(this);
         if (chatType == Constant.CHATTYPE_SINGLE) {
-            Map<String, RobotUser> robotMap = DemoHelper.getInstance().getRobotList();
-            if (robotMap != null && robotMap.containsKey(toChatUsername)) {
+            Map<String,RobotUser> robotMap = DemoHelper.getInstance().getRobotList();
+            if(robotMap!=null && robotMap.containsKey(toChatUsername)){
                 isRobot = true;
             }
         }
@@ -125,7 +125,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         //增加扩展item
         inputMenu.registerExtendMenuItem(R.string.attach_video, R.drawable.em_chat_video_selector, ITEM_VIDEO, extendMenuItemClickListener);
         inputMenu.registerExtendMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, ITEM_FILE, extendMenuItemClickListener);
-        if (chatType == Constant.CHATTYPE_SINGLE) {
+        if(chatType == Constant.CHATTYPE_SINGLE){
             inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, ITEM_VOICE_CALL, extendMenuItemClickListener);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL, extendMenuItemClickListener);
             // 阅后即焚开关菜单
@@ -137,65 +137,65 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("lzan13", "ChatFragment - onActivityResult - " + requestCode);
+        Log.d("lzan13", "ChatFragment - onActivityResult - "+requestCode);
         if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
             switch (resultCode) {
-                case ContextMenuActivity.RESULT_CODE_COPY: // 复制消息
-                    clipboard.setText(((TextMessageBody) contextMenuMessage.getBody()).getMessage());
-                    break;
-                case ContextMenuActivity.RESULT_CODE_DELETE: // 删除消息
-                    conversation.removeMessage(contextMenuMessage.getMsgId());
-                    refreshUI();
-                    break;
+            case ContextMenuActivity.RESULT_CODE_COPY: // 复制消息
+                clipboard.setText(((TextMessageBody) contextMenuMessage.getBody()).getMessage());
+                break;
+            case ContextMenuActivity.RESULT_CODE_DELETE: // 删除消息
+                conversation.removeMessage(contextMenuMessage.getMsgId());
+                refreshUI();
+                break;
 
-                case ContextMenuActivity.RESULT_CODE_FORWARD: // 转发消息
-                    if (chatType == EaseConstant.CHATTYPE_CHATROOM) {
-                        Toast.makeText(getActivity(), R.string.chatroom_not_support_forward, 1).show();
-                        return;
+            case ContextMenuActivity.RESULT_CODE_FORWARD: // 转发消息
+                if(chatType == EaseConstant.CHATTYPE_CHATROOM){
+                    Toast.makeText(getActivity(), R.string.chatroom_not_support_forward, 1).show();
+                    return;
+                }
+                Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
+                intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
+                startActivity(intent);
+
+                break;
+            case ContextMenuActivity.RESULT_CODE_REVOKE:
+            	// 显示撤回消息操作的 dialog
+                final ProgressDialog pd = new ProgressDialog(getActivity());
+                pd.setMessage(getString(R.string.revoking));
+                pd.show();
+                EaseCommonUtils.sendRevokeMessage(getActivity(), contextMenuMessage, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        pd.dismiss();
+                        refreshUI();
                     }
-                    Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
-                    intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
-                    startActivity(intent);
 
-                    break;
-                case ContextMenuActivity.RESULT_CODE_REVOKE:
-                    // 显示撤回消息操作的 dialog
-                    final ProgressDialog pd = new ProgressDialog(getActivity());
-                    pd.setMessage(getString(R.string.revoking));
-                    pd.show();
-                    EaseCommonUtils.sendRevokeMessage(getActivity(), contextMenuMessage, new EMCallBack() {
-                        @Override
-                        public void onSuccess() {
-                            pd.dismiss();
-                            refreshUI();
-                        }
-
-                        @Override
-                        public void onError(final int i, final String s) {
-                            pd.dismiss();
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (s.equals("maxtime")) {
-                                        Toast.makeText(getActivity(), R.string.revoke_error_maxtime, Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(getActivity(), getString(R.string.revoke_error) + i + " " + s + "", Toast.LENGTH_LONG).show();
-                                    }
+                    @Override
+                    public void onError(final int i, final String s) {
+                        pd.dismiss();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (s.equals("maxtime")) {
+                                    Toast.makeText(getActivity(), R.string.revoke_error_maxtime, Toast.LENGTH_LONG).show();
+                                } else {
+                                	Toast.makeText(getActivity(), getString(R.string.revoke_error) + i + " " + s + "", Toast.LENGTH_LONG).show();
                                 }
-                            });
-                        }
+                            }
+                        });
+                    }
 
-                        @Override
-                        public void onProgress(int i, String s) {
+                    @Override
+                    public void onProgress(int i, String s) {
 
-                        }
-                    });
-                    break;
-                default:
-                    break;
+                    }
+                });
+            	break;
+            default:
+                break;
             }
         }
-        if (resultCode == Activity.RESULT_OK) {
+        if(resultCode == Activity.RESULT_OK){
             switch (requestCode) {
                 case REQUEST_CODE_SELECT_VIDEO: //发送选中的视频
                     if (data != null) {
@@ -225,9 +225,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     if (data != null) {
                         String greetings = data.getStringExtra(LMConstant.EXTRA_MONEY_GREETING);
                         String moneyID = data.getStringExtra(LMConstant.EXTRA_CHECK_MONEY_ID);
-                        EMMessage message = EMMessage.createTxtSendMessage("环信红包", toChatUsername);
+                        EMMessage message = EMMessage.createTxtSendMessage(getResources().getString(R.string.hunxin_luckymoney)+"["+greetings+"]", toChatUsername);
                         message.setAttribute(LMConstant.MESSAGE_ATTR_IS_MONEY_MESSAGE, true);
-                        message.setAttribute(LMConstant.EXTRA_SPONSOR_NAME, "环信红包");
+                        message.setAttribute(LMConstant.EXTRA_SPONSOR_NAME, getResources().getString(R.string.hunxin_luckymoney));
                         message.setAttribute(LMConstant.EXTRA_MONEY_GREETING, greetings);
                         message.setAttribute(LMConstant.EXTRA_CHECK_MONEY_ID, moneyID);
                         sendMessage(message);
@@ -258,7 +258,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     /**
      * 刷新UI界面
      */
-    public void refreshUI() {
+    public void refreshUI(){
         messageList.refresh();
     }
 
@@ -268,14 +268,14 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
      */
     @Override
     public void onSetMessageAttributes(EMMessage message) {
-        if (isRobot) {
+        if(isRobot){
             //设置消息扩展属性
             message.setAttribute("em_robot_message", isRobot);
         }
         // 根据当前状态是否是阅后即焚状态来设置发送消息的扩展
-        if (isReadFire && (message.getType() == EMMessage.Type.TXT
+        if(isReadFire && (message.getType() == EMMessage.Type.TXT
                 || message.getType() == EMMessage.Type.IMAGE
-                || message.getType() == EMMessage.Type.VOICE)) {
+                || message.getType() == EMMessage.Type.VOICE)){
             message.setAttribute(EaseConstant.EASE_ATTR_READFIRE, true);
         }
 
@@ -298,8 +298,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             startActivityForResult(
                     (new Intent(getActivity(), GroupDetailsActivity.class).putExtra("groupId", toChatUsername)),
                     REQUEST_CODE_GROUP_DETAIL);
-        } else if (chatType == Constant.CHATTYPE_CHATROOM) {
-            startActivityForResult(new Intent(getActivity(), ChatRoomDetailsActivity.class).putExtra("roomId", toChatUsername), REQUEST_CODE_GROUP_DETAIL);
+        }else if(chatType == Constant.CHATTYPE_CHATROOM){
+        	startActivityForResult(new Intent(getActivity(), ChatRoomDetailsActivity.class).putExtra("roomId", toChatUsername), REQUEST_CODE_GROUP_DETAIL);
         }
     }
 
@@ -362,7 +362,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                         receiverNickname = TextUtils.isEmpty(receiverUser.getNick()) ? receiverUser.getUsername() : receiverUser.getNick();
                     }
                     if (chatType == Constant.CHATTYPE_SINGLE) {
-                        EMMessage msg = EMMessage.createTxtSendMessage(receiverNickname + "领取了你的红包", toChatUsername);
+                        EMMessage msg = EMMessage.createTxtSendMessage(String.format(getResources().getString(R.string.money_msg_someone_take_money),receiverNickname), toChatUsername);
                         msg.setAttribute(LMConstant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, true);
                         msg.setAttribute(LMConstant.EXTRA_LUCKY_MONEY_RECEIVER, receiverNickname);
                         msg.setAttribute(LMConstant.EXTRA_LUCKY_MONEY_SENDER, senderNickname);
@@ -411,7 +411,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public void onMessageBubbleLongClick(EMMessage message) {
         //消息框长按
-        startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message", message),
+        startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message",message),
                 REQUEST_CODE_CONTEXT_MENU);
     }
 
@@ -444,7 +444,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         //不覆盖已有的点击事件
         return false;
     }
-
     /**
      * 选择文件
      */
@@ -532,11 +531,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
         @Override
         public int getCustomChatRowType(EMMessage message) {
-            if (message.getType() == EMMessage.Type.TXT) {
+            if(message.getType() == EMMessage.Type.TXT){
                 //语音通话类型
-                if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
+                if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
                     return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL : MESSAGE_TYPE_SENT_VOICE_CALL;
-                } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)) {
+                }else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     //视频通话
                     return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO_CALL : MESSAGE_TYPE_SENT_VIDEO_CALL;
                 } else if (message.getBooleanAttribute(LMConstant.MESSAGE_ATTR_IS_MONEY_MESSAGE, false)) {
@@ -552,10 +551,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
         @Override
         public EaseChatRow getCustomChatRow(EMMessage message, int position, BaseAdapter adapter) {
-            if (message.getType() == EMMessage.Type.TXT) {
+            if(message.getType() == EMMessage.Type.TXT){
                 // 语音通话,  视频通话
                 if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
-                        message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)) {
+                    message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     return new ChatRowVoiceCall(getActivity(), message, position, adapter);
                 }else if (message.getBooleanAttribute(LMConstant.MESSAGE_ATTR_IS_MONEY_MESSAGE, false)) {//发送红包消息
                     return new ChatRowMoney(getActivity(), message, position, adapter);
