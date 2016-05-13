@@ -51,6 +51,7 @@ import com.easemob.chatuidemo.ui.ChatActivity;
 import com.easemob.chatuidemo.ui.MainActivity;
 import com.easemob.chatuidemo.ui.VideoCallActivity;
 import com.easemob.chatuidemo.ui.VoiceCallActivity;
+import com.easemob.chatuidemo.utils.MoneyUtils;
 import com.easemob.chatuidemo.utils.PreferenceManager;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.R;
@@ -697,6 +698,10 @@ public class DemoHelper {
                 	if(!easeUI.hasForegroundActivies()){
                         if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
                             EaseCommonUtils.receiveRevokeMessage(appContext, message);
+                        }
+                        if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION)){
+                            MoneyUtils.receiveMoneyMessage(message);
+                            broadcastManager.sendBroadcast(new Intent(Constant.REFRESH_GROUP_MONEY_ACTION));
                         }
                 	}
                     //获取扩展属性 此处省略

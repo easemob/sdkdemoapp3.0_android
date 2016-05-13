@@ -269,6 +269,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
+		intentFilter.addAction(Constant.REFRESH_GROUP_MONEY_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
             
             @Override
@@ -291,6 +292,11 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                         GroupsActivity.instance.onResume();
                     }
                 }
+				if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION)){
+					if (conversationListFragment != null){
+						conversationListFragment.refresh();
+					}
+				}
             }
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
