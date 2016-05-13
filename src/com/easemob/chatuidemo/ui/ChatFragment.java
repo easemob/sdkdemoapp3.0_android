@@ -131,7 +131,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             // 阅后即焚开关菜单
             inputMenu.registerExtendMenuItem(R.string.attach_read_fire, R.drawable.ease_read_fire, ITEM_READFIRE, extendMenuItemClickListener);
         }
-        inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.ease_chat_money_selector, ITEM_SEND_MONEY, extendMenuItemClickListener);
+        inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_money_selector, ITEM_SEND_MONEY, extendMenuItemClickListener);
     }
 
     @Override

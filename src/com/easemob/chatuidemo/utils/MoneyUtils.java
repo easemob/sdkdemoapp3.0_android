@@ -20,12 +20,11 @@ public class MoneyUtils {
         cmdMsg.setChatType(EMMessage.ChatType.GroupChat);
         CmdMessageBody cmdBody = new CmdMessageBody(Constant.REFRESH_GROUP_MONEY_ACTION);
         cmdMsg.addBody(cmdBody);
-        //设置cmd消息接收者为发红包的人
         cmdMsg.setReceipt(message.getTo());
         //设置扩展属性
         cmdMsg.setAttribute(Constant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, true);
-        cmdMsg.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER, senderNickname);
-        cmdMsg.setAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER, receiverNickname);
+        cmdMsg.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_NAME, senderNickname);
+        cmdMsg.setAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_NAME, receiverNickname);
         cmdMsg.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_ID, senderId);
         cmdMsg.setAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_ID, receiverId);
         EMChatManager.getInstance().sendMessage(cmdMsg, new EMCallBack() {
@@ -39,8 +38,8 @@ public class MoneyUtils {
                 sendMessage.setMsgId(UUID.randomUUID().toString());
                 sendMessage.direct = EMMessage.Direct.SEND;
                 sendMessage.setAttribute(Constant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, true);
-                sendMessage.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER, senderNickname);
-                sendMessage.setAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER, receiverNickname);
+                sendMessage.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_NAME, senderNickname);
+                sendMessage.setAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_NAME, receiverNickname);
                 sendMessage.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_ID, senderId);
                 EMChatManager.getInstance().saveMessage(sendMessage);
                 callBack.onSuccess();
@@ -59,8 +58,8 @@ public class MoneyUtils {
 
     public static void receiveMoneyMessage(EMMessage message) {
         try {
-            String senderNickname = message.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER);
-            String receiverNickname = message.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER);
+            String senderNickname = message.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_NAME);
+            String receiverNickname = message.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_NAME);
             String senderId = message.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_ID);
             String receiverId = message.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_ID);
             String currentUser = EMChatManager.getInstance().getCurrentUser();
@@ -73,9 +72,9 @@ public class MoneyUtils {
                 msg.setMsgId(UUID.randomUUID().toString());
                 msg.direct = EMMessage.Direct.RECEIVE;
                 msg.setAttribute(Constant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, true);
-                msg.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER, senderNickname);
+                msg.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_NAME, senderNickname);
                 msg.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_ID, senderId);
-                msg.setAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER, receiverNickname);
+                msg.setAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_NAME, receiverNickname);
                 //保存消息
                 EMChatManager.getInstance().saveMessage(msg);
             }

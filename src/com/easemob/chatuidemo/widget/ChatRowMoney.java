@@ -23,7 +23,7 @@ public class ChatRowMoney extends EaseChatRow {
     protected void onInflatView() {
         if (message.getBooleanAttribute(LMConstant.MESSAGE_ATTR_IS_MONEY_MESSAGE, false)) {
             inflater.inflate(message.direct == EMMessage.Direct.RECEIVE ?
-                    R.layout.ease_row_received_money : R.layout.ease_row_sent_money, this);
+                    R.layout.em_row_received_money : R.layout.em_row_sent_money, this);
         }
     }
 

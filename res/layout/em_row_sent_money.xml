@@ -36,12 +36,12 @@
             android:layout_height="90dp"
             android:layout_marginRight="@dimen/margin_chat_activity"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:background="@drawable/ease_money_chatto_bg"
+            android:background="@drawable/em_money_chatto_bg"
             >
 
             <ImageView
                 android:id="@+id/iv_money_icon"
-                android:src="@drawable/ease_money_icon"
+                android:src="@drawable/em_money_icon"
                 style="@style/MoneyIconStyle"
                 />
 

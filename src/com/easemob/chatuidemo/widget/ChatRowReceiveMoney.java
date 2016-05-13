@@ -23,7 +23,7 @@ public class ChatRowReceiveMoney extends EaseChatRow {
     protected void onInflatView() {
         if (message.getBooleanAttribute(LMConstant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, false)) {
             inflater.inflate(message.direct == EMMessage.Direct.RECEIVE ?
-                    R.layout.ease_row_money_message : R.layout.ease_row_money_message, this);
+                    R.layout.em_row_money_message : R.layout.em_row_money_message, this);
         }
     }
 
@@ -43,15 +43,15 @@ public class ChatRowReceiveMoney extends EaseChatRow {
                 if (message.getChatType().equals(EMMessage.ChatType.GroupChat)) {
                     senderId = message.getStringAttribute(LMConstant.EXTRA_LUCKY_MONEY_SENDER_ID);
                     if (senderId.equals(currentUser)) {
-                        mTvMessage.setText("你领取了自己的红包");
+                        mTvMessage.setText(R.string.money_msg_take_money);
                     } else {
-                        mTvMessage.setText(String.format("你领取了%s的红包", fromUser));
+                        mTvMessage.setText(String.format(getResources().getString(R.string.money_msg_take_someone_money), fromUser));
                     }
                 } else {
-                    mTvMessage.setText(String.format("你领取了%s的红包", fromUser));
+                    mTvMessage.setText(String.format(getResources().getString(R.string.money_msg_take_someone_money), fromUser));
                 }
             } else {
-                mTvMessage.setText(String.format("%s领取了你的红包", toUser));
+                mTvMessage.setText(String.format(getResources().getString(R.string.money_msg_someone_take_money), toUser));
             }
         } catch (EaseMobException e) {
             e.printStackTrace();

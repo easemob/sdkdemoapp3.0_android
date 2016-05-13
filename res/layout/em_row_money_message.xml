@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="7dp"
-            android:src="@drawable/ease_money_message_icon"
+            android:src="@drawable/em_money_message_icon"
             />
 
         <TextView

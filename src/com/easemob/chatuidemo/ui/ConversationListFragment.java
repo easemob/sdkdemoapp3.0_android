@@ -72,16 +72,16 @@ public class ConversationListFragment extends EaseConversationListFragment {
             public String onSetItemSecondaryText(EMMessage lastMessage) {
                 if (lastMessage.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, false)) {
                     try {
-                        String sendNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER);
-                        String receiveNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER);
+                        String sendNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_NAME);
+                        String receiveNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_NAME);
                         String msg;
                         if (lastMessage.direct == EMMessage.Direct.RECEIVE) {
-                            msg = receiveNick + "领取了你的红包";
+                            msg = String.format(getResources().getString(R.string.money_msg_someone_take_money),receiveNick);
                         } else {
                             if (sendNick.equals(receiveNick)) {
-                                msg = "你领取了自己的红包";
+                                msg = getResources().getString(R.string.money_msg_take_money);
                             } else {
-                                msg = "你领取了" + sendNick + "的红包";
+                                msg = String.format(getResources().getString(R.string.money_msg_take_someone_money),sendNick);
                             }
                         }
                         return msg;

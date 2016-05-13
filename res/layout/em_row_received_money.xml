@@ -33,11 +33,11 @@
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
             android:layout_below="@+id/tv_userid"
-            android:background="@drawable/ease_money_chatfrom_bg" >
+            android:background="@drawable/em_money_chatfrom_bg" >
 
             <ImageView
                 android:id="@+id/iv_money_icon"
-                android:src="@drawable/ease_money_icon"
+                android:src="@drawable/em_money_icon"
                 style="@style/MoneyIconStyle"
                 />
 

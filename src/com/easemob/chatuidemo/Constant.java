@@ -37,6 +37,6 @@ public class Constant extends EaseConstant{
 	public static final String EXTRA_LUCKY_MONEY_SENDER_ID = "money_sender_id";
 	public static final String EXTRA_LUCKY_MONEY_RECEIVER_ID = "money_receiver_id";
 	public static final String MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE = "is_open_money_msg";
-	public static final String EXTRA_LUCKY_MONEY_SENDER = "money_sender";
-	public static final String EXTRA_LUCKY_MONEY_RECEIVER = "money_receiver";
+	public static final String EXTRA_LUCKY_MONEY_SENDER_NAME = "money_sender";
+	public static final String EXTRA_LUCKY_MONEY_RECEIVER_NAME = "money_receiver";
 }
