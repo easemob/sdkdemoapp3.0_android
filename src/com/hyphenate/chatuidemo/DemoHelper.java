@@ -167,6 +167,8 @@ public class DemoHelper {
 			//初始化用户管理类
 			getUserProfileManager().init(context);
 			
+			EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(getModel().isAdaptiveVideoEncode());
+			
 			//设置全局监听
 			setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
@@ -1282,3 +1284,4 @@ public class DemoHelper {
     }
 
 }
+
