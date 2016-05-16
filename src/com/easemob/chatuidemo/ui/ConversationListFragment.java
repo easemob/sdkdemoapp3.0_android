@@ -14,13 +14,14 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMConversation;
-import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMConversation.EMConversationType;
+import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.easeui.ui.EaseConversationListFragment;
 import com.easemob.easeui.widget.EaseConversationList.EaseConversationListHelper;
+import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.NetUtils;
 
 public class ConversationListFragment extends EaseConversationListFragment{
@@ -34,10 +35,9 @@ public class ConversationListFragment extends EaseConversationListFragment{
         errorItemContainer.addView(errorView);
         errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
     }
-    
+
     @Override
     protected void setUpView() {
-        super.setUpView();
         // 注册上下文菜单
         registerForContextMenu(conversationListView);
         conversationListView.setOnItemClickListener(new OnItemClickListener() {
@@ -58,7 +58,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
                         }else{
                             intent.putExtra(Constant.EXTRA_CHAT_TYPE, Constant.CHATTYPE_GROUP);
                         }
-                        
+
                     }
                     // it's single chat
                     intent.putExtra(Constant.EXTRA_USER_ID, username);
@@ -66,6 +66,33 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 }
             }
         });
+
+        conversationListView.setConversationListHelper(new EaseConversationListHelper() {
+            @Override
+            public String onSetItemSecondaryText(EMMessage lastMessage) {
+                if (lastMessage.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, false)) {
+                    try {
+                        String sendNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_NAME);
+                        String receiveNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_NAME);
+                        String msg;
+                        if (lastMessage.direct == EMMessage.Direct.RECEIVE) {
+                            msg = String.format(getResources().getString(R.string.money_msg_someone_take_money),receiveNick);
+                        } else {
+                            if (sendNick.equals(receiveNick)) {
+                                msg = getResources().getString(R.string.money_msg_take_money);
+                            } else {
+                                msg = String.format(getResources().getString(R.string.money_msg_take_someone_money),sendNick);
+                            }
+                        }
+                        return msg;
+                    } catch (EaseMobException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
+            }
+        });
+        super.setUpView();
     }
 
     @Override
@@ -77,11 +104,11 @@ public class ConversationListFragment extends EaseConversationListFragment{
           errorText.setText(R.string.the_current_network);
         }
     }
-    
-    
+
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-        getActivity().getMenuInflater().inflate(R.menu.em_delete_message, menu); 
+        getActivity().getMenuInflater().inflate(R.menu.em_delete_message, menu);
     }
 
     @Override

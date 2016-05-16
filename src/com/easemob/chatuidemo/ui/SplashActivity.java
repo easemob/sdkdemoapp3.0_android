@@ -13,6 +13,9 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.luckymoneysdk.LMCallback;
+import com.easemob.luckymoneysdk.core.LMMoney;
+import com.easemob.util.EMLog;
 
 /**
  * 开屏页
@@ -61,6 +64,17 @@ public class SplashActivity extends BaseActivity {
 						}
 					}
 					//进入主页面
+					LMMoney.getInstance().initLMToken(DemoHelper.getInstance().getCurrentUsernName(), DemoHelper.getInstance().getCurrentUsernName(), EMChatManager.getInstance().getAccessToken(), new LMCallback() {
+						@Override
+						public void onSuccess() {
+							EMLog.d("LMToken","Auto Login init LMToken Success");
+						}
+
+						@Override
+						public void onError(String s, String s1) {
+							EMLog.d("LMToken","Auto Login init LMToken Error "+s);
+						}
+					});
 					startActivity(new Intent(SplashActivity.this, MainActivity.class));
 					finish();
 				}else {
