@@ -700,7 +700,7 @@ public class DemoHelper {
                             EaseCommonUtils.receiveRevokeMessage(appContext, message);
                         }
                         if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION)){
-                            MoneyUtils.receiveMoneyMessage(message);
+                            MoneyUtils.receiveMoneyAckMessage(message);
                             broadcastManager.sendBroadcast(new Intent(Constant.REFRESH_GROUP_MONEY_ACTION));
                         }
                 	}
@@ -717,6 +717,10 @@ public class DemoHelper {
                             @Override
                             public void onReceive(Context context, Intent intent) {
                                 // TODO Auto-generated method stub
+                                //过滤掉红包回执消息的透传吐司
+                                if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION)){
+                                    return;
+                                }
                                 Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
                             }
                         };

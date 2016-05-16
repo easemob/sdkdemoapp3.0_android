@@ -213,8 +213,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
                 EaseCommonUtils.receiveRevokeMessage(this, cmdMessage);
             }
-			if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION) && cmdMessage.getChatType() ==   ChatType.GroupChat) {
-				MoneyUtils.receiveMoneyMessage(cmdMessage);
+			if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION) && cmdMessage.getChatType() == ChatType.GroupChat) {
+				MoneyUtils.receiveMoneyAckMessage(cmdMessage);
 			}
 			refreshUIWithMessage();
 			break;

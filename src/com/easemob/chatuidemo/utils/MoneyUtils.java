@@ -13,8 +13,10 @@ import java.util.UUID;
  * Created by max on 16/5/10.
  */
 public class MoneyUtils {
-
-    public static void sendMoneyMessage(final EMMessage message, final String senderId, final String senderNickname, String receiverId, final String receiverNickname, final EMCallBack callBack) {
+    /**
+     * 使用cmd消息发送领到红包之后的回执消息
+     */
+    public static void sendMoneyAckMessage(final EMMessage message, final String senderId, final String senderNickname, String receiverId, final String receiverNickname, final EMCallBack callBack) {
         //创建透传消息
         final EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
         cmdMsg.setChatType(EMMessage.ChatType.GroupChat);
@@ -55,8 +57,10 @@ public class MoneyUtils {
             }
         });
     }
-
-    public static void receiveMoneyMessage(EMMessage message) {
+    /**
+     * 使用cmd消息收取领到红包之后的回执消息
+     */
+    public static void receiveMoneyAckMessage(EMMessage message) {
         try {
             String senderNickname = message.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_NAME);
             String receiverNickname = message.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_NAME);

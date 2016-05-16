@@ -14,7 +14,7 @@
     <EditText
         android:id="@+id/ed_search"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size90px"
+        android:layout_height="wrap_content"
         android:layout_below="@id/title_bar"
         android:paddingTop="@dimen/size24px"
         android:paddingLeft="@dimen/size15px"

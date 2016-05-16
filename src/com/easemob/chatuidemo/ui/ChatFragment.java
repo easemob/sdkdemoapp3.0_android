@@ -251,7 +251,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 CmdMessageBody cmdMsgBody = (CmdMessageBody) cmdMessage.getBody();
                 final String action = cmdMsgBody.action;//获取自定义action
                 if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION) && cmdMessage.getChatType() == EMMessage.ChatType.GroupChat) {
-                    MoneyUtils.receiveMoneyMessage(cmdMessage);
+                    MoneyUtils.receiveMoneyAckMessage(cmdMessage);
                     messageList.refresh();
                 }
                 break;
@@ -372,7 +372,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                         msg.setAttribute(LMConstant.EXTRA_LUCKY_MONEY_SENDER, senderNickname);
                         sendMessage(msg);
                     } else {
-                        MoneyUtils.sendMoneyMessage(message, senderId, senderNickname, receiverId, receiverNickname, new EMCallBack() {
+                        MoneyUtils.sendMoneyAckMessage(message, senderId, senderNickname, receiverId, receiverNickname, new EMCallBack() {
                             @Override
                             public void onSuccess() {
                                 messageList.refresh();
