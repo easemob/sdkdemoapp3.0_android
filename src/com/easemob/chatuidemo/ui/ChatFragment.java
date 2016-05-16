@@ -131,7 +131,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             // 阅后即焚开关菜单
             inputMenu.registerExtendMenuItem(R.string.attach_read_fire, R.drawable.ease_read_fire, ITEM_READFIRE, extendMenuItemClickListener);
         }
-        inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_money_selector, ITEM_SEND_MONEY, extendMenuItemClickListener);
+        //暂时不支持聊天室
+        if (chatType != Constant.CHATTYPE_CHATROOM){
+            inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_money_selector, ITEM_SEND_MONEY, extendMenuItemClickListener);
+        }
     }
 
     @Override
@@ -232,6 +235,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                         message.setAttribute(LMConstant.EXTRA_CHECK_MONEY_ID, moneyID);
                         sendMessage(message);
                     }
+                    break;
                 default:
                     break;
             }
@@ -509,7 +513,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if (chatType == Constant.CHATTYPE_SINGLE) {
             moneyInfo.toUserId = toChatUsername;
             moneyInfo.chatType = LMConstant.CHATTYPE_SINGLE;
-        } else {
+        } else if (chatType == Constant.CHATTYPE_GROUP) {
             EMGroup group = EMGroupManager.getInstance().getGroup(toChatUsername);
             moneyInfo.toGroupId = group.getGroupId();
             moneyInfo.groupMemberCount = group.getAffiliationsCount();

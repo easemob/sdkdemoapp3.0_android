@@ -30,6 +30,8 @@ RecyclerView's bounds.-->
     <dimen name="size81px">27dp</dimen>
     <dimen name="size174px">58dp</dimen>
     <dimen name="size9px">3dp</dimen>
+    <dimen name="size15px">5dp</dimen>
+    <dimen name="size12px">4dp</dimen>
     <dimen name="size114px">38dp</dimen>
     <dimen name="size165px">55dp</dimen>
     <dimen name="size36px">12dp</dimen>

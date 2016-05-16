@@ -347,7 +347,7 @@
 		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
 		</activity>
 
-        <!--发红包界面-->
+        <!--红包相关界面-->
         <activity
             android:name="com.easemob.luckymoneyui.ui.activity.LMMoneyActivity"
             android:screenOrientation="portrait"

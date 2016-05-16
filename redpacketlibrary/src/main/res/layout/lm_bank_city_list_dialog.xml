@@ -11,13 +11,32 @@
         android:layout_height="wrap_content"
         yzh:titleBackground="@color/button_blue"
         yzh:mytitle="@string/money_record_title" />
+    <EditText
+        android:id="@+id/ed_search"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size90px"
+        android:layout_below="@id/title_bar"
+        android:paddingTop="@dimen/size24px"
+        android:paddingLeft="@dimen/size15px"
+        android:paddingBottom="@dimen/size24px"
+        android:layout_margin="@dimen/size30px"
+        android:layout_centerVertical="true"
+        android:background="@drawable/lm_search_bar_input"
+        android:drawableLeft="@drawable/lm_search_icon"
+        android:drawablePadding="@dimen/size9px"
+        android:textColorHint="@color/text_light_grey"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/font42px"
+        android:hint="@string/ed_search_word"
+        android:visibility="gone"
+        android:singleLine="true"/>
 
     <com.easemob.luckymoneyui.android.support.v7.widget.RecyclerView
         android:id="@+id/bank_city_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/title_bar"
-        android:background="@color/money_bg_color"
+        android:layout_below="@id/ed_search"
+        android:background="@color/background_white"
         android:scrollbars="vertical" />
 
 

@@ -86,6 +86,7 @@
                     android:maxLength="18"
                     android:singleLine="true" />
             </RelativeLayout>
+
             <View
                 android:id="@+id/div_line_two"
                 style="@style/DividerStyleNoHead" />
@@ -120,30 +121,31 @@
                     android:singleLine="true" />
             </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/layout_amount_agreement"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size45px"
+                android:layout_marginRight="@dimen/size45px"
                 android:layout_marginTop="@dimen/size30px"
-                android:visibility="gone"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/size45px"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/lm_iv_my_agreement"/>
+                android:visibility="gone">
 
-                <TextView
-                    style="@style/BindBankCardHintStyle"
-                    android:text="@string/operation_tpy_agreement" />
+                <ImageView
+                    android:id="@+id/iv_amount_agreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size12px"
+                    android:layout_marginRight="@dimen/size9px"
+                    android:src="@drawable/lm_iv_my_agreement" />
 
                 <TextView
                     android:id="@+id/tv_amount_agreement"
                     style="@style/BindBankCardHintStyle"
-                    android:text="@string/amount_agreement"
-                    android:textColor="@color/button_blue" />
-            </LinearLayout>
+                    android:layout_toRightOf="@id/iv_amount_agreement"
+                    android:text="@string/operation_tpy_agreement" />
+            </RelativeLayout>
+
+
         </LinearLayout>
 
 
@@ -153,33 +155,19 @@
             android:background="@drawable/lm_btn_blue_selector"
             android:text="@string/btn_next_step" />
 
-        <LinearLayout
-            android:id="@+id/layout_user_agreement"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/tv_user_agreement"
+            style="@style/BindBankCardHintStyle"
+            android:layout_marginLeft="@dimen/size45px"
             android:layout_marginTop="@dimen/size30px"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/BindBankCardHintStyle"
-                android:layout_marginLeft="@dimen/size45px"
-                android:text="@string/operation_user_agreement" />
-
-            <TextView
-                android:id="@+id/tv_user_agreement"
-                style="@style/BindBankCardHintStyle"
-                android:text="@string/user_agreement"
-                android:textColor="@color/button_blue" />
-        </LinearLayout>
-
+            android:text="@string/operation_user_agreement" />
     </LinearLayout>
 
 
     <TextView
         style="@style/BindBankCardBottomStyle"
         android:layout_above="@+id/tv_insurance_agreement"
-        android:layout_marginBottom="@dimen/size30px"
+        android:layout_marginBottom="@dimen/size9px"
         android:text="@string/jd_pay_agreement_hint" />
 
     <TextView

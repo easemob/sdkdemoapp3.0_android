@@ -21,9 +21,5 @@
         android:layout_centerInParent="true"
         android:orientation="vertical"
         />
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        style="@style/LoadingProgressStyle"
-        android:visibility="gone"
-        android:layout_centerInParent="true" />
+
 </RelativeLayout>

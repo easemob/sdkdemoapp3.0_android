@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/iv_item_avatar_icon"
-            android:layout_width="@dimen/size105px"
-            android:layout_height="@dimen/size105px"
+            android:layout_width="@dimen/size120px"
+            android:layout_height="@dimen/size120px"
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="@dimen/size30px"
             android:layout_marginLeft="@dimen/size45px"
@@ -38,10 +38,10 @@
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/iv_item_avatar_icon"
             android:layout_below="@id/tv_money_to_user"
             android:layout_marginLeft="@dimen/size30px"
             android:layout_toRightOf="@id/iv_item_avatar_icon"
+            android:layout_alignBottom="@id/iv_item_avatar_icon"
             android:text="17:00"
             android:textColor="@color/text_light_grey"
             android:textSize="@dimen/font36px" />

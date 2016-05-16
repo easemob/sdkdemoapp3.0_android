@@ -123,7 +123,7 @@
         <Button
             android:id="@+id/btn_forget_pwd"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size51px"
+            android:layout_height="@dimen/size57px"
             android:layout_gravity="center"
             android:background="@null"
             android:textColor="@color/text_blue"
@@ -133,7 +133,7 @@
         <Button
             android:id="@+id/btn_resend_code"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/size51px"
+            android:layout_height="@dimen/size57px"
             android:layout_gravity="center"
             android:background="@null"
             android:textColor="@color/text_blue"
