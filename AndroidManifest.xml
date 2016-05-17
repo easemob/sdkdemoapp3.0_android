@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.easemob.chatuidemo"
-    android:versionCode="28"
-    android:versionName="2.2.9" >
+<manifest package="com.easemob.chatuidemo"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          android:versionCode="29"
+          android:versionName="2.2.9"
+    >
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="19"
+        tools:overrideLibrary="com.easemob.luckymoneyui"
+        />
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -42,8 +46,8 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.easemob.chatuidemo.permission.MIPUSH_RECEIVE" />
-    
-    
+
+
     <application
         android:name="DemoApplication"
         android:allowBackup="true"
@@ -73,7 +77,7 @@
         <activity
             android:name="com.easemob.chatuidemo.ui.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" 
+            android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize|stateVisible">
         </activity>
 
@@ -81,7 +85,7 @@
         <activity
             android:name="com.easemob.chatuidemo.ui.RegisterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" 
+            android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize|stateVisible">
         </activity>
         <!-- 聊天页面 -->
@@ -120,7 +124,7 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
+
         <activity
             android:name="com.easemob.chatuidemo.ui.ChatRoomActivity"
             android:screenOrientation="portrait"
@@ -133,7 +137,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" >
         </activity>
-        
+
         <!-- 新建群组 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.NewGroupActivity"
@@ -206,14 +210,14 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
+
         <activity
             android:name="com.easemob.chatuidemo.ui.PublicChatRoomsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
+
         <!-- 语音通话 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.VoiceCallActivity"
@@ -287,14 +291,14 @@
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
         <!-- robots list -->
-        <activity 
+        <activity
             android:name="com.easemob.chatuidemo.ui.RobotsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden"
             ></activity>
         <!-- user profile -->
-		<activity 
+		<activity
 		    android:name="com.easemob.chatuidemo.ui.UserProfileActivity"
 		    android:screenOrientation="portrait"
 		    android:theme="@style/horizontal_slide"
@@ -309,7 +313,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
-        
+
         <!-- gcm start，不需要GCM推送的删掉即可-->
         <receiver
             android:name="com.easemob.chat.EMGCMBroadcastReceiver"
@@ -324,8 +328,8 @@
         <service android:name="com.easemob.chat.EMGCMListenerService"
             android:exported="false" >
         </service>
-        
-        <receiver 
+
+        <receiver
             android:name="com.easemob.chatuidemo.receiver.GCMPushBroadCast"
             android:exported="false">
             <intent-filter >
@@ -338,10 +342,51 @@
    			 android:name="com.umeng.update.net.DownloadingService"
    			 android:process=":DownloadingService" >
 		</service>
-		<activity 
+		<activity
 		    android:name="com.umeng.update.UpdateDialogActivity"
 		    android:theme="@android:style/Theme.Translucent.NoTitleBar" >
 		</activity>
+
+        <!--红包相关界面-->
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMMoneyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan|stateVisible"
+            />
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan"
+            />
+
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMRecordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan"
+            />
+
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMWebViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMChangeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMBankCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            >
+        </activity>
 
         <!-- 设置环信应用的appkey -->
         <meta-data
@@ -363,7 +408,7 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
-        
+
          <!-- xiaomi push start，不需要删除即可-->
         <service
             android:name="com.xiaomi.mipush.sdk.PushMessageHandler"
@@ -389,7 +434,7 @@
 
         <!-- 百度地图所需的service -->
         <service
-            android:name="com.baidu.location.f" 
+            android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
         <!-- umeng appkey，可忽略 -->
@@ -401,7 +446,7 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="3ecea51f560650b1ed8a4b99808f52e8" />
-        
+
     </application>
 
 </manifest>

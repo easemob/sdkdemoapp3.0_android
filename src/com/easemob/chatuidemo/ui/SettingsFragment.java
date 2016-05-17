@@ -29,15 +29,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.EMCallBack;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatOptions;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.DemoModel;
 import com.easemob.chatuidemo.R;
-import com.easemob.chatuidemo.utils.PreferenceManager;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.easeui.widget.EaseSwitchButton;
+import com.easemob.luckymoneysdk.constant.LMConstant;
+import com.easemob.luckymoneyui.ui.activity.LMChangeActivity;
 
 /**
  * 设置界面
@@ -89,8 +91,13 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	 * iOS离线推送昵称
 	 */
 	private LinearLayout pushNick;
-	
-    private EaseSwitchButton notifiSwitch;
+	/**
+	 * 零钱
+	 */
+	private LinearLayout llChange;
+
+
+	private EaseSwitchButton notifiSwitch;
     private EaseSwitchButton soundSwitch;
     private EaseSwitchButton vibrateSwitch;
     private EaseSwitchButton speakerSwitch;
@@ -116,7 +123,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_speaker = (RelativeLayout) getView().findViewById(R.id.rl_switch_speaker);
 		rl_switch_chatroom_leave = (RelativeLayout) getView().findViewById(R.id.rl_switch_chatroom_owner_leave);
 		rl_switch_adaptive_video_encode = (RelativeLayout) getView().findViewById(R.id.rl_switch_adaptive_video_encode);
-		
+		llChange= (LinearLayout) getView().findViewById(R.id.ll_change);
+
 		notifiSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
 		soundSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_sound);
 		vibrateSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_vibrate);
@@ -151,6 +159,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pushNick.setOnClickListener(this);
 		rl_switch_chatroom_leave.setOnClickListener(this);
 		rl_switch_adaptive_video_encode.setOnClickListener(this);
+		llChange.setOnClickListener(this);
 		
 		// 震动和声音总开关，来消息时，是否允许此开关打开
 		// the vibrate and sound notification are allowed or not?
@@ -202,6 +211,19 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+			case R.id.ll_change:
+				Intent intent = new Intent(getActivity(), LMChangeActivity.class);
+				String fromNickname="";
+				String fromAvatarUrl="";
+				EaseUser easeUser = EaseUserUtils.getUserInfo(EMChatManager.getInstance().getCurrentUser());
+				if (easeUser != null) {
+					fromAvatarUrl = TextUtils.isEmpty(easeUser.getAvatar()) ? "none" : easeUser.getAvatar();
+					fromNickname = TextUtils.isEmpty(easeUser.getNick()) ? easeUser.getUsername() : easeUser.getNick();
+				}
+				intent.putExtra(LMConstant.EXTRA_USER_NAME, fromNickname);
+				intent.putExtra(LMConstant.EXTRA_TO_USER_AVATAR, fromAvatarUrl);
+				startActivity(intent);
+				break;
 		case R.id.rl_switch_notification:
 			if (notifiSwitch.isSwitchOpen()) {
 			    notifiSwitch.closeSwitch();

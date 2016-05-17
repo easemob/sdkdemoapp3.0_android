@@ -61,6 +61,7 @@ android {
 }
 
 dependencies {
+    compile project(':redpacketlibrary')
     compile project(':EaseUI')
     compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-multidex.jar')
 }

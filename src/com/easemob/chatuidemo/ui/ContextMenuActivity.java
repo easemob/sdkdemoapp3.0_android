@@ -21,6 +21,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.EaseConstant;
+import com.easemob.luckymoneysdk.constant.LMConstant;
 
 public class ContextMenuActivity extends BaseActivity {
 	public static final int RESULT_CODE_COPY = 1;
@@ -39,7 +40,8 @@ public class ContextMenuActivity extends BaseActivity {
 		}else{
     		if (type == EMMessage.Type.TXT.ordinal()) {
     		    if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
-    		            || message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)) {
+    		            || message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
+						|| message.getBooleanAttribute(LMConstant.MESSAGE_ATTR_IS_MONEY_MESSAGE, false)) {
     		        setContentView(R.layout.em_context_menu_for_delete);
     		    } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
     		        setContentView(R.layout.em_context_menu_for_image);
