@@ -144,12 +144,12 @@ public class CameraHelper implements PreviewCallback {
             if (isScreenOriatationPortrait()) {
                 if (cameraInfo.orientation == 90 || cameraInfo.orientation == 0 || cameraInfo.orientation == 180){
                     YUV420spRotate90(yuv_Rotate90, yuv_frame, mwidth, mheight);
-                    YUV42left2right(yuv_frame,yuv_Rotate90,mheight,mwidth);
+                    //YUV42left2right(yuv_frame,yuv_Rotate90,mheight,mwidth);
                 }else if (cameraInfo.orientation == 270){
                     YUV420spRotate270(yuv_Rotate90,yuv_frame,  mwidth,mheight);
-                    YUV42left2right(yuv_frame,yuv_Rotate90,mheight,mwidth);
+                    //YUV42left2right(yuv_frame,yuv_Rotate90,mheight,mwidth);
                 }
-                callHelper.processPreviewData(mheight, mwidth, yuv_frame);
+                callHelper.processPreviewData(mheight, mwidth, yuv_Rotate90);
             } else {
                 if (cameraInfo.orientation == 90 || cameraInfo.orientation == 0 || cameraInfo.orientation == 180) {
                     YUV420spRotate180(yuv_Rotate90, yuv_frame, mwidth, mheight);

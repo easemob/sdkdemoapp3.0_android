@@ -31,4 +31,12 @@ public class Constant extends EaseConstant{
     // 设置自己扩展的消息类型的 key
     public static final String EM_ATTR_TYPE = "msg_type";
     public static final String EM_ATTR_TYPE_REVOKE = "revoke";
+
+	//红包相关常量值
+	public static final String REFRESH_GROUP_MONEY_ACTION = "refresh_group_money_action";
+	public static final String EXTRA_LUCKY_MONEY_SENDER_ID = "money_sender_id";
+	public static final String EXTRA_LUCKY_MONEY_RECEIVER_ID = "money_receiver_id";
+	public static final String MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE = "is_open_money_msg";
+	public static final String EXTRA_LUCKY_MONEY_SENDER_NAME = "money_sender";
+	public static final String EXTRA_LUCKY_MONEY_RECEIVER_NAME = "money_receiver";
 }

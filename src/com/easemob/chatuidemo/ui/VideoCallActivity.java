@@ -42,10 +42,13 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMVideoCallHelper;
 import com.easemob.chat.EMCallStateChangeListener.CallError;
 import com.easemob.chatuidemo.DemoHelper;
+import com.easemob.chatuidemo.DemoModel;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.ui.CallActivity.CallingState;
 import com.easemob.chatuidemo.utils.CameraHelper;
 import com.easemob.exceptions.EMServiceNotReadyException;
+import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.NetUtils;
 import com.easemob.util.PathUtil;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
@@ -137,6 +140,13 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         // 获取通话是否为接收方向的
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
         username = getIntent().getStringExtra("username");
+        
+        DemoModel dm = DemoHelper.getInstance().getModel();
+        if(dm.isAdaptiveVideoEncode()){
+        	EMChatManager.getInstance().setAdaptiveVideoFlag(true);
+        }else{
+        	EMChatManager.getInstance().setAdaptiveVideoFlag(false);
+        }
 
         // 设置通话人
         nickTextView.setText(username);
@@ -438,8 +448,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             if (isInComingCall) {
                 try {
                     callStateTextView.setText("正在接听...");
-                    EMChatManager.getInstance().answerCall();
-                    cameraHelper.setStartFlag(true);
+                    if(NetUtils.hasDataConnection(VideoCallActivity.this)){
+                    	EMChatManager.getInstance().answerCall();
+                    	cameraHelper.setStartFlag(true);
+                    }else{
+                    	throw new EaseMobException();
+                    }
 
                     openSpeakerOn();
                     handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);

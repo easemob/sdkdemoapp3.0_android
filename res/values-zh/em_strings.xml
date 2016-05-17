@@ -15,6 +15,7 @@
     <string name="attach_video">视频</string>
     <string name="attach_file">文件</string>
     <string name="attach_read_fire">阅后即焚</string>
+    <string name="attach_red_packet">红包</string>
     <string name="attach_voice_call">语音电话</string>
     <string name="attach_video_call">视频通话</string>
     <string name="user_card">名片</string>
@@ -74,6 +75,7 @@
     <string name="set">设置</string>
     <string name="notify">新消息提醒</string>
     <string name="newnotify">接收新消息通知</string>
+    <string name="change">零钱</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>
     <string name="chatset">聊天设置</string>
@@ -321,4 +323,10 @@
     
     <string name="network_unstable">网络不稳定</string>
      <string name="no_call_data">没有通话数据</string>
+     <string name="adaptive_video_encode">视频自适应码率编码</string>
+
+    <string name="money_msg_take_money">你领取了自己的红包</string>
+    <string name="money_msg_take_someone_money">你领取了%1$s的红包</string>
+    <string name="money_msg_someone_take_money">%1$s领取了你的红包</string>
+    <string name="hunxin_luckymoney">环信红包</string>
 </resources>
