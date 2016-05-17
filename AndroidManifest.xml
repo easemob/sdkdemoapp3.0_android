@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.easemob.chatuidemo"
     android:versionCode="28"
-    android:versionName="2.2.8" >
+    android:versionName="2.2.9" >
 
     <uses-sdk
         android:minSdkVersion="9"
