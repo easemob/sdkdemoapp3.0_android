@@ -57,6 +57,7 @@ public class MoneyUtils {
             }
         });
     }
+
     /**
      * 使用cmd消息收取领到红包之后的回执消息
      */
@@ -75,6 +76,7 @@ public class MoneyUtils {
                 msg.setTo(message.getTo());
                 msg.setMsgId(UUID.randomUUID().toString());
                 msg.direct = EMMessage.Direct.RECEIVE;
+                msg.setUnread(false);//去掉未读的显示
                 msg.setAttribute(Constant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, true);
                 msg.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_NAME, senderNickname);
                 msg.setAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_ID, senderId);
