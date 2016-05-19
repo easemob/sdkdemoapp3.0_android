@@ -64,5 +64,4 @@ dependencies {
     compile project(':redpacketlibrary')
     compile project(':EaseUI')
     compile fileTree(include: '*.jar', exclude: 'android-support-multidex.jar', dir: 'libs')
-    compile files('libs/MiPush_SDK_Client_2_2_21.jar')
 }
