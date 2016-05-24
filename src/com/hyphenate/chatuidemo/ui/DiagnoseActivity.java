@@ -35,7 +35,6 @@ import android.widget.Toast;
  */
 public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 	private TextView currentVersion;
-	private Button uploadLog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +42,6 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.em_activity_diagnose);
 
 		currentVersion = (TextView) findViewById(R.id.tv_version);
-		uploadLog = (Button) findViewById(R.id.button_uploadlog);
-		uploadLog.setOnClickListener(this);
 		String strVersion = "";
 		try {
 			strVersion = getVersionName();
@@ -68,72 +65,6 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.button_uploadlog:
-			uploadlog();
-			break;
-
-		default:
-			break;
-		}
-
-	}
-
-	private ProgressDialog progressDialog;
-
-	public void uploadlog() {
-
-		if (progressDialog == null)
-			progressDialog = new ProgressDialog(this);
-		String stri = getResources().getString(R.string.Upload_the_log);
-		progressDialog.setMessage(stri);
-		progressDialog.setCancelable(false);
-		progressDialog.show();
-		final String st = getResources().getString(R.string.Log_uploaded_successfully);
-		EMClient.getInstance().uploadLog(new EMCallBack() {
-
-			@Override
-			public void onSuccess() {
-				runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						progressDialog.dismiss();
-						Toast.makeText(DiagnoseActivity.this, st,
-								Toast.LENGTH_SHORT).show();
-					}
-				});
-			}
-
-			@Override
-			public void onProgress(final int progress, String status) {
-				// getActivity().runOnUiThread(new Runnable() {
-				//
-				// @Override
-				// public void run() {
-				// progressDialog.setMessage("上传中 "+progress+"%");
-				//
-				// }
-				// });
-
-			}
-			String st3 = getResources().getString(R.string.Log_Upload_failed);
-			@Override
-			public void onError(int code, String message) {
-				EMLog.e("###", message);
-				runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						progressDialog.dismiss();
-						Toast.makeText(DiagnoseActivity.this, st3,
-								Toast.LENGTH_SHORT).show();
-					}
-				});
-
-			}
-		});
-
 	}
 
 }
