@@ -199,15 +199,7 @@ public class DemoModel {
     public boolean isBacklistSynced(){
         return PreferenceManager.getInstance().isBacklistSynced();
     }
-    
-    public void allowChatroomOwnerLeave(boolean value){
-        PreferenceManager.getInstance().setSettingAllowChatroomOwnerLeave(value);
-    }
-    
-    public boolean isChatroomOwnerLeaveAllowed(){
-        return PreferenceManager.getInstance().getSettingAllowChatroomOwnerLeave();
-    }
-   
+
     public void setDeleteMessagesAsExitGroup(boolean value) {
         PreferenceManager.getInstance().setDeleteMessagesAsExitGroup(value);
     }

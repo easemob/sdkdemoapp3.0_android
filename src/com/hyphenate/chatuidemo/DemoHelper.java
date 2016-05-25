@@ -196,7 +196,6 @@ public class DemoHelper {
         //集成华为推送时需要设置
 //        options.setHuaweiPushAppId("10492024");
         
-        options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
         

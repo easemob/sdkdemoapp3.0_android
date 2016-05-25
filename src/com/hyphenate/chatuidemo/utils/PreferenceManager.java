@@ -30,7 +30,6 @@ public class PreferenceManager {
 	private String SHARED_KEY_SETTING_VIBRATE = "shared_key_setting_vibrate";
 	private String SHARED_KEY_SETTING_SPEAKER = "shared_key_setting_speaker";
 
-	private static String SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE = "shared_key_setting_chatroom_owner_leave";
     private static String SHARED_KEY_SETTING_DELETE_MESSAGES_WHEN_EXIT_GROUP = "shared_key_setting_delete_messages_when_exit_group";
     private static String SHARED_KEY_SETTING_AUTO_ACCEPT_GROUP_INVITATION = "shared_key_setting_auto_accept_group_invitation";
     private static String SHARED_KEY_SETTING_ADAPTIVE_VIDEO_ENCODE = "shared_key_setting_adaptive_video_encode";
@@ -104,16 +103,7 @@ public class PreferenceManager {
 	public boolean getSettingMsgSpeaker() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_SPEAKER, true);
 	}
-	
-	public void setSettingAllowChatroomOwnerLeave(boolean value) {
-        editor.putBoolean(SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE, value);
-        editor.commit();
-    }
-	
-	public boolean getSettingAllowChatroomOwnerLeave() {
-        return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE, true);
-    }
-	
+
     public void setDeleteMessagesAsExitGroup(boolean value){
         editor.putBoolean(SHARED_KEY_SETTING_DELETE_MESSAGES_WHEN_EXIT_GROUP, value);
         editor.commit();
