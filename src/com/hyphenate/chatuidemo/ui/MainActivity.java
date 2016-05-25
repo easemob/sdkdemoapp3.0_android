@@ -15,11 +15,14 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.List;
 
+import com.easemob.luckymoneyui.RedPacketConstant;
+import com.easemob.luckymoneyui.utils.RedPacketUtils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMGroupChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMMessage;
@@ -209,6 +212,14 @@ public class MainActivity extends BaseActivity {
 		
 		@Override
 		public void onCmdMessageReceived(List<EMMessage> messages) {
+			for (EMMessage message : messages) {
+				EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+				final String action = cmdMsgBody.action();//获取自定义action
+				if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION) && message.getChatType() == EMMessage.ChatType.GroupChat) {
+					RedPacketUtils.receiveMoneyAckMessage(message);
+				}
+			}
+			refreshUIWithMessage();
 		}
 		
 		@Override
@@ -270,6 +281,11 @@ public class MainActivity extends BaseActivity {
                         GroupsActivity.instance.onResume();
                     }
                 }
+				if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION)){
+					if (conversationListFragment != null){
+						conversationListFragment.refresh();
+					}
+				}
             }
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.easemob.luckymoneyui.RedPacketConstant;
+import com.easemob.luckymoneyui.utils.RedPacketUtils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -753,7 +755,12 @@ public class DemoHelper {
                     //获取消息body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
-
+                    if(!easeUI.hasForegroundActivies()){
+                        if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION)){
+                            RedPacketUtils.receiveMoneyAckMessage(message);
+                            broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION));
+                        }
+                    }
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
                     EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
@@ -768,6 +775,10 @@ public class DemoHelper {
                             @Override
                             public void onReceive(Context context, Intent intent) {
                                 // TODO Auto-generated method stub
+                                //过滤掉红包回执消息的透传吐司
+                                if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION)){
+                                    return;
+                                }
                                 Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
                             }
                         };
