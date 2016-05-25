@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hyphenate.chatuidemo"
-    android:versionName="3.1.2"
-    android:versionCode="34" >
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.hyphenate.chatuidemo"
+          android:versionName="3.1.2"
+          android:versionCode="34"
+    >
 
     <uses-sdk
         android:minSdkVersion="9"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="19"
+        tools:overrideLibrary="com.easemob.luckymoneyui"
+        />
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -306,6 +310,49 @@
 		    android:screenOrientation="portrait"
 		    android:theme="@style/horizontal_slide"
 		    ></activity>
+
+        <!--红包相关界面 start-->
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMMoneyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan|stateVisible"
+            />
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan"
+            />
+
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMRecordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan"
+            />
+
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMWebViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMChangeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
+        <activity
+            android:name="com.easemob.luckymoneyui.ui.activity.LMBankCardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            />
+
+        <!--红包相关界面 end-->
+
 
         <!-- 开机自启动服务 -->
         <receiver android:name="com.hyphenate.chatuidemo.receiver.StartServiceReceiver" >
