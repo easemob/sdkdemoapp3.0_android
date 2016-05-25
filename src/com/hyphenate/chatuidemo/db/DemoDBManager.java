@@ -74,7 +74,7 @@ public class DemoDBManager {
                 user.setNick(nick);
                 user.setAvatar(avatar);
                 if (username.equals(Constant.NEW_FRIENDS_USERNAME) || username.equals(Constant.GROUP_USERNAME)
-                        || username.equals(Constant.CHAT_ROOM)|| username.equals(Constant.CHAT_ROBOT)) {
+                        || username.equals(Constant.CHAT_ROBOT)) {
                         user.setInitialLetter("");
                 } else {
                     EaseCommonUtils.setUserInitialLetter(user);

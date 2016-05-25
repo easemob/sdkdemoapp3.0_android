@@ -120,20 +120,9 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
-        <activity
-            android:name="com.hyphenate.chatuidemo.ui.ChatRoomActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
+
         <!-- 聊天室详情 -->
-        <activity
-            android:name="com.hyphenate.chatuidemo.ui.ChatRoomDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" >
-        </activity>
-        
+
         <!-- 新建群组 -->
         <activity
             android:name="com.hyphenate.chatuidemo.ui.NewGroupActivity"
@@ -206,14 +195,7 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
-        <activity
-            android:name="com.hyphenate.chatuidemo.ui.PublicChatRoomsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
-        
+
         <!-- 语音通话 -->
         <activity
             android:name="com.hyphenate.chatuidemo.ui.VoiceCallActivity"

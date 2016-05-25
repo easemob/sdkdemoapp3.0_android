@@ -18,7 +18,6 @@ import com.hyphenate.easeui.EaseConstant;
 public class Constant extends EaseConstant{
 	public static final String NEW_FRIENDS_USERNAME = "item_new_friends";
 	public static final String GROUP_USERNAME = "item_groups";
-	public static final String CHAT_ROOM = "item_chatroom";
 	public static final String ACCOUNT_REMOVED = "account_removed";
 	public static final String ACCOUNT_CONFLICT = "conflict";
 	public static final String CHAT_ROBOT = "item_robots";

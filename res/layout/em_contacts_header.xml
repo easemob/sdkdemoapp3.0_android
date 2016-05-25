@@ -20,13 +20,6 @@
         app:contactItemName="@string/group_chat" />
 
     <com.hyphenate.chatuidemo.widget.ContactItemView
-        android:id="@+id/chat_room_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:contactItemImage="@drawable/em_groups_icon"
-        app:contactItemName="@string/chat_room" />
-
-    <com.hyphenate.chatuidemo.widget.ContactItemView
         android:id="@+id/robot_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

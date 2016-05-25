@@ -62,7 +62,6 @@ public class ContactListFragment extends EaseContactListFragment {
         applicationItem = (ContactItemView) headerView.findViewById(R.id.application_item);
         applicationItem.setOnClickListener(clickListener);
         headerView.findViewById(R.id.group_item).setOnClickListener(clickListener);
-        headerView.findViewById(R.id.chat_room_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.robot_item).setOnClickListener(clickListener);
         //添加headerview
         listView.addHeaderView(headerView);
@@ -177,10 +176,6 @@ public class ContactListFragment extends EaseContactListFragment {
             case R.id.group_item:
                 // 进入群聊列表页面
                 startActivity(new Intent(getActivity(), GroupsActivity.class));
-                break;
-            case R.id.chat_room_item:
-                //进入聊天室列表页面
-                startActivity(new Intent(getActivity(), PublicChatRoomsActivity.class));
                 break;
             case R.id.robot_item:
                 //进入Robot列表页面
