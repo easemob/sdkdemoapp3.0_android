@@ -9,6 +9,8 @@ import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.easemob.luckymoneysdk.LMCallback;
+import com.easemob.luckymoneysdk.core.LMMoney;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroupManager;
@@ -52,6 +54,18 @@ public class SplashActivity extends BaseActivity {
 					long start = System.currentTimeMillis();
 					EMClient.getInstance().groupManager().loadAllGroups();
 					EMClient.getInstance().chatManager().loadAllConversations();
+
+					LMMoney.getInstance().initLMToken(DemoHelper.getInstance().getCurrentUsernName(), DemoHelper.getInstance().getCurrentUsernName(), EMClient.getInstance().getChatConfig().getAccessToken(), new LMCallback() {
+						@Override
+						public void onSuccess() {
+
+						}
+
+						@Override
+						public void onError(String s, String s1) {
+
+						}
+					});
 					long costTime = System.currentTimeMillis() - start;
 					//等待sleeptime时长
 					if (sleepTime - costTime > 0) {

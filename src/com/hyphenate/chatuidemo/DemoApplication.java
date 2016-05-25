@@ -17,6 +17,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.easemob.luckymoneysdk.core.LMMoney;
+
 public class DemoApplication extends Application {
 
 	public static Context applicationContext;
@@ -38,6 +40,7 @@ public class DemoApplication extends Application {
         
         //init demo helper
         DemoHelper.getInstance().init(applicationContext);
+		LMMoney.getInstance().initContext(applicationContext);
 	}
 
 	public static DemoApplication getInstance() {

@@ -13,6 +13,8 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
+import com.easemob.luckymoneysdk.LMCallback;
+import com.easemob.luckymoneysdk.core.LMMoney;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApplication;
@@ -158,6 +160,17 @@ public class LoginActivity extends BaseActivity {
 				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
 
+				LMMoney.getInstance().initLMToken(currentUsername, currentUsername, EMClient.getInstance().getChatConfig().getAccessToken(), new LMCallback() {
+					@Override
+					public void onSuccess() {
+
+					}
+
+					@Override
+					public void onError(String s, String s1) {
+
+					}
+				});
 				// 进入主页面
 				Intent intent = new Intent(LoginActivity.this,
 						MainActivity.class);
