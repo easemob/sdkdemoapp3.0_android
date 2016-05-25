@@ -13,6 +13,7 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
+import com.easemob.luckymoneyui.utils.RedPacketUtils;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
@@ -130,7 +131,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		switch_delete_msg_when_exit_group = (EaseSwitchButton) getView().findViewById(R.id.switch_delete_msg_when_exit_group);
 		switch_auto_accept_group_invitation = (EaseSwitchButton) getView().findViewById(R.id.switch_auto_accept_group_invitation);
 		switch_adaptive_video_encode = (EaseSwitchButton) getView().findViewById(R.id.switch_adaptive_video_encode);
-		
+		LinearLayout llChange = (LinearLayout) getView().findViewById(R.id.ll_change);
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
 		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
 			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMClient.getInstance().getCurrentUser() + ")");
@@ -160,7 +161,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_delete_msg_when_exit_group.setOnClickListener(this);
 		rl_switch_auto_accept_group_invitation.setOnClickListener(this);
 		rl_switch_adaptive_video_encode.setOnClickListener(this);
-		
+		llChange.setOnClickListener(this);
 		// 震动和声音总开关，来消息时，是否允许此开关打开
 		// the vibrate and sound notification are allowed or not?
 		if (settingsModel.getSettingMsgNotification()) {
@@ -226,6 +227,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+			case R.id.ll_change:
+				RedPacketUtils.startChangeActivity(getActivity());
+				break;
 		case R.id.rl_switch_notification:
 			if (notifiSwitch.isSwitchOpen()) {
 			    notifiSwitch.closeSwitch();
