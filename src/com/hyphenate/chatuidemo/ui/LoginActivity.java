@@ -13,8 +13,8 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import com.easemob.luckymoneysdk.LMCallback;
-import com.easemob.luckymoneysdk.core.LMMoney;
+import com.easemob.redpacketsdk.RPCallback;
+import com.easemob.redpacketsdk.RedPacket;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApplication;
@@ -160,7 +160,7 @@ public class LoginActivity extends BaseActivity {
 				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
 
-				LMMoney.getInstance().initLMToken(currentUsername, currentUsername, EMClient.getInstance().getChatConfig().getAccessToken(), new LMCallback() {
+				RedPacket.getInstance().initRPToken(currentUsername, currentUsername, EMClient.getInstance().getChatConfig().getAccessToken(), new RPCallback() {
 					@Override
 					public void onSuccess() {
 

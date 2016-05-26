@@ -17,7 +17,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.easemob.luckymoneyui.RedPacketConstant;
+import com.easemob.redpacketui.RedPacketConstant;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
@@ -37,7 +37,7 @@ public class ContextMenuActivity extends BaseActivity {
 		if (type == EMMessage.Type.TXT.ordinal()) {
 		    if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false) ||
 		            message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
-					|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_MONEY_MESSAGE, false)){
+					|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
 		        setContentView(R.layout.em_context_menu_for_location);
 		    }else if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
 		        setContentView(R.layout.em_context_menu_for_image);

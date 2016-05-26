@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.easemob.luckymoneyui.RedPacketConstant;
-import com.easemob.luckymoneyui.utils.RedPacketUtils;
+import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -54,7 +54,6 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -756,9 +755,9 @@ public class DemoHelper {
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
                     if(!easeUI.hasForegroundActivies()){
-                        if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION)){
-                            RedPacketUtils.receiveMoneyAckMessage(message);
-                            broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION));
+                        if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+                            RedPacketUtil.receiveRedPacketAckMessage(message);
+                            broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
                     }
                     //获取扩展属性 此处省略
@@ -776,7 +775,7 @@ public class DemoHelper {
                             public void onReceive(Context context, Intent intent) {
                                 // TODO Auto-generated method stub
                                 //过滤掉红包回执消息的透传吐司
-                                if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION)){
+                                if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                                     return;
                                 }
                                 Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();

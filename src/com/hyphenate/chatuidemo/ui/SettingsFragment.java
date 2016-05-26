@@ -13,7 +13,7 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import com.easemob.luckymoneyui.utils.RedPacketUtils;
+import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
@@ -228,7 +228,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.ll_change:
-				RedPacketUtils.startChangeActivity(getActivity());
+				RedPacketUtil.startChangeActivity(getActivity());
 				break;
 		case R.id.rl_switch_notification:
 			if (notifiSwitch.isSwitchOpen()) {

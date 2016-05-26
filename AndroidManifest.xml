@@ -9,7 +9,7 @@
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="19"
-        tools:overrideLibrary="com.easemob.luckymoneyui"
+        tools:overrideLibrary="com.easemob.redpacketui"
         />
 
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -311,47 +311,50 @@
 		    android:theme="@style/horizontal_slide"
 		    ></activity>
 
-        <!--红包相关界面 start-->
+        <!--红包相关Activity start-->
+        <!--发红包-->
         <activity
-            android:name="com.easemob.luckymoneyui.ui.activity.LMMoneyActivity"
+            android:name="com.easemob.redpacketui.ui.activity.RPRedPacketActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan|stateVisible"
             />
+        <!--红包详情-->
         <activity
-            android:name="com.easemob.luckymoneyui.ui.activity.LMDetailActivity"
+            android:name="com.easemob.redpacketui.ui.activity.RPDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"
             />
-
+        <!--红包记录-->
         <activity
-            android:name="com.easemob.luckymoneyui.ui.activity.LMRecordActivity"
+            android:name="com.easemob.redpacketui.ui.activity.RPRecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"
             />
-
+        <!--WebView相关-->
         <activity
-            android:name="com.easemob.luckymoneyui.ui.activity.LMWebViewActivity"
+            android:name="com.easemob.redpacketui.ui.activity.RPWebViewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
+        <!--零钱-->
         <activity
-            android:name="com.easemob.luckymoneyui.ui.activity.LMChangeActivity"
+            android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
+        <!--绑定银行卡-->
         <activity
-            android:name="com.easemob.luckymoneyui.ui.activity.LMBankCardActivity"
+            android:name="com.easemob.redpacketui.ui.activity.RPBankCardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan|stateHidden"
             />
-
-        <!--红包相关界面 end-->
+        <!--红包相关Activity end-->
 
 
         <!-- 开机自启动服务 -->

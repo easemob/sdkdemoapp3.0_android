@@ -9,8 +9,8 @@ import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.easemob.luckymoneysdk.LMCallback;
-import com.easemob.luckymoneysdk.core.LMMoney;
+import com.easemob.redpacketsdk.RPCallback;
+import com.easemob.redpacketsdk.RedPacket;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroupManager;
@@ -55,7 +55,7 @@ public class SplashActivity extends BaseActivity {
 					EMClient.getInstance().groupManager().loadAllGroups();
 					EMClient.getInstance().chatManager().loadAllConversations();
 
-					LMMoney.getInstance().initLMToken(DemoHelper.getInstance().getCurrentUsernName(), DemoHelper.getInstance().getCurrentUsernName(), EMClient.getInstance().getChatConfig().getAccessToken(), new LMCallback() {
+					RedPacket.getInstance().initRPToken(DemoHelper.getInstance().getCurrentUsernName(), DemoHelper.getInstance().getCurrentUsernName(), EMClient.getInstance().getChatConfig().getAccessToken(), new RPCallback() {
 						@Override
 						public void onSuccess() {
 
