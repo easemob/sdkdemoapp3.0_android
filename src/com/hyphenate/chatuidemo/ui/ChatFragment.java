@@ -1,9 +1,5 @@
 package com.hyphenate.chatuidemo.ui;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
@@ -13,6 +9,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,7 +18,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
-
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
@@ -40,6 +36,9 @@ import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Map;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper{
 
@@ -183,7 +182,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             case REQUEST_CODE_SELECT_AT_USER:
                 if(data != null){
                     String username = data.getStringExtra("username");
-                    inputAtUsername(username);
+                    inputAtUsername(username, false);
                 }
                 break;
 
@@ -361,5 +360,4 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
     }
 
-    
 }

@@ -7,6 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+import android.widget.Toast;
+
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -37,7 +46,7 @@ import com.hyphenate.chatuidemo.ui.MainActivity;
 import com.hyphenate.chatuidemo.ui.VideoCallActivity;
 import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
-import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.controller.EaseUI.EaseSettingsProvider;
@@ -45,22 +54,12 @@ import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
-
-import android.app.Activity;
-import android.app.Application;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-import android.widget.Toast;
 
 public class DemoHelper {
     /**
@@ -306,8 +305,14 @@ public class DemoHelper {
                 }
                 EaseUser user = getUserInfo(message.getFrom());
                 if(user != null){
-                    return getUserInfo(message.getFrom()).getNick() + ": " + ticker;
+                    if(EaseAtMessageHelper.get().isAtMeMsg(message)){
+                        return String.format(appContext.getString(R.string.at_your_in_group), user.getNick());
+                    }
+                    return user.getNick() + ": " + ticker;
                 }else{
+                    if(EaseAtMessageHelper.get().isAtMeMsg(message)){
+                        return String.format(appContext.getString(R.string.at_your_in_group), message.getFrom());
+                    }
                     return message.getFrom() + ": " + ticker;
                 }
             }
@@ -763,28 +768,6 @@ public class DemoHelper {
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
                     EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));
-                    final String str = appContext.getString(R.string.receive_the_passthrough);
-
-                    final String CMD_TOAST_BROADCAST = "hyphenate.demo.cmd.toast";
-                    IntentFilter cmdFilter = new IntentFilter(CMD_TOAST_BROADCAST);
-
-                    if(broadCastReceiver == null){
-                        broadCastReceiver = new BroadcastReceiver(){
-
-                            @Override
-                            public void onReceive(Context context, Intent intent) {
-                                // TODO Auto-generated method stub
-                                Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
-                            }
-                        };
-
-                        //注册广播接收者
-                        appContext.registerReceiver(broadCastReceiver,cmdFilter);
-                    }
-
-                    Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
-                    broadcastIntent.putExtra("cmd_value", str+action);
-                    appContext.sendBroadcast(broadcastIntent, null);
                 }
 			}
 

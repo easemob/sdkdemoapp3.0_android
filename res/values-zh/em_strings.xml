@@ -134,6 +134,7 @@
     <string name="Exit_the_group_chat">退出群聊</string>
     <string name="accept_join_group">同意加入群：</string>
     <string name="refuse_join_group">拒绝加入群：</string>
+    <string name="at_your_in_group">%s在群聊中@了你</string>
     
     <string name="not_add_myself">不能添加自己</string>
     <string name="This_user_is_already_your_friend">此用户已是你的好友</string>

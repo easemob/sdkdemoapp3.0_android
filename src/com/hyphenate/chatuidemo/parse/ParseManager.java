@@ -3,8 +3,9 @@ package com.hyphenate.chatuidemo.parse;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+
 import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -19,13 +20,11 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
-import android.content.Context;
-
 public class ParseManager {
 
 	private static final String TAG = ParseManager.class.getSimpleName();
-	private static final String ParseAppID = "UUL8TxlHwKj7ZXEUr2brF3ydOxirCXdIj9LscvJs";
-	private static final String ParseClientKey = "B1jH9bmxuYyTcpoFfpeVslhmLYsytWTxqYqKQhBJ";
+	private static final String ParseAppID = "task";
+	private static final String ParseClientKey = "123456789";
 
 	private static final String CONFIG_TABLE_NAME = "hxuser";
 	private static final String CONFIG_USERNAME = "username";
@@ -46,7 +45,10 @@ public class ParseManager {
 	public void onInit(Context context) {
 		this.appContext = context.getApplicationContext();
 		Parse.enableLocalDatastore(appContext);
-		Parse.initialize(context, ParseAppID, ParseClientKey);
+		Parse.initialize(new Parse.Configuration.Builder(appContext)
+		        .applicationId(ParseAppID)
+		        .server("http://114.215.141.221:1337/parse/")
+		        .build());
 	}
 
 	public boolean updateParseNickName(final String nickname) {
@@ -211,8 +213,6 @@ public class ParseManager {
 		}
 		return null;
 	}
-
 	
-
 	
 }
