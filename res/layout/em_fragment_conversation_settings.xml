@@ -396,7 +396,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:background="@drawable/em_btn_bottom_selector"
-                android:visibility="gone"
                 android:padding="10dip" >
 
                 <TextView
