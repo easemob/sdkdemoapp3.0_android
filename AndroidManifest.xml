@@ -8,7 +8,7 @@
 
     <uses-sdk
         android:minSdkVersion="11"
-        android:targetSdkVersion="22"
+        android:targetSdkVersion="23"
         tools:overrideLibrary="com.easemob.redpacketui"
         />
 
@@ -31,6 +31,7 @@
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <!-- GCM required, remember replace "com.hyphenate.chatuidemo" to your own package-->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
