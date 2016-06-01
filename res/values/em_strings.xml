@@ -71,7 +71,7 @@
     <string name="set">Settings</string>
     <string name="notify">New message notification</string>
     <string name="newnotify">Receiving a new message</string>
-    <string name="voice">Voice</string>
+    <string name="voice">Sounds</string>
     <string name="shake">Vibrate</string>
     <string name="chatset">Chat settings</string>
     <string name="yangshengqi">Use speaker</string>
@@ -88,9 +88,9 @@
     <string name="add_friend">Add friends</string>
     <string name="search">Search</string>
     <string name="black_item">Black list</string>
-    <string name="diagnose">Diagnose</string>
-    <string name="push_nick">nickname for APNS </string>
-    <string name="Current_version">Current version</string>
+    <string name="diagnose">Debug</string>
+    <string name="push_nick">nickname for Notification</string>
+    <string name="Current_version">SDK version</string>
     <string name="Not_Set">Not set</string>
     <string name="Upload_the_log">Uploading the log</string>
     <string name="The_new_group_chat">Create new group</string>
@@ -305,7 +305,7 @@
     <string name="hanging_up">Hanging up..</string>
     <string name="illegal_user_name">Illegal user name</string>
     <string name="robot_chat">Robot chat</string>
-    <string name="title_user_profile">User Profile</string>
+    <string name="title_user_profile">Profile</string>
     <string name="nickname">Nickname</string>
     <string name="dl_title_upload_photo">Upload Photo</string>
     <string name="dl_msg_local_upload">Upload photo</string>

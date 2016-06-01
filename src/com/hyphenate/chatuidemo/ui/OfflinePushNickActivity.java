@@ -1,6 +1,7 @@
 package com.hyphenate.chatuidemo.ui;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 
 import android.app.ProgressDialog;
@@ -57,9 +58,16 @@ public class OfflinePushNickActivity extends BaseActivity {
 						} else {
 							runOnUiThread(new Runnable() {
 								public void run() {
-									dialog.dismiss();
-									Toast.makeText(OfflinePushNickActivity.this, "update nickname success!",
-											Toast.LENGTH_SHORT).show();
+									boolean updatenick = DemoHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(inputNickName.getText().toString());
+									if (!updatenick) {
+										Toast.makeText(OfflinePushNickActivity.this, "update nickname failed!",
+														Toast.LENGTH_SHORT).show();
+										dialog.dismiss();
+									} else {
+										dialog.dismiss();
+										Toast.makeText(OfflinePushNickActivity.this, "update nickname success!",
+												Toast.LENGTH_SHORT).show();
+									}
 								}
 							});
 							finish();
