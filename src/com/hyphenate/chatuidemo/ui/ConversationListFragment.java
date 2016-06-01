@@ -12,14 +12,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.chat.EMChatManager;
+import com.easemob.redpacketui.RedPacketConstant;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
+import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.NetUtils;
 
 public class ConversationListFragment extends EaseConversationListFragment{
@@ -65,6 +68,32 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 }
             }
         });
+        conversationListView.setConversationListHelper(new EaseConversationListHelper() {
+            @Override
+            public String onSetItemSecondaryText(EMMessage lastMessage) {
+                if (lastMessage.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
+                    try {
+                        String sendNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME);
+                        String receiveNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME);
+                        String msg;
+                        if (lastMessage.direct() == EMMessage.Direct.RECEIVE) {
+                            msg = String.format(getResources().getString(R.string.money_msg_someone_take_money),receiveNick);
+                        } else {
+                            if (sendNick.equals(receiveNick)) {
+                                msg = getResources().getString(R.string.money_msg_take_money);
+                            } else {
+                                msg = String.format(getResources().getString(R.string.money_msg_take_someone_money),sendNick);
+                            }
+                        }
+                        return msg;
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
+            }
+        });
+        super.setUpView();
     }
 
     @Override

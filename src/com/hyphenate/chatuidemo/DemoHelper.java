@@ -14,8 +14,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -46,7 +47,6 @@ import com.hyphenate.chatuidemo.ui.MainActivity;
 import com.hyphenate.chatuidemo.ui.VideoCallActivity;
 import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
-import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.controller.EaseUI.EaseSettingsProvider;
@@ -764,7 +764,12 @@ public class DemoHelper {
                     //获取消息body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
-
+                    if(!easeUI.hasForegroundActivies()){
+                        if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+                            RedPacketUtil.receiveRedPacketAckMessage(message);
+                            broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
+                        }
+                    }
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
                     EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));

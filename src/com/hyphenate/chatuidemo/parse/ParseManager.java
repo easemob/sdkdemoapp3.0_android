@@ -25,7 +25,7 @@ public class ParseManager {
 	private static final String TAG = ParseManager.class.getSimpleName();
 	
 	private static final String ParseAppID = "UUL8TxlHwKj7ZXEUr2brF3ydOxirCXdIj9LscvJs";
-	 -  private static final String ParseClientKey = "B1jH9bmxuYyTcpoFfpeVslhmLYsytWTxqYqKQhBJ";
+	private static final String ParseClientKey = "B1jH9bmxuYyTcpoFfpeVslhmLYsytWTxqYqKQhBJ";
 	
 //	private static final String ParseAppID = "task";
 //	private static final String ParseClientKey = "123456789";

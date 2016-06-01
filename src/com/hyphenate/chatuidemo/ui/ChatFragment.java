@@ -1,5 +1,10 @@
 package com.hyphenate.chatuidemo.ui;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
@@ -9,7 +14,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,8 +22,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
+
+import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketui.utils.RedPacketUtil;
+import com.easemob.redpacketui.widget.ChatRowRedPacket;
+import com.easemob.redpacketui.widget.ChatRowRedPacketAck;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
@@ -34,11 +45,9 @@ import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Map;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper{
 
@@ -47,17 +56,25 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int ITEM_FILE = 12;
     private static final int ITEM_VOICE_CALL = 13;
     private static final int ITEM_VIDEO_CALL = 14;
-    
+    private static final int ITEM_RED_PACKET = 16;
+
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
     private static final int REQUEST_CODE_GROUP_DETAIL = 13;
     private static final int REQUEST_CODE_CONTEXT_MENU = 14;
     private static final int REQUEST_CODE_SELECT_AT_USER = 15;
     
+    private static final int REQUEST_CODE_SEND_MONEY = 16;
+
     private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 1;
     private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
-    private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3; 
+    private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
     private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
+
+    private static final int MESSAGE_TYPE_RECV_MONEY = 5;
+    private static final int MESSAGE_TYPE_SEND_MONEY = 6;
+    private static final int MESSAGE_TYPE_SEND_LUCKY = 7;
+    private static final int MESSAGE_TYPE_RECV_LUCKY = 8;
     
     
     /**
@@ -112,6 +129,19 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     
                 }
             });
+            EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
+            if(group == null || group.getAffiliationsCount() <= 0){
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            EMClient.getInstance().groupManager().getGroupFromServer(toChatUsername);
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
         }
     }
     
@@ -125,6 +155,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if(chatType == Constant.CHATTYPE_SINGLE){
             inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, ITEM_VOICE_CALL, extendMenuItemClickListener);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL, extendMenuItemClickListener);
+        }
+        //聊天室暂时不支持红包功能
+        if (chatType != Constant.CHATTYPE_CHATROOM) {
+            inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_red_packet_selector, ITEM_RED_PACKET, extendMenuItemClickListener);
         }
     }
     
@@ -186,6 +220,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 }
                 break;
 
+            case REQUEST_CODE_SEND_MONEY:
+                if (data != null){
+                    sendMessage(RedPacketUtil.createRPMessage(getActivity(), data, toChatUsername));
+                }
+                break;
             default:
                 break;
             }
@@ -241,7 +280,25 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public boolean onMessageBubbleClick(EMMessage message) {
         //消息框点击事件，demo这里不做覆盖，如需覆盖，return true
+        if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
+            RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
+            return true;
+        }
         return false;
+    }
+
+    @Override
+    public void onCmdMessageReceived(List<EMMessage> messages) {
+        for (EMMessage message : messages) {
+            //获取消息body
+            EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+            String action = cmdMsgBody.action();//获取自定义action
+            if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION) && message.getChatType() == EMMessage.ChatType.GroupChat){
+                RedPacketUtil.receiveRedPacketAckMessage(message);
+                messageList.refresh();
+            }
+        }
+        super.onCmdMessageReceived(messages);
     }
 
     @Override
@@ -269,7 +326,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         case ITEM_VIDEO_CALL: //视频通话
             startVideoCall();
             break;
-
+        case ITEM_RED_PACKET:
+            RedPacketUtil.startRedPacketActivityForResult(this, chatType, toChatUsername, REQUEST_CODE_SEND_MONEY);
+            break;
         default:
             break;
         }
@@ -328,8 +387,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
         @Override
         public int getCustomChatRowTypeCount() {
-            //音、视频通话发送、接收共4种
-            return 4;
+            //红包、音、视频通话发送、接收共8种
+            return 8;
         }
 
         @Override
@@ -341,6 +400,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 }else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     //视频通话
                     return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO_CALL : MESSAGE_TYPE_SENT_VIDEO_CALL;
+                }else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
+                    //发送红包消息
+                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_MONEY : MESSAGE_TYPE_SEND_MONEY;
+                } else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
+                    //领取红包消息
+                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_LUCKY : MESSAGE_TYPE_SEND_LUCKY;
                 }
             }
             return 0;
@@ -353,6 +418,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     return new ChatRowVoiceCall(getActivity(), message, position, adapter);
+                }else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {//发送红包消息
+                    return new ChatRowRedPacket(getActivity(), message, position, adapter);
+                } else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {//领取红包消息
+                    return new ChatRowRedPacketAck(getActivity(), message, position, adapter);
                 }
             }
             return null;
