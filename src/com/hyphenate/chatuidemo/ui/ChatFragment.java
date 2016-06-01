@@ -105,16 +105,19 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         });
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
         if (chatType == Constant.CHATTYPE_GROUP) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        EMClient.getInstance().groupManager().getGroupFromServer(toChatUsername);
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
+            EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
+            if (group == null||group.getAffiliationsCount() <= 0){
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            EMClient.getInstance().groupManager().getGroupFromServer(toChatUsername);
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            }).start();
+                }).start();
+            }
         }
     }
     

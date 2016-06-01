@@ -7,12 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 
-import com.easemob.redpacketui.R;
-import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketsdk.bean.RedPacketInfo;
 import com.easemob.redpacketsdk.constant.RPConstant;
+import com.easemob.redpacketui.R;
+import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketui.ui.activity.RPChangeActivity;
 import com.easemob.redpacketui.ui.activity.RPRedPacketActivity;
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMGroup;
@@ -143,9 +144,23 @@ public class RedPacketUtil {
                     msg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
                     EMClient.getInstance().chatManager().sendMessage(msg);
                 } else {
-                    sendRedPacketAckMessage(message, senderId, senderNickname, receiverId, receiverNickname);
+                    sendRedPacketAckMessage(message, senderId, senderNickname, receiverId, receiverNickname, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            messageList.refresh();
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+
+                        }
+
+                        @Override
+                        public void onProgress(int i, String s) {
+
+                        }
+                    });
                 }
-                messageList.refresh();
             }
 
             @Override
@@ -187,7 +202,7 @@ public class RedPacketUtil {
     /**
      * 使用cmd消息发送领到红包之后的回执消息
      */
-    private static void sendRedPacketAckMessage(final EMMessage message, final String senderId, final String senderNickname, String receiverId, final String receiverNickname) {
+    private static void sendRedPacketAckMessage(final EMMessage message, final String senderId, final String senderNickname, String receiverId, final String receiverNickname, final EMCallBack callBack) {
         //创建透传消息
         final EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
         cmdMsg.setChatType(EMMessage.ChatType.GroupChat);
@@ -200,20 +215,36 @@ public class RedPacketUtil {
         cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
         cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
         cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_ID, receiverId);
+        cmdMsg.setMessageStatusCallback(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                //保存消息到本地
+                EMMessage sendMessage = EMMessage.createTxtSendMessage("content", message.getTo());
+                sendMessage.setChatType(EMMessage.ChatType.GroupChat);
+                sendMessage.setFrom(message.getFrom());
+                sendMessage.setTo(message.getTo());
+                sendMessage.setMsgId(UUID.randomUUID().toString());
+                sendMessage.setUnread(false);//去掉未读的显示
+                sendMessage.setDirection(EMMessage.Direct.SEND);
+                sendMessage.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
+                sendMessage.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
+                sendMessage.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
+                sendMessage.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
+                EMClient.getInstance().chatManager().saveMessage(sendMessage);
+                callBack.onSuccess();
+            }
+
+            @Override
+            public void onError(int i, String s) {
+
+            }
+
+            @Override
+            public void onProgress(int i, String s) {
+
+            }
+        });
         EMClient.getInstance().chatManager().sendMessage(cmdMsg);
-        //保存消息到本地
-        EMMessage sendMessage = EMMessage.createTxtSendMessage("content", message.getTo());
-        sendMessage.setChatType(EMMessage.ChatType.GroupChat);
-        sendMessage.setFrom(message.getFrom());
-        sendMessage.setTo(message.getTo());
-        sendMessage.setMsgId(UUID.randomUUID().toString());
-        sendMessage.setUnread(false);//去掉未读的显示
-        sendMessage.setDirection(EMMessage.Direct.SEND);
-        sendMessage.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
-        sendMessage.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
-        sendMessage.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
-        sendMessage.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
-        EMClient.getInstance().chatManager().saveMessage(sendMessage);
     }
 
     /**
