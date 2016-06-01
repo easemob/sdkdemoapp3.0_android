@@ -13,11 +13,26 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.List;
-
+import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
-import com.hyphenate.EMGroupChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -29,29 +44,13 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
 import com.hyphenate.chatuidemo.domain.InviteMessage;
+import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
+import com.hyphenate.chatuidemo.runtimepermissions.PermissionsResultAction;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Display;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
@@ -102,6 +101,9 @@ public class MainActivity extends BaseActivity {
 			return;
 		}
 		setContentView(R.layout.em_activity_main);
+		//6.0运行时权限处理，target api设成23时，demo这里做的比较简单，直接请求所有需要的运行时权限
+		requestPermissions();
+
 		initView();
 
 		//umeng api
@@ -133,24 +135,23 @@ public class MainActivity extends BaseActivity {
 		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 		//内部测试方法，请忽略
         registerInternalDebugReceiver();
-        
-        EMLog.d(TAG, "width:" + getScreenWidth(this) + "  height:" + getScreenHeight(this));
 	}
 
-	public static int getScreenWidth(Context context) {    
-	    WindowManager manager = (WindowManager) context    
-	            .getSystemService(Context.WINDOW_SERVICE);    
-	    Display display = manager.getDefaultDisplay();    
-	    return display.getWidth();    
-	}    
-	//获取屏幕的高度    
-	public static int getScreenHeight(Context context) {    
-	    WindowManager manager = (WindowManager) context    
-	            .getSystemService(Context.WINDOW_SERVICE);    
-	    Display display = manager.getDefaultDisplay();    
-	    return display.getHeight();    
-	} 
-	
+	@TargetApi(23)
+	private void requestPermissions() {
+		PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
+			@Override
+			public void onGranted() {
+//				Toast.makeText(MainActivity.this, "All permissions have been granted", Toast.LENGTH_SHORT).show();
+			}
+
+			@Override
+			public void onDenied(String permission) {
+				//Toast.makeText(MainActivity.this, "Permission " + permission + " has been denied", Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
 	/**
 	 * 初始化组件
 	 */
@@ -285,7 +286,7 @@ public class MainActivity extends BaseActivity {
 					if (ChatActivity.activityInstance != null && ChatActivity.activityInstance.toChatUsername != null &&
 							username.equals(ChatActivity.activityInstance.toChatUsername)) {
 					    String st10 = getResources().getString(R.string.have_you_removed);
-					    Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, 1)
+					    Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, Toast.LENGTH_LONG)
 					    .show();
 					    ChatActivity.activityInstance.finish();
 					}
@@ -587,5 +588,9 @@ public class MainActivity extends BaseActivity {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		//getMenuInflater().inflate(R.menu.context_tab_contact, menu);
 	}
-	
+
+	@Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+			@NonNull int[] grantResults) {
+		PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
+	}
 }
