@@ -106,7 +106,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentLi
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
         if (chatType == Constant.CHATTYPE_GROUP) {
             EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
-            if (group.getAffiliationsCount() == -1){
+            if (group == null||group.getAffiliationsCount() <= 0){
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
