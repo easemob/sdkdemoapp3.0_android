@@ -15,11 +15,13 @@ package com.hyphenate.chatuidemo.ui;
 
 import java.util.List;
 
+import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
-import com.hyphenate.EMGroupChangeListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMMessage;
@@ -209,6 +211,14 @@ public class MainActivity extends BaseActivity {
 		
 		@Override
 		public void onCmdMessageReceived(List<EMMessage> messages) {
+			for (EMMessage message : messages) {
+				EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+				final String action = cmdMsgBody.action();//获取自定义action
+				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION) && message.getChatType() == EMMessage.ChatType.GroupChat) {
+					RedPacketUtil.receiveRedPacketAckMessage(message);
+				}
+			}
+			refreshUIWithMessage();
 		}
 		
 		@Override
@@ -248,6 +258,7 @@ public class MainActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
+		intentFilter.addAction(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
             
             @Override
@@ -270,6 +281,11 @@ public class MainActivity extends BaseActivity {
                         GroupsActivity.instance.onResume();
                     }
                 }
+				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+					if (conversationListFragment != null){
+						conversationListFragment.refresh();
+					}
+				}
             }
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);

@@ -1,4 +1,4 @@
-include ':EaseUI'
+include ':EaseUI', ':redpacketlibrary'
 project(':EaseUI').projectDir = new File('../easeui')
 
 //release时需要把下面的include相关的两行注释掉
