@@ -38,6 +38,7 @@
     <string name="button_uploadlog">Upload the log</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="search_contanier">Search："%s"</string>
     <string name="prompt">Prompt</string>
     <string name="clear_records">Clear conversation?</string>
     <string name="clear_all_records">Clear all conversations？</string>
