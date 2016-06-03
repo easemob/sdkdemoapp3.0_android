@@ -1,11 +1,13 @@
 package com.easemob.redpacketui.widget;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketui.R;
+import com.easemob.redpacketui.RedPacketConstant;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.exceptions.HyphenateException;
@@ -43,11 +45,47 @@ public class ChatRowRedPacket extends EaseChatRow {
         } catch (HyphenateException e) {
             e.printStackTrace();
         }
+        handleTextMessage();
+    }
+
+    protected void handleTextMessage() {
+        if (message.direct() == EMMessage.Direct.SEND) {
+            setMessageSendCallback();
+            switch (message.status()) {
+                case CREATE:
+                    progressBar.setVisibility(View.GONE);
+                    statusView.setVisibility(View.VISIBLE);
+                    // 发送消息
+                    break;
+                case SUCCESS: // 发送成功
+                    progressBar.setVisibility(View.GONE);
+                    statusView.setVisibility(View.GONE);
+                    break;
+                case FAIL: // 发送失败
+                    progressBar.setVisibility(View.GONE);
+                    statusView.setVisibility(View.VISIBLE);
+                    break;
+                case INPROGRESS: // 发送中
+                    progressBar.setVisibility(View.VISIBLE);
+                    statusView.setVisibility(View.GONE);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            if (!message.isAcked() && message.getChatType() == EMMessage.ChatType.Chat) {
+                try {
+                    EMClient.getInstance().chatManager().ackMessageRead(message.getFrom(), message.getMsgId());
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
     protected void onUpdateView() {
-
+        adapter.notifyDataSetChanged();
     }
 
     @Override
