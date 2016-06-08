@@ -11,8 +11,8 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        yzh:leftImage="@drawable/rp_title_back"
-        yzh:mytitle="@string/red_money" />
+        yzh:RPleftImage="@drawable/rp_title_back"
+        yzh:RPmytitle="@string/red_money" />
 
     <include
         android:id="@+id/layout_top"
