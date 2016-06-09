@@ -111,8 +111,6 @@ public class DemoHelper {
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
-    
-    private boolean alreadyNotified = false;
 	
 	public boolean isVoiceCalling;
     public boolean isVideoCalling;
@@ -375,12 +373,7 @@ public class DemoHelper {
             public void onConnected() {
                 // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
                 if(isGroupsSyncedWithServer && isContactsSyncedWithServer){
-                    new Thread(){
-                        @Override
-                        public void run(){
-                            DemoHelper.getInstance().notifyForRecevingEvents();
-                        }
-                    }.start();
+                    EMLog.d(TAG, "group and contact already synced with servre");
                 }else{
                     if(!isGroupsSyncedWithServer){
                         asyncFetchGroupsFromServer(null);
@@ -396,8 +389,7 @@ public class DemoHelper {
                 }
             }
         };
-        
-        
+
         IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
         if(callReceiver == null){
             callReceiver = new CallReceiver();
@@ -904,6 +896,7 @@ public class DemoHelper {
 	public void setRobotList(Map<String, RobotUser> robotList) {
 		this.robotList = robotList;
 	}
+
 	public Map<String, RobotUser> getRobotList() {
 		if (isLoggedIn() && robotList == null) {
 			robotList = demoModel.getRobotList();
@@ -912,7 +905,7 @@ public class DemoHelper {
 	}
 
 	 /**
-     * update user list to cach And db
+     * update user list to cache and database
      *
      * @param contactList
      */
@@ -940,59 +933,59 @@ public class DemoHelper {
 		}
 	}
 	
-	  public void addSyncGroupListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (!syncGroupsListeners.contains(listener)) {
-	            syncGroupsListeners.add(listener);
-	        }
-	    }
+  public void addSyncGroupListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (!syncGroupsListeners.contains(listener)) {
+            syncGroupsListeners.add(listener);
+        }
+    }
 
-	    public void removeSyncGroupListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (syncGroupsListeners.contains(listener)) {
-	            syncGroupsListeners.remove(listener);
-	        }
-	    }
+    public void removeSyncGroupListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (syncGroupsListeners.contains(listener)) {
+            syncGroupsListeners.remove(listener);
+        }
+    }
 
-	    public void addSyncContactListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (!syncContactsListeners.contains(listener)) {
-	            syncContactsListeners.add(listener);
-	        }
-	    }
+    public void addSyncContactListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (!syncContactsListeners.contains(listener)) {
+            syncContactsListeners.add(listener);
+        }
+    }
 
-	    public void removeSyncContactListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (syncContactsListeners.contains(listener)) {
-	            syncContactsListeners.remove(listener);
-	        }
-	    }
+    public void removeSyncContactListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (syncContactsListeners.contains(listener)) {
+            syncContactsListeners.remove(listener);
+        }
+    }
 
-	    public void addSyncBlackListListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (!syncBlackListListeners.contains(listener)) {
-	            syncBlackListListeners.add(listener);
-	        }
-	    }
+    public void addSyncBlackListListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (!syncBlackListListeners.contains(listener)) {
+            syncBlackListListeners.add(listener);
+        }
+    }
 
-	    public void removeSyncBlackListListener(DataSyncListener listener) {
-	        if (listener == null) {
-	            return;
-	        }
-	        if (syncBlackListListeners.contains(listener)) {
-	            syncBlackListListeners.remove(listener);
-	        }
-	    }
+    public void removeSyncBlackListListener(DataSyncListener listener) {
+        if (listener == null) {
+            return;
+        }
+        if (syncBlackListListeners.contains(listener)) {
+            syncBlackListListeners.remove(listener);
+        }
+    }
 	
 	/**
     * Get group list from server
@@ -1027,9 +1020,7 @@ public class DemoHelper {
                    
                    //notify sync group list success
                    noitifyGroupSyncListeners(true);
-                   if(isContactsSyncedWithServer()){
-                       notifyForRecevingEvents();
-                   }
+
                    if(callback != null){
                        callback.onSuccess();
                    }
@@ -1096,9 +1087,6 @@ public class DemoHelper {
                    
                    //notify sync success
                    notifyContactsSyncListener(true);
-                   if(isGroupsSyncedWithServer()){
-                       notifyForRecevingEvents();
-                   }
                    
                    getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
 
@@ -1213,14 +1201,6 @@ public class DemoHelper {
         return isBlackListSyncedWithServer;
     }
 	
-	public synchronized void notifyForRecevingEvents(){
-        if(alreadyNotified){
-            return;
-        }
-
-        alreadyNotified = true;
-    }
-	
     synchronized void reset(){
         isSyncingGroupsWithServer = false;
         isSyncingContactsWithServer = false;
@@ -1233,8 +1213,7 @@ public class DemoHelper {
         isGroupsSyncedWithServer = false;
         isContactsSyncedWithServer = false;
         isBlackListSyncedWithServer = false;
-        
-        alreadyNotified = false;
+
         isGroupAndContactListenerRegisted = false;
         
         setContactList(null);
