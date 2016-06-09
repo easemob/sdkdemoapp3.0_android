@@ -411,37 +411,6 @@ public class MainActivity extends BaseActivity {
 	private InviteMessgeDao inviteMessgeDao;
 	private UserDao userDao;
 
-
-
-
-	/**
-	 * notify new invitation message
-	 * 
-	 * @param msg
-	 */
-	private void notifyNewInviteMessage(InviteMessage msg) {
-		saveInviteMsg(msg);
-		// notify new message
-		DemoHelper.getInstance().getNotifier().viberateAndPlayTone(null);
-
-		// refresh undread count
-		updateUnreadAddressLable();
-		// refresh contact list
-		if (currentTabIndex == 1)
-			contactListFragment.refresh();
-	}
-
-	/**
-	 * save invitation message
-	 * 
-	 * @param msg
-	 */
-	private void saveInviteMsg(InviteMessage msg) {
-		inviteMessgeDao.saveMessage(msg);
-		inviteMessgeDao.saveUnreadMessageCount(1);
-	}
-
-
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -607,12 +576,6 @@ public class MainActivity extends BaseActivity {
         IntentFilter filter = new IntentFilter(getPackageName() + ".em_internal_debug");
         registerReceiver(internalDebugReceiver, filter);
     }
-
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		//getMenuInflater().inflate(R.menu.context_tab_contact, menu);
-	}
 
 	@Override 
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
