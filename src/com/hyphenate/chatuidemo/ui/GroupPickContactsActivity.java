@@ -45,8 +45,6 @@ public class GroupPickContactsActivity extends BaseActivity {
 	private ListView listView;
 	/** if this is a new group */
 	protected boolean isCreatingNewGroup;
-	/** if single user is selected */
-	private boolean isSingleChecked;
 	private PickContactAdapter contactAdapter;
 	/** members already in the group */
 	private List<String> existMembers;
@@ -173,7 +171,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 						}
 						isCheckedArray[position] = isChecked;
 
-						if (isSingleChecked && isChecked) {
+						if (isChecked) {
 							for (int i = 0; i < isCheckedArray.length; i++) {
 								if (i != position) {
 									isCheckedArray[i] = false;
@@ -181,7 +179,6 @@ public class GroupPickContactsActivity extends BaseActivity {
 							}
 							contactAdapter.notifyDataSetChanged();
 						}
-						
 					}
 				});
 				// keep exist members checked
