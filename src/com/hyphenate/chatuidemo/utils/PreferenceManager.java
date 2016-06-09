@@ -18,7 +18,7 @@ import android.content.SharedPreferences;
 
 public class PreferenceManager {
 	/**
-	 * 保存Preference的name
+	 * name of preference
 	 */
 	public static final String PREFERENCE_NAME = "saveInfo";
 	private static SharedPreferences mSharedPreferences;
@@ -55,7 +55,7 @@ public class PreferenceManager {
 	}
 
 	/**
-	 * 单例模式，获取instance实例
+	 * get instance of PreferenceManager
 	 * 
 	 * @param cxt
 	 * @return

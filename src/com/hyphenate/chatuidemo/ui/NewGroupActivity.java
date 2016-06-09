@@ -72,7 +72,7 @@ public class NewGroupActivity extends BaseActivity {
 		if (TextUtils.isEmpty(name)) {
 		    new EaseAlertDialog(this, R.string.Group_name_cannot_be_empty).show();
 		} else {
-			// 进通讯录选人
+			// select from contact list
 			startActivityForResult(new Intent(this, GroupPickContactsActivity.class).putExtra("groupName", name), 0);
 		}
 	}
@@ -83,7 +83,7 @@ public class NewGroupActivity extends BaseActivity {
 		String st1 = getResources().getString(R.string.Is_to_create_a_group_chat);
 		final String st2 = getResources().getString(R.string.Failed_to_create_groups);
 		if (resultCode == RESULT_OK) {
-			//新建群组
+			//new group
 			progressDialog = new ProgressDialog(this);
 			progressDialog.setMessage(st1);
 			progressDialog.setCanceledOnTouchOutside(false);
@@ -92,7 +92,6 @@ public class NewGroupActivity extends BaseActivity {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					// 调用sdk创建群组方法
 					final String groupName = groupNameEditText.getText().toString().trim();
 					String desc = introductionEditText.getText().toString();
 					String[] members = data.getStringArrayExtra("newmembers");

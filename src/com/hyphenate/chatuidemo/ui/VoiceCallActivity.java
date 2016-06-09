@@ -100,17 +100,13 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
 						| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-		// 注册语音电话的状态的监听
 		addCallStateListener();
 		msgid = UUID.randomUUID().toString();
 
 		username = getIntent().getStringExtra("username");
-		// 语音电话是否为接收的
 		isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
-
-		// 设置通话人
 		nickTextView.setText(username);
-		if (!isInComingCall) {// 拨打电话
+		if (!isInComingCall) {// outgoing call
 			soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
 			outgoing = soundPool.load(this, R.raw.em_outgoing, 1);
 
@@ -119,7 +115,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			st1 = getResources().getString(R.string.Are_connected_to_each_other);
 			callStateTextView.setText(st1);
 			handler.sendEmptyMessage(MSG_CALL_MAKE_VOICE);
-		} else { // 有电话进来
+		} else { // incoming call
 			voiceContronlLayout.setVisibility(View.INVISIBLE);
 			Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 			audioManager.setMode(AudioManager.MODE_RINGTONE);
@@ -130,7 +126,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	}
 
 	/**
-	 * 设置电话监听
+	 * set call state listener
 	 */
 	void addCallStateListener() {
 	    callStateListener = new EMCallStateChangeListener() {
@@ -141,7 +137,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                 EMLog.d("EMCallManager", "onCallStateChanged:" + callState);
                 switch (callState) {
                 
-                case CONNECTING: // 正在连接对方
+                case CONNECTING:
                     runOnUiThread(new Runnable() {
                         
                         @Override
@@ -150,7 +146,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                         }
                     });
                     break;
-                case CONNECTED: // 双方已经建立连接
+                case CONNECTED:
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -161,7 +157,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                     });
                     break;
 
-                case ACCEPTED: // 电话接通成功
+                case ACCEPTED:
                     handler.removeCallbacks(timeoutHangup);
                     runOnUiThread(new Runnable() {
 
@@ -174,12 +170,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             }
                             if(!isHandsfreeState)
                                 closeSpeakerOn();
-                            //显示是否为直连，方便测试
+                            //show relay or direct call, for testing purpose
                             ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
                                     ? R.string.direct_call : R.string.relay_call);
                             chronometer.setVisibility(View.VISIBLE);
                             chronometer.setBase(SystemClock.elapsedRealtime());
-                            // 开始记时
+                            // duration start
                             chronometer.start();
                             String str4 = getResources().getString(R.string.In_the_call);
                             callStateTextView.setText(str4);
@@ -220,7 +216,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                         }
                     });
                     break;
-                case DISCONNNECTED: // 电话断了
+                case DISCONNNECTED:
                     handler.removeCallbacks(timeoutHangup);
                     final CallError fError = error;
                     runOnUiThread(new Runnable() {
@@ -319,12 +315,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_refuse_call: // 拒绝接听
+		case R.id.btn_refuse_call:
 		    refuseBtn.setEnabled(false);
 		    handler.sendEmptyMessage(MSG_CALL_REJECT);
 			break;
 
-		case R.id.btn_answer_call: // 接听电话
+		case R.id.btn_answer_call:
 		    answerBtn.setEnabled(false);
 		    closeSpeakerOn();
             callStateTextView.setText("正在接听...");
@@ -334,7 +330,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
             handler.sendEmptyMessage(MSG_CALL_ANSWER);
 			break;
 
-		case R.id.btn_hangup_call: // 挂断电话
+		case R.id.btn_hangup_call:
 		    hangupBtn.setEnabled(false);
 			chronometer.stop();
 			endCallTriggerByMe = true;
@@ -342,22 +338,19 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
             handler.sendEmptyMessage(MSG_CALL_END);
 			break;
 
-		case R.id.iv_mute: // 静音开关
+		case R.id.iv_mute:
 			if (isMuteState) {
-				// 关闭静音
 				muteImage.setImageResource(R.drawable.em_icon_mute_normal);
 				EMClient.getInstance().callManager().resumeVoiceTransfer();
 				isMuteState = false;
 			} else {
-				// 打开静音
 				muteImage.setImageResource(R.drawable.em_icon_mute_on);
 				EMClient.getInstance().callManager().pauseVoiceTransfer();
 				isMuteState = true;
 			}
 			break;
-		case R.id.iv_handsfree: // 免提开关
+		case R.id.iv_handsfree:
 			if (isHandsfreeState) {
-				// 关闭免提
 				handsFreeImage.setImageResource(R.drawable.em_icon_speaker_normal);
 				closeSpeakerOn();
 				isHandsfreeState = false;

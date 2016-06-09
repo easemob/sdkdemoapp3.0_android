@@ -84,7 +84,7 @@ public class GroupsActivity extends BaseActivity {
 		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
 		swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light,
 		                R.color.holo_orange_light, R.color.holo_red_light);
-		//下拉刷新
+		//pull down to refresh
 		swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -109,13 +109,13 @@ public class GroupsActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (position == 1) {
-					// 新建群聊
+					// create a new group
 					startActivityForResult(new Intent(GroupsActivity.this, NewGroupActivity.class), 0);
 				} else if (position == 2) {
-					// 添加公开群
+					// join a public group
 					startActivityForResult(new Intent(GroupsActivity.this, PublicGroupsActivity.class), 0);
 				} else {
-					// 进入群聊
+					// enter group chat
 					Intent intent = new Intent(GroupsActivity.this, ChatActivity.class);
 					// it is group chat
 					intent.putExtra("chatType", Constant.CHATTYPE_GROUP);
@@ -138,13 +138,6 @@ public class GroupsActivity extends BaseActivity {
 			}
 		});
 		
-	}
-
-	/**
-	 * 进入公开群聊列表
-	 */
-	public void onPublicGroups(View view) {
-		startActivity(new Intent(this, PublicGroupsActivity.class));
 	}
 
 	@Override
@@ -170,13 +163,7 @@ public class GroupsActivity extends BaseActivity {
 		super.onDestroy();
 		instance = null;
 	}
-	
 
-	/**
-	 * 返回
-	 * 
-	 * @param view
-	 */
 	public void back(View view) {
 		finish();
 	}

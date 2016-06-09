@@ -36,7 +36,7 @@ public class DemoDBManager {
     }
     
     /**
-     * 保存好友list
+     * save contact list
      * 
      * @param contactList
      */
@@ -57,7 +57,7 @@ public class DemoDBManager {
     }
 
     /**
-     * 获取好友list
+     * get contact list
      * 
      * @return
      */
@@ -87,7 +87,7 @@ public class DemoDBManager {
     }
     
     /**
-     * 删除一个联系人
+     * delete a contact
      * @param username
      */
     synchronized public void deleteContact(String username){
@@ -98,7 +98,7 @@ public class DemoDBManager {
     }
     
     /**
-     * 保存一个联系人
+     * save a contact
      * @param user
      */
     synchronized public void saveContact(EaseUser user){
@@ -176,9 +176,9 @@ public class DemoDBManager {
     }
     
     /**
-     * 保存message
+     * save a message
      * @param message
-     * @return  返回这条messaged在db中的id
+     * @return  return cursor of the message
      */
     public synchronized Integer saveMessage(InviteMessage message){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -205,7 +205,7 @@ public class DemoDBManager {
     }
     
     /**
-     * 更新message
+     * update message
      * @param msgId
      * @param values
      */
@@ -217,7 +217,7 @@ public class DemoDBManager {
     }
     
     /**
-     * 获取messges
+     * get messges
      * @return
      */
     synchronized public List<InviteMessage> getMessagesList(){
@@ -271,7 +271,7 @@ public class DemoDBManager {
     }
     
     /**
-     * 删除要求消息
+     * delete invitation message
      * @param from
      */
     synchronized public void deleteMessage(String from){
@@ -372,7 +372,4 @@ public class DemoDBManager {
 		}
 		return users;
 	}
-    
-    
-    
 }

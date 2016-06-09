@@ -70,7 +70,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 		new Thread(new Runnable() {
 
 			public void run() {
-				//从服务器获取详情
+				//get detail from server
 				try {
 					group = EMClient.getInstance().groupManager().getGroupFromServer(groupid);
 					runOnUiThread(new Runnable() {
@@ -94,7 +94,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 		
 	}
 	
-	//加入群聊
+	//join the group
 	public void addToGroup(View view){
 		String st1 = getResources().getString(R.string.Is_sending_a_request);
 		final String st2 = getResources().getString(R.string.Request_to_join);
@@ -102,14 +102,13 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 		final String st4 = getResources().getString(R.string.Join_the_group_chat);
 		final String st5 = getResources().getString(R.string.Failed_to_join_the_group_chat);
 		final ProgressDialog pd = new ProgressDialog(this);
-//		getResources().getString(R.string)
 		pd.setMessage(st1);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					//如果是membersOnly的群，需要申请加入，不能直接join
+					//if group is membersOnly，you need apply to join
 					if(group.isMembersOnly()){
 					    EMClient.getInstance().groupManager().applyJoinToGroup(groupid, st2);
 					}else{
@@ -140,7 +139,8 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 	
      private void showGroupDetail() {
          progressBar.setVisibility(View.INVISIBLE);
-         //获取详情成功，并且自己不在群中，才让加入群聊按钮可点击
+
+         //get group detail, and you are not in, then show join button
          if(!group.getMembers().contains(EMClient.getInstance().getCurrentUser()))
              btn_add_group.setEnabled(true);
          tv_name.setText(group.getGroupName());

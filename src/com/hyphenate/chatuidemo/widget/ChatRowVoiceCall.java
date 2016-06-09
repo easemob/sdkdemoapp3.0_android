@@ -25,7 +25,7 @@ public class ChatRowVoiceCall extends EaseChatRow{
         if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
             inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
                     R.layout.ease_row_received_voice_call : R.layout.ease_row_sent_voice_call, this);
-        // 视频通话
+        // video call
         }else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
             inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
                     R.layout.ease_row_received_video_call : R.layout.ease_row_sent_video_call, this);

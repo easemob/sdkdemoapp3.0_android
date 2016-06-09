@@ -76,10 +76,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private TextView netwrokStatusVeiw;
     
     private Handler uiHandler;
-    
-    /**
-     * 正在通话中
-     */
+
     private boolean isInCalling;
     boolean isRecording = false;
     private Button recordBtn;
@@ -152,8 +149,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         recordBtn = (Button) findViewById(R.id.btn_record_video);
         switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
         YDeltaSeekBar = (SeekBar) findViewById(R.id.seekbar_y_detal);
-//        toggleVideoBtn = (Button) findViewById(R.id.btn_toggle_video_stream);
-        
 
         refuseBtn.setOnClickListener(this);
         answerBtn.setOnClickListener(this);
@@ -163,28 +158,25 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         rootContainer.setOnClickListener(this);
         recordBtn.setOnClickListener(this);
         switchCameraBtn.setOnClickListener(this);
-//        toggleVideoBtn.setOnClickListener(this);
         YDeltaSeekBar.setOnSeekBarChangeListener(new YDeltaSeekBarListener());
 
         msgid = UUID.randomUUID().toString();
-        // 获取通话是否为接收方向的
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
         username = getIntent().getStringExtra("username");
 
-        // 设置通话人
         nickTextView.setText(username);
 
-        // 显示本地图像的surfaceview
+        // local surfaceview
         localSurface = (EMLocalSurfaceView) findViewById(R.id.local_surface);
         localSurface.setZOrderMediaOverlay(true);
         localSurface.setZOrderOnTop(true);
 
-        // 显示对方图像的surfaceview
+        // remote surfaceview
         oppositeSurface = (EMOppositeSurfaceView) findViewById(R.id.opposite_surface);
 
-        // 设置通话监听
+        // set call state listener
         addCallStateListener();
-        if (!isInComingCall) {// 拨打电话
+        if (!isInComingCall) {// outgoing call
             soundPool = new SoundPool(1, AudioManager.STREAM_RING, 0);
             outgoing = soundPool.load(this, R.raw.em_outgoing, 1);
 
@@ -194,7 +186,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             callStateTextView.setText(st);
             EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
             handler.sendEmptyMessage(MSG_CALL_MAKE_VIDEO);
-        } else { // 有电话进来
+        } else { // incoming call
             voiceContronlLayout.setVisibility(View.INVISIBLE);
             localSurface.setVisibility(View.INVISIBLE);
             Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
@@ -204,7 +196,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             ringtone.play();
             EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
         }
-        //获取callhelper对象，需要写在callManager().setSurfaceView方法后面
+
+        // get instance of call helper, should be called after setSurfaceView was called
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
         
         EMClient.getInstance().callManager().setCameraDataProcessor(dataProcessor);
@@ -228,17 +221,16 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     }
 
     /**
-     * 设置通话状态监听
+     * set call state listener
      */
     void addCallStateListener() {
         callStateListener = new EMCallStateChangeListener() {
 
             @Override
             public void onCallStateChanged(CallState callState, final CallError error) {
-                // Message msg = handler.obtainMessage();
                 switch (callState) {
 
-                case CONNECTING: // 正在连接对方
+                case CONNECTING: // is connecting
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -248,7 +240,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                     });
                     break;
-                case CONNECTED: // 双方已经建立连接
+                case CONNECTED: // connected
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -259,7 +251,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     });
                     break;
 
-                case ACCEPTED: // 电话接通成功
+                case ACCEPTED: // call is accepted
                     handler.removeCallbacks(timeoutHangup);
                     runOnUiThread(new Runnable() {
 
@@ -278,7 +270,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             isInCalling = true;
                             chronometer.setVisibility(View.VISIBLE);
                             chronometer.setBase(SystemClock.elapsedRealtime());
-                            // 开始记时
+                            // call durations start
                             chronometer.start();
                             nickTextView.setVisibility(View.INVISIBLE);
                             callStateTextView.setText(R.string.In_the_call);
@@ -336,7 +328,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                         }
                     });
                     break;
-                case DISCONNNECTED: // 电话断了
+                case DISCONNNECTED: // call is disconnected
                     handler.removeCallbacks(timeoutHangup);
                     final CallError fError = error;
                     runOnUiThread(new Runnable() {
@@ -428,18 +420,18 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-        case R.id.btn_refuse_call: // 拒绝接听
+        case R.id.btn_refuse_call: // decline the call
             refuseBtn.setEnabled(false);
             handler.sendEmptyMessage(MSG_CALL_REJECT);
             break;
 
-        case R.id.btn_answer_call: // 接听电话
+        case R.id.btn_answer_call: // answer the call
             answerBtn.setEnabled(false);
             openSpeakerOn();
             if (ringtone != null)
                 ringtone.stop();
             
-            callStateTextView.setText("正在接听...");
+            callStateTextView.setText("answering...");
             handler.sendEmptyMessage(MSG_CALL_ANSWER);
             handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
             isAnswered = true;
@@ -450,7 +442,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             localSurface.setVisibility(View.VISIBLE);
             break;
 
-        case R.id.btn_hangup_call: // 挂断电话
+        case R.id.btn_hangup_call: // hangup
             hangupBtn.setEnabled(false);
             chronometer.stop();
             endCallTriggerByMe = true;
@@ -461,22 +453,22 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             handler.sendEmptyMessage(MSG_CALL_END);
             break;
 
-        case R.id.iv_mute: // 静音开关
+        case R.id.iv_mute: // mute
             if (isMuteState) {
-                // 关闭静音
+                // resume voice transfer
                 muteImage.setImageResource(R.drawable.em_icon_mute_normal);
                 EMClient.getInstance().callManager().resumeVoiceTransfer();
                 isMuteState = false;
             } else {
-                // 打开静音
+                // pause voice transfer
                 muteImage.setImageResource(R.drawable.em_icon_mute_on);
                 EMClient.getInstance().callManager().pauseVoiceTransfer();
                 isMuteState = true;
             }
             break;
-        case R.id.iv_handsfree: // 免提开关
+        case R.id.iv_handsfree: // handsfree
             if (isHandsfreeState) {
-                // 关闭免提
+                // turn off speaker
                 handsFreeImage.setImageResource(R.drawable.em_icon_speaker_normal);
                 closeSpeakerOn();
                 isHandsfreeState = false;
@@ -486,7 +478,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 isHandsfreeState = true;
             }
             break;
-        case R.id.btn_record_video: //视频录制
+        case R.id.btn_record_video: //record the video
             if(!isRecording){
                 callHelper.startVideoRecord(PathUtil.getInstance().getVideoPath().getAbsolutePath());
                 isRecording = true;
@@ -498,9 +490,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 Toast.makeText(getApplicationContext(), String.format(getString(R.string.record_finish_toast), filepath), 1).show();
             }
             break;
-//        case R.id.btn_toggle_video_stream:
-//            EMClient.getInstance().callManager().pauseVideoTransfer();
-//            break;
         case R.id.root_layout:
             if (callingState == CallingState.NORMAL) {
                 if (bottomContainer.getVisibility() == View.VISIBLE) {
@@ -514,7 +503,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 }
             }
             break;
-        case R.id.btn_switch_camera: //切换摄像头
+        case R.id.btn_switch_camera: //switch camera
             handler.sendEmptyMessage(MSG_CALL_SWITCH_CAMERA);
         default:
             break;
@@ -542,7 +531,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     }
     
     /**
-     * 方便开发测试，实际app中去掉显示即可
+     * for debug & testing, you can remove this when release
      */
     void startMonitor(){
         new Thread(new Runnable() {
@@ -550,12 +539,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 while(monitor){
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            monitorTextView.setText("宽x高："+callHelper.getVideoWidth()+"x"+callHelper.getVideoHeight()
-                                    + "\n延迟：" + callHelper.getVideoTimedelay()
-                                    + "\n帧率：" + callHelper.getVideoFramerate()
-                                    + "\n丢包数：" + callHelper.getVideoLostcnt()
-                                    + "\n本地比特率：" + callHelper.getLocalBitrate()
-                                    + "\n对方比特率：" + callHelper.getRemoteBitrate());
+                            monitorTextView.setText("WidthxHeight："+callHelper.getVideoWidth()+"x"+callHelper.getVideoHeight()
+                                    + "\nDelay：" + callHelper.getVideoTimedelay()
+                                    + "\nFramerate：" + callHelper.getVideoFramerate()
+                                    + "\nLost：" + callHelper.getVideoLostcnt()
+                                    + "\nLocalBitrate：" + callHelper.getLocalBitrate()
+                                    + "\nRemoteBitrate：" + callHelper.getRemoteBitrate());
                             
                         }
                     });

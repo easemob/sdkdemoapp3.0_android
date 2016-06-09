@@ -25,7 +25,7 @@ import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.domain.InviteMessage;
 
 /**
- * 申请与通知
+ * Application and notification
  *
  */
 public class NewFriendsMsgActivity extends BaseActivity {
@@ -39,7 +39,7 @@ public class NewFriendsMsgActivity extends BaseActivity {
 		listView = (ListView) findViewById(R.id.list);
 		InviteMessgeDao dao = new InviteMessgeDao(this);
 		List<InviteMessage> msgs = dao.getMessagesList();
-		//设置adapter
+
 		NewFriendsMsgAdapter adapter = new NewFriendsMsgAdapter(this, 1, msgs); 
 		listView.setAdapter(adapter);
 		dao.saveUnreadMessageCount(0);
@@ -49,6 +49,4 @@ public class NewFriendsMsgActivity extends BaseActivity {
 	public void back(View view) {
 		finish();
 	}
-	
-	
 }

@@ -50,9 +50,9 @@ public class PickContactNoCheckboxActivity extends BaseActivity {
 		sidebar = (EaseSidebar) findViewById(R.id.sidebar);
 		sidebar.setListView(listView);
 		contactList = new ArrayList<EaseUser>();
-		// 获取设置contactlist
+		// get contactlist
 		getContactList();
-		// 设置adapter
+		// set adapter
 		contactAdapter = new EaseContactAdapter(this, R.layout.ease_row_contact, contactList);
 		listView.setAdapter(contactAdapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -66,11 +66,9 @@ public class PickContactNoCheckboxActivity extends BaseActivity {
 	}
 
 	protected void onListItemClick(int position) {
-//		if (position != 0) {
-			setResult(RESULT_OK, new Intent().putExtra("username", contactAdapter.getItem(position)
-					.getUsername()));
-			finish();
-//		}
+		setResult(RESULT_OK, new Intent().putExtra("username", contactAdapter.getItem(position)
+				.getUsername()));
+		finish();
 	}
 
 	public void back(View view) {
@@ -86,7 +84,7 @@ public class PickContactNoCheckboxActivity extends BaseActivity {
 			if (!entry.getKey().equals(Constant.NEW_FRIENDS_USERNAME) && !entry.getKey().equals(Constant.GROUP_USERNAME) && !entry.getKey().equals(Constant.CHAT_ROOM) && !entry.getKey().equals(Constant.CHAT_ROBOT))
 				contactList.add(entry.getValue());
 		}
-		// 排序
+		// sort
         Collections.sort(contactList, new Comparator<EaseUser>() {
 
             @Override

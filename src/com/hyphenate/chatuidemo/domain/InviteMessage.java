@@ -15,18 +15,12 @@ package com.hyphenate.chatuidemo.domain;
 
 public class InviteMessage {
 	private String from;
-	//时间
 	private long time;
-	//添加理由
 	private String reason;
-	
-	//未验证，已同意等状态
+
 	private InviteMesageStatus status;
-	//群id
 	private String groupId;
-	//群名称
 	private String groupName;
-	//群邀请者
 	private String groupInviter;
 	
 
@@ -103,28 +97,28 @@ public class InviteMessage {
 
 	public enum InviteMesageStatus{
 	    
-	    //==好友
-		/**被邀请*/
+	    //==contact
+		/**being invited*/
 		BEINVITEED,
-		/**被拒绝*/
+		/**being refused*/
 		BEREFUSED,
-		/**对方同意*/
+		/**remote user already agreed*/
 		BEAGREED,
 		
-		//==群组
-		/**对方申请进入群*/
+		//==group application
+		/**remote user apply to join*/
 		BEAPPLYED,
-		/**我同意了对方的请求*/
+		/**you have agreed to join*/
 		AGREED,
-		/**我拒绝了对方的请求*/
+		/**you refused the join request*/
 		REFUSED,
 		
-		//==群邀请
-		/**收到对方的群邀请**/
+		//==group invitation
+		/**received remote user's invitation**/
 		GROUPINVITATION,
-		/**收到对方同意群邀请的通知**/
+		/**remote user accept your invitation**/
 		GROUPINVITATION_ACCEPTED,
-        /**收到对方拒绝群邀请的通知**/
+        /**remote user declined your invitation**/
 		GROUPINVITATION_DECLINED
 	}
 	
