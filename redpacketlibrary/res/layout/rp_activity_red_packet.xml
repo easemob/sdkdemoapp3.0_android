@@ -10,9 +10,9 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        yzh:leftImage="@drawable/rp_title_back"
-        yzh:mytitle="@string/send_money_title"
-        yzh:rightImage="@drawable/rp_question_white" />
+        yzh:RPleftImage="@drawable/rp_title_back"
+        yzh:RPmytitle="@string/send_money_title"
+        yzh:RPrightImage="@drawable/rp_question_white" />
 
     <FrameLayout
         android:id="@+id/money_fragment_container"

@@ -11,12 +11,12 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:rightTextColor="@color/button_blue"
-        app:rightText="@string/title_close"
-        app:leftImage="@drawable/rp_back_arrow_blue"
-        app:mytitle="@string/small_change"
-        app:titleBackground="@color/money_white"
-        app:titleTextColor="@color/text_black"
+        app:RPrightTextColor="@color/button_blue"
+        app:RPrightText="@string/title_close"
+        app:RPleftImage="@drawable/rp_back_arrow_blue"
+        app:RPmytitle="@string/small_change"
+        app:RPtitleBackground="@color/money_white"
+        app:RPtitleTextColor="@color/text_black"
         />
 
     <WebView
