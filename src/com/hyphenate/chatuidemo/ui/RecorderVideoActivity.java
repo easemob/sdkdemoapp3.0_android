@@ -319,7 +319,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 
 	@SuppressLint("NewApi")
 	private boolean initRecorder(){
-	    if(!EaseCommonUtils.isExitsSdcard()){
+	    if(!EaseCommonUtils.isSdcardExist()){
 	        showNoSDCardDialog();
 	        return false;
 	    }

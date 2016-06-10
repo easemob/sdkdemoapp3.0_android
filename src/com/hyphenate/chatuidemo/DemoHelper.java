@@ -552,7 +552,7 @@ public class DemoHelper {
             // save accept message
             EMClient.getInstance().chatManager().saveMessage(msg);
             // notify the accept message
-            getNotifier().viberateAndPlayTone(msg);
+            getNotifier().vibrateAndPlayTone(msg);
 
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
@@ -576,7 +576,7 @@ public class DemoHelper {
             // save invitation as messages
             EMClient.getInstance().chatManager().saveMessage(msg);
             // notify invitation message
-            getNotifier().viberateAndPlayTone(msg);
+            getNotifier().vibrateAndPlayTone(msg);
             EMLog.d(TAG, "onAutoAcceptInvitationFromGroup groupId:" + groupId);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
@@ -672,7 +672,7 @@ public class DemoHelper {
         //increase the unread message count
         inviteMessgeDao.saveUnreadMessageCount(1);
         // notify there is new message
-        getNotifier().viberateAndPlayTone(null);
+        getNotifier().vibrateAndPlayTone(null);
     }
     
     /**
