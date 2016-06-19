@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.easemob.redpacketsdk.bean.RedPacketInfo;
 import com.easemob.redpacketsdk.constant.RPConstant;
@@ -205,16 +206,17 @@ public class RedPacketUtil {
     private static void sendRedPacketAckMessage(final EMMessage message, final String senderId, final String senderNickname, String receiverId, final String receiverNickname, final EMCallBack callBack) {
         //创建透传消息
         final EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
-        cmdMsg.setChatType(EMMessage.ChatType.GroupChat);
+        cmdMsg.setChatType(EMMessage.ChatType.Chat);
         EMCmdMessageBody cmdBody = new EMCmdMessageBody(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         cmdMsg.addBody(cmdBody);
-        cmdMsg.setReceipt(message.getTo());
+        cmdMsg.setReceipt(senderId);
         //设置扩展属性
         cmdMsg.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
         cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
         cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
         cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
         cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_ID, receiverId);
+        cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_GROUP_ID, message.getTo());
         cmdMsg.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -256,21 +258,23 @@ public class RedPacketUtil {
         String receiverNickname = "";
         String senderId = "";
         String receiverId = "";
+        String groupId = "";
         try {
             senderNickname = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME);
             receiverNickname = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME);
             senderId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID);
             receiverId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_ID);
+            groupId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_GROUP_ID);
         } catch (HyphenateException e) {
             e.printStackTrace();
         }
         String currentUser = EMClient.getInstance().getCurrentUser();
         //更新UI为 xx领取了你的红包
         if (currentUser.equals(senderId) && !receiverId.equals(senderId)) {//如果不是自己领取的红包更新此类消息UI
-            EMMessage msg = EMMessage.createTxtSendMessage("content", message.getTo());
+            EMMessage msg = EMMessage.createTxtSendMessage("content", groupId);
             msg.setChatType(EMMessage.ChatType.GroupChat);
             msg.setFrom(message.getFrom());
-            msg.setTo(message.getTo());
+            msg.setTo(groupId);
             msg.setMsgId(UUID.randomUUID().toString());
             msg.setMsgTime(message.getMsgTime());
             msg.setDirection(EMMessage.Direct.RECEIVE);

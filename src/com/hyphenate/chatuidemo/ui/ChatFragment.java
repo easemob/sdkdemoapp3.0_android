@@ -293,7 +293,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             //获取消息body
             EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
             String action = cmdMsgBody.action();//获取自定义action
-            if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION) && message.getChatType() == EMMessage.ChatType.GroupChat){
+            if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                 RedPacketUtil.receiveRedPacketAckMessage(message);
                 messageList.refresh();
             }

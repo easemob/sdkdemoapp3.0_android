@@ -15,4 +15,5 @@ public class RedPacketConstant {
     public static final String EXTRA_SPONSOR_NAME = "money_sponsor_name";
     public static final String EXTRA_RED_PACKET_GREETING = "money_greeting";
     public static final String EXTRA_RED_PACKET_ID = "ID";
+    public static final String EXTRA_RED_PACKET_GROUP_ID = "money_from_group_id";
 }
