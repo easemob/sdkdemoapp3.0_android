@@ -42,7 +42,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
 /**
- * 联系人列表页
+ * contact list
  * 
  */
 public class ContactListFragment extends EaseContactListFragment {
@@ -65,12 +65,11 @@ public class ContactListFragment extends EaseContactListFragment {
         headerView.findViewById(R.id.group_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.chat_room_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.robot_item).setOnClickListener(clickListener);
-        //添加headerview
         listView.addHeaderView(headerView);
-        //添加正在加载数据提示的loading view
+        //add loading view
         loadingView = LayoutInflater.from(getActivity()).inflate(R.layout.em_layout_loading_data, null);
         contentContainer.addView(loadingView);
-        //注册上下文菜单
+
         registerForContextMenu(listView);
     }
     
@@ -209,9 +208,9 @@ public class ContactListFragment extends EaseContactListFragment {
 	public boolean onContextItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.delete_contact) {
 			try {
-                // 删除此联系人
+                // delete contact
                 deleteContact(toBeProcessUser);
-                // 删除相关的邀请消息
+                // remove invitation message
                 InviteMessgeDao dao = new InviteMessgeDao(getActivity());
                 dao.deleteMessage(toBeProcessUser.getUsername());
             } catch (Exception e) {
@@ -227,7 +226,7 @@ public class ContactListFragment extends EaseContactListFragment {
 
 
 	/**
-	 * 删除联系人
+	 * delete contact
 	 * 
 	 * @param toDeleteUser
 	 */
@@ -242,7 +241,7 @@ public class ContactListFragment extends EaseContactListFragment {
 			public void run() {
 				try {
 					EMClient.getInstance().contactManager().deleteContact(tobeDeleteUser.getUsername());
-					// 删除db和内存中此用户的数据
+					// remove user from memory and database
 					UserDao dao = new UserDao(getActivity());
 					dao.deleteContact(tobeDeleteUser.getUsername());
 					DemoHelper.getInstance().getContactList().remove(tobeDeleteUser.getUsername());

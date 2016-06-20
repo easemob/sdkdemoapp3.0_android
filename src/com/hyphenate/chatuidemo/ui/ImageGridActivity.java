@@ -11,9 +11,6 @@ public class ImageGridActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        if (BuildConfig.DEBUG) {
-//            Utils.enableStrictMode();
-//        }
         super.onCreate(savedInstanceState);
 
         if (getSupportFragmentManager().findFragmentByTag(TAG) == null) {
@@ -26,13 +23,7 @@ public class ImageGridActivity extends FragmentActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		
-		
-		
-		
-		
-	}
-	
+		super.onActivityResult(requestCode, resultCode, data);	
+	}	
 	
 }

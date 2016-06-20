@@ -49,7 +49,7 @@ public class GroupSearchMessageActivity extends BaseActivity implements OnClickL
         setContentView(R.layout.em_activity_group_search_message);
         
         query = (EditText) findViewById(R.id.query);
-        // 搜索框中清除button
+        // clear button
         clearSearch = (ImageButton) findViewById(R.id.search_clear);
         listView = (ListView) findViewById(R.id.listview);
         emptyView = (TextView) findViewById(R.id.tv_no_result);

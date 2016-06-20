@@ -41,7 +41,7 @@ public class UserDao {
 	}
 
 	/**
-	 * 保存好友list
+	 * save contact list
 	 * 
 	 * @param contactList
 	 */
@@ -50,7 +50,7 @@ public class UserDao {
 	}
 
 	/**
-	 * 获取好友list
+	 * get contact list
 	 * 
 	 * @return
 	 */
@@ -60,7 +60,7 @@ public class UserDao {
 	}
 	
 	/**
-	 * 删除一个联系人
+	 * delete a contact
 	 * @param username
 	 */
 	public void deleteContact(String username){
@@ -68,7 +68,7 @@ public class UserDao {
 	}
 	
 	/**
-	 * 保存一个联系人
+	 * save a contact
 	 * @param user
 	 */
 	public void saveContact(EaseUser user){
