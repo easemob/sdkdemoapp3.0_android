@@ -51,7 +51,6 @@ import com.easemob.chatuidemo.ui.ChatActivity;
 import com.easemob.chatuidemo.ui.MainActivity;
 import com.easemob.chatuidemo.ui.VideoCallActivity;
 import com.easemob.chatuidemo.ui.VoiceCallActivity;
-import com.easemob.chatuidemo.utils.MoneyUtils;
 import com.easemob.chatuidemo.utils.PreferenceManager;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.R;
@@ -67,6 +66,7 @@ import com.easemob.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.easemob.easeui.utils.EaseACKUtil;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.exceptions.EaseMobException;
+import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.easemob.util.EMLog;
 
 public class DemoHelper {
@@ -700,7 +700,7 @@ public class DemoHelper {
                             EaseCommonUtils.receiveRevokeMessage(appContext, message);
                         }
                         if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION)){
-                            MoneyUtils.receiveMoneyAckMessage(message);
+                            RedPacketUtil.receiveRedPacketAckMessage(message);
                             broadcastManager.sendBroadcast(new Intent(Constant.REFRESH_GROUP_MONEY_ACTION));
                         }
                 	}

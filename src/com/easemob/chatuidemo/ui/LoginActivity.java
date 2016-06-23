@@ -31,9 +31,6 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.utils.EaseCommonUtils;
-import com.easemob.luckymoneysdk.LMCallback;
-import com.easemob.luckymoneysdk.core.LMMoney;
-import com.easemob.util.EMLog;
 
 /**
  * 登陆页面
@@ -145,18 +142,6 @@ public class LoginActivity extends BaseActivity {
 
 				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
-
-				LMMoney.getInstance().initLMToken(currentUsername, currentUsername, EMChatManager.getInstance().getAccessToken(), new LMCallback() {
-					@Override
-					public void onSuccess() {
-						EMLog.d("LMToken","init LMToken Success");
-					}
-
-					@Override
-					public void onError(String s, String s1) {
-                        EMLog.d("LMToken","init LMToken Error "+s);
-					}
-				});
 
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 					pd.dismiss();

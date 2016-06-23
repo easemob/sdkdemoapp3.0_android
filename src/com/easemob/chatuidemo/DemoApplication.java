@@ -17,7 +17,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.easemob.luckymoneysdk.core.LMMoney;
+import com.easemob.redpacketsdk.RedPacket;
 
 
 public class DemoApplication extends Application {
@@ -43,7 +43,8 @@ public class DemoApplication extends Application {
         //init demo helper
         DemoHelper.getInstance().init(applicationContext);
 		//初始化红包上下文
-		LMMoney.getInstance().initContext(applicationContext);
+		RedPacket.getInstance().initContext(applicationContext);
+		RedPacket.getInstance().setDebugMode(true);
 	}
 
 	@Override

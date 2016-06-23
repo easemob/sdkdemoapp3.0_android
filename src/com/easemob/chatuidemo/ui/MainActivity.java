@@ -45,9 +45,9 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
-import com.easemob.chatuidemo.utils.MoneyUtils;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.utils.EaseCommonUtils;
+import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -213,8 +213,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
                 EaseCommonUtils.receiveRevokeMessage(this, cmdMessage);
             }
-			if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION) && cmdMessage.getChatType() == ChatType.GroupChat) {
-				MoneyUtils.receiveMoneyAckMessage(cmdMessage);
+			if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION)) {
+				RedPacketUtil.receiveRedPacketAckMessage(cmdMessage);
 			}
 			refreshUIWithMessage();
 			break;
