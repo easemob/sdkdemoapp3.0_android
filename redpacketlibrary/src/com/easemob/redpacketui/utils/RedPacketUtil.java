@@ -331,20 +331,11 @@ public class RedPacketUtil {
      * 使用cmd消息收取领到红包之后的回执消息
      */
     public static void receiveRedPacketAckMessage(EMMessage message) {
-        String senderNickname = "";
-        String receiverNickname = "";
-        String senderId = "";
-        String receiverId = "";
-        String groupId = "";
-        try {
-            senderNickname = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME);
-            receiverNickname = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME);
-            senderId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID);
-            receiverId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_ID);
-            groupId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_GROUP_ID, "");
-        } catch (EaseMobException e) {
-            e.printStackTrace();
-        }
+        String senderNickname = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, "");
+        String receiverNickname = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
+        String senderId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, "");
+        String receiverId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_ID, "");
+        String groupId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_GROUP_ID, "");
         String currentUser = EMChatManager.getInstance().getCurrentUser();
         //更新UI为 xx领取了你的红包
         if (currentUser.equals(senderId) && !receiverId.equals(senderId)) {//如果不是自己领取的红包更新此类消息UI
