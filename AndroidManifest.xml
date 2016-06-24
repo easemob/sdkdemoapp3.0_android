@@ -421,8 +421,8 @@
         <!-- mi push end -->
         
         <!-- huawei push -->
-    <!-- 第三方相关 :接收Push消息（注册、Push消息、Push连接状态、标签，LBS上报结果）广播 -->
-        <!-- <receiver android:name="com.hyphenate.chat.EMHuaweiPushReceiver" >
+    第三方相关 :接收Push消息（注册、Push消息、Push连接状态、标签，LBS上报结果）广播
+        <receiver android:name="com.hyphenate.chat.EMHuaweiPushReceiver" >
             <intent-filter>
                 必须,用于接收token
                 <action android:name="com.huawei.android.push.intent.REGISTRATION" />
@@ -449,7 +449,7 @@
         <service
             android:name="com.huawei.android.pushagent.PushService"
             android:process=":pushservice" >
-        </service> -->
+        </service>
 
         <!-- huawei push end -->
         
@@ -465,7 +465,7 @@
         <!-- 设置环信应用的appkey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
-            android:value="easemob-demo#chatdemoui" />
+            android:value="easemob-demo#no2" />
         <!-- 声明sdk所需的service -->
         <service android:name="com.hyphenate.chat.EMChatService"
             android:exported="true"

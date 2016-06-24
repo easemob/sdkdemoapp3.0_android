@@ -194,7 +194,7 @@ public class DemoHelper {
         //在小米手机上当app被kill时使用小米推送进行消息提示，同GCM一样不是必须的
         options.setMipushConfig("2882303761517426801", "5381742660801");
         //集成华为推送时需要设置
-//        options.setHuaweiPushAppId("10492024");
+        options.setHuaweiPushAppId("10492024");
         
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
