@@ -29,15 +29,15 @@ public class CallReceiver extends BroadcastReceiver{
 	public void onReceive(Context context, Intent intent) {
 		if(!DemoHelper.getInstance().isLoggedIn())
 		    return;
-		//拨打方username
+		//username
 		String from = intent.getStringExtra("from");
 		//call type
 		String type = intent.getStringExtra("type");
-		if("video".equals(type)){ //视频通话
+		if("video".equals(type)){ //video call
 		    context.startActivity(new Intent(context, VideoCallActivity.class).
                     putExtra("username", from).putExtra("isComingCall", true).
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-		}else{ //音频通话
+		}else{ //voice call
 		    context.startActivity(new Intent(context, VoiceCallActivity.class).
 		            putExtra("username", from).putExtra("isComingCall", true).
 		            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));

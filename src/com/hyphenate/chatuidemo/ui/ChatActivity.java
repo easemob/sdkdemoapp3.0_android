@@ -9,7 +9,7 @@ import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.util.EasyUtils;
 
 /**
- * 聊天页面，需要fragment的使用{@link #EaseChatFragment}
+ * chat activity，EaseChatFragment was used {@link #EaseChatFragment}
  *
  */
 public class ChatActivity extends BaseActivity{
@@ -22,11 +22,11 @@ public class ChatActivity extends BaseActivity{
         super.onCreate(arg0);
         setContentView(R.layout.em_activity_chat);
         activityInstance = this;
-        //聊天人或群id
+        //get user id or group id
         toChatUsername = getIntent().getExtras().getString("userId");
-        //可以直接new EaseChatFratFragment使用
+        //use EaseChatFratFragment
         chatFragment = new ChatFragment();
-        //传入参数
+        //pass parameters to chat fragment
         chatFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().add(R.id.container, chatFragment).commit();
         
@@ -40,7 +40,7 @@ public class ChatActivity extends BaseActivity{
     
     @Override
     protected void onNewIntent(Intent intent) {
-        // 点击notification bar进入聊天页面，保证只有一个聊天页面
+    	// make sure only one chat activity is opened
         String username = intent.getStringExtra("userId");
         if (toChatUsername.equals(username))
             super.onNewIntent(intent);

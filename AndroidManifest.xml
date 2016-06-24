@@ -123,13 +123,7 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
-        <activity
-            android:name="com.hyphenate.chatuidemo.ui.ChatRoomActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
+
         <!-- 聊天室详情 -->
         <activity
             android:name="com.hyphenate.chatuidemo.ui.ChatRoomDetailsActivity"

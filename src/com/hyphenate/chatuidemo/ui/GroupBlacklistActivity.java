@@ -36,7 +36,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 		listView = (ListView) findViewById(R.id.list);
 
 		groupId = getIntent().getStringExtra("groupId");
-		// 注册上下文菜单
+		// register context menu
 		registerForContextMenu(listView);
 		final String st1 = getResources().getString(R.string.get_failed_please_check);
 		new Thread(new Runnable() {
@@ -77,7 +77,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.remove) {
 			final String tobeRemoveUser = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-			// 移出黑名单
+			// move out of blacklist
 			removeOutBlacklist(tobeRemoveUser);
 			return true;
 		}
@@ -85,14 +85,13 @@ public class GroupBlacklistActivity extends BaseActivity {
 	}
 	
 	/**
-	 * 移出黑民单
+	 * move out of blacklist
 	 * 
 	 * @param tobeRemoveUser
 	 */
 	void removeOutBlacklist(final String tobeRemoveUser) {
 		final String st2 = getResources().getString(R.string.Removed_from_the_failure);
 		try {
-			// 移出黑民单
 		    EMClient.getInstance().groupManager().unblockUser(groupId, tobeRemoveUser);
 			adapter.remove(tobeRemoveUser);
 		} catch (HyphenateException e) {

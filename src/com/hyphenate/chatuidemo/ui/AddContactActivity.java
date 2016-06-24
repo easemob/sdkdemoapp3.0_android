@@ -62,7 +62,7 @@ public class AddContactActivity extends BaseActivity{
 	
 	
 	/**
-	 * 查找contact
+	 * search contact
 	 * @param v
 	 */
 	public void searchContact(View v) {
@@ -76,9 +76,9 @@ public class AddContactActivity extends BaseActivity{
 				return;
 			}
 			
-			// TODO 从服务器获取此contact,如果不存在提示不存在此用户
+			// TODO you can search the user from your app server here.
 			
-			//服务器存在此用户，显示此用户和添加按钮
+			//show the userame and add button if user exist
 			searchedUserLayout.setVisibility(View.VISIBLE);
 			nameText.setText(toAddUsername);
 			
@@ -86,7 +86,7 @@ public class AddContactActivity extends BaseActivity{
 	}	
 	
 	/**
-	 *  添加contact
+	 *  add contact
 	 * @param view
 	 */
 	public void addContact(View view){
@@ -96,7 +96,7 @@ public class AddContactActivity extends BaseActivity{
 		}
 		
 		if(DemoHelper.getInstance().getContactList().containsKey(nameText.getText().toString())){
-		    //提示已在好友列表中(在黑名单列表里)，无需添加
+		    //let the user know the contact already in your contact list
 		    if(EMClient.getInstance().contactManager().getBlackListUsernames().contains(nameText.getText().toString())){
 		        new EaseAlertDialog(this, R.string.user_already_in_contactlist).show();
 		        return;
@@ -115,7 +115,7 @@ public class AddContactActivity extends BaseActivity{
 			public void run() {
 				
 				try {
-					//demo写死了个reason，实际应该让用户手动填入
+					//demo use a hardcode reason here, you need let user to input if you like
 					String s = getResources().getString(R.string.Add_a_friend);
 					EMClient.getInstance().contactManager().addContact(toAddUsername, s);
 					runOnUiThread(new Runnable() {

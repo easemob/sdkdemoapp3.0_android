@@ -10,10 +10,10 @@
         android:id="@+id/bc_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:leftImage="@drawable/rp_back_arrow_blue"
-        app:mytitle="@string/title_add_bankcard"
-        app:titleBackground="@color/money_white"
-        app:titleTextColor="@color/text_black" />
+        app:RPleftImage="@drawable/rp_back_arrow_blue"
+        app:RPmytitle="@string/title_add_bankcard"
+        app:RPtitleBackground="@color/money_white"
+        app:RPtitleTextColor="@color/text_black" />
 
     <RelativeLayout
         android:layout_width="match_parent"

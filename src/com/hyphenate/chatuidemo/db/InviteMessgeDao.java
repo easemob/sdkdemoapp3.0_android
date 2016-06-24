@@ -40,16 +40,16 @@ public class InviteMessgeDao {
 	}
 	
 	/**
-	 * 保存message
+	 * save message
 	 * @param message
-	 * @return  返回这条messaged在db中的id
+	 * @return  return cursor of the message
 	 */
 	public Integer saveMessage(InviteMessage message){
 		return DemoDBManager.getInstance().saveMessage(message);
 	}
 	
 	/**
-	 * 更新message
+	 * update message
 	 * @param msgId
 	 * @param values
 	 */
@@ -58,7 +58,7 @@ public class InviteMessgeDao {
 	}
 	
 	/**
-	 * 获取messges
+	 * get messges
 	 * @return
 	 */
 	public List<InviteMessage> getMessagesList(){

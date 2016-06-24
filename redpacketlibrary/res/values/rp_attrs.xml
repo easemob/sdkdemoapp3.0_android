@@ -2,15 +2,15 @@
 <resources>
 
     <declare-styleable name="app">
-        <attr name="mytitle" format="string" />
-        <attr name="leftImage" format="reference" />
-        <attr name="rightImage" format="reference" />
-        <attr name="rightText" format="string" />
-        <attr name="rightTextColor" format="reference|color" />
-        <attr name="rightTextSize" format="dimension" />
-        <attr name="titleTextColor" format="reference|color" />
-        <attr name="titleTextSize" format="dimension" />
-        <attr name="titleBackground" format="reference|color" />
+        <attr name="RPmytitle" format="string" />
+        <attr name="RPleftImage" format="reference" />
+        <attr name="RPrightImage" format="reference" />
+        <attr name="RPrightText" format="string" />
+        <attr name="RPrightTextColor" format="reference|color" />
+        <attr name="RPrightTextSize" format="dimension" />
+        <attr name="RPtitleTextColor" format="reference|color" />
+        <attr name="RPtitleTextSize" format="dimension" />
+        <attr name="RPtitleBackground" format="reference|color" />
     </declare-styleable>
 
     <declare-styleable name="gridPasswordView">

@@ -56,7 +56,7 @@ public class EmojiconExampleGroupData {
         for(int i = 0; i < icons.length; i++){
             datas[i] = new EaseEmojicon(icons[i], null, Type.BIG_EXPRESSION);
             datas[i].setBigIcon(bigIcons[i]);
-            datas[i].setName("示例"+ (i+1));
+            datas[i].setName("Icon"+ (i+1));
             datas[i].setIdentityCode("em"+ (1000+i+1));
         }
         emojiconGroupEntity.setEmojiconList(Arrays.asList(datas));

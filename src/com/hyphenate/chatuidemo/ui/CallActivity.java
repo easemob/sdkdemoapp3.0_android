@@ -49,7 +49,7 @@ public class CallActivity extends BaseActivity {
     protected int streamID = -1;
     
     /**
-     * 0：音频，1：视频
+     * 0：voice call，1：video call
      */
     protected int callType = 0;
     
@@ -196,36 +196,33 @@ public class CallActivity extends BaseActivity {
     }
     
     /**
-     * 播放拨号响铃
-     * 
-     * @param sound
-     * @param number
+     * play the incoming call ringtone
+     *
      */
     protected int playMakeCallSounds() {
         try {
-            // 最大音量
-            float audioMaxVolumn = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
-            // 当前音量
-            float audioCurrentVolumn = audioManager.getStreamVolume(AudioManager.STREAM_RING);
-            float volumnRatio = audioCurrentVolumn / audioMaxVolumn;
+            // max volume
+            float audioMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+            // current volume
+            float audioCurrentVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
+            float volumeRatio = audioCurrentVolume / audioMaxVolume;
 
             audioManager.setMode(AudioManager.MODE_RINGTONE);
             audioManager.setSpeakerphoneOn(false);
 
-            // 播放
-            int id = soundPool.play(outgoing, // 声音资源
-                    0.3f, // 左声道
-                    0.3f, // 右声道
-                    1, // 优先级，0最低
-                    -1, // 循环次数，0是不循环，-1是永远循环
-                    1); // 回放速度，0.5-2.0之间。1为正常速度
+            // play
+            int id = soundPool.play(outgoing, // sound resource
+                    0.3f, // left volume
+                    0.3f, // right volume
+                    1,    // priority
+                    -1,   // loop，0 is no loop，-1 is loop forever
+                    1);   // playback rate (1.0 = normal playback, range 0.5 to 2.0)
             return id;
         } catch (Exception e) {
             return -1;
         }
     }
-    
-    // 打开扬声器
+
     protected void openSpeakerOn() {
         try {
             if (!audioManager.isSpeakerphoneOn())
@@ -236,7 +233,6 @@ public class CallActivity extends BaseActivity {
         }
     }
 
-    // 关闭扬声器
     protected void closeSpeakerOn() {
 
         try {
@@ -257,13 +253,12 @@ public class CallActivity extends BaseActivity {
     }
 
     /**
-     * 保存通话消息记录
-     * @param type 0：音频，1：视频
+     * save call record
      */
     protected void saveCallRecord() {
         EMMessage message = null;
         EMTextMessageBody txtBody = null;
-        if (!isInComingCall) { // 打出去的通话
+        if (!isInComingCall) { // outgoing call
             message = EMMessage.createSendMessage(EMMessage.Type.TXT);
             message.setReceipt(username);
         } else {
@@ -307,18 +302,18 @@ public class CallActivity extends BaseActivity {
             txtBody = new EMTextMessageBody(st8);
             break;
         }
-        // 设置扩展属性
+        // set message extension
         if(callType == 0)
             message.setAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, true);
         else
             message.setAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, true);
 
-        // 设置消息body
+        // set message body
         message.addBody(txtBody);
         message.setMsgId(msgid);
         message.setStatus(Status.SUCCESS);
 
-        // 保存
+        // save
         EMClient.getInstance().chatManager().saveMessage(message);
     }
 

@@ -382,7 +382,7 @@ include ':EaseUI', ':redpacketlibrary'
                             }
                         }
                         return msg;
-                    } catch (EaseMobException e) {
+                    } catch (HyphenateException e) {
                         e.printStackTrace();
                     }
                 }

@@ -74,7 +74,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	public static GroupDetailsActivity instance;
 	
 	String st = "";
-	// 清空所有聊天记录
+
 	private RelativeLayout clearAllHistory;
 	private RelativeLayout blacklistLayout;
 	private RelativeLayout changeGroupNameLayout;
@@ -88,7 +88,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    
-	    // 获取传过来的groupid
         groupId = getIntent().getStringExtra("groupId");
         group = EMClient.getInstance().groupManager().getGroup(groupId);
 
@@ -125,7 +124,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			blacklistLayout.setVisibility(View.GONE);
 			changeGroupNameLayout.setVisibility(View.GONE);
 		}
-		// 如果自己是群主，显示解散按钮
+		// show dismiss button if you are owner of group
 		if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.VISIBLE);

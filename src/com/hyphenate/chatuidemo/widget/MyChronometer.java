@@ -21,7 +21,7 @@ public class MyChronometer extends Chronometer{
     
     @Override
     protected void onWindowVisibilityChanged(int visibility) {
-        //屏幕隐藏时继续计时
+        //continue when view is hidden
         visibility = View.VISIBLE;
         super.onWindowVisibilityChanged(visibility);
     }

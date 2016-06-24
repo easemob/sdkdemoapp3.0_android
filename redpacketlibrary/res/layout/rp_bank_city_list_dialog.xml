@@ -9,8 +9,8 @@
         android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        yzh:titleBackground="@color/button_blue"
-        yzh:mytitle="@string/money_record_title" />
+        yzh:RPtitleBackground="@color/button_blue"
+        yzh:RPmytitle="@string/money_record_title" />
     <EditText
         android:id="@+id/ed_search"
         android:layout_width="match_parent"

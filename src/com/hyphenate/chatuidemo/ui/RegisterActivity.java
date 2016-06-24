@@ -27,7 +27,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * 注册页
+ * register screen
  * 
  */
 public class RegisterActivity extends BaseActivity {
@@ -44,11 +44,6 @@ public class RegisterActivity extends BaseActivity {
 		confirmPwdEditText = (EditText) findViewById(R.id.confirm_password);
 	}
 
-	/**
-	 * 注册
-	 * 
-	 * @param view
-	 */
 	public void register(View view) {
 		final String username = userNameEditText.getText().toString().trim();
 		final String pwd = passwordEditText.getText().toString().trim();
@@ -78,13 +73,13 @@ public class RegisterActivity extends BaseActivity {
 			new Thread(new Runnable() {
 				public void run() {
 					try {
-						// 调用sdk注册方法
+						// call method in SDK
 						EMClient.getInstance().createAccount(username, pwd);
 						runOnUiThread(new Runnable() {
 							public void run() {
 								if (!RegisterActivity.this.isFinishing())
 									pd.dismiss();
-								// 保存用户名
+								// save current user
 								DemoHelper.getInstance().setCurrentUserName(username);
 								Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registered_successfully), 0).show();
 								finish();

@@ -74,11 +74,9 @@ public class PublicGroupsActivity extends BaseActivity {
         footLoadingText = (TextView) footView.findViewById(R.id.loading_text);
         listView.addFooterView(footView, null, false);
         footLoadingLayout.setVisibility(View.GONE);
-        
-        //获取及显示数据
+
         loadAndShowData();
-        
-        //设置item点击事件
+
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -108,11 +106,7 @@ public class PublicGroupsActivity extends BaseActivity {
         });
         
 	}
-	
-	/**
-	 * 搜索
-	 * @param view
-	 */
+
 	public void search(View view){
 	    startActivity(new Intent(this, PublicGroupsSeachActivity.class));
 	}
@@ -124,7 +118,6 @@ public class PublicGroupsActivity extends BaseActivity {
                 try {
                     isLoading = true;
                     final EMCursorResult<EMGroupInfo> result = EMClient.getInstance().groupManager().getPublicGroupsFromServer(pagesize, cursor);
-                    //获取group list
                     final List<EMGroupInfo> returnGroups = result.getData();
                     runOnUiThread(new Runnable() {
 
@@ -132,7 +125,6 @@ public class PublicGroupsActivity extends BaseActivity {
                             searchBtn.setVisibility(View.VISIBLE);
                             groupsList.addAll(returnGroups);
                             if(returnGroups.size() != 0){
-                                //获取cursor
                                 cursor = result.getCursor();
                                 if(returnGroups.size() == pagesize)
                                     footLoadingLayout.setVisibility(View.VISIBLE);
@@ -140,7 +132,6 @@ public class PublicGroupsActivity extends BaseActivity {
                             if(isFirstLoading){
                                 pb.setVisibility(View.INVISIBLE);
                                 isFirstLoading = false;
-                                //设置adapter
                                 adapter = new GroupsAdapter(PublicGroupsActivity.this, 1, groupsList);
                                 listView.setAdapter(adapter);
                             }else{
@@ -162,7 +153,7 @@ public class PublicGroupsActivity extends BaseActivity {
                             isLoading = false;
                             pb.setVisibility(View.INVISIBLE);
                             footLoadingLayout.setVisibility(View.GONE);
-                            Toast.makeText(PublicGroupsActivity.this, "加载数据失败，请检查网络或稍后重试", 0).show();
+                            Toast.makeText(PublicGroupsActivity.this, "load failed, please check your network or try it later", 0).show();
                         }
                     });
                 }
