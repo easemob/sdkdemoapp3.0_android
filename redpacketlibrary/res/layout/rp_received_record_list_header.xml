@@ -13,7 +13,9 @@
 
     <TextView
         android:id="@+id/tv_username"
-        style="@style/UserNameStyle" />
+        style="@style/UserNameStyle"
+        android:maxLength="18"
+        android:singleLine="true"/>
 
     <TextView
         android:id="@+id/tv_received_money_amount"

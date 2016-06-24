@@ -244,7 +244,7 @@
     <string name="error_sd_card">请挂载SD卡！</string>
     <string name="btn_silence_turn_off">默默关掉</string>
     <string name="btn_secretly_look">偷看一下</string>
-    <string name="subtitle_content">云账户红包服务</string>
+    <string name="subtitle_content">环信红包服务</string>
     <string name="upload_success_review_going">"上传成功，审核中"</string>
     <string name="recharge_success">"充值成功"</string>
     <string name="str_upload">上传</string>

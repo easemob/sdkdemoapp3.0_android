@@ -22,14 +22,6 @@
         android:layout_below="@id/change_title_bar"
         />
 
-    <LinearLayout
-        android:id="@+id/loading_target"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/change_title_bar"
-        android:orientation="vertical"
-        />
-
     <ProgressBar
         android:id="@+id/progressBar1"
         style="@style/LoadingProgressStyle"

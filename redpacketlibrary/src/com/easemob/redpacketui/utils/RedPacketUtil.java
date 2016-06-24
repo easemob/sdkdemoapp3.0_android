@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.chat.EMChatManager;
@@ -244,6 +245,7 @@ public class RedPacketUtil {
 
             @Override
             public void onError(String code, String message) {
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
