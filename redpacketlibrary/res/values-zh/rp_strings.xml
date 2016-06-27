@@ -249,4 +249,7 @@
     <string name="recharge_success">"充值成功"</string>
     <string name="str_upload">上传</string>
     <string name="single_limit">单笔限额200</string>
+    <string name="str_choose_camera">选择相机</string>
+    <string name="str_choose_album">选择相册</string>
+
 </resources>

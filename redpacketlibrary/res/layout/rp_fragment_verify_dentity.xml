@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/money_bg_color">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/money_bg_color"
+    >
 
     <LinearLayout
         android:id="@+id/layout_no_verify"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="visible"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/button_blue"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <TextView
                 android:id="@+id/tv_vi_hind"
@@ -26,7 +29,8 @@
                 android:layout_marginTop="@dimen/size75px"
                 android:text="@string/msg_upload_card_hint"
                 android:textColor="@color/money_white"
-                android:textSize="@dimen/font39px" />
+                android:textSize="@dimen/font39px"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,48 +40,57 @@
                 android:layout_marginLeft="@dimen/size45px"
                 android:layout_marginRight="@dimen/size45px"
                 android:layout_marginTop="@dimen/size63px"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
+
                 <FrameLayout
                     android:id="@+id/fl_front"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginRight="@dimen/size21px"
+                    android:layout_weight="1"
                     android:background="@drawable/rp_upload_frame"
                     >
+
                     <ImageView
                         android:id="@+id/iv_vi_add_front"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/rp_upload_add"/>
+                        android:src="@drawable/rp_upload_add"
+                        />
+
                     <ImageView
                         android:id="@+id/iv_vi_front_picture"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitXY"
-                       />
+                        />
                 </FrameLayout>
+
                 <FrameLayout
                     android:id="@+id/fl_behind"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:layout_marginLeft="@dimen/size21px"
+                    android:layout_weight="1"
                     android:background="@drawable/rp_upload_frame"
                     >
+
                     <ImageView
                         android:id="@+id/iv_vi_add_behind"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/rp_upload_add"/>
+                        android:src="@drawable/rp_upload_add"
+                        />
+
                     <ImageView
                         android:id="@+id/iv_vi_behind_picture"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="fitXY"
-                  />
+                        />
                 </FrameLayout>
             </LinearLayout>
 
@@ -88,7 +101,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="@dimen/size30px"
                 android:layout_marginTop="@dimen/size30px"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <TextView
                     android:layout_width="0dp"
@@ -97,7 +111,8 @@
                     android:gravity="center"
                     android:text="身份证正面"
                     android:textColor="@color/money_white"
-                    android:textSize="@dimen/font48px" />
+                    android:textSize="@dimen/font48px"
+                    />
 
                 <TextView
                     android:layout_width="0dp"
@@ -106,7 +121,8 @@
                     android:gravity="center"
                     android:text="身份证反面"
                     android:textColor="@color/money_white"
-                    android:textSize="@dimen/font48px" />
+                    android:textSize="@dimen/font48px"
+                    />
             </LinearLayout>
 
         </RelativeLayout>
@@ -115,7 +131,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <TextView
                 android:layout_width="match_parent"
@@ -124,11 +141,13 @@
                 android:layout_marginTop="@dimen/size45px"
                 android:text="@string/tv_id_card_photo_requirement"
                 android:textColor="@color/text_all_black"
-                android:textSize="@dimen/font45px" />
+                android:textSize="@dimen/font45px"
+                />
 
             <View
                 style="@style/DividerStyleNoHead"
-                android:layout_marginTop="@dimen/size45px" />
+                android:layout_marginTop="@dimen/size45px"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -137,7 +156,8 @@
                 android:layout_marginTop="@dimen/size45px"
                 android:text="@string/tv_id_card_requirement"
                 android:textColor="@color/text_grey"
-                android:textSize="@dimen/font42px" />
+                android:textSize="@dimen/font42px"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -146,18 +166,21 @@
                 android:layout_marginTop="@dimen/size45px"
                 android:text="@string/tv_shooting_example"
                 android:textColor="@color/text_all_black"
-                android:textSize="@dimen/font45px" />
+                android:textSize="@dimen/font45px"
+                />
 
             <View
                 style="@style/DividerStyleNoHead"
-                android:layout_marginTop="@dimen/size45px" />
+                android:layout_marginTop="@dimen/size45px"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/size45px"
                 android:layout_marginTop="@dimen/size39px"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -165,13 +188,15 @@
                     android:layout_marginRight="@dimen/size36px"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/rp_picture_right" />
+                        android:background="@drawable/rp_picture_right"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -179,7 +204,8 @@
                         android:layout_marginTop="@dimen/size15px"
                         android:text="@string/tv_standard"
                         android:textColor="@color/text_grey"
-                        android:textSize="@dimen/font42px" />
+                        android:textSize="@dimen/font42px"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -188,13 +214,15 @@
                     android:layout_marginRight="@dimen/size36px"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/rp_picture_frame_lack" />
+                        android:background="@drawable/rp_picture_frame_lack"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -202,7 +230,8 @@
                         android:layout_marginTop="@dimen/size15px"
                         android:text="@string/tv_frame_lack"
                         android:textColor="@color/text_grey"
-                        android:textSize="@dimen/font42px" />
+                        android:textSize="@dimen/font42px"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -211,13 +240,15 @@
                     android:layout_marginRight="@dimen/size36px"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/rp_picture_vague" />
+                        android:background="@drawable/rp_picture_vague"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -225,7 +256,8 @@
                         android:layout_marginTop="@dimen/size15px"
                         android:text="@string/tv_picture_vague"
                         android:textColor="@color/text_grey"
-                        android:textSize="@dimen/font42px" />
+                        android:textSize="@dimen/font42px"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
@@ -234,13 +266,15 @@
                     android:layout_marginRight="@dimen/size45px"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/rp_picture_flash_strong" />
+                        android:background="@drawable/rp_picture_flash_strong"
+                        />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -248,7 +282,8 @@
                         android:layout_marginTop="@dimen/size15px"
                         android:text="@string/tv_flash_strong"
                         android:textColor="@color/text_grey"
-                        android:textSize="@dimen/font42px" />
+                        android:textSize="@dimen/font42px"
+                        />
                 </LinearLayout>
 
             </LinearLayout>
@@ -261,14 +296,16 @@
                 android:gravity="center"
                 android:textColor="@color/text_red_color"
                 android:textSize="@dimen/font45px"
-                android:visibility="visible" />
+                android:visibility="visible"
+                />
 
             <Button
                 android:id="@+id/btn_submit_review"
                 style="@style/SendMoneyButtonStyle"
                 android:layout_marginTop="@dimen/size96px"
                 android:background="@drawable/rp_btn_blue_selector"
-                android:text="@string/tv_submit_review" />
+                android:text="@string/tv_submit_review"
+                />
         </LinearLayout>
 
     </LinearLayout>
@@ -278,12 +315,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="179dp"
-            android:background="@color/background_white">
+            android:background="@color/background_white"
+            >
 
             <ImageView
                 android:id="@+id/iv_pass_authentication"
@@ -291,7 +330,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/size120px"
-                android:background="@drawable/rp_pass_authentication" />
+                android:background="@drawable/rp_pass_authentication"
+                />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -300,40 +341,46 @@
                 android:layout_marginTop="@dimen/size45px"
                 android:text="@string/tv_identity_msg_right"
                 android:textColor="@color/text_black"
-                android:textSize="@dimen/font48px" />
+                android:textSize="@dimen/font48px"
+                />
 
         </RelativeLayout>
 
         <RelativeLayout
             style="@style/BindBankCardRLayoutStyle"
-            android:layout_marginTop="@dimen/size30px">
+            android:layout_marginTop="@dimen/size30px"
+            >
 
             <TextView
                 style="@style/SendMoneyLeftTextViewStyle"
-                android:text="@string/real_name" />
+                android:text="@string/real_name"
+                />
 
             <TextView
                 android:id="@+id/tv_vi_real_name"
                 style="@style/SendMoneyRightTextViewStyle"
+                android:textColor="@color/text_light_grey"
                 android:textSize="@dimen/font45px"
-                android:textColor="@color/text_light_grey" />
+                />
 
         </RelativeLayout>
 
-        <View style="@style/DividerStyleNoHead" />
+        <View style="@style/DividerStyleNoHead"/>
 
         <RelativeLayout style="@style/BindBankCardRLayoutStyle">
 
             <TextView
                 android:id="@+id/tv_money_amount"
                 style="@style/SendMoneyLeftTextViewStyle"
-                android:text="@string/id_card" />
+                android:text="@string/id_card"
+                />
 
             <TextView
                 android:id="@+id/tv_vi_id_card"
                 style="@style/SendMoneyRightTextViewStyle"
+                android:textColor="@color/text_light_grey"
                 android:textSize="@dimen/font45px"
-                android:textColor="@color/text_light_grey" />
+                />
 
         </RelativeLayout>
 
@@ -344,5 +391,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        />
 </RelativeLayout>

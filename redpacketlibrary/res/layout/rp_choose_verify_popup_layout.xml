@@ -13,9 +13,9 @@
         android:layout_height="@dimen/size132px"
         android:background="@color/money_bg_color"
         android:gravity="center"
+        android:text="@string/str_choose_camera"
         android:textColor="@color/text_black"
         android:textSize="@dimen/font45px"
-        android:text="选择相机"
         />
 
     <View style="@style/DividerStyle"/>
@@ -27,11 +27,13 @@
         android:layout_height="@dimen/size132px"
         android:background="@color/money_bg_color"
         android:gravity="center"
+        android:text="@string/str_choose_album"
         android:textColor="@color/text_black"
         android:textSize="@dimen/font45px"
-        android:text="选择相册"
         />
+
     <View style="@style/DividerStyle"/>
+
     <TextView
         android:id="@+id/tv_choose_cancel"
         style="@style/DialogTitleStyle"
@@ -39,10 +41,10 @@
         android:layout_height="@dimen/size132px"
         android:background="@color/money_bg_color"
         android:gravity="center"
+        android:text="@string/btn_cancel"
         android:textColor="@color/text_black"
         android:textSize="@dimen/font45px"
         android:textStyle="bold"
-        android:text="取消"
         />
 
 </LinearLayout>
