@@ -3,12 +3,12 @@
 
 ## 1. redpacketlibrary简介
 
-**redpacketlibrary**，在环信**sdk**的基础上提供了收发红包和零钱的功能。 
+**redpacketlibrary**，在环信**SDK**的基础上提供了收发红包和零钱的功能。 
 
 
 ## 2. redpacketlibrary目录说明
 
-* libs ：redpacket3.0.jar是集成红包功能所依赖的jar包。
+* libs ：包含了集成红包功能所依赖的jar包。
 * res ：包含了红包SDK和聊天页面中的资源文件。（红包SDK相关以rp开头，聊天页面相关以em开头）
 * utils ： 封装了收发红包的相关方法。
 * widget ：聊天界面中的红包以及领取红包后的chatrow。
@@ -289,21 +289,30 @@ include ':EaseUI', ':redpacketlibrary'
     import com.easemob.redpacketui.RedPacketConstant;
     import com.easemob.redpacketui.utils.RedPacketUtils;
     
-    @Override
-    public void onCmdMessageReceived(List<EMMessage> messages) {
-        for (EMMessage message : messages) {
-            EMLog.d(TAG, "收到透传消息");
-            //获取消息body
-            EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
-            final String action = cmdMsgBody.action();//获取自定义action
-            if(!easeUI.hasForegroundActivies()){
-                if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
-                    RedPacketUtils.receiveRedPacketAckMessage(message);
-                    broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
+     protected void registerEventListener() {
+            eventListener = new EMEventListener() {
+                private BroadcastReceiver broadCastReceiver = null;
+                @Override
+                public void onEvent(EMNotifierEvent event) {
+                    switch (event.getEvent()) {
+                        ...
+                        case EventNewCMDMessage:
+                            //获取消息body
+                            CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
+                            final String action = cmdMsgBody.action;//获取自定义action
+                            if(!easeUI.hasForegroundActivies()){
+                                if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+                                    RedPacketUtil.receiveRedPacketAckMessage(message);
+                                    broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
+                                }
+                            }
+                            break;
+                        ...
+                    }
                 }
-            }
-        }
-    }
+            };
+            EMChatManager.getInstance().registerEventListener(eventListener);
+     }
 ```
 
 * MainActivity中
@@ -324,9 +333,9 @@ include ':EaseUI', ':redpacketlibrary'
                 public void onReceive(Context context, Intent intent) {
                     ...
                     if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
-                        if (conversationListFragment != null){
-                            conversationListFragment.refresh();
-                        }
+                         if (conversationListFragment != null){
+                             conversationListFragment.refresh();
+                         }
                     }
                 }
             };
@@ -363,8 +372,8 @@ include ':EaseUI', ':redpacketlibrary'
                        }
                        return null;
                    }
-               });
-               super.setUpView();
+       });
+       super.setUpView();
     }
 ```
 

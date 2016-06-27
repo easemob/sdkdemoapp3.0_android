@@ -10,6 +10,7 @@
     <string name="btn_put_money">塞钱进红包</string>
     <string name="greetings_hint">打赏你哒!</string>
     <string name="send_money_title">发红包</string>
+    <string name="title_send_group_money">发群红包</string>
     <string name="dialog_title_pay">支付</string>
     <string name="red_money">红包</string>
     <string name="small_change">零钱</string>
@@ -42,7 +43,7 @@
     <string name="error_is_id_card_number">身份证号不正确</string>
     <string name="error_name_isnull">姓名不能为空</string>
 
-    <string name="tv_not_receive_message">收不到手机验证码?</string>
+    <string name="tv_not_receive_message">收不到验证码?</string>
     <string name="tv_password_hint_one">请输入6位数字支付密码(1/2)</string>
     <string name="tv_password_hint_two">请再次输入6位数字支付密码(2/2)</string>
     <string name="str_me_agreement">我同意</string>
@@ -133,7 +134,7 @@
     <string name="money_username_format">%1$s的红包</string>
     <string name="send_money_bottom_text">未领取的红包，将于24小时后发起退款</string>
     <string name="retry_str">"%1$s 秒后重试"</string>
-    <string name="my_change">我的零钱（余额%1$s）</string>
+    <string name="my_change">我的零钱（余额￥%1$s）</string>
     <string name="str_my_change">我的零钱</string>
     <string name="change_withdraw">提现</string>
     <string name="change_detail">零钱明细</string>
@@ -142,12 +143,11 @@
     <string name="withdraw_amount">提现金额</string>
     <string name="change_withdraw_all">全部提现</string>
     <string name="withdraw_change_balance">零钱余额￥%1$s，</string>
-    <string name="captcha_send_phone">验证码已发送至手机%1$s</string>
+    <string name="captcha_send_phone">验证码已发送至手机号%1$s</string>
     <string name="add_bankcard">添加银行卡付款</string>
     <string name="pay_no_pwd">本次交易免密码</string>
-    <string name="input_change_pwd">请输入零钱支付密码</string>
     <string name="input_sms_code">请输入您%1$s手机号收到的验证码</string>
-    <string name="forget_pay_pwd">忘记支付密码?</string>
+    <string name="forget_pay_pwd">忘记密码</string>
     <string name="resend_sms_code">重新获取</string>
     <string name="before_tomorrow_24_hour_to_account">预计明天24点前到账</string>
     <string name="withdraw_bankcard_name">%1$s（%2$s）</string>
@@ -212,7 +212,7 @@
     <string name="single_day_pay_quota">单日支付限额</string>
     <string name="change_recharge">充值</string>
     <string name="recharge_amount">充值金额</string>
-    <string name="verify_identity">身份验证</string>
+    <string name="verify_identity">验证身份</string>
     <string name="yes_verify">已验证</string>
     <string name="no_verify">未验证</string>
     <string name="verify_going">审核中</string>
@@ -248,5 +248,5 @@
     <string name="upload_success_review_going">"上传成功，审核中"</string>
     <string name="recharge_success">"充值成功"</string>
     <string name="str_upload">上传</string>
-    <string name="single_limit">单笔最多200</string>
+    <string name="single_limit">单笔限额200</string>
 </resources>

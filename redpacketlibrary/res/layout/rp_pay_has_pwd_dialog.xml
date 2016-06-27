@@ -101,7 +101,7 @@
         android:layout_marginLeft="@dimen/size45px"
         android:layout_marginRight="@dimen/size45px"
         android:layout_marginTop="@dimen/size27px"
-        android:text="@string/input_change_pwd"
+        android:text="@string/input_pay_pwd"
         android:textColor="@color/text_grey"
         android:textSize="@dimen/font36px"
 

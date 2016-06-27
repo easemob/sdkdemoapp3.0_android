@@ -133,7 +133,7 @@
             android:drawableRight="@drawable/rp_arrow_forward"
             android:gravity="center_vertical"
             android:text="@string/no_verify"
-            android:textColor="@color/text_red_color"
+            android:textColor="@color/text_light_grey"
             android:textSize="@dimen/font48px" />
     </RelativeLayout>
 

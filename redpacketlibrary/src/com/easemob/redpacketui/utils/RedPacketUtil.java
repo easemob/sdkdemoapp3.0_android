@@ -126,11 +126,15 @@ public class RedPacketUtil {
     public static EMMessage createRPMessage(Context context, Intent data, String toChatUsername) {
         String greetings = data.getStringExtra(RedPacketConstant.EXTRA_RED_PACKET_GREETING);
         String moneyID = data.getStringExtra(RedPacketConstant.EXTRA_RED_PACKET_ID);
+        String specialReceiveId = data.getStringExtra(RPConstant.EXTRA_RED_PACKET_RECEIVER_ID);
+        String redPacketType = data.getStringExtra(RPConstant.EXTRA_RED_PACKET_TYPE);
         EMMessage message = EMMessage.createTxtSendMessage("[" + context.getResources().getString(R.string.easemob_red_packet) + "]" + greetings, toChatUsername);
         message.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, true);
         message.setAttribute(RedPacketConstant.EXTRA_SPONSOR_NAME, context.getResources().getString(R.string.easemob_red_packet));
         message.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_GREETING, greetings);
         message.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_ID, moneyID);
+        message.setAttribute(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE, redPacketType);
+        message.setAttribute(RPConstant.MESSAGE_ATTR_SPECIAL_RECEIVER_ID, specialReceiveId);
         return message;
     }
 
