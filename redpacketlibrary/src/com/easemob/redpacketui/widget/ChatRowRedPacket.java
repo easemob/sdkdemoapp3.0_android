@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.easemob.chat.EMMessage;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.R;
 import com.easemob.redpacketui.RedPacketConstant;
 
@@ -43,10 +42,12 @@ public class ChatRowRedPacket extends EaseChatRow {
         String greetings = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_GREETING, "");
         mTvGreeting.setText(greetings);
         mTvSponsorName.setText(sponsorName);
-        String packetType = message.getStringAttribute(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE, "");
-        if (!TextUtils.isEmpty(packetType) && TextUtils.equals(packetType, RPConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
+        String packetType = message.getStringAttribute(RedPacketConstant.MESSAGE_ATTR_RED_PACKET_TYPE, "");
+        if (!TextUtils.isEmpty(packetType) && TextUtils.equals(packetType, RedPacketConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
             mTvPacketType.setVisibility(VISIBLE);
             mTvPacketType.setText("专属红包");
+        } else {
+            mTvPacketType.setVisibility(GONE);
         }
         handleTextMessage();
     }
