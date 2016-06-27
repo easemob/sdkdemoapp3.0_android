@@ -215,9 +215,11 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
                 EaseCommonUtils.receiveRevokeMessage(this, cmdMessage);
             }
+			//red packet code : 处理红包回执透传消息
 			if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
 				RedPacketUtil.receiveRedPacketAckMessage(cmdMessage);
 			}
+			//end of red packet code
 			refreshUIWithMessage();
 			break;
 		case EventReadAck:
@@ -294,12 +296,14 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                         GroupsActivity.instance.onResume();
                     }
                 }
+				//red packet code : 会话列表页面刷新红包回执消息
 				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
 					if (conversationListFragment != null){
 						conversationListFragment.refresh();
 					}
 				}
-            }
+				//end of red packet code
+			}
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }

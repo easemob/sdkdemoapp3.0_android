@@ -41,7 +41,10 @@ public class ContextMenuActivity extends BaseActivity {
     		if (type == EMMessage.Type.TXT.ordinal()) {
     		    if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
     		            || message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
-						|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
+						//red packet code : 屏蔽红包消息的转发功能
+						|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
+						//end of red packet code
+						) {
     		        setContentView(R.layout.em_context_menu_for_delete);
     		    } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
     		        setContentView(R.layout.em_context_menu_for_image);

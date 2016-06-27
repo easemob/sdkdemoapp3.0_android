@@ -700,11 +700,13 @@ public class DemoHelper {
                         if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
                             EaseCommonUtils.receiveRevokeMessage(appContext, message);
                         }
+                        //red packet code : 处理红包回执透传消息
                         if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                             RedPacketUtil.receiveRedPacketAckMessage(message);
                             broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
-                	}
+                        //end of red packet code
+                    }
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
                     final String str = appContext.getString(R.string.receive_the_passthrough);
@@ -718,10 +720,11 @@ public class DemoHelper {
                             @Override
                             public void onReceive(Context context, Intent intent) {
                                 // TODO Auto-generated method stub
-                                //过滤掉红包回执消息的透传吐司
+                                //red packet code : 过滤掉红包回执消息的toast
                                 if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                                     return;
                                 }
+                                //end of red packet code
                                 Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
                             }
                         };
