@@ -45,9 +45,11 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
-import com.easemob.chatuidemo.utils.MoneyUtils;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.utils.EaseCommonUtils;
+import com.easemob.redpacketsdk.RedPacket;
+import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
 import com.umeng.analytics.MobclickAgent;
@@ -213,8 +215,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
             if(action.equals(EaseConstant.EASE_ATTR_REVOKE)){
                 EaseCommonUtils.receiveRevokeMessage(this, cmdMessage);
             }
-			if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION) && cmdMessage.getChatType() == ChatType.GroupChat) {
-				MoneyUtils.receiveMoneyAckMessage(cmdMessage);
+			if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
+				RedPacketUtil.receiveRedPacketAckMessage(cmdMessage);
 			}
 			refreshUIWithMessage();
 			break;
@@ -269,7 +271,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
-		intentFilter.addAction(Constant.REFRESH_GROUP_MONEY_ACTION);
+		intentFilter.addAction(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
             
             @Override
@@ -292,7 +294,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                         GroupsActivity.instance.onResume();
                     }
                 }
-				if (action.equals(Constant.REFRESH_GROUP_MONEY_ACTION)){
+				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
 					if (conversationListFragment != null){
 						conversationListFragment.refresh();
 					}

@@ -35,11 +35,8 @@ import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.DemoModel;
 import com.easemob.chatuidemo.R;
-import com.easemob.easeui.domain.EaseUser;
-import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.easeui.widget.EaseSwitchButton;
-import com.easemob.luckymoneysdk.constant.LMConstant;
-import com.easemob.luckymoneyui.ui.activity.LMChangeActivity;
+import com.easemob.redpacketui.utils.RedPacketUtil;
 
 /**
  * 设置界面
@@ -212,17 +209,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.ll_change:
-				Intent intent = new Intent(getActivity(), LMChangeActivity.class);
-				String fromNickname="";
-				String fromAvatarUrl="";
-				EaseUser easeUser = EaseUserUtils.getUserInfo(EMChatManager.getInstance().getCurrentUser());
-				if (easeUser != null) {
-					fromAvatarUrl = TextUtils.isEmpty(easeUser.getAvatar()) ? "none" : easeUser.getAvatar();
-					fromNickname = TextUtils.isEmpty(easeUser.getNick()) ? easeUser.getUsername() : easeUser.getNick();
-				}
-				intent.putExtra(LMConstant.EXTRA_USER_NAME, fromNickname);
-				intent.putExtra(LMConstant.EXTRA_TO_USER_AVATAR, fromAvatarUrl);
-				startActivity(intent);
+				RedPacketUtil.startChangeActivity(getActivity());
 				break;
 		case R.id.rl_switch_notification:
 			if (notifiSwitch.isSwitchOpen()) {

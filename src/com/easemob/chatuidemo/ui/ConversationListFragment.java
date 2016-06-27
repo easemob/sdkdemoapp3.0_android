@@ -21,7 +21,7 @@ import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.easeui.ui.EaseConversationListFragment;
 import com.easemob.easeui.widget.EaseConversationList.EaseConversationListHelper;
-import com.easemob.exceptions.EaseMobException;
+import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.util.NetUtils;
 
 public class ConversationListFragment extends EaseConversationListFragment{
@@ -70,24 +70,20 @@ public class ConversationListFragment extends EaseConversationListFragment{
         conversationListView.setConversationListHelper(new EaseConversationListHelper() {
             @Override
             public String onSetItemSecondaryText(EMMessage lastMessage) {
-                if (lastMessage.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_OPEN_MONEY_MESSAGE, false)) {
-                    try {
-                        String sendNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_SENDER_NAME);
-                        String receiveNick = lastMessage.getStringAttribute(Constant.EXTRA_LUCKY_MONEY_RECEIVER_NAME);
-                        String msg;
-                        if (lastMessage.direct == EMMessage.Direct.RECEIVE) {
-                            msg = String.format(getResources().getString(R.string.money_msg_someone_take_money),receiveNick);
+                if (lastMessage.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
+                    String sendNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, "");
+                    String receiveNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
+                    String msg;
+                    if (lastMessage.direct == EMMessage.Direct.RECEIVE) {
+                        msg = String.format(getResources().getString(R.string.money_msg_someone_take_money), receiveNick);
+                    } else {
+                        if (sendNick.equals(receiveNick)) {
+                            msg = getResources().getString(R.string.money_msg_take_money);
                         } else {
-                            if (sendNick.equals(receiveNick)) {
-                                msg = getResources().getString(R.string.money_msg_take_money);
-                            } else {
-                                msg = String.format(getResources().getString(R.string.money_msg_take_someone_money),sendNick);
-                            }
+                            msg = String.format(getResources().getString(R.string.money_msg_take_someone_money), sendNick);
                         }
-                        return msg;
-                    } catch (EaseMobException e) {
-                        e.printStackTrace();
                     }
+                    return msg;
                 }
                 return null;
             }
