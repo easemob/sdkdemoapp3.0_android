@@ -8,12 +8,12 @@
 
 ## 2. redpacketlibrary目录说明
 
-* libs ：包含了集成红包功能所依赖的jar包。
+* libs ：包含了集成红包功能所依赖的jar包。(红包使用了glide库做图片加载，由于已经依赖了easeui这里不重复添加)
 * res ：包含了红包SDK和聊天页面中的资源文件。（红包SDK相关以rp开头，聊天页面相关以em开头）
 * utils ： 封装了收发红包的相关方法。
 * widget ：聊天界面中的红包以及领取红包后的chatrow。
 * RedPacketConstant.java 红包功能需要的常量。
-* **注意: redpacketlibrary依赖了easeui，可以查看redpacketlibrary的build.gradle**。
+* **注意: 由于RedPacketUtil类中使用了环信SDK中相关方法，redpacketlibrary依赖了easeui。**。
 
 ## 3. 集成步骤
 
@@ -390,6 +390,7 @@ include ':EaseUI', ':redpacketlibrary'
 ```
 
 
+* **提示: 如果不需要红包相关功能可全局搜索关键字red packet去掉红包相关的代码以及redpacketlibray**。
 
 
 

@@ -42,9 +42,10 @@ public class DemoApplication extends Application {
 
         //init demo helper
         DemoHelper.getInstance().init(applicationContext);
-		//初始化红包上下文
+		//red packet code : 初始化红包上下文，开启日志输出开关
 		RedPacket.getInstance().initContext(applicationContext);
 		RedPacket.getInstance().setDebugMode(true);
+		//end of red packet code
 	}
 
 	@Override

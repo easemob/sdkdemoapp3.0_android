@@ -54,13 +54,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int ITEM_VOICE_CALL = 13;
     private static final int ITEM_VIDEO_CALL = 14;
     private static final int ITEM_READFIRE = 15;
-    private static final int ITEM_RED_PACKET = 16;
 
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
     private static final int REQUEST_CODE_GROUP_DETAIL = 13;
     private static final int REQUEST_CODE_CONTEXT_MENU = 14;
-    private static final int REQUEST_CODE_SEND_RED_PACKET = 15;
 
 
     private static final int MESSAGE_TYPE_SENT_VOICE_CALL = 1;
@@ -68,10 +66,14 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
     private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
 
+    //red packet code : 红包功能使用的常量
     private static final int MESSAGE_TYPE_RECV_RED_PACKET = 5;
     private static final int MESSAGE_TYPE_SEND_RED_PACKET = 6;
     private static final int MESSAGE_TYPE_SEND_RED_PACKET_ACK = 7;
     private static final int MESSAGE_TYPE_RECV_RED_PACKET_ACK = 8;
+    private static final int REQUEST_CODE_SEND_RED_PACKET = 15;
+    private static final int ITEM_RED_PACKET = 16;
+    //end of red packet code
 
 
     /**
@@ -111,9 +113,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             inputMenu.registerExtendMenuItem(R.string.attach_read_fire, R.drawable.ease_read_fire, ITEM_READFIRE, extendMenuItemClickListener);
         }
         //暂时不支持聊天室
+        //red packet code : 注册红包菜单选项
         if (chatType != Constant.CHATTYPE_CHATROOM){
             inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_red_packet_selector, ITEM_RED_PACKET, extendMenuItemClickListener);
         }
+        //end of red packet code
     }
 
     @Override
@@ -203,11 +207,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                         }
                     }
                     break;
-                case REQUEST_CODE_SEND_RED_PACKET://发送红包消息
+                //red packet code : 发送红包消息到聊天界面
+                case REQUEST_CODE_SEND_RED_PACKET:
                     if (data != null){
                         sendMessage(RedPacketUtil.createRPMessage(getActivity(), data, toChatUsername));
                     }
                     break;
+                //end of red packet code
                 default:
                     break;
             }
@@ -290,10 +296,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public boolean onMessageBubbleClick(final EMMessage message) {
         //消息框点击事件，demo这里不做覆盖，如需覆盖，return true
+        //red packet code : 拆红包页面
         if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
             RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
             return true;
         }
+        //end of red packet code
         return false;
     }
 
@@ -324,9 +332,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             case ITEM_READFIRE:
                 setReadFire(true);
                 break;
-            case ITEM_RED_PACKET://发送红包
+            //red packet code : 进入发红包页面
+            case ITEM_RED_PACKET:
                 RedPacketUtil.startRedPacketActivityForResult(this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
                 break;
+            //end of red packet code
             default:
                 break;
         }
@@ -397,13 +407,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 }else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     //视频通话
                     return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO_CALL : MESSAGE_TYPE_SENT_VIDEO_CALL;
-                } else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
+                }
+                //red packet code : 红包消息和红包回执消息的chat row type
+                else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
                     //发送红包消息
                     return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_RED_PACKET : MESSAGE_TYPE_SEND_RED_PACKET;
                 } else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
                     //领取红包消息
                     return message.direct == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_RED_PACKET_ACK : MESSAGE_TYPE_SEND_RED_PACKET_ACK;
                 }
+                //end of red packet code
             }
             return 0;
         }
@@ -415,11 +428,14 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     return new ChatRowVoiceCall(getActivity(), message, position, adapter);
-                }else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {//发送红包消息
+                }
+                //red packet code : 红包消息和红包回执消息的chat row
+                else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {//发送红包消息
                     return new ChatRowRedPacket(getActivity(), message, position, adapter);
                 } else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {//领取红包消息
                     return new ChatRowRedPacketAck(getActivity(), message, position, adapter);
                 }
+                //end of red packet code
             }
             return null;
         }

@@ -41,7 +41,10 @@ public class ContextMenuActivity extends BaseActivity {
     		if (type == EMMessage.Type.TXT.ordinal()) {
     		    if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
     		            || message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
-						|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
+						//red packet code : 屏蔽红包消息的转发功能
+						|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
+						//end of red packet code
+						) {
     		        setContentView(R.layout.em_context_menu_for_delete);
     		    } else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
     		        setContentView(R.layout.em_context_menu_for_image);
@@ -61,8 +64,11 @@ public class ContextMenuActivity extends BaseActivity {
     		}
 		}
 		// 这里根据消息是发送方还是接收放判断是否显示撤回菜单项
-		if (message.direct == EMMessage.Direct.RECEIVE || message.getChatType() == EMMessage.ChatType.ChatRoom) {
-		    View view = findViewById(R.id.text_revoke);
+		if (message.direct == EMMessage.Direct.RECEIVE || message.getChatType() == EMMessage.ChatType.ChatRoom
+				//red packet code : 屏蔽红包消息的撤回功能
+				|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
+			    //end of red packet code
+			View view = findViewById(R.id.text_revoke);
 			if(view != null){
 			    view.setVisibility(View.GONE);
 			}

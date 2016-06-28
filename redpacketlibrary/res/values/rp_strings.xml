@@ -217,7 +217,7 @@
     <string name="no_verify">未验证</string>
     <string name="verify_going">审核中</string>
     <string name="verify_fail">认证失败</string>
-    <string name="your_no_bankcard">你还没有一张银行卡</string>
+    <string name="your_no_bankcard">你还没有银行卡</string>
     <string name="tv_id_card_requirement">需要本人有效二代身份证进行身份认证；\n拍摄时确保身份证边框完整，字体清晰，亮度均匀；</string>
     <string name="tv_shooting_example">拍摄示例</string>
     <string name="tv_id_card_photo_requirement">身份证照片要求</string>
