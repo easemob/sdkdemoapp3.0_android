@@ -5,4 +5,5 @@
     <string name="easemob_red_packet">环信红包</string>
     <string name="attach_red_packet">红包</string>
     <string name="change">零钱</string>
+    <string name="exclusive_red_packet">专属红包</string>
 </resources>

@@ -45,7 +45,7 @@ public class ChatRowRedPacket extends EaseChatRow {
         String packetType = message.getStringAttribute(RedPacketConstant.MESSAGE_ATTR_RED_PACKET_TYPE, "");
         if (!TextUtils.isEmpty(packetType) && TextUtils.equals(packetType, RedPacketConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
             mTvPacketType.setVisibility(VISIBLE);
-            mTvPacketType.setText("专属红包");
+            mTvPacketType.setText(R.string.exclusive_red_packet);
         } else {
             mTvPacketType.setVisibility(GONE);
         }
