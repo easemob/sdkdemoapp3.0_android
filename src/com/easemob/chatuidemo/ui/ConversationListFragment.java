@@ -66,7 +66,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 }
             }
         });
-
+        //red packet code : 红包回执消息在会话列表最后一条消息的展示
         conversationListView.setConversationListHelper(new EaseConversationListHelper() {
             @Override
             public String onSetItemSecondaryText(EMMessage lastMessage) {
@@ -88,6 +88,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 return null;
             }
         });
+        //end of red packet code
         super.setUpView();
     }
 

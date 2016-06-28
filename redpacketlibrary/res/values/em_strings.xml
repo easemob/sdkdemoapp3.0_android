@@ -6,5 +6,6 @@
     <string name="easemob_red_packet">Easemob Red Packet</string>
     <string name="attach_red_packet">Red Packet</string>
     <string name="change">Change</string>
+    <string name="exclusive_red_packet">Exclusive Red Packet</string>
 
 </resources>
