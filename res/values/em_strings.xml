@@ -238,7 +238,7 @@
     <string name="network_anomalies">Network is not available, please check the network!</string>
     <string name="User_already_exists">User already existed!</string>
     <string name="registration_failed_without_permission">Registration failed, without permission!</string>
-    <string name="Registration_failed">Registration failed:</string>
+    <string name="Registration_failed">Registration failed</string>
     <string name="Are_logged_out">Logging out</string>
     <string name="Download_the_pictures">Download the pictures: 0%</string>
     <string name="Download_the_pictures_new">Download the pictures:</string>
