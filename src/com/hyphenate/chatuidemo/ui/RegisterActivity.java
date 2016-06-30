@@ -100,7 +100,7 @@ public class RegisterActivity extends BaseActivity {
 								}else if(errorCode == EMError.USER_ILLEGAL_ARGUMENT){
 								    Toast.makeText(getApplicationContext(), getResources().getString(R.string.illegal_user_name),Toast.LENGTH_SHORT).show();
 								}else{
-									Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed) + e.getMessage(), Toast.LENGTH_SHORT).show();
+									Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registration_failed), Toast.LENGTH_SHORT).show();
 								}
 							}
 						});

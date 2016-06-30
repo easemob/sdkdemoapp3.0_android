@@ -238,7 +238,7 @@
     <string name="network_anomalies">网络异常，请检查网络！</string>
     <string name="User_already_exists">用户已存在！</string>
     <string name="registration_failed_without_permission">注册失败，无权限！</string>
-    <string name="Registration_failed">注册失败:</string>
+    <string name="Registration_failed">注册失败</string>
     <string name="Are_logged_out">正在退出登录..</string>
     <string name="Download_the_pictures">下载图片: 0%</string>
     <string name="Download_the_pictures_new">下载图片:</string>
