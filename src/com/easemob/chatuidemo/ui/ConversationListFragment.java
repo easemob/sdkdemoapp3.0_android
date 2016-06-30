@@ -88,8 +88,8 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 return null;
             }
         });
-        //end of red packet code
         super.setUpView();
+        //end of red packet code
     }
 
     @Override

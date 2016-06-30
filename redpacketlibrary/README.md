@@ -158,7 +158,7 @@ include ':EaseUI', ':redpacketlibrary'
         super.registerExtendMenuItem();
         //聊天室暂时不支持红包功能
         if (chatType != Constant.CHATTYPE_CHATROOM) {
-            inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_money_selector, ITEM_RED_PACKET, extendMenuItemClickListener);
+            inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_red_packet_selector, ITEM_RED_PACKET, extendMenuItemClickListener);
         }
     }
 ```
