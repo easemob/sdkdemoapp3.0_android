@@ -227,9 +227,11 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.ll_change:
-				RedPacketUtil.startChangeActivity(getActivity());
-				break;
+		//red packet code : 进入零钱页面
+		case R.id.ll_change:
+			RedPacketUtil.startChangeActivity(getActivity());
+			break;
+		//end of red packet code
 		case R.id.rl_switch_notification:
 			if (notifiSwitch.isSwitchOpen()) {
 			    notifiSwitch.closeSwitch();

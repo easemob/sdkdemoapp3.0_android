@@ -764,12 +764,14 @@ public class DemoHelper {
                     //获取消息body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
+                    //red packet code : 处理红包回执透传消息
                     if(!easeUI.hasForegroundActivies()){
                         if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                             RedPacketUtil.receiveRedPacketAckMessage(message);
                             broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
                     }
+                    //end of red packet code
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
                     EMLog.d(TAG, String.format("透传消息：action:%s,message:%s", action,message.toString()));

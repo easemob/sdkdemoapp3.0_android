@@ -231,6 +231,7 @@ public class MainActivity extends BaseActivity {
 		
 		@Override
 		public void onCmdMessageReceived(List<EMMessage> messages) {
+			//red packet code : 处理红包回执透传消息
 			for (EMMessage message : messages) {
 				EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
 				final String action = cmdMsgBody.action();//获取自定义action
@@ -238,6 +239,7 @@ public class MainActivity extends BaseActivity {
 					RedPacketUtil.receiveRedPacketAckMessage(message);
 				}
 			}
+			//end of red packet code
 			refreshUIWithMessage();
 		}
 		
@@ -301,12 +303,14 @@ public class MainActivity extends BaseActivity {
                         GroupsActivity.instance.onResume();
                     }
                 }
+				//red packet code : 处理红包回执透传消息
 				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
 					if (conversationListFragment != null){
 						conversationListFragment.refresh();
 					}
 				}
-            }
+				//end of red packet code
+			}
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
