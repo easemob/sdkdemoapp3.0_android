@@ -740,13 +740,16 @@ public class DemoHelper {
                     EMLog.d(TAG, "receive command message");
                     //get message body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
-                    final String action = cmdMsgBody.action();//get your predefined action
+                    final String action = cmdMsgBody.action();//获取自定义action
+                    //red packet code : 处理红包回执透传消息
                     if(!easeUI.hasForegroundActivies()){
                         if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                             RedPacketUtil.receiveRedPacketAckMessage(message);
                             broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
                     }
+                    //end of red packet code
+                    //获取扩展属性 此处省略
                     //maybe you need get extension of your message
                     //message.getStringAttribute("");
                     EMLog.d(TAG, String.format("Command：action:%s,message:%s", action,message.toString()));
