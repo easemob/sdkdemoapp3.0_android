@@ -27,7 +27,7 @@ public class DemoApplication extends Application {
 	public final String PREF_USERNAME = "username";
 	
 	/**
-	 * 当前用户nickname,为了苹果推送不是userid而是昵称
+	 * nickname for current user, the nickname instead of ID be shown when user receive notification from APNs
 	 */
 	public static String currentUserNick = "";
 

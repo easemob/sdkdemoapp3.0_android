@@ -1,13 +1,13 @@
 /************************************************************
-  *  * EaseMob CONFIDENTIAL 
+  *  * Hyphenate CONFIDENTIAL 
   * __________________ 
   * Copyright (C) 2016 Hyphenate Inc. All rights reserved. 
   *  
   * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
+  * the property of Hyphenate Inc..
   * Dissemination of this information or reproduction of this material 
   * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
+  * from Hyphenate Inc.
   */
 package com.hyphenate.chatuidemo.receiver;
 
@@ -26,7 +26,7 @@ public class StartServiceReceiver extends BroadcastReceiver{
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		EMLog.d("boot", "start easemob service on boot");
+		EMLog.d("boot", "start IM service on boot");
 		Intent startServiceIntent=new Intent(context, EMChatService.class);
 		startServiceIntent.putExtra("reason", "boot");
 		context.startService(startServiceIntent);

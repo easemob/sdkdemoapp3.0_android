@@ -35,7 +35,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * 登陆页面
+ * Login screen
  * 
  */
 public class LoginActivity extends BaseActivity {
@@ -54,7 +54,7 @@ public class LoginActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// 如果登录成功过，直接进入主页面
+		// enter the main activity if already logged in
 		if (DemoHelper.getInstance().isLoggedIn()) {
 			autoLogin = true;
 			startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -66,7 +66,7 @@ public class LoginActivity extends BaseActivity {
 		usernameEditText = (EditText) findViewById(R.id.username);
 		passwordEditText = (EditText) findViewById(R.id.password);
 
-		// 如果用户名改变，清空密码
+		// if user changed, clear the password
 		usernameEditText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -89,7 +89,7 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	/**
-	 * 登录
+	 * login
 	 * 
 	 * @param view
 	 */
@@ -132,7 +132,7 @@ public class LoginActivity extends BaseActivity {
         DemoHelper.getInstance().setCurrentUserName(currentUsername);
         
 		final long start = System.currentTimeMillis();
-		// 调用sdk登陆方法登陆聊天服务器
+		// call login method
 		Log.d(TAG, "EMClient.getInstance().login");
 		EMClient.getInstance().login(currentUsername, currentPassword, new EMCallBack() {
 
@@ -144,18 +144,18 @@ public class LoginActivity extends BaseActivity {
 					pd.dismiss();
 				}
 
-				// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
-				// ** manually load all local groups and
+				// ** manually load all local groups and conversation
 			    EMClient.getInstance().groupManager().loadAllGroups();
 			    EMClient.getInstance().chatManager().loadAllConversations();
-				
-				// 更新当前用户的nickname 此方法的作用是在ios离线推送时能够显示用户nick
+
+			    // update current user's display name for APNs
 				boolean updatenick = EMClient.getInstance().updateCurrentUserNick(
 						DemoApplication.currentUserNick.trim());
 				if (!updatenick) {
 					Log.e("LoginActivity", "update current user nick fail");
 				}
-				//异步获取当前用户的昵称和头像(从自己服务器获取，demo使用的一个第三方服务)
+
+				// get user's info (this should be get from App's server or 3rd party service)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
 
 				Intent intent = new Intent(LoginActivity.this,
@@ -189,7 +189,7 @@ public class LoginActivity extends BaseActivity {
 
 	
 	/**
-	 * 注册
+	 * register
 	 * 
 	 * @param view
 	 */

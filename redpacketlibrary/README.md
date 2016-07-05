@@ -178,11 +178,13 @@ include ':EaseUI', ':redpacketlibrary'
         }
         
         
-   if (message.direct == EMMessage.Direct.RECEIVE || message.getChatType() == EMMessage.ChatType.ChatRoom
+    if (isChatroom
+                //red packet code : 屏蔽红包消息的撤回功能
                 || message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
-            View view = findViewById(R.id.text_revoke);
-            if(view != null){
-                view.setVisibility(View.GONE);
+                //end of red packet code
+            View v = (View) findViewById(R.id.forward);
+            if (v != null) {
+                v.setVisibility(View.GONE);
             }
         }
 

@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * 黑名单列表页面
+ * Blacklist screen
  * 
  */
 public class BlacklistActivity extends Activity {
@@ -39,17 +39,16 @@ public class BlacklistActivity extends Activity {
 
 		listView = (ListView) findViewById(R.id.list);
 
-		// 从本地获取黑名单
+		// get blacklist from local databases
 		 List<String> blacklist = EMClient.getInstance().contactManager().getBlackListUsernames();
 
-		// 显示黑名单列表
+		// show the blacklist
 		if (blacklist != null) {
 			Collections.sort(blacklist);
 			adapter = new BlacklistAdapater(this, 1, blacklist);
 			listView.setAdapter(adapter);
 		}
 
-		// 注册上下文菜单
 		registerForContextMenu(listView);
 
 	}
@@ -64,7 +63,7 @@ public class BlacklistActivity extends Activity {
 	public boolean onContextItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.remove) {
 			final String tobeRemoveUser = adapter.getItem(((AdapterContextMenuInfo) item.getMenuInfo()).position);
-			// 把目标user移出黑名单
+			// remove user out from blacklist
 			removeOutBlacklist(tobeRemoveUser);
 			return true;
 		}
@@ -72,7 +71,7 @@ public class BlacklistActivity extends Activity {
 	}
 
 	/**
-	 * 移出黑民单
+	 * remove user out from blacklist
 	 * 
 	 * @param tobeRemoveUser
 	 */
@@ -84,7 +83,6 @@ public class BlacklistActivity extends Activity {
 	    new Thread(new Runnable() {
             public void run() {
                 try {
-                    // 移出黑民单
                     EMClient.getInstance().contactManager().removeUserFromBlackList(tobeRemoveUser);
                     runOnUiThread(new Runnable() {
                         public void run() {
@@ -130,14 +128,5 @@ public class BlacklistActivity extends Activity {
 			return convertView;
 		}
 
-	}
-
-	/**
-	 * 返回
-	 * 
-	 * @param view
-	 */
-	public void back(View view) {
-		finish();
 	}
 }

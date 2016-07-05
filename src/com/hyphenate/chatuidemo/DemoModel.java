@@ -42,16 +42,13 @@ public class DemoModel {
     }
     
     /**
-     * 设置当前用户的环信id
+     * save current username
      * @param username
      */
     public void setCurrentUserName(String username){
         PreferenceManager.getInstance().setCurrentUserName(username);
     }
-    
-    /**
-     * 获取当前用户的环信id
-     */
+
     public String getCurrentUsernName(){
         return PreferenceManager.getInstance().getCurrentUsername();
     }

@@ -35,7 +35,7 @@ public class PublicGroupsSeachActivity extends BaseActivity{
     }
     
     /**
-     * 搜索
+     * search group with group id
      * @param v
      */
     public void searchGroup(View v){
@@ -83,7 +83,7 @@ public class PublicGroupsSeachActivity extends BaseActivity{
     
     
     /**
-     * 点击搜索到的群组进入群组信息页面
+     * enter the detail screen of group
      * @param view
      */
     public void enterToDetails(View view){

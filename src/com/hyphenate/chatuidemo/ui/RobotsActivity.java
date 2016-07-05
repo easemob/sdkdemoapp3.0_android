@@ -127,9 +127,9 @@ public class RobotsActivity extends BaseActivity {
 						}
 						robotList.clear();
 						robotList.addAll(mMap.values());
-						// 存入内存
+						// save it in cache
 						DemoHelper.getInstance().setRobotList(mMap);
-						// 存入db
+						// save it in database
 						UserDao dao = new UserDao(RobotsActivity.this);
 						dao.saveRobotUser(robotList);
 						adapter.notifyDataSetChanged();

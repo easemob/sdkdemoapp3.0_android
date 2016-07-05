@@ -49,7 +49,7 @@ import com.hyphenate.util.PathUtil;
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHelper{
 
-    //避免和基类定义的常量可能发生的冲突，常量从11开始定义
+	// constant start from 11 to avoid conflict with constant in base class
     private static final int ITEM_VIDEO = 11;
     private static final int ITEM_FILE = 12;
     private static final int ITEM_VOICE_CALL = 13;
@@ -77,7 +77,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     //end of red packet code
 
     /**
-     * 是否为环信小助手
+     * if it is chatBot 
      */
     private boolean isRobot;
     
@@ -96,7 +96,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             }
         }
         super.setUpView();
-        // 设置标题栏点击事件
+        // set click listener
         titleBar.setLeftLayoutClickListener(new OnClickListener() {
 
             @Override
@@ -133,9 +133,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     
     @Override
     protected void registerExtendMenuItem() {
-        //demo这里不覆盖基类已经注册的item,item点击listener沿用基类的
+        //use the menu in base class
         super.registerExtendMenuItem();
-        //增加扩展item
+        //extend menu items
         inputMenu.registerExtendMenuItem(R.string.attach_video, R.drawable.em_chat_video_selector, ITEM_VIDEO, extendMenuItemClickListener);
         inputMenu.registerExtendMenuItem(R.string.attach_file, R.drawable.em_chat_file_selector, ITEM_FILE, extendMenuItemClickListener);
         if(chatType == Constant.CHATTYPE_SINGLE){
@@ -155,16 +155,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
             switch (resultCode) {
-            case ContextMenuActivity.RESULT_CODE_COPY: // 复制消息
+            case ContextMenuActivity.RESULT_CODE_COPY: // copy
                 clipboard.setPrimaryClip(ClipData.newPlainText(null, 
                         ((EMTextMessageBody) contextMenuMessage.getBody()).getMessage()));
                 break;
-            case ContextMenuActivity.RESULT_CODE_DELETE: // 删除消息
+            case ContextMenuActivity.RESULT_CODE_DELETE: // delete
                 conversation.removeMessage(contextMenuMessage.getMsgId());
                 messageList.refresh();
                 break;
 
-            case ContextMenuActivity.RESULT_CODE_FORWARD: // 转发消息
+            case ContextMenuActivity.RESULT_CODE_FORWARD: // forward
                 Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
                 intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
                 startActivity(intent);
@@ -177,7 +177,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         }
         if(resultCode == Activity.RESULT_OK){
             switch (requestCode) {
-            case REQUEST_CODE_SELECT_VIDEO: //发送选中的视频
+            case REQUEST_CODE_SELECT_VIDEO: //send the video
                 if (data != null) {
                     int duration = data.getIntExtra("dur", 0);
                     String videoPath = data.getStringExtra("path");
@@ -193,7 +193,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     }
                 }
                 break;
-            case REQUEST_CODE_SELECT_FILE: //发送选中的文件
+            case REQUEST_CODE_SELECT_FILE: //send the file
                 if (data != null) {
                     Uri uri = data.getData();
                     if (uri != null) {
@@ -224,14 +224,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public void onSetMessageAttributes(EMMessage message) {
         if(isRobot){
-            //设置消息扩展属性
+            //set message extension
             message.setAttribute("em_robot_message", isRobot);
         }
     }
     
     @Override
     public EaseCustomChatRowProvider onSetCustomChatRowProvider() {
-        //设置自定义listview item提供者
         return new CustomChatRowProvider();
     }
   
@@ -254,7 +253,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
     @Override
     public void onAvatarClick(String username) {
-        //头像点击事件
+        //handling when user click avatar
         Intent intent = new Intent(getActivity(), UserProfileActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
@@ -281,7 +280,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     public void onCmdMessageReceived(List<EMMessage> messages) {
         //red packet code : 处理红包回执透传消息
         for (EMMessage message : messages) {
-            //获取消息body
             EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
             String action = cmdMsgBody.action();//获取自定义action
             if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
@@ -295,7 +293,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
     @Override
     public void onMessageBubbleLongClick(EMMessage message) {
-        //消息框长按
+    	// no message forward when in chat room
         startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message",message)
                 .putExtra("ischatroom", chatType == EaseConstant.CHATTYPE_CHATROOM),
                 REQUEST_CODE_CONTEXT_MENU);
@@ -304,18 +302,17 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public boolean onExtendMenuItemClick(int itemId, View view) {
         switch (itemId) {
-        case ITEM_VIDEO: //视频
+        case ITEM_VIDEO:
             Intent intent = new Intent(getActivity(), ImageGridActivity.class);
             startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
             break;
-        case ITEM_FILE: //一般文件
-            //demo这里是通过系统api选择文件，实际app中最好是做成qq那种选择发送文件
+        case ITEM_FILE: //file
             selectFileFromLocal();
             break;
-        case ITEM_VOICE_CALL: //音频通话
+        case ITEM_VOICE_CALL:
             startVoiceCall();
             break;
-        case ITEM_VIDEO_CALL: //视频通话
+        case ITEM_VIDEO_CALL:
             startVideoCall();
             break;
         //red packet code : 进入发红包页面
@@ -326,16 +323,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         default:
             break;
         }
-        //不覆盖已有的点击事件
+        //keep exist extend menu
         return false;
     }
     
     /**
-     * 选择文件
+     * select file
      */
     protected void selectFileFromLocal() {
         Intent intent = null;
-        if (Build.VERSION.SDK_INT < 19) { //19以后这个api不可用，demo这里简单处理成图库选择图片
+        if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
             intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -347,7 +344,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     }
     
     /**
-     * 拨打语音电话
+     * make a voice call
      */
     protected void startVoiceCall() {
         if (!EMClient.getInstance().isConnected()) {
@@ -361,7 +358,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     }
     
     /**
-     * 拨打视频电话
+     * make a video call
      */
     protected void startVideoCall() {
         if (!EMClient.getInstance().isConnected())
@@ -381,18 +378,19 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private final class CustomChatRowProvider implements EaseCustomChatRowProvider {
         @Override
         public int getCustomChatRowTypeCount() {
-            //红包、音、视频通话发送、接收共8种
+            //here the number is the message type in EMMessage::Type
+        	//which is used to count the number of different chat row
             return 8;
         }
 
         @Override
         public int getCustomChatRowType(EMMessage message) {
             if(message.getType() == EMMessage.Type.TXT){
-                //语音通话类型
+                //voice call
                 if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
                     return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VOICE_CALL : MESSAGE_TYPE_SENT_VOICE_CALL;
                 }else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
-                    //视频通话
+                    //video call
                     return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO_CALL : MESSAGE_TYPE_SENT_VIDEO_CALL;
                 }
                 //red packet code : 红包消息和红包回执消息的chat row type
@@ -411,7 +409,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         @Override
         public EaseChatRow getCustomChatRow(EMMessage message, int position, BaseAdapter adapter) {
             if(message.getType() == EMMessage.Type.TXT){
-                // 语音通话,  视频通话
+                // voice call or video call
                 if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     return new ChatRowVoiceCall(getActivity(), message, position, adapter);
@@ -419,7 +417,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 //red packet code : 红包消息和红包回执消息的chat row
                 else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {//发送红包消息
                     return new ChatRowRedPacket(getActivity(), message, position, adapter);
-                } else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {//领取红包消息
+                } else if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {//open redpacket message
                     return new ChatRowRedPacketAck(getActivity(), message, position, adapter);
                 }
                 //end of red packet code

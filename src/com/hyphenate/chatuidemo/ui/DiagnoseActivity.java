@@ -28,7 +28,7 @@ import android.widget.Toast;
  * language governing permissions and limitations under the License.
  */
 /**
- * 诊断界面；在此上传错误日志
+ * Diagnose activity；user can upload log for debug purpose
  * 
  * @author lyuzhao
  * 
@@ -62,7 +62,6 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private String getVersionName() throws Exception {
-		// 获取packagemanager的实例
 		return EMClient.getInstance().getChatConfig().getVersion();
 	}
 

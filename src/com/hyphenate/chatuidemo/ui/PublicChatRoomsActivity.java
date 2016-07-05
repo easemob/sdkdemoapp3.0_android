@@ -73,7 +73,6 @@ public class PublicChatRoomsActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.em_activity_public_groups);
 
-		// 搜索框
 		etSearch = (EditText)findViewById(R.id.query);
 		ibClean = (ImageButton)findViewById(R.id.search_clear);
 		etSearch.setHint(R.string.search);
@@ -124,8 +123,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
 				hideSoftKeyboard();
 			}
 		});
-        
-        //获取及显示数据
+
         loadAndShowData();
         
         EMClient.getInstance().chatroomManager().addChatRoomChangeListener(new EMChatRoomChangeListener(){
@@ -163,8 +161,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
             }
             
         });
-        
-        //设置item点击事件
+
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -205,22 +202,18 @@ public class PublicChatRoomsActivity extends BaseActivity {
                 try {
                     isLoading = true;
                     final EMCursorResult<EMChatRoom> result = EMClient.getInstance().chatroomManager().fetchPublicChatRoomsFromServer(pagesize, cursor);
-                    //获取group list
+                    //get chat room list
                     final List<EMChatRoom> chatRooms = result.getData();
                     runOnUiThread(new Runnable() {
 
                         public void run() {
                             chatRoomList.addAll(chatRooms);
                             if(chatRooms.size() != 0){
-                                //获取cursor
                                 cursor = result.getCursor();
-//                                if(chatRooms.size() == pagesize)
-//                                    footLoadingLayout.setVisibility(View.VISIBLE);
                             }
                             if(isFirstLoading){
                                 pb.setVisibility(View.INVISIBLE);
                                 isFirstLoading = false;
-                                //设置adapter
                                 adapter = new ChatRoomAdapter(PublicChatRoomsActivity.this, 1, chatRoomList);
                                 listView.setAdapter(adapter);
                                 rooms.addAll(chatRooms);

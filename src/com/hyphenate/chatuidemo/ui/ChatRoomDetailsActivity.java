@@ -70,7 +70,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	public static ChatRoomDetailsActivity instance;
 	
 	String st = "";
-	// 清空所有聊天记录
+	// clear all history
 	private RelativeLayout clearAllHistory;
 	private RelativeLayout blacklistLayout;
 	private RelativeLayout changeGroupNameLayout;
@@ -112,7 +112,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		referenceWidth = referenceDrawable.getIntrinsicWidth();
 		referenceHeight = referenceDrawable.getIntrinsicHeight();
 
-		 // 获取传过来的groupid
+		 // get room id
 		 roomId = getIntent().getStringExtra("roomId");
 		 
 		 showChatRoomIdLayout.setVisibility(View.VISIBLE);
@@ -130,7 +130,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		changeGroupNameLayout.setVisibility(View.GONE);
 		blockGroupMsgLayout.setVisibility(View.GONE);
 		
-		// 如果自己是群主，显示解散按钮
+		// show dismiss button if you are owner
 		if (EMClient.getInstance().getCurrentUser().equals(room.getOwner())) {
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.GONE);
@@ -145,7 +145,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		updateRoom();
 
 
-		// 设置OnTouchListener
+		// set OnTouchListener
 		userGridview.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -192,10 +192,10 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 				progressDialog.setCanceledOnTouchOutside(false);
 			}
 			switch (requestCode) {
-			case REQUEST_CODE_EXIT: // 退出群
+			case REQUEST_CODE_EXIT: // quit the group
 				progressDialog.setMessage(st2);
 				progressDialog.show();
-				exitGrop();
+				exitGroup();
 				break;
 
 			default:
@@ -204,21 +204,13 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		}
 	}
 
-	/**
-	 * 点击退出群组按钮
-	 * 
-	 * @param view
-	 */
+
 	public void exitGroup(View view) {
 		startActivityForResult(new Intent(this, ExitGroupDialog.class), REQUEST_CODE_EXIT);
 
 	}
 
-	/**
-	 * 点击解散群组按钮
-	 * 
-	 * @param view
-	 */
+
 	public void exitDeleteGroup(View view) {
 		startActivityForResult(new Intent(this, ExitGroupDialog.class).putExtra("deleteToast", getString(R.string.dissolution_group_hint)),
 				REQUEST_CODE_EXIT_DELETE);
@@ -226,7 +218,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	}
 
 	/**
-	 * 清空群聊天记录
+	 * clear conversation history in group
 	 */
 	public void clearGroupHistory() {
 		EMConversation conversation = EMClient.getInstance().chatManager().getConversation(room.getId(), EMConversationType.ChatRoom);
@@ -237,11 +229,11 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	}
 
 	/**
-	 * 退出群组
+	 * exit group
 	 * 
 	 * @param groupId
 	 */
-	private void exitGrop() {
+	private void exitGroup() {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -259,7 +251,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), "退出聊天室失败: " + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), "Failed to quit group: " + e.getMessage(), 1).show();
 						}
 					});
 				}
@@ -279,11 +271,11 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 							loadingPB.setVisibility(View.INVISIBLE);
 							adapter.notifyDataSetChanged();
 							if (EMClient.getInstance().getCurrentUser().equals(returnRoom.getOwner())) {
-								// 显示解散按钮
+								// show dismiss button
 								exitBtn.setVisibility(View.GONE);
 								deleteBtn.setVisibility(View.GONE);
 							} else {
-								// 显示退出按钮
+								// show exit button
 								exitBtn.setVisibility(View.GONE);
 								deleteBtn.setVisibility(View.GONE);
 
@@ -306,7 +298,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.clear_all_history: // 清空聊天记录
+		case R.id.clear_all_history: // clear conversation history
 			String st9 = getResources().getString(R.string.sure_to_empty_this);
 			new EaseAlertDialog(ChatRoomDetailsActivity.this, null, st9, null, new AlertDialogUser() {
                 
@@ -326,7 +318,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	}
 
 	/**
-	 * 群组成员gridadapter
+	 * group member gridadapter
 	 * 
 	 * @author admin_new
 	 * 
@@ -358,22 +350,22 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			    holder = (ViewHolder) convertView.getTag();
 			}
 			final LinearLayout button = (LinearLayout) convertView.findViewById(R.id.button_avatar);
-			// 最后一个item，减人按钮
+			// last item is "remove" button
 			if (position == getCount() - 1) {
 			    holder.textView.setText("");
-				// 设置成删除按钮
+				// set "remove" button
 			    holder.imageView.setImageResource(R.drawable.em_smiley_minus_btn);
-//				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_minus_btn, 0, 0);
-				// 如果不是创建者或者没有相应权限，不提供加减人按钮
+
+				// no "remove" button if you are not owner of the group
 				if (!room.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
-					// if current user is not room admin, hide add/remove btn
+					// if current user is not the owner, hide add/remove btn
 					convertView.setVisibility(View.INVISIBLE);
-				} else { // 显示删除按钮
+				} else { // show delete icon
 					if (isInDeleteMode) {
-						// 正处于删除模式下，隐藏删除按钮
+						// already delete mode, hide "remove" button
 						convertView.setVisibility(View.INVISIBLE);
 					} else {
-						// 正常模式
+						// normal mode
 						convertView.setVisibility(View.VISIBLE);
 						convertView.findViewById(R.id.badge_delete).setVisibility(View.INVISIBLE);
 					}
@@ -387,46 +379,32 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 						}
 					});
 				}
-			} else if (position == getCount() - 2) { // 添加群组成员按钮
+			} else if (position == getCount() - 2) { // "add" button
 			    holder.textView.setText("");
 			    holder.imageView.setImageResource(R.drawable.em_smiley_add_btn);
-//				button.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.smiley_add_btn, 0, 0);
-				// 如果不是创建者或者没有相应权限
+
+				// only owner of room has permission to add/remove member
 				if (!room.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
-					// if current user is not room admin, hide add/remove btn
+					// if current user is not room owner, hide add/remove btn
 					convertView.setVisibility(View.INVISIBLE);
 				} else {
-					// 正处于删除模式下,隐藏添加按钮
+					// already delete mode, hide "remove" button
 					if (isInDeleteMode) {
 						convertView.setVisibility(View.INVISIBLE);
 					} else {
 						convertView.setVisibility(View.VISIBLE);
 						convertView.findViewById(R.id.badge_delete).setVisibility(View.INVISIBLE);
 					}
-					final String st11 = getResources().getString(R.string.Add_a_button_was_clicked);
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							EMLog.d(TAG, st11);
-							// 进入选人页面
-//							startActivityForResult(
-//									(new Intent(ChatRoomDetailsActivity.this, GroupPickContactsActivity.class).putExtra("groupId", groupId)),
-//									REQUEST_CODE_ADD_USER);
-						}
-					});
 				}
-			} else { // 普通item，显示群组成员
+			} else { // group member item
 				final String username = getItem(position);
 				convertView.setVisibility(View.VISIBLE);
 				button.setVisibility(View.VISIBLE);
-//				Drawable avatar = getResources().getDrawable(R.drawable.default_avatar);
-//				avatar.setBounds(0, 0, referenceWidth, referenceHeight);
-//				button.setCompoundDrawables(null, avatar, null, null);
 				holder.textView.setText(username);
 				EaseUserUtils.setUserAvatar(getContext(), username, holder.imageView);
-				// demo群组成员的头像都用默认头像，需由开发者自己去设置头像
+				// here we just use default avatar, you need handle it if want to show other avatar
 				if (isInDeleteMode) {
-					// 如果是删除模式下，显示减人图标
+					// show remove icon if under delete mode
 					convertView.findViewById(R.id.badge_delete).setVisibility(View.VISIBLE);
 				} else {
 					convertView.findViewById(R.id.badge_delete).setVisibility(View.INVISIBLE);
@@ -435,7 +413,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					@Override
 					public void onClick(View v) {
 						if (isInDeleteMode) {
-							// 如果是删除自己，return
+							// just return if user want remove himself
 							if (EMClient.getInstance().getCurrentUser().equals(username)) {
 							    new EaseAlertDialog(ChatRoomDetailsActivity.this, R.string.not_delete_myself).show();
 								return;
@@ -446,12 +424,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 							}
 							EMLog.d("room", "remove user from room:" + username);
 						} else {
-							// 正常情况下点击user，可以进入用户详情或者聊天页面等等
-							// startActivity(new
-							// Intent(GroupDetailsActivity.this,
-							// ChatActivity.class).putExtra("userId",
-							// user.getUsername()));
-
+                            // do nothing here, you can show group member's profile here
 						}
 					}
 				});

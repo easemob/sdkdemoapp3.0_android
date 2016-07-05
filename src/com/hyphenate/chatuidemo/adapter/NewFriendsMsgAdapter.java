@@ -84,7 +84,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 		    
 		    holder.agree.setVisibility(View.INVISIBLE);
 		    
-			if(msg.getGroupId() != null){ // 显示群聊提示
+			if(msg.getGroupId() != null){ // show group name
 				holder.groupContainer.setVisibility(View.VISIBLE);
 				holder.groupname.setText(msg.getGroupName());
 			} else{
@@ -111,10 +111,10 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				holder.status.setText(str7);
 				if(msg.getStatus() == InviteMesageStatus.BEINVITEED){
 					if (msg.getReason() == null) {
-						// 如果没写理由
+						// use default text
 						holder.reason.setText(str3);
 					}
-				}else if (msg.getStatus() == InviteMesageStatus.BEAPPLYED) { //入群申请
+				}else if (msg.getStatus() == InviteMesageStatus.BEAPPLYED) { //application to join group
 					if (TextUtils.isEmpty(msg.getReason())) {
 						holder.reason.setText(str4 + msg.getGroupName());
 					}
@@ -124,18 +124,18 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                     }
 				}
 				
-				// 设置点击事件
+				// set click listener
                 holder.agree.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // 同意别人发的好友请求
+                        // accept invitation
                         acceptInvitation(holder.agree, holder.status, msg);
                     }
                 });
 				holder.status.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						// 拒绝别人发的好友请求
+						// decline invitation
 					    refuseInvitation(holder.agree, holder.status, msg);
 					}
 				});
@@ -158,15 +158,13 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                 holder.status.setBackgroundDrawable(null);
                 holder.status.setEnabled(false);
             }
-
-			// 设置用户头像
 		}
 
 		return convertView;
 	}
 
 	/**
-	 * 同意好友请求或者群申请
+	 * accept invitation
 	 * 
 	 * @param button
 	 * @param username
@@ -182,17 +180,17 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 
 		new Thread(new Runnable() {
 			public void run() {
-				// 调用sdk的同意方法
+				// call api
 				try {
-					if (msg.getStatus() == InviteMesageStatus.BEINVITEED) {//同意好友请求
+					if (msg.getStatus() == InviteMesageStatus.BEINVITEED) {//accept be friends
 						EMClient.getInstance().contactManager().acceptInvitation(msg.getFrom());
-					} else if (msg.getStatus() == InviteMesageStatus.BEAPPLYED) { //同意加群申请
+					} else if (msg.getStatus() == InviteMesageStatus.BEAPPLYED) { //accept application to join group
 						EMClient.getInstance().groupManager().acceptApplication(msg.getFrom(), msg.getGroupId());
 					} else if (msg.getStatus() == InviteMesageStatus.GROUPINVITATION) {
 					    EMClient.getInstance().groupManager().acceptInvitation(msg.getGroupId(), msg.getGroupInviter());
 					}
                     msg.setStatus(InviteMesageStatus.AGREED);
-                    // 更新db
+                    // update database
                     ContentValues values = new ContentValues();
                     values.put(InviteMessgeDao.COLUMN_NAME_STATUS, msg.getStatus().ordinal());
                     messgeDao.updateMessage(msg.getId(), values);
@@ -224,7 +222,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 	}
 	
 	/**
-     * 拒绝好友请求或者群申请
+     * decline invitation
      * 
      * @param button
      * @param username
@@ -240,17 +238,17 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 
         new Thread(new Runnable() {
             public void run() {
-                // 调用sdk的拒绝方法
+                // call api
                 try {
-                    if (msg.getStatus() == InviteMesageStatus.BEINVITEED) {//拒绝好友请求
+                    if (msg.getStatus() == InviteMesageStatus.BEINVITEED) {//decline the invitation
                         EMClient.getInstance().contactManager().declineInvitation(msg.getFrom());
-                    } else if (msg.getStatus() == InviteMesageStatus.BEAPPLYED) { //同意加群申请
+                    } else if (msg.getStatus() == InviteMesageStatus.BEAPPLYED) { //decline application to join group
                         EMClient.getInstance().groupManager().declineApplication(msg.getFrom(), msg.getGroupId(), "");
                     } else if (msg.getStatus() == InviteMesageStatus.GROUPINVITATION) {
                         EMClient.getInstance().groupManager().declineInvitation(msg.getGroupId(), msg.getGroupInviter(), "");
                     }
                     msg.setStatus(InviteMesageStatus.REFUSED);
-                    // 更新db
+                    // update database
                     ContentValues values = new ContentValues();
                     values.put(InviteMessgeDao.COLUMN_NAME_STATUS, msg.getStatus().ordinal());
                     messgeDao.updateMessage(msg.getId(), values);

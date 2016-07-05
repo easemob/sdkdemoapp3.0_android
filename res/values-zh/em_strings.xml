@@ -135,6 +135,7 @@
     <string name="accept_join_group">同意加入群：</string>
     <string name="refuse_join_group">拒绝加入群：</string>
     <string name="at_your_in_group">%s在群聊中@了你</string>
+    <string name="emojicon_test_name">示例</string>
     
     <string name="not_add_myself">不能添加自己</string>
     <string name="This_user_is_already_your_friend">此用户已是你的好友</string>
@@ -238,7 +239,7 @@
     <string name="network_anomalies">网络异常，请检查网络！</string>
     <string name="User_already_exists">用户已存在！</string>
     <string name="registration_failed_without_permission">注册失败，无权限！</string>
-    <string name="Registration_failed">注册失败:</string>
+    <string name="Registration_failed">注册失败</string>
     <string name="Are_logged_out">正在退出登录..</string>
     <string name="Download_the_pictures">下载图片: 0%</string>
     <string name="Download_the_pictures_new">下载图片:</string>

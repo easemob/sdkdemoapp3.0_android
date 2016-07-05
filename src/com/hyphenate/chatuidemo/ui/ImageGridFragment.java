@@ -177,7 +177,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			startActivityForResult(intent, 100);
 		}else{
 			VideoEntity vEntty=mList.get(position-1);
-			// 限制大小不能超过10M
+			// limit the size to 10M
 			if (vEntty.size > 1024 * 1024 * 10) {
 				String st = getResources().getString(R.string.temporary_does_not);
 				Toast.makeText(getActivity(), st, Toast.LENGTH_SHORT).show();
@@ -282,32 +282,15 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			notifyDataSetChanged();
 		}
 
-		
-		
 		class ViewHolder{
 			
 			RecyclingImageView imageView;
 			ImageView icon;
 			TextView tvDur;
-			TextView tvSize;
-			
-			
-		}
-		
-		
-		
-		
-		
-		
-		 
+			TextView tvSize;		
+		}	 
 	}
 
-	
-	
-	
-	
-	
-	
 	private void getVideoFile()
 	{
 		ContentResolver mContentResolver=getActivity().getContentResolver();
@@ -320,14 +303,14 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				int id = cursor.getInt(cursor
 						.getColumnIndexOrThrow(MediaStore.Video.Media._ID));
 
-				// 名称：MediaStore.Audio.Media.TITLE
+				// title：MediaStore.Audio.Media.TITLE
 				String title = cursor.getString(cursor
 						.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
-				// 路径：MediaStore.Audio.Media.DATA
+				// path：MediaStore.Audio.Media.DATA
 				String url = cursor.getString(cursor
 						.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
 
-				// 总播放时长：MediaStore.Audio.Media.DURATION
+				// duration：MediaStore.Audio.Media.DURATION
 				int duration = cursor
 						.getInt(cursor
 								.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
@@ -350,13 +333,8 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			cursor.close();
 			cursor = null;
 		}
-	
-	
 	}
-	
-	
-	
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -374,10 +352,10 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				String filePath=null;
 				
 				if (cursor.moveToFirst()) {
-					// 路径：MediaStore.Audio.Media.DATA
+					// path：MediaStore.Audio.Media.DATA
 					filePath = cursor.getString(cursor
 							.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-					// 总播放时长：MediaStore.Audio.Media.DURATION
+					// duration：MediaStore.Audio.Media.DURATION
 					duration = cursor
 							.getInt(cursor
 									.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
@@ -393,20 +371,6 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				getActivity().finish();
 				
 			}
-		}
-		
+		}	
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
