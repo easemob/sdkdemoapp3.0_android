@@ -1,11 +1,12 @@
 package com.hyphenate.chatuidemo.domain;
 
-import java.util.Arrays;
-
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojicon.Type;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
+
+import java.util.Arrays;
 
 public class EmojiconExampleGroupData {
     
@@ -56,7 +57,8 @@ public class EmojiconExampleGroupData {
         for(int i = 0; i < icons.length; i++){
             datas[i] = new EaseEmojicon(icons[i], null, Type.BIG_EXPRESSION);
             datas[i].setBigIcon(bigIcons[i]);
-            datas[i].setName("Icon"+ (i+1));
+            //you can replace this to any you want
+            datas[i].setName(DemoApplication.getInstance().getApplicationContext().getString(R.string.emojicon_test_name)+ (i+1));
             datas[i].setIdentityCode("em"+ (1000+i+1));
         }
         emojiconGroupEntity.setEmojiconList(Arrays.asList(datas));

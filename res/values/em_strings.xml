@@ -135,6 +135,7 @@
     <string name="accept_join_group">accept join group:</string>
     <string name="refuse_join_group">refuse join group:</string>
     <string name="at_your_in_group">%s @ you in group chat</string>
+    <string name="emojicon_test_name">Test</string>
     
     <string name="not_add_myself">"Can't add yourself"</string>
     <string name="This_user_is_already_your_friend">This user is already your friend</string>
