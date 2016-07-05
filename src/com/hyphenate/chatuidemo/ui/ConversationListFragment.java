@@ -23,7 +23,6 @@ import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
-import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.NetUtils;
 
 public class ConversationListFragment extends EaseConversationListFragment{
@@ -69,32 +68,30 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 }
             }
         });
+        //red packet code : 红包回执消息在会话列表最后一条消息的展示
         conversationListView.setConversationListHelper(new EaseConversationListHelper() {
             @Override
             public String onSetItemSecondaryText(EMMessage lastMessage) {
                 if (lastMessage.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
-                    try {
-                        String sendNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME);
-                        String receiveNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME);
-                        String msg;
-                        if (lastMessage.direct() == EMMessage.Direct.RECEIVE) {
-                            msg = String.format(getResources().getString(R.string.money_msg_someone_take_money),receiveNick);
+                    String sendNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, "");
+                    String receiveNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
+                    String msg;
+                    if (lastMessage.direct() == EMMessage.Direct.RECEIVE) {
+                        msg = String.format(getResources().getString(R.string.msg_someone_take_red_packet), receiveNick);
+                    } else {
+                        if (sendNick.equals(receiveNick)) {
+                            msg = getResources().getString(R.string.msg_take_red_packet);
                         } else {
-                            if (sendNick.equals(receiveNick)) {
-                                msg = getResources().getString(R.string.money_msg_take_money);
-                            } else {
-                                msg = String.format(getResources().getString(R.string.money_msg_take_someone_money),sendNick);
-                            }
+                            msg = String.format(getResources().getString(R.string.msg_take_someone_red_packet), sendNick);
                         }
-                        return msg;
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
                     }
+                    return msg;
                 }
                 return null;
             }
         });
         super.setUpView();
+        //end of red packet code
     }
 
     @Override

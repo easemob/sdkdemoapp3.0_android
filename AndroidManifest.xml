@@ -344,6 +344,21 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan|stateHidden"
             />
+        <!--群成员列表页-->
+        <activity
+            android:name="com.easemob.redpacketui.ui.activity.RPGroupMemberActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            />
+        <!--支付宝h5支付页面-->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            />
         <!--红包相关Activity end-->
 
 

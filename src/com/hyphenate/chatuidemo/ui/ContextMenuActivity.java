@@ -35,10 +35,12 @@ public class ContextMenuActivity extends BaseActivity {
 		
 		int type = message.getType().ordinal();
 		if (type == EMMessage.Type.TXT.ordinal()) {
-		    if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false) ||
-		            message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
+		    if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
+					|| message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
+					//red packet code : 屏蔽红包消息的转发功能
 					|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
-		        setContentView(R.layout.em_context_menu_for_location);
+				    //end of red packet code
+				setContentView(R.layout.em_context_menu_for_location);
 		    }else if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
 		        setContentView(R.layout.em_context_menu_for_image);
 		    }else{
@@ -55,8 +57,11 @@ public class ContextMenuActivity extends BaseActivity {
 		} else if (type == EMMessage.Type.FILE.ordinal()) {
 		    setContentView(R.layout.em_context_menu_for_location);
 		}
-		if (isChatroom) {
-	        View v = (View) findViewById(R.id.forward);
+		if (isChatroom
+				//red packet code : 屏蔽红包消息的撤回功能
+				|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
+			    //end of red packet code
+			View v = (View) findViewById(R.id.forward);
 	        if (v != null) {
 	            v.setVisibility(View.GONE);
 	        }
