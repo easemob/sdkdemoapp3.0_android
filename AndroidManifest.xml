@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
           package="com.hyphenate.chatuidemo"
-          android:versionName="3.1.3"
-          android:versionCode="35"
+          android:versionName="3.1.4"
+          android:versionCode="36"
     >
 
     <uses-sdk
@@ -91,14 +91,6 @@
         <activity
             android:name="com.hyphenate.chatuidemo.ui.ChatActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize" >
-        </activity>
-        <!-- 聊天页面 -->
-        <activity
-            android:name="com.hyphenate.applib.ui.ChatActivity"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize" >
@@ -415,8 +407,8 @@
         <!-- mi push end -->
         
         <!-- huawei push -->
-    <!-- 第三方相关 :接收Push消息（注册、Push消息、Push连接状态、标签，LBS上报结果）广播 -->
-        <!-- <receiver android:name="com.hyphenate.chat.EMHuaweiPushReceiver" >
+    第三方相关 :接收Push消息（注册、Push消息、Push连接状态、标签，LBS上报结果）广播
+        <receiver android:name="com.hyphenate.chat.EMHuaweiPushReceiver" >
             <intent-filter>
                 必须,用于接收token
                 <action android:name="com.huawei.android.push.intent.REGISTRATION" />
@@ -443,7 +435,7 @@
         <service
             android:name="com.huawei.android.pushagent.PushService"
             android:process=":pushservice" >
-        </service> -->
+        </service>
 
         <!-- huawei push end -->
         
