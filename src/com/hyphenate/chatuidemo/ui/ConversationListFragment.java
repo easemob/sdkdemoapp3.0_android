@@ -20,6 +20,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
+import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.exceptions.HyphenateException;
@@ -124,6 +125,9 @@ public class ConversationListFragment extends EaseConversationListFragment{
     	if (tobeDeleteCons == null) {
     	    return true;
     	}
+        if(tobeDeleteCons.getType() == EMConversationType.GroupChat){
+            EaseAtMessageHelper.get().removeAtMeGroup(tobeDeleteCons.getUserName());
+        }
         try {
             // delete conversation
             EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
