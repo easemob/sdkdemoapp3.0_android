@@ -147,7 +147,7 @@
     <string name="resend_sms_code">重新获取</string>
     <string name="before_tomorrow_24_hour_to_account">预计明天24点前到账</string>
     <string name="withdraw_bankcard_name">%1$s（%2$s）</string>
-    <string name="id_card_digit">0123456789X</string>
+    <string name="id_card_digit">0123456789Xx</string>
     <!--提现-->
     <string name="str_withdraw">提现</string>
     <string name="str_forget_pay_pwd">忘记密码</string>
