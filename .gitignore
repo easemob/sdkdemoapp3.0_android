@@ -12,6 +12,8 @@
 *gen/
 #*/assets/
 
+# Local configuration file (sdk path, etc)
+local.properties
 
 # Local configuration file (sdk path, etc)
 #local.properties
