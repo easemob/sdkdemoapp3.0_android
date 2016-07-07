@@ -28,7 +28,7 @@ import android.widget.Toast;
  * Blacklist screen
  * 
  */
-public class BlacklistActivity extends Activity {
+public class BlacklistActivity extends BaseActivity {
 	private ListView listView;
 	private BlacklistAdapater adapter;
 

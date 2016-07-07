@@ -13,20 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.easeui.adapter.EaseContactAdapter;
-import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.widget.EaseSidebar;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +26,20 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.adapter.EaseContactAdapter;
+import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.widget.EaseSidebar;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class GroupPickContactsActivity extends BaseActivity {
 	private ListView listView;
@@ -171,14 +171,6 @@ public class GroupPickContactsActivity extends BaseActivity {
 						}
 						isCheckedArray[position] = isChecked;
 
-						if (isChecked) {
-							for (int i = 0; i < isCheckedArray.length; i++) {
-								if (i != position) {
-									isCheckedArray[i] = false;
-								}
-							}
-							contactAdapter.notifyDataSetChanged();
-						}
 					}
 				});
 				// keep exist members checked

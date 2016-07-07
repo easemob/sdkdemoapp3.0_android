@@ -105,7 +105,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
                 }
-                getActivity().finish();
+                onBackPressed();
             }
         });
         ((EaseEmojiconMenu)inputMenu.getEmojiconMenu()).addEmojiconGroup(EmojiconExampleGroupData.getData());
