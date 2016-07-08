@@ -1,10 +1,9 @@
 package com.hyphenate.chatuidemo.db;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoApplication;
@@ -15,10 +14,11 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.HanziToPinyin;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 public class DemoDBManager {
     static private DemoDBManager dbMgr = new DemoDBManager();
@@ -163,12 +163,9 @@ public class DemoDBManager {
         
         String[] array = strVal.split("$");
         
-        if(array != null && array.length > 0){
+        if(array.length > 0){
             List<String> list = new ArrayList<String>();
-            for(String str:array){
-                list.add(str);
-            }
-            
+            Collections.addAll(list, array);
             return list;
         }
         
@@ -341,8 +338,8 @@ public class DemoDBManager {
 			Cursor cursor = db.rawQuery("select * from " + UserDao.ROBOT_TABLE_NAME, null);
 			if(cursor.getCount()>0){
 				users = new Hashtable<String, RobotUser>();
-			};
-			while (cursor.moveToNext()) {
+			}
+            while (cursor.moveToNext()) {
 				String username = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_ID));
 				String nick = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_NICK));
 				String avatar = cursor.getString(cursor.getColumnIndex(UserDao.ROBOT_COLUMN_NAME_AVATAR));
@@ -365,8 +362,12 @@ public class DemoDBManager {
 						user.setInitialLetter("#");
 					}
 				}
-				
-				users.put(username, user);
+
+                try {
+                    users.put(username, user);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 			}
 			cursor.close();
 		}

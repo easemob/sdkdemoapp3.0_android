@@ -13,20 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMContact;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.db.UserDao;
-import com.hyphenate.chatuidemo.domain.RobotUser;
-import com.hyphenate.exceptions.HyphenateException;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,11 +31,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMContact;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.db.UserDao;
+import com.hyphenate.chatuidemo.domain.RobotUser;
+import com.hyphenate.exceptions.HyphenateException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class RobotsActivity extends BaseActivity {
 
 	public static final String TAG = RobotsActivity.class.getSimpleName();
 
-	private ListView mListView;
 	private List<RobotUser> robotList = new ArrayList<RobotUser>();
 	private RobotAdapter adapter;
 	private InputMethodManager inputMethodManager;
@@ -61,10 +60,12 @@ public class RobotsActivity extends BaseActivity {
 		super.onCreate(arg0);
 		setContentView(R.layout.em_fragment_robots);
 		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		mListView = (ListView) findViewById(R.id.list);
+		ListView mListView = (ListView) findViewById(R.id.list);
 		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
-		swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
-				android.R.color.holo_orange_light, android.R.color.holo_red_light);
+		if (android.os.Build.VERSION.SDK_INT >= 14) {
+			swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
+					android.R.color.holo_orange_light, android.R.color.holo_red_light);
+		}
 		progressBar = findViewById(R.id.progress_bar);
 		swipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
 
@@ -179,7 +180,7 @@ public class RobotsActivity extends BaseActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.em_row_robots, null);
+				convertView = inflater.inflate(R.layout.em_row_robots, parent, false);
 			}
 			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position).getNick());
 			return convertView;

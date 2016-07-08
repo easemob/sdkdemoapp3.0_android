@@ -13,17 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import com.easemob.redpacketui.utils.RedPacketUtil;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMOptions;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.DemoModel;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.easeui.widget.EaseSwitchButton;
-import com.hyphenate.util.EMLog;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,11 +28,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.redpacketui.utils.RedPacketUtil;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMOptions;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.DemoModel;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.widget.EaseSwitchButton;
+import com.hyphenate.util.EMLog;
+
 /**
  * settings screen
  * 
  * 
  */
+@SuppressWarnings({"FieldCanBeLocal"})
 public class SettingsFragment extends Fragment implements OnClickListener {
 
 	/**

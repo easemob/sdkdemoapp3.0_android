@@ -1,9 +1,5 @@
 package com.hyphenate.chatuidemo.ui;
 
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -16,10 +12,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+
 public class OfflinePushNickActivity extends BaseActivity {
 
 	private EditText inputNickName;
-	private Button saveNickName;
 	private TextView nicknameDescription;
 	private ProgressDialog dialog;
 
@@ -30,7 +29,7 @@ public class OfflinePushNickActivity extends BaseActivity {
 		setContentView(R.layout.em_activity_offline_push);
 
 		inputNickName = (EditText) findViewById(R.id.et_input_nickname);
-		saveNickName = (Button) findViewById(R.id.btn_save);
+		Button saveNickName = (Button) findViewById(R.id.btn_save);
 		nicknameDescription = (TextView) findViewById(R.id.tv_nickname_description);
 
 		saveNickName.setOnClickListener(new OnClickListener() {

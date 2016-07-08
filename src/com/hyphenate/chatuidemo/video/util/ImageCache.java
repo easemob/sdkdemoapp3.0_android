@@ -16,15 +16,6 @@
 
 package com.hyphenate.chatuidemo.video.util;
 
-import java.io.File;
-import java.lang.ref.SoftReference;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -40,6 +31,15 @@ import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.hyphenate.chatuidemo.BuildConfig;
+
+import java.io.File;
+import java.lang.ref.SoftReference;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * This class memory caching of bitmaps in conjunction with the
@@ -63,7 +63,6 @@ public class ImageCache {
 	private static final boolean DEFAULT_INIT_DISK_CACHE_ON_CREATE = false;
 
 	private LruCache<String, BitmapDrawable> mMemoryCache;
-	private ImageCacheParams mCacheParams;
 
 	private Set<SoftReference<Bitmap>> mReusableBitmaps;
 
@@ -119,7 +118,7 @@ public class ImageCache {
 	 *            The cache parameters to initialize the cache
 	 */
 	private void init(ImageCacheParams cacheParams) {
-		mCacheParams = cacheParams;
+		ImageCacheParams mCacheParams = cacheParams;
 
 		// BEGIN_INCLUDE(init_memory_cache)
 		// Set up memory cache
@@ -428,8 +427,8 @@ public class ImageCache {
 	private static String bytesToHexString(byte[] bytes) {
 		// http://stackoverflow.com/questions/332079
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < bytes.length; i++) {
-			String hex = Integer.toHexString(0xFF & bytes[i]);
+		for (byte aByte : bytes) {
+			String hex = Integer.toHexString(0xFF & aByte);
 			if (hex.length() == 1) {
 				sb.append('0');
 			}

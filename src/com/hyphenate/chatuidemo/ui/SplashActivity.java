@@ -1,17 +1,12 @@
 package com.hyphenate.chatuidemo.ui;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMGroupManager;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 
@@ -20,9 +15,7 @@ import com.hyphenate.chatuidemo.R;
  *
  */
 public class SplashActivity extends BaseActivity {
-	private RelativeLayout rootLayout;
-	private TextView versionText;
-	
+
 	private static final int sleepTime = 2000;
 
 	@Override
@@ -30,8 +23,8 @@ public class SplashActivity extends BaseActivity {
 		setContentView(R.layout.em_activity_splash);
 		super.onCreate(arg0);
 
-		rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
-		versionText = (TextView) findViewById(R.id.tv_version);
+		RelativeLayout rootLayout = (RelativeLayout) findViewById(R.id.splash_root);
+		TextView versionText = (TextView) findViewById(R.id.tv_version);
 
 		versionText.setText(getVersion());
 		AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);

@@ -212,7 +212,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 						@Override
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(context, str3 + e.getMessage(), 1).show();
+							Toast.makeText(context, str3 + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 
@@ -270,7 +270,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                         @Override
                         public void run() {
                             pd.dismiss();
-                            Toast.makeText(context, str3 + e.getMessage(), 1).show();
+                            Toast.makeText(context, str3 + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 

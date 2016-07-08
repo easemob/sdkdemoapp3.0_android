@@ -331,4 +331,8 @@
     
     <string name="network_unstable">网络不稳定</string>
     <string name="no_call_data">没有通话数据</string>
+
+    <!-- lint -->
+    <string name="delete_contact">删除联系人</string>
+    <string name="loading_more">正在加载更多...</string>
 </resources>

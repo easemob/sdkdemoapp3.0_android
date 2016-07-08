@@ -1,19 +1,6 @@
 package com.hyphenate.chatuidemo.ui;
 
-import com.hyphenate.chat.EMCallStateChangeListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMCallManager.EMVideoCallHelper.CallType;
-import com.hyphenate.chat.EMMessage.Status;
-import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EMServiceNotReadyException;
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
-import com.hyphenate.util.EMLog;
-import com.hyphenate.util.NetUtils;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.Ringtone;
@@ -24,6 +11,20 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessage.Status;
+import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.EMServiceNotReadyException;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
+import com.hyphenate.util.EMLog;
+import com.hyphenate.util.NetUtils;
+
+@SuppressLint("Registered")
 public class CallActivity extends BaseActivity {
     protected final int MSG_CALL_MAKE_VIDEO = 0;
     protected final int MSG_CALL_MAKE_VOICE = 1;
@@ -201,12 +202,6 @@ public class CallActivity extends BaseActivity {
      */
     protected int playMakeCallSounds() {
         try {
-            // max volume
-            float audioMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
-            // current volume
-            float audioCurrentVolume = audioManager.getStreamVolume(AudioManager.STREAM_RING);
-            float volumeRatio = audioCurrentVolume / audioMaxVolume;
-
             audioManager.setMode(AudioManager.MODE_RINGTONE);
             audioManager.setSpeakerphoneOn(false);
 
@@ -256,8 +251,8 @@ public class CallActivity extends BaseActivity {
      * save call record
      */
     protected void saveCallRecord() {
-        EMMessage message = null;
-        EMTextMessageBody txtBody = null;
+        @SuppressWarnings("UnusedAssignment") EMMessage message = null;
+        @SuppressWarnings("UnusedAssignment") EMTextMessageBody txtBody = null;
         if (!isInComingCall) { // outgoing call
             message = EMMessage.createSendMessage(EMMessage.Type.TXT);
             message.setReceipt(username);
@@ -298,6 +293,7 @@ public class CallActivity extends BaseActivity {
             break;
         case VERSION_NOT_SAME:
             txtBody = new EMTextMessageBody(getString(R.string.call_version_inconsistent));
+            break;
         default:
             txtBody = new EMTextMessageBody(st8);
             break;

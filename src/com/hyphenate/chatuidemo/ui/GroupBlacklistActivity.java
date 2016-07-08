@@ -1,12 +1,5 @@
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.Collections;
-import java.util.List;
-
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.HyphenateException;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -20,6 +13,13 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
+
+import java.util.Collections;
+import java.util.List;
 
 public class GroupBlacklistActivity extends BaseActivity {
 	private ListView listView;
@@ -57,7 +57,7 @@ public class GroupBlacklistActivity extends BaseActivity {
 				} catch (HyphenateException e) {
 					runOnUiThread(new Runnable() {
 						public void run() {
-							Toast.makeText(getApplicationContext(), st1, 1).show();
+							Toast.makeText(getApplicationContext(), st1, Toast.LENGTH_LONG).show();
 							progressBar.setVisibility(View.INVISIBLE);
 						}
 					});
@@ -98,12 +98,16 @@ public class GroupBlacklistActivity extends BaseActivity {
 			e.printStackTrace();
 			runOnUiThread(new Runnable() {
 				public void run() {
-					Toast.makeText(getApplicationContext(), st2, 0).show();
+					Toast.makeText(getApplicationContext(), st2, Toast.LENGTH_SHORT).show();
 				}
 			});
 		}
 	}
-	
+
+	public void back(View view) {
+        finish();
+	}
+
 	/**
 	 * adapter
 	 * 
