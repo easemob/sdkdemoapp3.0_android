@@ -13,19 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.UUID;
-
-import com.hyphenate.chat.EMCallManager.EMCameraDataProcessor;
-import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
-import com.hyphenate.chat.EMCallStateChangeListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
-import com.hyphenate.util.EMLog;
-import com.hyphenate.util.PathUtil;
-
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
@@ -49,6 +36,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMCallManager.EMCameraDataProcessor;
+import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
+import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
+import com.hyphenate.util.PathUtil;
+
+import java.util.UUID;
+
 public class VideoCallActivity extends CallActivity implements OnClickListener {
 
     private boolean isMuteState;
@@ -69,7 +68,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private Chronometer chronometer;
     private LinearLayout voiceContronlLayout;
     private RelativeLayout rootContainer;
-    private RelativeLayout btnsContainer;
     private LinearLayout topContainer;
     private LinearLayout bottomContainer;
     private TextView monitorTextView;
@@ -80,8 +78,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private boolean isInCalling;
     boolean isRecording = false;
     private Button recordBtn;
-    private Button switchCameraBtn;
-    private SeekBar YDeltaSeekBar;
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
     
@@ -141,14 +137,14 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         nickTextView = (TextView) findViewById(R.id.tv_nick);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
         voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
-        btnsContainer = (RelativeLayout) findViewById(R.id.ll_btns);
+        RelativeLayout btnsContainer = (RelativeLayout) findViewById(R.id.ll_btns);
         topContainer = (LinearLayout) findViewById(R.id.ll_top_container);
         bottomContainer = (LinearLayout) findViewById(R.id.ll_bottom_container);
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         recordBtn = (Button) findViewById(R.id.btn_record_video);
-        switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
-        YDeltaSeekBar = (SeekBar) findViewById(R.id.seekbar_y_detal);
+        Button switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
+        SeekBar YDeltaSeekBar = (SeekBar) findViewById(R.id.seekbar_y_detal);
 
         refuseBtn.setOnClickListener(this);
         answerBtn.setOnClickListener(this);
@@ -303,34 +299,34 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 case VIDEO_PAUSE:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VIDEO_PAUSE", 0).show();
+                            Toast.makeText(getApplicationContext(), "VIDEO_PAUSE", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case VIDEO_RESUME:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VIDEO_RESUME", 0).show();
+                            Toast.makeText(getApplicationContext(), "VIDEO_RESUME", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case VOICE_PAUSE:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VOICE_PAUSE", 0).show();
+                            Toast.makeText(getApplicationContext(), "VOICE_PAUSE", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case VOICE_RESUME:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VOICE_RESUME", 0).show();
+                            Toast.makeText(getApplicationContext(), "VOICE_RESUME", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case DISCONNNECTED: // call is disconnected
                     handler.removeCallbacks(timeoutHangup);
-                    final CallError fError = error;
+                    @SuppressWarnings("UnnecessaryLocalVariable")final CallError fError = error;
                     runOnUiThread(new Runnable() {
                         private void postDelayedCloseMsg() {
                             uiHandler.postDelayed(new Runnable() {
@@ -487,7 +483,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 String filepath = callHelper.stopVideoRecord();
                 isRecording = false;
                 recordBtn.setText(R.string.recording_video);
-                Toast.makeText(getApplicationContext(), String.format(getString(R.string.record_finish_toast), filepath), 1).show();
+                Toast.makeText(getApplicationContext(), String.format(getString(R.string.record_finish_toast), filepath), Toast.LENGTH_LONG).show();
             }
             break;
         case R.id.root_layout:

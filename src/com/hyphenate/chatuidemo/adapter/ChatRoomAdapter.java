@@ -13,8 +13,6 @@
  */
 package com.hyphenate.chatuidemo.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +28,8 @@ import android.widget.TextView;
 
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chatuidemo.R;
+
+import java.util.List;
 
 public class ChatRoomAdapter extends ArrayAdapter<EMChatRoom> {
 
@@ -62,7 +62,7 @@ public class ChatRoomAdapter extends ArrayAdapter<EMChatRoom> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (getItemViewType(position) == 0) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.em_search_bar_with_padding, null);
+				convertView = inflater.inflate(R.layout.em_search_bar_with_padding, parent, false);
 			}
 			final EditText query = (EditText) convertView.findViewById(R.id.query);
 			final ImageButton clearSearch = (ImageButton) convertView.findViewById(R.id.search_clear);
@@ -90,7 +90,7 @@ public class ChatRoomAdapter extends ArrayAdapter<EMChatRoom> {
 			});
 		}else if (getItemViewType(position) == 1) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.em_row_add_group, null);
+				convertView = inflater.inflate(R.layout.em_row_add_group, parent, false);
 			}
 			((ImageView) convertView.findViewById(R.id.avatar)).setImageResource(R.drawable.em_add_public_group);
 			((TextView) convertView.findViewById(R.id.name)).setText(addChatRoomString);
@@ -98,7 +98,7 @@ public class ChatRoomAdapter extends ArrayAdapter<EMChatRoom> {
 
 		} else {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.em_row_group, null);
+				convertView = inflater.inflate(R.layout.em_row_group, parent, false);
 			}
 			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position - 2).getName());
 

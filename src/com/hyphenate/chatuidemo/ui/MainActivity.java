@@ -13,8 +13,26 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.List;
-import java.util.List;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.PowerManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketui.utils.RedPacketUtil;
@@ -31,35 +49,14 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
-import com.hyphenate.chatuidemo.domain.InviteMessage;
 import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
 import com.hyphenate.chatuidemo.runtimepermissions.PermissionsResultAction;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.PowerManager;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.List;
 
 @SuppressLint("NewApi")
 public class MainActivity extends BaseActivity {
@@ -72,7 +69,6 @@ public class MainActivity extends BaseActivity {
 
 	private Button[] mTabs;
 	private ContactListFragment contactListFragment;
-	private SettingsFragment settingFragment;
 	private Fragment[] fragments;
 	private int index;
 	private int currentTabIndex;
@@ -133,11 +129,11 @@ public class MainActivity extends BaseActivity {
 		}
 
 		inviteMessgeDao = new InviteMessgeDao(this);
-		userDao = new UserDao(this);
+		UserDao userDao = new UserDao(this);
 		conversationListFragment = new ConversationListFragment();
 		contactListFragment = new ContactListFragment();
-		settingFragment = new SettingsFragment();
-		fragments = new Fragment[] { conversationListFragment, contactListFragment, settingFragment };
+		SettingsFragment settingFragment = new SettingsFragment();
+		fragments = new Fragment[] { conversationListFragment, contactListFragment, settingFragment};
 
 		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, conversationListFragment)
 				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
@@ -413,7 +409,6 @@ public class MainActivity extends BaseActivity {
 	}
 
 	private InviteMessgeDao inviteMessgeDao;
-	private UserDao userDao;
 
 	@Override
 	protected void onResume() {

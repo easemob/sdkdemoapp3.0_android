@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/splash_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -34,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textColor="#fff"
-            android:textSize="20dip"
+            android:textSize="20sp"
             android:typeface="normal" >
         </TextView>
 
@@ -45,7 +46,8 @@
             android:layout_marginLeft="10dip"
             android:text="2.1.7"
             android:textColor="#fff"
-            android:textSize="20sp" >
+            android:textSize="20sp"
+            tools:ignore="HardcodedText">
         </TextView>
     </LinearLayout>
 

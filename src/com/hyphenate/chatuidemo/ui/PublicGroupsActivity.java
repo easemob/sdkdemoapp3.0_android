@@ -14,15 +14,6 @@
 
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCursorResult;
-import com.hyphenate.chat.EMGroupInfo;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.HyphenateException;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +31,15 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCursorResult;
+import com.hyphenate.chat.EMGroupInfo;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PublicGroupsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -68,7 +68,7 @@ public class PublicGroupsActivity extends BaseActivity {
 		groupsList = new ArrayList<EMGroupInfo>();
 		searchBtn = (Button) findViewById(R.id.btn_search);
 		
-		View footView = getLayoutInflater().inflate(R.layout.em_listview_footer_view, null);
+		View footView = getLayoutInflater().inflate(R.layout.em_listview_footer_view, listView, false);
         footLoadingLayout = (LinearLayout) footView.findViewById(R.id.loading_layout);
         footLoadingPB = (ProgressBar)footView.findViewById(R.id.loading_bar);
         footLoadingText = (TextView) footView.findViewById(R.id.loading_text);
@@ -153,7 +153,7 @@ public class PublicGroupsActivity extends BaseActivity {
                             isLoading = false;
                             pb.setVisibility(View.INVISIBLE);
                             footLoadingLayout.setVisibility(View.GONE);
-                            Toast.makeText(PublicGroupsActivity.this, "load failed, please check your network or try it later", 0).show();
+                            Toast.makeText(PublicGroupsActivity.this, "load failed, please check your network or try it later", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -176,7 +176,7 @@ public class PublicGroupsActivity extends BaseActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.em_row_group, null);
+				convertView = inflater.inflate(R.layout.em_row_group, parent, false);
 			}
 
 			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position).getGroupName());

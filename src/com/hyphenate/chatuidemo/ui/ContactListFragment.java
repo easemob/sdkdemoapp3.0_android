@@ -28,6 +28,7 @@ import com.hyphenate.easeui.ui.EaseContactListFragment;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.NetUtils;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.ContextMenu;
@@ -55,10 +56,11 @@ public class ContactListFragment extends EaseContactListFragment {
     private ContactItemView applicationItem;
     private InviteMessgeDao inviteMessgeDao;
 
+    @SuppressLint("InflateParams")
     @Override
     protected void initView() {
         super.initView();
-        View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.em_contacts_header, null);
+        @SuppressLint("InflateParams") View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.em_contacts_header, null);
         HeaderItemClickListener clickListener = new HeaderItemClickListener();
         applicationItem = (ContactItemView) headerView.findViewById(R.id.application_item);
         applicationItem.setOnClickListener(clickListener);
@@ -77,6 +79,7 @@ public class ContactListFragment extends EaseContactListFragment {
     public void refresh() {
         Map<String, EaseUser> m = DemoHelper.getInstance().getContactList();
         if (m instanceof Hashtable<?, ?>) {
+            //noinspection unchecked
             m = (Map<String, EaseUser>) ((Hashtable<String, EaseUser>)m).clone();
         }
         setContactsMap(m);
@@ -257,7 +260,7 @@ public class ContactListFragment extends EaseContactListFragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), st2 + e.getMessage(), 1).show();
+							Toast.makeText(getActivity(), st2 + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 
@@ -283,7 +286,7 @@ public class ContactListFragment extends EaseContactListFragment {
                                 refresh();
                             }else{
                                 String s1 = getResources().getString(R.string.get_failed_please_check);
-                                Toast.makeText(getActivity(), s1, 1).show();
+                                Toast.makeText(getActivity(), s1, Toast.LENGTH_LONG).show();
                                 loadingView.setVisibility(View.GONE);
                             }
                         }
@@ -307,8 +310,8 @@ public class ContactListFragment extends EaseContactListFragment {
             });
         }
         
-    };
-    
+    }
+
     class ContactInfoSyncListener implements DataSyncListener{
 
         @Override

@@ -1,8 +1,5 @@
 package com.hyphenate.chatuidemo.parse;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 
 import com.hyphenate.EMValueCallBack;
@@ -20,6 +17,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParseManager {
 
 	private static final String TAG = ParseManager.class.getSimpleName();
@@ -35,7 +35,6 @@ public class ParseManager {
 	private static final String CONFIG_NICK = "nickname";
 	private static final String CONFIG_AVATAR = "avatar";
 
-	private Context appContext;
 	private static ParseManager instance = new ParseManager();
 	
 
@@ -47,7 +46,7 @@ public class ParseManager {
 	}
 
 	public void onInit(Context context) {
-		this.appContext = context.getApplicationContext();
+		Context appContext = context.getApplicationContext();
 		Parse.enableLocalDatastore(appContext);
 		Parse.initialize(context, ParseAppID, ParseClientKey);
 //		Parse.initialize(new Parse.Configuration.Builder(appContext)

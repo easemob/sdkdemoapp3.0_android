@@ -81,7 +81,7 @@ public class RegisterActivity extends BaseActivity {
 									pd.dismiss();
 								// save current user
 								DemoHelper.getInstance().setCurrentUserName(username);
-								Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registered_successfully), 0).show();
+								Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registered_successfully), Toast.LENGTH_SHORT).show();
 								finish();
 							}
 						});

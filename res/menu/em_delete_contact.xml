@@ -2,6 +2,6 @@
 
     <item
         android:id="@+id/delete_contact"
-        android:title="删除联系人"/>
+        android:title="@string/delete_contact"/>
 	
 </menu>

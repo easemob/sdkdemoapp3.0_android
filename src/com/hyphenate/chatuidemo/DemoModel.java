@@ -1,12 +1,5 @@
 package com.hyphenate.chatuidemo;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.content.Context;
 
 import com.hyphenate.chatuidemo.db.UserDao;
@@ -14,6 +7,11 @@ import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DemoModel {
     UserDao dao = null;
@@ -136,16 +134,13 @@ public class DemoModel {
         
         List<String> list = new ArrayList<String>();
         list.addAll(groups);
-        //直接删除groups的内容，可能会有并发的错误
-        synchronized (list) {
-            for(int i = 0; i < list.size(); i++){
-                if(EaseAtMessageHelper.get().getAtMeGroups().contains(list.get(i))){
-                    list.remove(i);
-                    i--;
-                }
+        for(int i = 0; i < list.size(); i++){
+            if(EaseAtMessageHelper.get().getAtMeGroups().contains(list.get(i))){
+                list.remove(i);
+                i--;
             }
         }
-        
+
         dao.setDisabledGroups(list);
         valueCache.put(Key.DisabledGroups, list);
     }
@@ -161,7 +156,8 @@ public class DemoModel {
             val = dao.getDisabledGroups();
             valueCache.put(Key.DisabledGroups, val);
         }
-       
+
+        //noinspection unchecked
         return (List<String>) val;
     }
     
@@ -185,7 +181,8 @@ public class DemoModel {
             val = dao.getDisabledIds();
             valueCache.put(Key.DisabledIds, val);
         }
-       
+
+        //noinspection unchecked
         return (List<String>) val;
     }
     

@@ -19,7 +19,7 @@ public class ChatRowRedPacketAck extends EaseChatRow {
     }
 
     @Override
-    protected void onInflatView() {
+    protected void onInflateView() {
         if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
             inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
                     R.layout.em_row_red_packet_ack_message : R.layout.em_row_red_packet_ack_message, this);

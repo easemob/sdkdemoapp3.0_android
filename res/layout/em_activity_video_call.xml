@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -43,7 +44,8 @@
                 android:layout_height="wrap_content"
                 android:text="Chronometer"
                 android:textColor="#fff"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/tv_is_p2p"
@@ -58,7 +60,8 @@
                 android:layout_marginTop="10dp"
                 android:text="张三"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
 
            <!-- 演示视频录制功能 -->
@@ -134,7 +137,8 @@
                 <LinearLayout
                     android:id="@+id/ll_voice_control"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    tools:ignore="DisableBaselineAlignment">
 
                     <LinearLayout
                         android:layout_width="0dp"

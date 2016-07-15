@@ -13,19 +13,15 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,7 +32,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -46,8 +41,6 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseExpandGridView;
-import com.hyphenate.util.EMLog;
-import com.hyphenate.util.NetUtils;
 
 public class ChatRoomDetailsActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "ChatRoomDetailsActivity";
@@ -57,7 +50,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 	String longClickUsername = null;
 
-	private EaseExpandGridView userGridview;
 	private String roomId;
 	private ProgressBar loadingPB;
 	private Button exitBtn;
@@ -69,19 +61,8 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	public static ChatRoomDetailsActivity instance;
 	
 	String st = "";
-	// clear all history
-	private RelativeLayout clearAllHistory;
-	private RelativeLayout blacklistLayout;
-	private RelativeLayout changeGroupNameLayout;
-	
-	private RelativeLayout blockGroupMsgLayout;
-	private RelativeLayout showChatRoomIdLayout;
-	private TextView chatRoomIdTextView;
-	private TextView chatRoomNickTextView;
-	private TextView chatRoomOwnerTextView;
-	private RelativeLayout showChatRoomNickLayout;
-	private RelativeLayout showChatRoomOwnerLayout;
-    private List<String> memberList;
+
+	private List<String> memberList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,23 +70,23 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		setContentView(R.layout.em_activity_group_details);
 		instance = this;
 		st = getResources().getString(R.string.people);
-		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
+		RelativeLayout clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
 		clearAllHistory.setVisibility(View.GONE);
-		userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
+		EaseExpandGridView userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
 		userGridview.setVisibility(View.VISIBLE);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
 		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
 		deleteBtn = (Button) findViewById(R.id.btn_exitdel_grp);
-		blacklistLayout = (RelativeLayout) findViewById(R.id.rl_blacklist);
-		changeGroupNameLayout = (RelativeLayout) findViewById(R.id.rl_change_group_name);
+		RelativeLayout blacklistLayout = (RelativeLayout) findViewById(R.id.rl_blacklist);
+		RelativeLayout changeGroupNameLayout = (RelativeLayout) findViewById(R.id.rl_change_group_name);
 
-		blockGroupMsgLayout = (RelativeLayout)findViewById(R.id.rl_switch_block_groupmsg);
-		showChatRoomIdLayout = (RelativeLayout)findViewById(R.id.rl_group_id);
-		showChatRoomNickLayout = (RelativeLayout)findViewById(R.id.rl_group_nick);
-		showChatRoomOwnerLayout = (RelativeLayout)findViewById(R.id.rl_group_owner);
-		chatRoomIdTextView = (TextView)findViewById(R.id.tv_group_id);
-		chatRoomNickTextView = (TextView)findViewById(R.id.tv_group_nick_value);
-		chatRoomOwnerTextView = (TextView)findViewById(R.id.tv_group_owner_value);
+		RelativeLayout blockGroupMsgLayout = (RelativeLayout) findViewById(R.id.rl_switch_block_groupmsg);
+		RelativeLayout showChatRoomIdLayout = (RelativeLayout) findViewById(R.id.rl_group_id);
+		RelativeLayout showChatRoomNickLayout = (RelativeLayout) findViewById(R.id.rl_group_nick);
+		RelativeLayout showChatRoomOwnerLayout = (RelativeLayout) findViewById(R.id.rl_group_owner);
+		TextView chatRoomIdTextView = (TextView) findViewById(R.id.tv_group_id);
+		TextView chatRoomNickTextView = (TextView) findViewById(R.id.tv_group_nick_value);
+		TextView chatRoomOwnerTextView = (TextView) findViewById(R.id.tv_group_owner_value);
 		
 		findViewById(R.id.rl_search).setVisibility(View.GONE);
 		
@@ -148,6 +129,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 	}
 
+	@SuppressWarnings("UnusedAssignment")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -202,7 +184,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		if (conversation != null) {
 			conversation.clearAllMessages();
 		}
-		Toast.makeText(this, R.string.messages_are_empty, 0).show();
+		Toast.makeText(this, R.string.messages_are_empty, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -228,7 +210,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), "Failed to quit group: " + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), "Failed to quit group: " + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 				}
@@ -317,7 +299,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public View getView(final int position, View convertView, final ViewGroup parent) {
-		    ViewHolder holder = null;
+		    @SuppressWarnings("UnusedAssignment") ViewHolder holder = null;
 			if (convertView == null) {
 			    holder = new ViewHolder();
 				convertView = LayoutInflater.from(getContext()).inflate(res, null);
