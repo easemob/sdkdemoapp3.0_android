@@ -120,6 +120,9 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		showChatRoomOwnerLayout.setVisibility(View.VISIBLE);
 		 
 		room = EMClient.getInstance().chatroomManager().getChatRoom(roomId);
+		if(room == null){
+		    return;
+		}
 		chatRoomNickTextView.setText(room.getName());
 		chatRoomOwnerTextView.setText(room.getOwner());
 
