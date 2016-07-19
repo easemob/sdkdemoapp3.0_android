@@ -214,7 +214,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                         }
                     });
                     break;
-                case DISCONNNECTED:
+                case DISCONNECTED:
                     handler.removeCallbacks(timeoutHangup);
                     @SuppressWarnings("UnnecessaryLocalVariable") final CallError fError = error;
                     runOnUiThread(new Runnable() {

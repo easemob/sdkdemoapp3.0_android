@@ -324,7 +324,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                         }
                     });
                     break;
-                case DISCONNNECTED: // call is disconnected
+                case DISCONNECTED: // call is disconnected
                     handler.removeCallbacks(timeoutHangup);
                     @SuppressWarnings("UnnecessaryLocalVariable")final CallError fError = error;
                     runOnUiThread(new Runnable() {
@@ -537,9 +537,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             monitorTextView.setText("WidthxHeight："+callHelper.getVideoWidth()+"x"+callHelper.getVideoHeight()
-                                    + "\nDelay：" + callHelper.getVideoTimedelay()
-                                    + "\nFramerate：" + callHelper.getVideoFramerate()
-                                    + "\nLost：" + callHelper.getVideoLostcnt()
+                                    + "\nDelay：" + callHelper.getVideoTimeDelay()
+                                    + "\nFramerate：" + callHelper.getVideoFrameRate()
+                                    + "\nLost：" + callHelper.getVideoLostRateInPercent()
                                     + "\nLocalBitrate：" + callHelper.getLocalBitrate()
                                     + "\nRemoteBitrate：" + callHelper.getRemoteBitrate());
                             
