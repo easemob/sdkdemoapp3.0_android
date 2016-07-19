@@ -100,7 +100,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton speakerSwitch;
     private EaseSwitchButton ownerLeaveSwitch;
     private EaseSwitchButton switch_delete_msg_when_exit_group;
-    private EaseSwitchButton switch_auto_accept_group_invitation;
+    private EaseSwitchButton switch_auto_accept_group_invitation;    
+    private EaseSwitchButton switch_adaptive_video_encode;
     private DemoModel settingsModel;
     private EMOptions chatOptions;
 	

@@ -233,6 +233,14 @@ public class DemoModel {
     public boolean isAutoAcceptGroupInvitation() {
         return PreferenceManager.getInstance().isAutoAcceptGroupInvitation();
     }
+
+    public void setAdaptiveVideoEncode(boolean value) {
+        PreferenceManager.getInstance().setAdaptiveVideoEncode(value);
+    }
+    
+    public boolean isAdaptiveVideoEncode() {
+        return PreferenceManager.getInstance().isAdaptiveVideoEncode();
+    }
     
     enum Key{
         VibrateAndPlayToneOn,
