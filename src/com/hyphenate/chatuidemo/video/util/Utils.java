@@ -1,8 +1,5 @@
 package com.hyphenate.chatuidemo.video.util;
 
-import java.util.Comparator;
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -13,10 +10,13 @@ import android.os.StrictMode;
 
 import com.hyphenate.chatuidemo.ui.ImageGridActivity;
 
+import java.util.Comparator;
+import java.util.List;
+
 public class Utils {
 
 	private Utils() {
-	};
+	}
 
 	@SuppressLint("NewApi")
 	public static void enableStrictMode() {
@@ -74,8 +74,7 @@ public class Utils {
 	public static List<Camera.Size> getResolutionList(Camera camera)
 	{ 
 		Parameters parameters = camera.getParameters();
-		List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
-		return previewSizes;
+		return parameters.getSupportedPreviewSizes();
 	}
 	
 	public static class ResolutionComparator implements Comparator<Camera.Size>{

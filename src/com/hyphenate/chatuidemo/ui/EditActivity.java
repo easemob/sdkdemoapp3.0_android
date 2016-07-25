@@ -1,12 +1,12 @@
 package com.hyphenate.chatuidemo.ui;
 
-import com.hyphenate.chatuidemo.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.hyphenate.chatuidemo.R;
 
 public class EditActivity extends BaseActivity{
 	private EditText editText;
@@ -31,6 +31,10 @@ public class EditActivity extends BaseActivity{
 	
 	public void save(View view){
 		setResult(RESULT_OK,new Intent().putExtra("data", editText.getText().toString()));
+		finish();
+	}
+
+	public void back(View view) {
 		finish();
 	}
 }

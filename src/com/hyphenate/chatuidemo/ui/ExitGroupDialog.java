@@ -22,16 +22,14 @@ import android.widget.TextView;
 import com.hyphenate.chatuidemo.R;
 
 public class ExitGroupDialog extends BaseActivity{
-    private TextView text;
-    private Button exitBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.em_logout_actionsheet);
-        
-        text = (TextView) findViewById(R.id.tv_text);
-        exitBtn = (Button) findViewById(R.id.btn_exit);
+
+        TextView text = (TextView) findViewById(R.id.tv_text);
+        Button exitBtn = (Button) findViewById(R.id.btn_exit);
         
         text.setText(R.string.exit_group_hint);
         String toast = getIntent().getStringExtra("deleteToast");

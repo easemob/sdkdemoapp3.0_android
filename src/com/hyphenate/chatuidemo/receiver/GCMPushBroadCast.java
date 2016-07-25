@@ -35,14 +35,11 @@ public class GCMPushBroadCast extends BroadcastReceiver {
 		}
 
 		try {
-			String notifyText = message;
 
 			PackageManager packageManager = context.getPackageManager();
-			String appname = (String) packageManager
-					.getApplicationLabel(context.getApplicationInfo());
-
 			// notification titile
-			String contentTitle = appname;
+			String contentTitle = (String) packageManager
+					.getApplicationLabel(context.getApplicationInfo());
 			String packageName = context.getApplicationInfo().packageName;
 
 			Uri defaultSoundUrlUri = RingtoneManager
@@ -61,8 +58,8 @@ public class GCMPushBroadCast extends BroadcastReceiver {
 					notifyID, msgIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 			mBuilder.setContentTitle(contentTitle);
-			mBuilder.setTicker(notifyText);
-			mBuilder.setContentText(notifyText);
+			mBuilder.setTicker(message);
+			mBuilder.setContentText(message);
 			mBuilder.setContentIntent(pendingIntent);
 			Notification notification = mBuilder.build();
 

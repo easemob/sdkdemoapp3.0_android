@@ -13,6 +13,7 @@
  */
 package com.hyphenate.chatuidemo.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -43,6 +44,7 @@ public class PreferenceManager {
 	private static String SHARED_KEY_CURRENTUSER_NICK = "SHARED_KEY_CURRENTUSER_NICK";
 	private static String SHARED_KEY_CURRENTUSER_AVATAR = "SHARED_KEY_CURRENTUSER_AVATAR";
 	
+	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
 		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
 		editor = mSharedPreferences.edit();
@@ -70,7 +72,7 @@ public class PreferenceManager {
 	
 	public void setSettingMsgNotification(boolean paramBoolean) {
 		editor.putBoolean(SHARED_KEY_SETTING_NOTIFICATION, paramBoolean);
-		editor.commit();
+		editor.apply();
 	}
 
 	public boolean getSettingMsgNotification() {
@@ -79,7 +81,7 @@ public class PreferenceManager {
 
 	public void setSettingMsgSound(boolean paramBoolean) {
 		editor.putBoolean(SHARED_KEY_SETTING_SOUND, paramBoolean);
-		editor.commit();
+		editor.apply();
 	}
 
 	public boolean getSettingMsgSound() {
@@ -89,7 +91,7 @@ public class PreferenceManager {
 
 	public void setSettingMsgVibrate(boolean paramBoolean) {
 		editor.putBoolean(SHARED_KEY_SETTING_VIBRATE, paramBoolean);
-		editor.commit();
+		editor.apply();
 	}
 
 	public boolean getSettingMsgVibrate() {
@@ -98,7 +100,7 @@ public class PreferenceManager {
 
 	public void setSettingMsgSpeaker(boolean paramBoolean) {
 		editor.putBoolean(SHARED_KEY_SETTING_SPEAKER, paramBoolean);
-		editor.commit();
+		editor.apply();
 	}
 
 	public boolean getSettingMsgSpeaker() {
@@ -107,7 +109,7 @@ public class PreferenceManager {
 	
 	public void setSettingAllowChatroomOwnerLeave(boolean value) {
         editor.putBoolean(SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE, value);
-        editor.commit();
+        editor.apply();
     }
 	
 	public boolean getSettingAllowChatroomOwnerLeave() {
@@ -116,7 +118,7 @@ public class PreferenceManager {
 	
     public void setDeleteMessagesAsExitGroup(boolean value){
         editor.putBoolean(SHARED_KEY_SETTING_DELETE_MESSAGES_WHEN_EXIT_GROUP, value);
-        editor.commit();
+        editor.apply();
     }    
     
     public boolean isDeleteMessagesAsExitGroup() {
@@ -134,7 +136,7 @@ public class PreferenceManager {
     
     public void setAdaptiveVideoEncode(boolean value) {
         editor.putBoolean(SHARED_KEY_SETTING_ADAPTIVE_VIDEO_ENCODE, value);
-        editor.commit();
+        editor.apply();
     }
     
     public boolean isAdaptiveVideoEncode() {
@@ -143,7 +145,7 @@ public class PreferenceManager {
     
 	public void setGroupsSynced(boolean synced){
 	    editor.putBoolean(SHARED_KEY_SETTING_GROUPS_SYNCED, synced);
-        editor.commit();
+        editor.apply();
 	}
 	
 	public boolean isGroupsSynced(){
@@ -152,7 +154,7 @@ public class PreferenceManager {
 	
 	public void setContactSynced(boolean synced){
         editor.putBoolean(SHARED_KEY_SETTING_CONTACT_SYNCED, synced);
-        editor.commit();
+        editor.apply();
     }
     
     public boolean isContactSynced(){
@@ -161,7 +163,7 @@ public class PreferenceManager {
     
     public void setBlacklistSynced(boolean synced){
         editor.putBoolean(SHARED_KEY_SETTING_BALCKLIST_SYNCED, synced);
-        editor.commit();
+        editor.apply();
     }
     
     public boolean isBacklistSynced(){
@@ -170,12 +172,12 @@ public class PreferenceManager {
     
 	public void setCurrentUserNick(String nick) {
 		editor.putString(SHARED_KEY_CURRENTUSER_NICK, nick);
-		editor.commit();
+		editor.apply();
 	}
 
 	public void setCurrentUserAvatar(String avatar) {
 		editor.putString(SHARED_KEY_CURRENTUSER_AVATAR, avatar);
-		editor.commit();
+		editor.apply();
 	}
 
 	public String getCurrentUserNick() {
@@ -188,7 +190,7 @@ public class PreferenceManager {
 	
 	public void setCurrentUserName(String username){
 		editor.putString(SHARED_KEY_CURRENTUSER_USERNAME, username);
-		editor.commit();
+		editor.apply();
 	}
 	
 	public String getCurrentUsername(){
@@ -199,6 +201,6 @@ public class PreferenceManager {
 	public void removeCurrentUserInfo() {
 		editor.remove(SHARED_KEY_CURRENTUSER_NICK);
 		editor.remove(SHARED_KEY_CURRENTUSER_AVATAR);
-		editor.commit();
+		editor.apply();
 	}
 }

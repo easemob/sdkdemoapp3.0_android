@@ -378,7 +378,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 			mediaRecorder.setOnInfoListener(null);
 			try {
 				mediaRecorder.stop();
-			} catch (IllegalStateException e) {
+			} catch (Exception e) {
 				EMLog.e("video", "stopRecording error:" + e.getMessage());
 			}
 		}

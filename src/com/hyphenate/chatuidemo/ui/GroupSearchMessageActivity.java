@@ -1,8 +1,5 @@
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.Date;
-import java.util.List;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,8 +9,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,17 +28,18 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.util.DateUtils;
 
+import java.util.Date;
+import java.util.List;
+
 public class GroupSearchMessageActivity extends BaseActivity implements OnClickListener{
     private ImageButton clearSearch;
     private EditText query;
     private ListView listView;
     private List<EMMessage> messageList;
     private String groupId;
-    private TextView cancleView;
     private TextView searchView;
     private SearchedMessageAdapter messageaAdapter;
     private ProgressDialog pd;
-    private TextView emptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +50,10 @@ public class GroupSearchMessageActivity extends BaseActivity implements OnClickL
         // clear button
         clearSearch = (ImageButton) findViewById(R.id.search_clear);
         listView = (ListView) findViewById(R.id.listview);
-        emptyView = (TextView) findViewById(R.id.tv_no_result);
+        TextView emptyView = (TextView) findViewById(R.id.tv_no_result);
         listView.setEmptyView(emptyView);
         emptyView.setVisibility(View.INVISIBLE);
-        cancleView = (TextView) findViewById(R.id.tv_cancel);
+        TextView cancleView = (TextView) findViewById(R.id.tv_cancel);
         searchView = (TextView) findViewById(R.id.tv_search);
         
         groupId = getIntent().getStringExtra("groupId");

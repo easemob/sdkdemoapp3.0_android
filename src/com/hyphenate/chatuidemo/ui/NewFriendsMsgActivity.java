@@ -13,8 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.List;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -24,19 +22,20 @@ import com.hyphenate.chatuidemo.adapter.NewFriendsMsgAdapter;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.domain.InviteMessage;
 
+import java.util.List;
+
 /**
  * Application and notification
  *
  */
 public class NewFriendsMsgActivity extends BaseActivity {
-	private ListView listView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.em_activity_new_friends_msg);
 
-		listView = (ListView) findViewById(R.id.list);
+		ListView listView = (ListView) findViewById(R.id.list);
 		InviteMessgeDao dao = new InviteMessgeDao(this);
 		List<InviteMessage> msgs = dao.getMessagesList();
 
