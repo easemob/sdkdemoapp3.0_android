@@ -85,6 +85,9 @@ public class ParseManager {
 			}
 			e.printStackTrace();
 			EMLog.e(TAG, "parse error " + e.getMessage());
+		} catch(Exception e) {
+			EMLog.e(TAG, "updateParseNickName error");
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -215,9 +218,11 @@ public class ParseManager {
 				e.printStackTrace();
 				EMLog.e(TAG, "parse error " + e.getMessage());
 			}
+		} catch(Exception e) {
+			EMLog.e(TAG, "uploadParseAvatar error");
+			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	
+
 }
