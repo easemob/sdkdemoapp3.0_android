@@ -83,6 +83,8 @@ public class ParseManager {
 			}
 			e.printStackTrace();
 			EMLog.e(TAG, "parse error " + e.getMessage());
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -221,6 +223,8 @@ public class ParseManager {
 				e.printStackTrace();
 				EMLog.e(TAG, "parse error " + e.getMessage());
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
