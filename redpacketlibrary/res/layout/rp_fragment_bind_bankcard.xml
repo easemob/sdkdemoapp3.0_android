@@ -97,7 +97,6 @@
                     android:layout_toRightOf="@id/tv_id_card_number"
                     android:digits="@string/id_card_digit"
                     android:hint="@string/edit_id_card_number_hint"
-                    android:inputType="number"
                     android:maxLength="18"
                     android:singleLine="true"
                     />

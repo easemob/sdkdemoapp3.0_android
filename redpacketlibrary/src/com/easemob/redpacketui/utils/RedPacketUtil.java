@@ -21,6 +21,7 @@ import com.easemob.easeui.widget.EaseChatMessageList;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.redpacketsdk.bean.RPUserBean;
 import com.easemob.redpacketsdk.bean.RedPacketInfo;
+import com.easemob.redpacketsdk.bean.TokenData;
 import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.R;
 import com.easemob.redpacketui.RedPacketConstant;
@@ -59,10 +60,6 @@ public class RedPacketUtil {
         RedPacketInfo redPacketInfo = new RedPacketInfo();
         redPacketInfo.fromAvatarUrl = fromAvatarUrl;
         redPacketInfo.fromNickName = fromNickname;
-        redPacketInfo.imUserId = EMChatManager.getInstance().getCurrentUser();
-        //此处使用环信id代替了appUserId 开发者可传入App的appUserId
-        redPacketInfo.appUserId = EMChatManager.getInstance().getCurrentUser();
-        redPacketInfo.imToken = EMChatManager.getInstance().getAccessToken();
         //接收者Id或者接收的群Id
         if (chatType == EaseConstant.CHATTYPE_SINGLE) {
             redPacketInfo.toUserId = toChatUsername;
@@ -111,9 +108,20 @@ public class RedPacketUtil {
             redPacketInfo.groupMemberCount = group.getAffiliationsCount();
             redPacketInfo.chatType = RPConstant.CHATTYPE_GROUP;
         }
+        TokenData tokenData = getTokenData();
         Intent intent = new Intent(fragment.getContext(), RPRedPacketActivity.class);
-        intent.putExtra(RPConstant.EXTRA_MONEY_INFO, redPacketInfo);
+        intent.putExtra(RPConstant.EXTRA_RED_PACKET_INFO, redPacketInfo);
+        intent.putExtra(RPConstant.EXTRA_TOKEN_DATA, tokenData);
         fragment.startActivityForResult(intent, requestCode);
+    }
+
+    private static TokenData getTokenData() {
+        TokenData tokenData = new TokenData();
+        tokenData.imUserId = EMChatManager.getInstance().getCurrentUser();
+        //此处使用环信id代替了appUserId 开发者可传入App的appUserId
+        tokenData.appUserId = EMChatManager.getInstance().getCurrentUser();
+        tokenData.imToken = EMChatManager.getInstance().getAccessToken();
+        return tokenData;
     }
 
     /**
@@ -158,7 +166,7 @@ public class RedPacketUtil {
         //接收者昵称 默认值为当前用户ID
         String toNickname = EMChatManager.getInstance().getCurrentUser();
         String currentUserId = toNickname;
-        String moneyId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_ID, "");
+        String redpacketId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_ID, "");
         if (message.direct == EMMessage.Direct.SEND) {
             messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
         } else {
@@ -184,24 +192,21 @@ public class RedPacketUtil {
             }
         }
         RedPacketInfo redPacketInfo = new RedPacketInfo();
-        redPacketInfo.moneyID = moneyId;
+        redPacketInfo.redPacketId = redpacketId;
         redPacketInfo.toAvatarUrl = toAvatarUrl;
         redPacketInfo.toNickName = toNickname;
         redPacketInfo.moneyMsgDirect = messageDirect;
         redPacketInfo.toUserId = currentUserId;
         redPacketInfo.chatType = chatType;
-        redPacketInfo.imUserId = currentUserId;
-        //此处使用环信id代替了appUserId 开发者可传入App的appUserId
-        redPacketInfo.appUserId = currentUserId;
-        redPacketInfo.imToken = EMChatManager.getInstance().getAccessToken();
+        TokenData tokenData = getTokenData();
         if (packetType.equals(RedPacketConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
             redPacketInfo.specialAvatarUrl = specialAvatarUrl;
             redPacketInfo.specialNickname = specialNickname;
         }
-        RPOpenPacketUtil.getInstance().openRedPacket(redPacketInfo, activity, new RPOpenPacketUtil.RPOpenPacketCallBack() {
+        RPOpenPacketUtil.getInstance().openRedPacket(redPacketInfo, tokenData, activity, new RPOpenPacketUtil.RPOpenPacketCallBack() {
             @Override
             public void onSuccess(String senderId, String senderNickname) {
-                //领取红包成功 发送消息到聊天窗口
+                //领取红包成功 发送消息到聊天窗
                 String receiverId = EMChatManager.getInstance().getCurrentUser();
                 //设置默认值为id
                 String receiverNickname = receiverId;
@@ -210,7 +215,7 @@ public class RedPacketUtil {
                     receiverNickname = TextUtils.isEmpty(receiverUser.getNick()) ? receiverUser.getUsername() : receiverUser.getNick();
                 }
                 if (chatType == EaseConstant.CHATTYPE_SINGLE) {
-                    EMMessage msg = EMMessage.createTxtSendMessage(String.format(activity.getResources().getString(com.easemob.redpacketui.R.string.money_msg_someone_take_money), receiverNickname), toChatUsername);
+                    EMMessage msg = EMMessage.createTxtSendMessage(String.format(activity.getResources().getString(R.string.msg_someone_take_red_packet), receiverNickname), toChatUsername);
                     msg.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
                     msg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
                     msg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
@@ -273,11 +278,8 @@ public class RedPacketUtil {
         RedPacketInfo redPacketInfo = new RedPacketInfo();
         redPacketInfo.fromNickName = fromNickname;
         redPacketInfo.fromAvatarUrl = fromAvatarUrl;
-        redPacketInfo.imUserId = EMChatManager.getInstance().getCurrentUser();
-        //此处使用环信id代替了appUserId 开发者可传入App的appUserId
-        redPacketInfo.appUserId = EMChatManager.getInstance().getCurrentUser();
-        redPacketInfo.imToken = EMChatManager.getInstance().getAccessToken();
-        intent.putExtra(RPConstant.EXTRA_MONEY_INFO, redPacketInfo);
+        intent.putExtra(RPConstant.EXTRA_RED_PACKET_INFO, redPacketInfo);
+        intent.putExtra(RPConstant.EXTRA_TOKEN_DATA, getTokenData());
         context.startActivity(intent);
     }
 

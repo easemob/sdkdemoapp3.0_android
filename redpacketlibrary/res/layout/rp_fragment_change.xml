@@ -167,7 +167,7 @@
         style="@style/ChangeLeftTextViewStyle"
         android:layout_below="@id/view_line_three"
         android:drawableLeft="@drawable/rp_forget_pwd"
-        android:text="@string/title_forget_pay_pwd"
+        android:text="@string/str_forget_pay_pwd"
         />
 
     <View

@@ -41,15 +41,15 @@ public class ChatRowRedPacketAck extends EaseChatRow {
             if (message.getChatType().equals(EMMessage.ChatType.GroupChat)) {
                 senderId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, "");
                 if (senderId.equals(currentUser)) {
-                    mTvMessage.setText(R.string.money_msg_take_money);
+                    mTvMessage.setText(R.string.msg_take_red_packet);
                 } else {
-                    mTvMessage.setText(String.format(getResources().getString(R.string.money_msg_take_someone_money), fromUser));
+                    mTvMessage.setText(String.format(getResources().getString(R.string.msg_take_someone_red_packet), fromUser));
                 }
             } else {
-                mTvMessage.setText(String.format(getResources().getString(R.string.money_msg_take_someone_money), fromUser));
+                mTvMessage.setText(String.format(getResources().getString(R.string.msg_take_someone_red_packet), fromUser));
             }
         } else {
-            mTvMessage.setText(String.format(getResources().getString(R.string.money_msg_someone_take_money), toUser));
+            mTvMessage.setText(String.format(getResources().getString(R.string.msg_someone_take_red_packet), toUser));
         }
     }
 
