@@ -2,9 +2,11 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
@@ -15,6 +17,12 @@ allprojects {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 
 android {
     compileSdkVersion 23
@@ -68,4 +76,7 @@ dependencies {
 //    compile ('com.anthonycr.grant:permissions:1.0'){
 //        exclude module: 'support-v4'
 //    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
+        transitive = true;
+    }
 }
