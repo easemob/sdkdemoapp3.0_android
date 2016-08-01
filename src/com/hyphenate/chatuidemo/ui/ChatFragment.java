@@ -9,6 +9,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore.Images;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -184,7 +185,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
                     try {
                         FileOutputStream fos = new FileOutputStream(file);
-                        Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+                        Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, Images.Thumbnails.MICRO_KIND);
                         ThumbBitmap.compress(CompressFormat.JPEG, 100, fos);
                         fos.close();
                         sendVideoMessage(videoPath, file.getAbsolutePath(), duration);

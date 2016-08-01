@@ -1,5 +1,24 @@
 package com.hyphenate.chatuidemo.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hyphenate.EMCallBack;
+import com.hyphenate.EMError;
+import com.hyphenate.chat.EMCallManager;
+import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessage.Status;
+import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.EMServiceNotReadyException;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
+import com.hyphenate.util.EMLog;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioManager;
@@ -11,22 +30,9 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.hyphenate.EMError;
-import com.hyphenate.chat.EMCallStateChangeListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMMessage.Status;
-import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.EMServiceNotReadyException;
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
-import com.hyphenate.util.EMLog;
-import com.hyphenate.util.NetUtils;
-
 @SuppressLint("Registered")
 public class CallActivity extends BaseActivity {
+    public final static String TAG = "CallActivity";
     protected final int MSG_CALL_MAKE_VIDEO = 0;
     protected final int MSG_CALL_MAKE_VOICE = 1;
     protected final int MSG_CALL_ANSWER = 2;
@@ -50,6 +56,8 @@ public class CallActivity extends BaseActivity {
     protected boolean isAnswered = false;
     protected int streamID = -1;
     
+    EMCallManager.EMCallPushProvider pushProvider;
+    
     /**
      * 0：voice call，1：video call
      */
@@ -59,6 +67,66 @@ public class CallActivity extends BaseActivity {
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+        pushProvider = new EMCallManager.EMCallPushProvider() {
+            
+            void updateMessageText(final EMMessage oldMsg, final String to) {
+                // update local message text
+                EMConversation conv = EMClient.getInstance().chatManager().getConversation(oldMsg.getTo());
+                conv.removeMessage(oldMsg.getMsgId());
+                
+                EMMessage newMsg = EMMessage.createTxtSendMessage("Opposite is offline", to);
+                newMsg.setStatus(Status.SUCCESS);
+                if(callType == 0) {
+                    newMsg.setAttribute("is_voice_call", true);
+                } else {
+                    newMsg.setAttribute("is_video_call", true);
+                }
+                
+                List<EMMessage> importMsgs = new ArrayList<EMMessage>();
+                importMsgs.add(newMsg);
+                EMClient.getInstance().chatManager().importMessages(importMsgs);
+            }
+            
+            @Override
+            public void onSendPushMessage(final String to) {
+
+                //this function should exposed & move to Demo
+                EMLog.d(TAG, "onSendPushMessage, to:" + to);
+                
+                final EMMessage message = EMMessage.createTxtSendMessage("You have an incoming call", to);         
+                // set the user-defined extension field
+                message.setAttribute("em_apns_ext", "extended content");
+                
+                if(callType == 0) {
+                    message.setAttribute("is_voice_call", true);
+                } else {
+                    message.setAttribute("is_video_call", true);
+                }
+                
+                message.setMessageStatusCallback(new EMCallBack(){
+
+                    @Override
+                    public void onSuccess() {
+                        EMLog.d(TAG, "onSendPushMessage success");                        
+                        updateMessageText(message, to);
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+                        EMLog.d(TAG, "onSendPushMessage Error");
+                        updateMessageText(message, to);
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+                    }
+                });
+                // send messages
+                EMClient.getInstance().chatManager().sendMessage(message);
+            }
+        };
+        
+        EMClient.getInstance().callManager().setPushProvider(pushProvider);
     }
     
     @Override
@@ -72,6 +140,11 @@ public class CallActivity extends BaseActivity {
         
         if(callStateListener != null)
             EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
+        
+        if (pushProvider != null) {
+            EMClient.getInstance().callManager().setPushProvider(null);
+            pushProvider = null;
+        }
         releaseHandler();
         super.onDestroy();
     }
@@ -97,7 +170,7 @@ public class CallActivity extends BaseActivity {
     protected Handler handler = new Handler(callHandlerThread.getLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            EMLog.d("EMCallManager CallActivity", "handleMessage ---enter--- msg.what:" + msg.what);
+            EMLog.d("EMCallManager CallActivity", "handleMessage ---enter block--- msg.what:" + msg.what);
             switch (msg.what) {
             case MSG_CALL_MAKE_VIDEO:
             case MSG_CALL_MAKE_VOICE:
@@ -204,7 +277,7 @@ public class CallActivity extends BaseActivity {
             default:
                 break;
             }
-            EMLog.d("EMCallManager CallActivity", "handleMessage ---exit--- msg.what:" + msg.what);
+            EMLog.d("EMCallManager CallActivity", "handleMessage ---exit block--- msg.what:" + msg.what);
         }
     };
     
