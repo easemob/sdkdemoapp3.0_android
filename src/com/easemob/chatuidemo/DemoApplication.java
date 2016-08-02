@@ -18,6 +18,10 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.easemob.redpacketsdk.RedPacket;
+// ================== fabric start
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
+// ================== fabric end
 
 
 public class DemoApplication extends Application {
@@ -35,7 +39,10 @@ public class DemoApplication extends Application {
 
 	@Override
 	public void onCreate() {
-		super.onCreate();  
+		super.onCreate();
+// ================== fabric start
+		Fabric.with(this, new Crashlytics());
+// ================== fabric end
 		MultiDex.install(this);
         applicationContext = this;
         instance = this;
