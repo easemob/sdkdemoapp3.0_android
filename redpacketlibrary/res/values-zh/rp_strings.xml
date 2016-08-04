@@ -111,7 +111,7 @@
     <string name="group_money_every">单个金额</string>
     <string name="group_member_count">本群共%1$s人</string>
     <string name="tip_money_count_zero">请输入红包个数</string>
-    <string name="tip_money_count_limit">一次最多发100个红包</string>
+    <string name="tip_money_count_limit">一次最多发%1$s个红包</string>
     <string name="group_rule_tips_random">当前为拼手气红包，</string>
     <string name="group_rule_tips_normal">当前为普通红包，</string>
     <string name="group_change_normal">改为普通红包</string>
@@ -176,7 +176,6 @@
     <string name="recharge_money_not_null">充值金额不能为空</string>
     <string name="recharge_money_not_zero">充值金额不能为零</string>
     <string name="recharge_money_limit">充值金额单笔不能超过%1$s元</string>
-    <string name="withdraw_money_not_max_five_thousand">提现金额单笔不能超过5000.00元</string>
     <string name="msg_withdraw_success">提现申请已受理</string>
     <string name="msg_captcha_has_sent">验证码已发送</string>
     <string name="money_received">收到红包</string>
@@ -234,8 +233,6 @@
     <string name="choose_pay_jd_limit">单笔限额%1$s元，当日剩余额度%2$s元</string>
     <string name="msg_review_going">审核中</string>
     <string name="msg_you_are_remove_bankcard">确定要解除这张银行卡吗？</string>
-    <string name="msg_remove_other_bankcard">这是一张提现卡。为了您的账户安全，请先移除其他支付卡后，再移除提现卡</string>
-    <string name="msg_change_you_balance">零钱还有余额，请先提现后再移除银行卡</string>
     <string name="msg_remove_bankcard_success">移除卡成功</string>
     <string name="error_sd_card">请挂载SD卡！</string>
     <string name="btn_silence_turn_off">默默关掉</string>
@@ -244,8 +241,9 @@
     <string name="upload_success_review_going">"上传成功，审核中"</string>
     <string name="recharge_success">"充值成功"</string>
     <string name="str_upload">上传</string>
-    <string name="single_limit_default">单笔限额200</string>
     <string name="single_limit">单笔限额%1$s</string>
+    <string name="single_withdraw_max_limit">单笔提现最多%1$s元</string>
+    <string name="single_withdraw_min_limit">单笔提现最少%1$s元</string>
     <string name="str_choose_camera">选择相机</string>
     <string name="str_choose_album">选择相册</string>
 
