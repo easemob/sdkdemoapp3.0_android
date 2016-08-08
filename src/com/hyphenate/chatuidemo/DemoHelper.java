@@ -446,7 +446,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onInvitationAccpted(String groupId, String invitee, String reason) {
+        public void onInvitationAccepted(String groupId, String invitee, String reason) {
             
             new InviteMessgeDao(appContext).deleteMessage(groupId);
             
@@ -512,7 +512,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onGroupDestroy(String groupId, String groupName) {
+        public void onGroupDestroyed(String groupId, String groupName) {
         	// group is dismissed, 
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
