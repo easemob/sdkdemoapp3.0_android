@@ -167,8 +167,8 @@ public class DemoHelper {
             EMChatManager.getInstance().setGCMProjectNumber(projectNumber);
             //在小米手机上当app被kill时使用小米推送进行消息提示，同GCM一样不是必须的
             EMChatManager.getInstance().setMipushConfig("2882303761517370134", "5131737040134");
-            
-            EMChatManager.getInstance().setHuaweiPushAppId("10492024");
+            //设置华为push appid
+            EMChatManager.getInstance().setHuaweiPushAppId("10601994");
 		    
 		    //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
 		    EMChat.getInstance().setDebugMode(true);
