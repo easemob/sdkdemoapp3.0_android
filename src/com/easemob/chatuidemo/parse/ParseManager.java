@@ -30,6 +30,8 @@ public class ParseManager {
 	private static final String CONFIG_USERNAME = "username";
 	private static final String CONFIG_NICK = "nickname";
 	private static final String CONFIG_AVATAR = "avatar";
+	
+	private static final String SERVER_URL = "http://parse.easemob.com/parse/";
 
 	private Context appContext;
 	private static ParseManager instance = new ParseManager();
@@ -46,6 +48,10 @@ public class ParseManager {
 		this.appContext = context.getApplicationContext();
 		Parse.enableLocalDatastore(appContext);
 		Parse.initialize(context, ParseAppID, ParseClientKey);
+//		Parse.initialize(new Parse.Configuration.Builder(appContext)
+//		        .applicationId(ParseAppID)
+//		        .server(SERVER_URL)
+//		        .build());
 	}
 
 	public boolean updateParseNickName(final String nickname) {
@@ -77,6 +83,8 @@ public class ParseManager {
 			}
 			e.printStackTrace();
 			EMLog.e(TAG, "parse error " + e.getMessage());
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -215,6 +223,8 @@ public class ParseManager {
 				e.printStackTrace();
 				EMLog.e(TAG, "parse error " + e.getMessage());
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

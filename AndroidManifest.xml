@@ -497,6 +497,11 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="3ecea51f560650b1ed8a4b99808f52e8" />
 
+        <!-- fabric start -->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="6b54bd4edc63eba3ef59d69f8e0a5070bea384e2" />
+        <!-- fabric end -->
     </application>
 
 </manifest>
