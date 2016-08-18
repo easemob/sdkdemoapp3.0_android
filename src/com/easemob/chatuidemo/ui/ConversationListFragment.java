@@ -75,12 +75,12 @@ public class ConversationListFragment extends EaseConversationListFragment{
                     String receiveNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
                     String msg;
                     if (lastMessage.direct == EMMessage.Direct.RECEIVE) {
-                        msg = String.format(getResources().getString(R.string.money_msg_someone_take_money), receiveNick);
+                        msg = String.format(getResources().getString(R.string.msg_someone_take_red_packet), receiveNick);
                     } else {
                         if (sendNick.equals(receiveNick)) {
-                            msg = getResources().getString(R.string.money_msg_take_money);
+                            msg = getResources().getString(R.string.msg_take_red_packet);
                         } else {
-                            msg = String.format(getResources().getString(R.string.money_msg_take_someone_money), sendNick);
+                            msg = String.format(getResources().getString(R.string.msg_take_someone_red_packet), sendNick);
                         }
                     }
                     return msg;
@@ -88,8 +88,8 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 return null;
             }
         });
-        //end of red packet code
         super.setUpView();
+        //end of red packet code
     }
 
     @Override
