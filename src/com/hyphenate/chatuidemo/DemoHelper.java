@@ -65,12 +65,12 @@ public class DemoHelper {
     /**
      * data sync listener
      */
-    static public interface DataSyncListener {
+    public interface DataSyncListener {
         /**
          * sync complete
          * @param success true：data sync successful，false: failed to sync data
          */
-        public void onSyncComplete(boolean success);
+        void onSyncComplete(boolean success);
     }
 
     protected static final String TAG = "DemoHelper";
@@ -120,8 +120,6 @@ public class DemoHelper {
     private Context appContext;
 
     private CallReceiver callReceiver;
-
-    private EMConnectionListener connectionListener;
 
     private InviteMessgeDao inviteMessgeDao;
     private UserDao userDao;
@@ -359,12 +357,12 @@ public class DemoHelper {
         isBlackListSyncedWithServer = demoModel.isBacklistSynced();
         
         // create the global connection listener
-        connectionListener = new EMConnectionListener() {
+        EMConnectionListener connectionListener = new EMConnectionListener() {
             @Override
             public void onDisconnected(int error) {
                 if (error == EMError.USER_REMOVED) {
                     onCurrentAccountRemoved();
-                }else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
                     onConnectionConflict();
                 }
             }
@@ -372,18 +370,18 @@ public class DemoHelper {
             @Override
             public void onConnected() {
                 // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
-                if(isGroupsSyncedWithServer && isContactsSyncedWithServer){
+                if (isGroupsSyncedWithServer && isContactsSyncedWithServer) {
                     EMLog.d(TAG, "group and contact already synced with servre");
-                }else{
-                    if(!isGroupsSyncedWithServer){
+                } else {
+                    if (!isGroupsSyncedWithServer) {
                         asyncFetchGroupsFromServer(null);
                     }
-                    
-                    if(!isContactsSyncedWithServer){
+
+                    if (!isContactsSyncedWithServer) {
                         asyncFetchContactsFromServer(null);
                     }
-                    
-                    if(!isBlackListSyncedWithServer){
+
+                    if (!isBlackListSyncedWithServer) {
                         asyncFetchBlackListFromServer(null);
                     }
                 }
@@ -448,7 +446,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onInvitationAccpted(String groupId, String invitee, String reason) {
+        public void onInvitationAccepted(String groupId, String invitee, String reason) {
             
             new InviteMessgeDao(appContext).deleteMessage(groupId);
             
@@ -500,10 +498,10 @@ public class DemoHelper {
             msg.setFrom(groupId);
             msg.setTime(System.currentTimeMillis());
             msg.setGroupId(groupId);
-            msg.setGroupName(group == null ? groupId : group.getGroupName());
+            msg.setGroupName(group.getGroupName());
             msg.setReason(reason);
             msg.setGroupInviter(invitee);
-            Log.d(TAG, invitee + "Declined to join the group：" + group == null ? groupId : group.getGroupName());
+            Log.d(TAG, invitee + "Declined to join the group：" + group.getGroupName());
             msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
@@ -516,7 +514,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onGroupDestroy(String groupId, String groupName) {
+        public void onGroupDestroyed(String groupId, String groupName) {
         	// group is dismissed, 
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }

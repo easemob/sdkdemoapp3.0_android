@@ -13,16 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.List;
-
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.adapter.GroupAdapter;
-import com.hyphenate.exceptions.HyphenateException;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +28,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.adapter.GroupAdapter;
+import com.hyphenate.exceptions.HyphenateException;
+
+import java.util.List;
 
 public class GroupsActivity extends BaseActivity {
 	public static final String TAG = "GroupsActivity";
@@ -64,7 +63,7 @@ public class GroupsActivity extends BaseActivity {
             default:
                 break;
             }
-	    };
+	    }
 	};
 
 		

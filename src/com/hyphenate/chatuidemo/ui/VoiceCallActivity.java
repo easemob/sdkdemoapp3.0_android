@@ -205,20 +205,20 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                 case VOICE_PAUSE:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VOICE_PAUSE", 0).show();
+                            Toast.makeText(getApplicationContext(), "VOICE_PAUSE", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case VOICE_RESUME:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VOICE_RESUME", 0).show();
+                            Toast.makeText(getApplicationContext(), "VOICE_RESUME", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case DISCONNNECTED:
                     handler.removeCallbacks(timeoutHangup);
-                    final CallError fError = error;
+                    @SuppressWarnings("UnnecessaryLocalVariable") final CallError fError = error;
                     runOnUiThread(new Runnable() {
                         private void postDelayedCloseMsg() {
                             handler.postDelayed(new Runnable() {
@@ -262,7 +262,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                 callStateTextView.setText(st2);
                             } else if (fError == CallError.ERROR_TRANSPORT) {
                                 callStateTextView.setText(st3);
-                            } else if (fError == CallError.ERROR_INAVAILABLE) {
+                            } else if (fError == CallError.ERROR_UNAVAILABLE) {
                                 callingState = CallingState.OFFLINE;
                                 callStateTextView.setText(st4);
                             } else if (fError == CallError.ERROR_BUSY) {
@@ -271,7 +271,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             } else if (fError == CallError.ERROR_NORESPONSE) {
                                 callingState = CallingState.NORESPONSE;
                                 callStateTextView.setText(st6);
-                            } else if (fError == CallError.ERROR_LOCAL_VERSION_SMALLER || fError == CallError.ERROR_PEER_VERSION_SMALLER){
+                            } else if (fError == CallError.ERROR_LOCAL_SDK_VERSION_OUTDATED || fError == CallError.ERROR_REMOTE_SDK_VERSION_OUTDATED){
                                 callingState = CallingState.VERSION_NOT_SAME;
                                 callStateTextView.setText(R.string.call_version_inconsistent);
                             } else {

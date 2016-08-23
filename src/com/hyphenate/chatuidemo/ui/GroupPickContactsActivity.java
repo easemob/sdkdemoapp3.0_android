@@ -13,20 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chatuidemo.Constant;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.easeui.adapter.EaseContactAdapter;
-import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.widget.EaseSidebar;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,8 +27,21 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.adapter.EaseContactAdapter;
+import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.widget.EaseSidebar;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class GroupPickContactsActivity extends BaseActivity {
-	private ListView listView;
 	/** if this is a new group */
 	protected boolean isCreatingNewGroup;
 	private PickContactAdapter contactAdapter;
@@ -89,7 +88,7 @@ public class GroupPickContactsActivity extends BaseActivity {
             }
         });
 
-		listView = (ListView) findViewById(R.id.list);
+		ListView listView = (ListView) findViewById(R.id.list);
 		contactAdapter = new PickContactAdapter(this, R.layout.em_row_contact_with_checkbox, alluserList);
 		listView.setAdapter(contactAdapter);
 		((EaseSidebar) findViewById(R.id.sidebar)).setListView(listView);
@@ -110,7 +109,8 @@ public class GroupPickContactsActivity extends BaseActivity {
 	 * @param v
 	 */
 	public void save(View v) {
-		setResult(RESULT_OK, new Intent().putExtra("newmembers", getToBeAddMembers().toArray(new String[0])));
+		List<String> var = getToBeAddMembers();
+		setResult(RESULT_OK, new Intent().putExtra("newmembers", var.toArray(new String[var.size()])));
 		finish();
 	}
 
@@ -171,14 +171,6 @@ public class GroupPickContactsActivity extends BaseActivity {
 						}
 						isCheckedArray[position] = isChecked;
 
-						if (isChecked) {
-							for (int i = 0; i < isCheckedArray.length; i++) {
-								if (i != position) {
-									isCheckedArray[i] = false;
-								}
-							}
-							contactAdapter.notifyDataSetChanged();
-						}
 					}
 				});
 				// keep exist members checked

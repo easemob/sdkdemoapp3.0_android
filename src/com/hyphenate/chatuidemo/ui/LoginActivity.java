@@ -13,14 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoApplication;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.db.DemoDBManager;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -34,6 +26,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoApplication;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.db.DemoDBManager;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+
 /**
  * Login screen
  * 
@@ -46,9 +46,6 @@ public class LoginActivity extends BaseActivity {
 
 	private boolean progressShow;
 	private boolean autoLogin = false;
-
-	private String currentUsername;
-	private String currentPassword;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +95,8 @@ public class LoginActivity extends BaseActivity {
 			Toast.makeText(this, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		currentUsername = usernameEditText.getText().toString().trim();
-		currentPassword = passwordEditText.getText().toString().trim();
+		String currentUsername = usernameEditText.getText().toString().trim();
+		String currentPassword = passwordEditText.getText().toString().trim();
 
 		if (TextUtils.isEmpty(currentUsername)) {
 			Toast.makeText(this, R.string.User_name_cannot_be_empty, Toast.LENGTH_SHORT).show();

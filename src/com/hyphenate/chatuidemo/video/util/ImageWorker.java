@@ -45,7 +45,6 @@ public abstract class ImageWorker {
     private static final int FADE_IN_TIME = 200;
 
     private ImageCache mImageCache;
-    private ImageCache.ImageCacheParams mImageCacheParams;
     private Bitmap mLoadingBitmap;
     private boolean mFadeInBitmap = true;
     private boolean mExitTasksEarly = false;
@@ -132,7 +131,7 @@ public abstract class ImageWorker {
      */
     public void addImageCache(FragmentManager fragmentManager,
             ImageCache.ImageCacheParams cacheParams) {
-        mImageCacheParams = cacheParams;
+        ImageCache.ImageCacheParams mImageCacheParams = cacheParams;
         mImageCache = ImageCache.getInstance(fragmentManager, mImageCacheParams);
         new CacheAsyncTask().execute(MESSAGE_INIT_DISK_CACHE);
     }

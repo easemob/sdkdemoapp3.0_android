@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,7 +13,8 @@
         android:layout_alignParentBottom="true"
         android:background="@color/bottom_bar_normal_bg"
         android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        tools:ignore="DisableBaselineAlignment">
 
         <RelativeLayout
             android:id="@+id/btn_container_conversation"
@@ -43,7 +45,6 @@
                 android:layout_marginTop="1dp"
                 android:background="@drawable/em_unread_count_bg"
                 android:gravity="center"
-                android:text="7"
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:visibility="invisible" />

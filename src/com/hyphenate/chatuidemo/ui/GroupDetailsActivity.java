@@ -60,7 +60,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	private static final int REQUEST_CODE_EDIT_GROUPNAME = 5;
 
 
-	private EaseExpandGridView userGridview;
 	private String groupId;
 	private ProgressBar loadingPB;
 	private Button exitBtn;
@@ -69,20 +68,11 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	private GridAdapter adapter;
 	private ProgressDialog progressDialog;
 
-	private RelativeLayout rl_switch_block_groupmsg;
-
 	public static GroupDetailsActivity instance;
 	
 	String st = "";
 
-	private RelativeLayout clearAllHistory;
-	private RelativeLayout blacklistLayout;
-	private RelativeLayout changeGroupNameLayout;
-    private RelativeLayout idLayout;
-    private TextView idText;
 	private EaseSwitchButton switchButton;
-    private GroupChangeListener groupChangeListener;
-    private RelativeLayout searchLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,20 +90,20 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		setContentView(R.layout.em_activity_group_details);
 		instance = this;
 		st = getResources().getString(R.string.people);
-		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
-		userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
+		RelativeLayout clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
+		EaseExpandGridView userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
 		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
 		deleteBtn = (Button) findViewById(R.id.btn_exitdel_grp);
-		blacklistLayout = (RelativeLayout) findViewById(R.id.rl_blacklist);
-		changeGroupNameLayout = (RelativeLayout) findViewById(R.id.rl_change_group_name);
-		idLayout = (RelativeLayout) findViewById(R.id.rl_group_id);
+		RelativeLayout blacklistLayout = (RelativeLayout) findViewById(R.id.rl_blacklist);
+		RelativeLayout changeGroupNameLayout = (RelativeLayout) findViewById(R.id.rl_change_group_name);
+		RelativeLayout idLayout = (RelativeLayout) findViewById(R.id.rl_group_id);
 		idLayout.setVisibility(View.VISIBLE);
-		idText = (TextView) findViewById(R.id.tv_group_id_value);
-		
-		rl_switch_block_groupmsg = (RelativeLayout) findViewById(R.id.rl_switch_block_groupmsg);
+		TextView idText = (TextView) findViewById(R.id.tv_group_id_value);
+
+		RelativeLayout rl_switch_block_groupmsg = (RelativeLayout) findViewById(R.id.rl_switch_block_groupmsg);
 		switchButton = (EaseSwitchButton) findViewById(R.id.switch_btn);
-		searchLayout = (RelativeLayout) findViewById(R.id.rl_search); 
+		RelativeLayout searchLayout = (RelativeLayout) findViewById(R.id.rl_search);
 
 
 		idText.setText(groupId);
@@ -129,8 +119,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.VISIBLE);
 		}
-		
-		groupChangeListener = new GroupChangeListener();
+
+		GroupChangeListener groupChangeListener = new GroupChangeListener();
 		EMClient.getInstance().groupManager().addGroupChangeListener(groupChangeListener);
 		
 		((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getAffiliationsCount() + st);
@@ -221,7 +211,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 										((TextView) findViewById(R.id.group_name)).setText(returnData + "(" + group.getAffiliationsCount()
 												+ st);
 										progressDialog.dismiss();
-										Toast.makeText(getApplicationContext(), st6, 0).show();
+										Toast.makeText(getApplicationContext(), st6, Toast.LENGTH_SHORT).show();
 									}
 								});
 								
@@ -230,7 +220,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 								runOnUiThread(new Runnable() {
 									public void run() {
 										progressDialog.dismiss();
-										Toast.makeText(getApplicationContext(), st7, 0).show();
+										Toast.makeText(getApplicationContext(), st7, Toast.LENGTH_SHORT).show();
 									}
 								});
 							}
@@ -257,14 +247,14 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         				public void run() {
         				    refreshMembers();
         				    pd.dismiss();
-        					Toast.makeText(getApplicationContext(), R.string.Move_into_blacklist_success, 0).show();
+        					Toast.makeText(getApplicationContext(), R.string.Move_into_blacklist_success, Toast.LENGTH_SHORT).show();
         				}
         			});
         		} catch (HyphenateException e) {
         			runOnUiThread(new Runnable() {
         				public void run() {
         				    pd.dismiss();
-        					Toast.makeText(getApplicationContext(), R.string.failed_to_move_into, 0).show();
+        					Toast.makeText(getApplicationContext(), R.string.failed_to_move_into, Toast.LENGTH_SHORT).show();
         				}
         			});
         		}
@@ -311,7 +301,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		if (conversation != null) {
 			conversation.clearAllMessages();
 		}
-		Toast.makeText(this, R.string.messages_are_empty, 0).show();
+		Toast.makeText(this, R.string.messages_are_empty, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -338,7 +328,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Exit_the_group_chat_failure) + " " + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Exit_the_group_chat_failure) + " " + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 				}
@@ -370,7 +360,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), st5 + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), st5 + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 				}
@@ -408,7 +398,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), st6 + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), st6 + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 				}
@@ -478,7 +468,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		                runOnUiThread(new Runnable() {
 		                    public void run() {
 		                        progressDialog.dismiss();
-		                        Toast.makeText(getApplicationContext(), R.string.remove_group_of, 1).show();
+		                        Toast.makeText(getApplicationContext(), R.string.remove_group_of, Toast.LENGTH_LONG).show();
 		                    }
 		                });
 		                
@@ -511,7 +501,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		                runOnUiThread(new Runnable() {
 		                    public void run() {
 		                        progressDialog.dismiss();
-		                        Toast.makeText(getApplicationContext(), st9, 1).show();
+		                        Toast.makeText(getApplicationContext(), st9, Toast.LENGTH_LONG).show();
 		                    }
 		                });
 		            }
@@ -640,7 +630,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 								return;
 							}
 							if (!NetUtils.hasNetwork(getApplicationContext())) {
-								Toast.makeText(getApplicationContext(), getString(R.string.network_unavailable), 0).show();
+								Toast.makeText(getApplicationContext(), getString(R.string.network_unavailable), Toast.LENGTH_SHORT).show();
 								return;
 							}
 							EMLog.d("group", "remove user from group:" + username);
@@ -687,7 +677,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 									deleteDialog.dismiss();
 									runOnUiThread(new Runnable() {
 										public void run() {
-											Toast.makeText(getApplicationContext(), st14 + e.getMessage(), 1).show();
+											Toast.makeText(getApplicationContext(), st14 + e.getMessage(), Toast.LENGTH_LONG).show();
 										}
 									});
 								}
@@ -824,7 +814,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 
 		@Override
-		public void onInvitationAccpted(String groupId, String inviter,
+		public void onInvitationAccepted(String groupId, String inviter,
 				String reason) {
 			runOnUiThread(new Runnable(){
 
@@ -851,7 +841,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 
 		@Override
-		public void onGroupDestroy(String groupId, String groupName) {
+		public void onGroupDestroyed(String groupId, String groupName) {
 			finish();
 			
 		}

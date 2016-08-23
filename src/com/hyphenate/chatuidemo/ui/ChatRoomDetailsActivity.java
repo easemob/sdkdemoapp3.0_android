@@ -18,13 +18,10 @@ import java.util.List;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,7 +32,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -45,8 +41,6 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseExpandGridView;
-import com.hyphenate.util.EMLog;
-import com.hyphenate.util.NetUtils;
 
 public class ChatRoomDetailsActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "ChatRoomDetailsActivity";
@@ -56,32 +50,19 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 	String longClickUsername = null;
 
-	private EaseExpandGridView userGridview;
 	private String roomId;
 	private ProgressBar loadingPB;
 	private Button exitBtn;
 	private Button deleteBtn;
 	private EMChatRoom room;
 	private GridAdapter adapter;
-	private int referenceWidth;
-	private int referenceHeight;
 	private ProgressDialog progressDialog;
 
 	public static ChatRoomDetailsActivity instance;
 	
 	String st = "";
-	// clear all history
-	private RelativeLayout clearAllHistory;
-	private RelativeLayout blacklistLayout;
-	private RelativeLayout changeGroupNameLayout;
-	
-	private RelativeLayout blockGroupMsgLayout;
-	private RelativeLayout showChatRoomIdLayout;
-	private TextView chatRoomIdTextView;
-	private TextView chatRoomNickTextView;
-	private TextView chatRoomOwnerTextView;
-	private RelativeLayout showChatRoomNickLayout;
-	private RelativeLayout showChatRoomOwnerLayout;
+
+	private List<String> memberList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,40 +70,42 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		setContentView(R.layout.em_activity_group_details);
 		instance = this;
 		st = getResources().getString(R.string.people);
-		clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
+		RelativeLayout clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
 		clearAllHistory.setVisibility(View.GONE);
-		userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
-		userGridview.setVisibility(View.GONE);
+		EaseExpandGridView userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
+		userGridview.setVisibility(View.VISIBLE);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
 		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
 		deleteBtn = (Button) findViewById(R.id.btn_exitdel_grp);
-		blacklistLayout = (RelativeLayout) findViewById(R.id.rl_blacklist);
-		changeGroupNameLayout = (RelativeLayout) findViewById(R.id.rl_change_group_name);
+		RelativeLayout blacklistLayout = (RelativeLayout) findViewById(R.id.rl_blacklist);
+		RelativeLayout changeGroupNameLayout = (RelativeLayout) findViewById(R.id.rl_change_group_name);
 
-		blockGroupMsgLayout = (RelativeLayout)findViewById(R.id.rl_switch_block_groupmsg);
-		showChatRoomIdLayout = (RelativeLayout)findViewById(R.id.rl_group_id);
-		showChatRoomNickLayout = (RelativeLayout)findViewById(R.id.rl_group_nick);
-		showChatRoomOwnerLayout = (RelativeLayout)findViewById(R.id.rl_group_owner);
-		chatRoomIdTextView = (TextView)findViewById(R.id.tv_group_id);
-		chatRoomNickTextView = (TextView)findViewById(R.id.tv_group_nick_value);
-		chatRoomOwnerTextView = (TextView)findViewById(R.id.tv_group_owner_value);
+		RelativeLayout blockGroupMsgLayout = (RelativeLayout) findViewById(R.id.rl_switch_block_groupmsg);
+		RelativeLayout showChatRoomIdLayout = (RelativeLayout) findViewById(R.id.rl_group_id);
+		RelativeLayout showChatRoomNickLayout = (RelativeLayout) findViewById(R.id.rl_group_nick);
+		RelativeLayout showChatRoomOwnerLayout = (RelativeLayout) findViewById(R.id.rl_group_owner);
+		TextView chatRoomIdTextView = (TextView) findViewById(R.id.tv_group_id);
+		TextView chatRoomNickTextView = (TextView) findViewById(R.id.tv_group_nick_value);
+		TextView chatRoomOwnerTextView = (TextView) findViewById(R.id.tv_group_owner_value);
+		
+		findViewById(R.id.rl_search).setVisibility(View.GONE);
 		
 
-		Drawable referenceDrawable = getResources().getDrawable(R.drawable.em_smiley_add_btn);
-		referenceWidth = referenceDrawable.getIntrinsicWidth();
-		referenceHeight = referenceDrawable.getIntrinsicHeight();
 
-		 // get room id
-		 roomId = getIntent().getStringExtra("roomId");
+		// get room id
+		roomId = getIntent().getStringExtra("roomId");
 		 
-		 showChatRoomIdLayout.setVisibility(View.VISIBLE);
-		 chatRoomIdTextView.setText(getResources().getString(R.string.chat_room) + " ID："+roomId);
-		 showChatRoomNickLayout.setVisibility(View.VISIBLE);
-		 showChatRoomOwnerLayout.setVisibility(View.VISIBLE);
+		showChatRoomIdLayout.setVisibility(View.VISIBLE);
+		chatRoomIdTextView.setText(getResources().getString(R.string.chat_room) + " ID："+roomId);
+		showChatRoomNickLayout.setVisibility(View.VISIBLE);
+		showChatRoomOwnerLayout.setVisibility(View.VISIBLE);
 		 
-		 room = EMClient.getInstance().chatroomManager().getChatRoom(roomId);
-		 chatRoomNickTextView.setText(room.getName());
-		 chatRoomOwnerTextView.setText(room.getOwner());
+		room = EMClient.getInstance().chatroomManager().getChatRoom(roomId);
+		if(room == null){
+		    return;
+		}
+		chatRoomNickTextView.setText(room.getName());
+		chatRoomOwnerTextView.setText(room.getOwner());
 
 		exitBtn.setVisibility(View.GONE);
 		deleteBtn.setVisibility(View.GONE);
@@ -130,40 +113,15 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		changeGroupNameLayout.setVisibility(View.GONE);
 		blockGroupMsgLayout.setVisibility(View.GONE);
 		
-		// show dismiss button if you are owner
-		if (EMClient.getInstance().getCurrentUser().equals(room.getOwner())) {
-			exitBtn.setVisibility(View.GONE);
-			deleteBtn.setVisibility(View.GONE);
-		}
 		
 		((TextView) findViewById(R.id.group_name)).setText(room.getName());
-		List<String> owner = new java.util.ArrayList<String>();
-		owner.add(room.getOwner());
-		adapter = new GridAdapter(this, R.layout.em_grid, owner);
+		memberList = new java.util.ArrayList<String>();
+		memberList.addAll(room.getMemberList());
+		adapter = new GridAdapter(this, R.layout.em_grid, memberList);
 		userGridview.setAdapter(adapter);
 		
 		updateRoom();
 
-
-		// set OnTouchListener
-		userGridview.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN:
-					if (adapter.isInDeleteMode) {
-						adapter.isInDeleteMode = false;
-						adapter.notifyDataSetChanged();
-						return true;
-					}
-					break;
-				default:
-					break;
-				}
-				return false;
-			}
-		});
 
 		clearAllHistory.setOnClickListener(this);
 		blacklistLayout.setOnClickListener(this);
@@ -171,6 +129,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 	}
 
+	@SuppressWarnings("UnusedAssignment")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -225,7 +184,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		if (conversation != null) {
 			conversation.clearAllMessages();
 		}
-		Toast.makeText(this, R.string.messages_are_empty, 0).show();
+		Toast.makeText(this, R.string.messages_are_empty, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -251,7 +210,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), "Failed to quit group: " + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), "Failed to quit group: " + e.getMessage(), Toast.LENGTH_LONG).show();
 						}
 					});
 				}
@@ -263,14 +222,14 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					final EMChatRoom returnRoom = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId);
+					room = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId, true);
 
 					runOnUiThread(new Runnable() {
 						public void run() {
-							((TextView) findViewById(R.id.group_name)).setText(returnRoom.getName());
+							((TextView) findViewById(R.id.group_name)).setText(room.getName());
 							loadingPB.setVisibility(View.INVISIBLE);
-							adapter.notifyDataSetChanged();
-							if (EMClient.getInstance().getCurrentUser().equals(returnRoom.getOwner())) {
+							refreshMembers();
+							if (EMClient.getInstance().getCurrentUser().equals(room.getOwner())) {
 								// show dismiss button
 								exitBtn.setVisibility(View.GONE);
 								deleteBtn.setVisibility(View.GONE);
@@ -294,7 +253,13 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		}).start();
 	}
 
-
+	private void refreshMembers(){
+        memberList.clear();
+        memberList.addAll(room.getMemberList());
+        
+        adapter.notifyDataSetChanged();
+    }
+    
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -326,19 +291,15 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	private class GridAdapter extends ArrayAdapter<String> {
 
 		private int res;
-		public boolean isInDeleteMode;
-		private List<String> objects;
 
 		public GridAdapter(Context context, int textViewResourceId, List<String> objects) {
 			super(context, textViewResourceId, objects);
-			this.objects = objects;
 			res = textViewResourceId;
-			isInDeleteMode = false;
 		}
 
 		@Override
 		public View getView(final int position, View convertView, final ViewGroup parent) {
-		    ViewHolder holder = null;
+		    @SuppressWarnings("UnusedAssignment") ViewHolder holder = null;
 			if (convertView == null) {
 			    holder = new ViewHolder();
 				convertView = LayoutInflater.from(getContext()).inflate(res, null);
@@ -350,92 +311,23 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			    holder = (ViewHolder) convertView.getTag();
 			}
 			final LinearLayout button = (LinearLayout) convertView.findViewById(R.id.button_avatar);
-			// last item is "remove" button
-			if (position == getCount() - 1) {
-			    holder.textView.setText("");
-				// set "remove" button
-			    holder.imageView.setImageResource(R.drawable.em_smiley_minus_btn);
-
-				// no "remove" button if you are not owner of the group
-				if (!room.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
-					// if current user is not the owner, hide add/remove btn
-					convertView.setVisibility(View.INVISIBLE);
-				} else { // show delete icon
-					if (isInDeleteMode) {
-						// already delete mode, hide "remove" button
-						convertView.setVisibility(View.INVISIBLE);
-					} else {
-						// normal mode
-						convertView.setVisibility(View.VISIBLE);
-						convertView.findViewById(R.id.badge_delete).setVisibility(View.INVISIBLE);
-					}
-					final String st10 = getResources().getString(R.string.The_delete_button_is_clicked);
-					button.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							EMLog.d(TAG, st10);
-							isInDeleteMode = true;
-							notifyDataSetChanged();
-						}
-					});
+			// group member item
+			final String username = getItem(position);
+			holder.textView.setText(username);
+			EaseUserUtils.setUserAvatar(getContext(), username, holder.imageView);
+			button.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+                    // do nothing here, you can show group member's profile here
 				}
-			} else if (position == getCount() - 2) { // "add" button
-			    holder.textView.setText("");
-			    holder.imageView.setImageResource(R.drawable.em_smiley_add_btn);
+			});
 
-				// only owner of room has permission to add/remove member
-				if (!room.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
-					// if current user is not room owner, hide add/remove btn
-					convertView.setVisibility(View.INVISIBLE);
-				} else {
-					// already delete mode, hide "remove" button
-					if (isInDeleteMode) {
-						convertView.setVisibility(View.INVISIBLE);
-					} else {
-						convertView.setVisibility(View.VISIBLE);
-						convertView.findViewById(R.id.badge_delete).setVisibility(View.INVISIBLE);
-					}
-				}
-			} else { // group member item
-				final String username = getItem(position);
-				convertView.setVisibility(View.VISIBLE);
-				button.setVisibility(View.VISIBLE);
-				holder.textView.setText(username);
-				EaseUserUtils.setUserAvatar(getContext(), username, holder.imageView);
-				// here we just use default avatar, you need handle it if want to show other avatar
-				if (isInDeleteMode) {
-					// show remove icon if under delete mode
-					convertView.findViewById(R.id.badge_delete).setVisibility(View.VISIBLE);
-				} else {
-					convertView.findViewById(R.id.badge_delete).setVisibility(View.INVISIBLE);
-				}
-				button.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						if (isInDeleteMode) {
-							// just return if user want remove himself
-							if (EMClient.getInstance().getCurrentUser().equals(username)) {
-							    new EaseAlertDialog(ChatRoomDetailsActivity.this, R.string.not_delete_myself).show();
-								return;
-							}
-							if (!NetUtils.hasNetwork(getApplicationContext())) {
-								Toast.makeText(getApplicationContext(), getString(R.string.network_unavailable), 0).show();
-								return;
-							}
-							EMLog.d("room", "remove user from room:" + username);
-						} else {
-                            // do nothing here, you can show group member's profile here
-						}
-					}
-				});
-
-			}
 			return convertView;
 		}
 
 		@Override
 		public int getCount() {
-			return super.getCount() + 2;
+			return super.getCount();
 		}
 	}
 

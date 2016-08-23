@@ -13,13 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMGroupManager.EMGroupOptions;
-import com.hyphenate.chat.EMGroupManager.EMGroupStyle;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.easeui.widget.EaseAlertDialog;
-import com.hyphenate.exceptions.HyphenateException;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,9 +22,15 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMGroupManager.EMGroupOptions;
+import com.hyphenate.chat.EMGroupManager.EMGroupStyle;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
+import com.hyphenate.exceptions.HyphenateException;
 
 public class NewGroupActivity extends BaseActivity {
 	private EditText groupNameEditText;
@@ -119,7 +118,7 @@ public class NewGroupActivity extends BaseActivity {
 						runOnUiThread(new Runnable() {
 							public void run() {
 								progressDialog.dismiss();
-								Toast.makeText(NewGroupActivity.this, st2 + e.getLocalizedMessage(), 1).show();
+								Toast.makeText(NewGroupActivity.this, st2 + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 							}
 						});
 					}

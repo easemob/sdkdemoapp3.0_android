@@ -303,34 +303,34 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 case VIDEO_PAUSE:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VIDEO_PAUSE", 0).show();
+                            Toast.makeText(getApplicationContext(), "VIDEO_PAUSE", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case VIDEO_RESUME:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VIDEO_RESUME", 0).show();
+                            Toast.makeText(getApplicationContext(), "VIDEO_RESUME", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case VOICE_PAUSE:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VOICE_PAUSE", 0).show();
+                            Toast.makeText(getApplicationContext(), "VOICE_PAUSE", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case VOICE_RESUME:
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "VOICE_RESUME", 0).show();
+                            Toast.makeText(getApplicationContext(), "VOICE_RESUME", Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
                 case DISCONNNECTED: // call is disconnected
                     handler.removeCallbacks(timeoutHangup);
-                    final CallError fError = error;
+                    @SuppressWarnings("UnnecessaryLocalVariable")final CallError fError = error;
                     runOnUiThread(new Runnable() {
                         private void postDelayedCloseMsg() {
                             uiHandler.postDelayed(new Runnable() {
@@ -367,7 +367,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                 callStateTextView.setText(s1);
                             } else if (fError == CallError.ERROR_TRANSPORT) {
                                 callStateTextView.setText(s2);
-                            } else if (fError == CallError.ERROR_INAVAILABLE) {
+                            } else if (fError == CallError.ERROR_UNAVAILABLE) {
                                 callingState = CallingState.OFFLINE;
                                 callStateTextView.setText(s3);
                             } else if (fError == CallError.ERROR_BUSY) {
@@ -376,7 +376,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             } else if (fError == CallError.ERROR_NORESPONSE) {
                                 callingState = CallingState.NORESPONSE;
                                 callStateTextView.setText(s5);
-                            }else if (fError == CallError.ERROR_LOCAL_VERSION_SMALLER || fError == CallError.ERROR_PEER_VERSION_SMALLER){
+                            }else if (fError == CallError.ERROR_LOCAL_SDK_VERSION_OUTDATED || fError == CallError.ERROR_REMOTE_SDK_VERSION_OUTDATED){
                                 callingState = CallingState.VERSION_NOT_SAME;
                                 callStateTextView.setText(R.string.call_version_inconsistent);
                             }  else {
@@ -487,7 +487,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 String filepath = callHelper.stopVideoRecord();
                 isRecording = false;
                 recordBtn.setText(R.string.recording_video);
-                Toast.makeText(getApplicationContext(), String.format(getString(R.string.record_finish_toast), filepath), 1).show();
+                Toast.makeText(getApplicationContext(), String.format(getString(R.string.record_finish_toast), filepath), Toast.LENGTH_LONG).show();
             }
             break;
         case R.id.root_layout:
@@ -540,9 +540,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             monitorTextView.setText("WidthxHeight："+callHelper.getVideoWidth()+"x"+callHelper.getVideoHeight()
-                                    + "\nDelay：" + callHelper.getVideoTimedelay()
-                                    + "\nFramerate：" + callHelper.getVideoFramerate()
-                                    + "\nLost：" + callHelper.getVideoLostcnt()
+                                    + "\nDelay：" + callHelper.getVideoLatency()
+                                    + "\nFramerate：" + callHelper.getVideoFrameRate()
+                                    + "\nLost：" + callHelper.getVideoLostRate()
                                     + "\nLocalBitrate：" + callHelper.getLocalBitrate()
                                     + "\nRemoteBitrate：" + callHelper.getRemoteBitrate());
                             

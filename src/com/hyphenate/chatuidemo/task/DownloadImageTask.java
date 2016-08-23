@@ -24,11 +24,10 @@ public class DownloadImageTask extends AsyncTask<EMMessage, Integer, Bitmap>{
 	Bitmap bitmap = null;
 	public boolean downloadThumbnail = false;
 	EMMessage message;
-	private String remoteDir;
 
 	public DownloadImageTask(String remoteDir, DownloadFileCallback callback){
 		this.callback = callback;
-		this.remoteDir = remoteDir;
+		String remoteDir1 = remoteDir;
 	}
 	
 	@Override

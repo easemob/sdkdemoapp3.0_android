@@ -25,7 +25,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class PickAtUserActivity extends BaseActivity{
-    private EaseSidebar sidebar;
     ListView listView;
 
     @Override
@@ -36,7 +35,7 @@ public class PickAtUserActivity extends BaseActivity{
         String groupId = getIntent().getStringExtra("groupId");
         EMGroup group = EMClient.getInstance().groupManager().getGroup(groupId);
 
-        sidebar = (EaseSidebar) findViewById(com.hyphenate.easeui.R.id.sidebar);
+        EaseSidebar sidebar = (EaseSidebar) findViewById(com.hyphenate.easeui.R.id.sidebar);
         listView = (ListView) findViewById(R.id.list);
         sidebar.setListView(listView);
         List<String> members = group.getMembers();
@@ -95,14 +94,18 @@ public class PickAtUserActivity extends BaseActivity{
     }
 
     private void addHeadView(){
-        View view = LayoutInflater.from(this).inflate(R.layout.ease_row_contact, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.ease_row_contact, listView, false);
         ImageView avatarView = (ImageView) view.findViewById(R.id.avatar);
         TextView textView = (TextView) view.findViewById(R.id.name);
         textView.setText(getString(R.string.all_members));
         avatarView.setImageResource(R.drawable.ease_groups_icon);
         listView.addHeaderView(view);
     }
-    
+
+    public void back(View view) {
+        finish();
+    }
+
     private class PickUserAdapter extends EaseContactAdapter{
 
         public PickUserAdapter(Context context, int resource, List<EaseUser> objects) {

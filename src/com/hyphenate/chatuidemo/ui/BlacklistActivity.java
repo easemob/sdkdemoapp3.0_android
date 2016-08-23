@@ -1,14 +1,5 @@
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.Collections;
-import java.util.List;
-
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.easeui.utils.EaseUserUtils;
-import com.hyphenate.exceptions.HyphenateException;
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -24,20 +15,27 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.exceptions.HyphenateException;
+
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Blacklist screen
  * 
  */
-public class BlacklistActivity extends Activity {
-	private ListView listView;
-	private BlacklistAdapater adapter;
+public class BlacklistActivity extends BaseActivity {
+	private BlacklistAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.em_activity_black_list);
 
-		listView = (ListView) findViewById(R.id.list);
+		ListView listView = (ListView) findViewById(R.id.list);
 
 		// get blacklist from local databases
 		 List<String> blacklist = EMClient.getInstance().contactManager().getBlackListUsernames();
@@ -45,7 +43,7 @@ public class BlacklistActivity extends Activity {
 		// show the blacklist
 		if (blacklist != null) {
 			Collections.sort(blacklist);
-			adapter = new BlacklistAdapater(this, 1, blacklist);
+			adapter = new BlacklistAdapter(this, blacklist);
 			listView.setAdapter(adapter);
 		}
 
@@ -95,7 +93,7 @@ public class BlacklistActivity extends Activity {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             pd.dismiss();
-                            Toast.makeText(getApplicationContext(), R.string.Removed_from_the_failure, 0).show();
+                            Toast.makeText(getApplicationContext(), R.string.Removed_from_the_failure, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -103,14 +101,17 @@ public class BlacklistActivity extends Activity {
         }).start();
 	}
 
+	public void toGroupDetails(View view) {
+	}
+
 	/**
 	 * adapter
 	 * 
 	 */
-	private class BlacklistAdapater extends ArrayAdapter<String> {
+	private class BlacklistAdapter extends ArrayAdapter<String> {
 
-		public BlacklistAdapater(Context context, int textViewResourceId, List<String> objects) {
-			super(context, textViewResourceId, objects);
+		public BlacklistAdapter(Context context, List<String> objects) {
+			super(context, 0, objects);
 		}
 
 		@Override
