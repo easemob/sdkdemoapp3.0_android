@@ -50,11 +50,11 @@ public class ParseManager {
 	public void onInit(Context context) {
 		Context appContext = context.getApplicationContext();
 		Parse.enableLocalDatastore(appContext);
-		Parse.initialize(context, ParseAppID, ParseClientKey);
-//		Parse.initialize(new Parse.Configuration.Builder(appContext)
-//		        .applicationId(ParseAppID)
-//		        .server(parseServer)
-//		        .build());
+//		Parse.initialize(context, ParseAppID, ParseClientKey);
+		Parse.initialize(new Parse.Configuration.Builder(appContext)
+		        .applicationId(ParseAppID)
+		        .server(parseServer)
+		        .build());
 	}
 
 	public boolean updateParseNickName(final String nickname) {
