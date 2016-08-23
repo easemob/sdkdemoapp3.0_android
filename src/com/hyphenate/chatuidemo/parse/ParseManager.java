@@ -34,6 +34,8 @@ public class ParseManager {
 	private static final String CONFIG_USERNAME = "username";
 	private static final String CONFIG_NICK = "nickname";
 	private static final String CONFIG_AVATAR = "avatar";
+	
+	private static final String parseServer = "http://parse.easemob.com/parse/";
 
 	private static ParseManager instance = new ParseManager();
 	
@@ -51,7 +53,7 @@ public class ParseManager {
 		Parse.initialize(context, ParseAppID, ParseClientKey);
 //		Parse.initialize(new Parse.Configuration.Builder(appContext)
 //		        .applicationId(ParseAppID)
-//		        .server("http://114.215.141.221:1337/parse/")
+//		        .server(parseServer)
 //		        .build());
 	}
 
