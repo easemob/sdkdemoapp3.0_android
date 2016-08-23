@@ -191,7 +191,7 @@ public class RedPacketUtil {
             }
         }
         RedPacketInfo redPacketInfo = new RedPacketInfo();
-        redPacketInfo.moneyID = moneyId;
+        redPacketInfo.redPacketId = moneyId;
         redPacketInfo.toAvatarUrl = toAvatarUrl;
         redPacketInfo.toNickName = toNickname;
         redPacketInfo.moneyMsgDirect = messageDirect;
