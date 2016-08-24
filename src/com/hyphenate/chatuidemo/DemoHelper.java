@@ -482,16 +482,14 @@ public class DemoHelper {
             new InviteMessgeDao(appContext).deleteMessage(groupId);
             
             //user declined your invitation
-            boolean hasGroup = false;
             EMGroup group = null;
             for (EMGroup _group : EMClient.getInstance().groupManager().getAllGroups()) {
                 if (_group.getGroupId().equals(groupId)) {
                     group = _group;
-                    hasGroup = true;
                     break;
                 }
             }
-            if (!hasGroup)
+            if (group == null)
                 return;
             
             InviteMessage msg = new InviteMessage();

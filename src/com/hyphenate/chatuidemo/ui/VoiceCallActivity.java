@@ -14,8 +14,6 @@
 
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.UUID;
-
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
@@ -41,6 +39,8 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.util.EMLog;
 
+import java.util.UUID;
+
 /**
  * 语音通话页面
  * 
@@ -58,8 +58,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	
 	private TextView callStateTextView;
 	private boolean endCallTriggerByMe = false;
-	private TextView nickTextView;
-	private TextView durationTextView;
 	private Chronometer chronometer;
 	String st1;
 	private LinearLayout voiceContronlLayout;
@@ -84,8 +82,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		muteImage = (ImageView) findViewById(R.id.iv_mute);
 		handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
 		callStateTextView = (TextView) findViewById(R.id.tv_call_state);
-		nickTextView = (TextView) findViewById(R.id.tv_nick);
-		durationTextView = (TextView) findViewById(R.id.tv_calling_duration);
+        TextView nickTextView = (TextView) findViewById(R.id.tv_nick);
+        TextView durationTextView = (TextView) findViewById(R.id.tv_calling_duration);
 		chronometer = (Chronometer) findViewById(R.id.chronometer);
 		voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
 		netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);

@@ -13,19 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.UUID;
-
-import com.hyphenate.chat.EMCallManager.EMCameraDataProcessor;
-import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
-import com.hyphenate.chat.EMCallStateChangeListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
-import com.hyphenate.util.EMLog;
-import com.hyphenate.util.PathUtil;
-
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
@@ -48,6 +35,17 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.hyphenate.chat.EMCallManager.EMCameraDataProcessor;
+import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
+import com.hyphenate.chat.EMCallStateChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
+import com.hyphenate.util.PathUtil;
+
+import java.util.UUID;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
 
@@ -69,7 +67,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private Chronometer chronometer;
     private LinearLayout voiceContronlLayout;
     private RelativeLayout rootContainer;
-    private RelativeLayout btnsContainer;
     private LinearLayout topContainer;
     private LinearLayout bottomContainer;
     private TextView monitorTextView;
@@ -80,8 +77,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private boolean isInCalling;
     boolean isRecording = false;
     private Button recordBtn;
-    private Button switchCameraBtn;
-    private SeekBar YDeltaSeekBar;
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
     
@@ -141,14 +136,14 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         nickTextView = (TextView) findViewById(R.id.tv_nick);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
         voiceContronlLayout = (LinearLayout) findViewById(R.id.ll_voice_control);
-        btnsContainer = (RelativeLayout) findViewById(R.id.ll_btns);
+        RelativeLayout btnsContainer = (RelativeLayout) findViewById(R.id.ll_btns);
         topContainer = (LinearLayout) findViewById(R.id.ll_top_container);
         bottomContainer = (LinearLayout) findViewById(R.id.ll_bottom_container);
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         recordBtn = (Button) findViewById(R.id.btn_record_video);
-        switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
-        YDeltaSeekBar = (SeekBar) findViewById(R.id.seekbar_y_detal);
+        Button switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
+        SeekBar YDeltaSeekBar = (SeekBar) findViewById(R.id.seekbar_y_detal);
 
         refuseBtn.setOnClickListener(this);
         answerBtn.setOnClickListener(this);
