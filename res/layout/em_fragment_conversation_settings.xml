@@ -217,8 +217,8 @@
                     android:layout_marginRight="10dp"
                     android:background="@color/btn_gray_normal" />
 
-                <LinearLayout
-                    android:id="@+id/ll_black_list"
+                <RelativeLayout
+                    android:id="@+id/rl_custom_server"
                     android:layout_width="match_parent"
                     android:layout_height="50dip"
                     android:background="@drawable/em_btn_bottom_selector"
@@ -227,12 +227,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
+                        android:layout_centerVertical="true"
                         android:paddingLeft="10dip"
-                        android:text="@string/book_black"
+                        android:text="@string/set_custom_server"
                         android:textColor="@android:color/black"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                        android:textSize="14sp"
+                        android:typeface="serif" />
+
+                    <com.hyphenate.easeui.widget.EaseSwitchButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/switch_custom_server"
+                        app:switchStatus="close"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -240,6 +249,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@color/btn_gray_normal" />
+
 
                 <LinearLayout
                     android:id="@+id/ll_user_profile"
@@ -254,6 +264,31 @@
                         android:layout_gravity="center_vertical"
                         android:paddingLeft="10dip"
                         android:text="@string/title_user_profile"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/btn_gray_normal" />
+
+
+                <LinearLayout
+                    android:id="@+id/ll_black_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dip"
+                    android:background="@drawable/em_btn_bottom_selector"
+                    android:padding="10dip" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="10dip"
+                        android:text="@string/book_black"
                         android:textColor="@android:color/black"
                         android:textSize="14sp" />
                 </LinearLayout>

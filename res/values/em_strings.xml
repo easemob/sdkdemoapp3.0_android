@@ -77,6 +77,7 @@
     <string name="chatset">Chat settings</string>
     <string name="yangshengqi">Use speaker</string>
     <string name="book_black">Black list</string>
+    <string name="set_custom_server">Set custom servers</string>
     <string name="session">Conversation</string>
     <string name="address_book">Address book</string>
     <string name="setting">Settings</string>

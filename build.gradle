@@ -43,7 +43,7 @@ android {
         multiDexEnabled true
     }
 
-	sourceSets {
+    sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
@@ -67,7 +67,7 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
-	
+
     buildTypes {
         release {
             minifyEnabled false
@@ -79,7 +79,7 @@ android {
 dependencies {
     compile project(':redpacketlibrary')
     compile project(':EaseUI')
-	  compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-multidex.jar')
+    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-multidex.jar')
     //考虑到在eclipse中,直接使用源码
 //    compile ('com.anthonycr.grant:permissions:1.0'){
 //        exclude module: 'support-v4'
@@ -89,4 +89,5 @@ dependencies {
         transitive = true;
     }
 // ============== fabric end
+    compile 'com.android.support:appcompat-v7:23.4.0'
 }

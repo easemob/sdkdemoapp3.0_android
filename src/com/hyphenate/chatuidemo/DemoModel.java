@@ -242,6 +242,30 @@ public class DemoModel {
     public boolean isAdaptiveVideoEncode() {
         return PreferenceManager.getInstance().isAdaptiveVideoEncode();
     }
+
+    public void setRestServer(String restServer){
+        PreferenceManager.getInstance().setRestServer(restServer);
+    }
+
+    public String getRestServer(){
+        return  PreferenceManager.getInstance().getRestServer();
+    }
+
+    public void setIMServer(String imServer){
+        PreferenceManager.getInstance().setIMServer(imServer);
+    }
+
+    public String getIMServer(){
+        return PreferenceManager.getInstance().getIMServer();
+    }
+
+    public void enableCustomServer(boolean enable){
+        PreferenceManager.getInstance().enableCustomServer(enable);
+    }
+
+    public boolean isCustomServerEnable(){
+        return PreferenceManager.getInstance().isCustomServerEnable();
+    }
     
     enum Key{
         VibrateAndPlayToneOn,
