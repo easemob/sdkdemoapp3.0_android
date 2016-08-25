@@ -353,7 +353,8 @@ public class DemoHelper {
             }
         });
     }
-    
+
+    EMConnectionListener connectionListener;
     /**
      * set global listener
      */
@@ -367,7 +368,7 @@ public class DemoHelper {
         isBlackListSyncedWithServer = demoModel.isBacklistSynced();
         
         // create the global connection listener
-        EMConnectionListener connectionListener = new EMConnectionListener() {
+        connectionListener = new EMConnectionListener() {
             @Override
             public void onDisconnected(int error) {
                 if (error == EMError.USER_REMOVED) {

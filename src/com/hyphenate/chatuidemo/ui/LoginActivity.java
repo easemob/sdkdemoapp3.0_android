@@ -137,9 +137,6 @@ public class LoginActivity extends BaseActivity {
 			public void onSuccess() {
 				Log.d(TAG, "login: onSuccess");
 
-				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
-					pd.dismiss();
-				}
 
 				// ** manually load all local groups and conversation
 			    EMClient.getInstance().groupManager().loadAllGroups();
@@ -152,6 +149,9 @@ public class LoginActivity extends BaseActivity {
 					Log.e("LoginActivity", "update current user nick fail");
 				}
 
+				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
+				    pd.dismiss();
+				}
 				// get user's info (this should be get from App's server or 3rd party service)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
 
