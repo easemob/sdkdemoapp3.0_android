@@ -188,6 +188,16 @@ public class DemoHelper {
         options.setMipushConfig("2882303761517426801", "5381742660801");
         //you need apply & set your own id if you want to use Huawei push notification
         options.setHuaweiPushAppId("10492024");
+
+        //set custom servers, commonly used in private deployment
+        if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
+            options.setRestServer(demoModel.getRestServer());
+            options.setIMServer(demoModel.getIMServer());
+            if(demoModel.getIMServer().contains(":")) {
+                options.setIMServer(demoModel.getIMServer().split(":")[0]);
+                options.setImPort(Integer.valueOf(demoModel.getIMServer().split(":")[1]));
+            }
+        }
         
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
@@ -343,7 +353,8 @@ public class DemoHelper {
             }
         });
     }
-    
+
+    EMConnectionListener connectionListener;
     /**
      * set global listener
      */
@@ -357,7 +368,7 @@ public class DemoHelper {
         isBlackListSyncedWithServer = demoModel.isBacklistSynced();
         
         // create the global connection listener
-        EMConnectionListener connectionListener = new EMConnectionListener() {
+        connectionListener = new EMConnectionListener() {
             @Override
             public void onDisconnected(int error) {
                 if (error == EMError.USER_REMOVED) {
