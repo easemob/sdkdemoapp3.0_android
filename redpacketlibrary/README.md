@@ -172,7 +172,7 @@ include ':EaseUI', ':redpacketlibrary'
    if (type == EMMessage.Type.TXT.ordinal()) {
             if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false) ||
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
-                    || message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_MONEY_MESSAGE, false)){
+                    || message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
                 setContentView(R.layout.em_context_menu_for_location);
             }
         }
@@ -253,7 +253,7 @@ include ':EaseUI', ':redpacketlibrary'
         for (EMMessage message : messages) {
             EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
             String action = cmdMsgBody.action();//获取自定义action
-            if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION)){
+            if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                 RedPacketUtils.receiveRedPacketAckMessage(message);
                 messageList.refresh();
             }
@@ -273,7 +273,7 @@ include ':EaseUI', ':redpacketlibrary'
         for (EMMessage message : messages) {
             EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
             String action = cmdMsgBody.action();//获取自定义action
-            if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION) ){
+            if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION) ){
                 RedPacketUtils.receiveRedPacketAckMessage(message);
             }
         }
@@ -297,9 +297,9 @@ include ':EaseUI', ':redpacketlibrary'
             EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
             final String action = cmdMsgBody.action();//获取自定义action
             if(!easeUI.hasForegroundActivies()){
-                if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION)){
+                if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                     RedPacketUtils.receiveRedPacketAckMessage(message);
-                    broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION));
+                    broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                 }
             }
         }
@@ -314,13 +314,13 @@ include ':EaseUI', ':redpacketlibrary'
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
-        intentFilter.addAction(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION);
+        intentFilter.addAction(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
             
             @Override
             public void onReceive(Context context, Intent intent) {
             ...
-            if (action.equals(RedPacketConstant.REFRESH_GROUP_MONEY_ACTION)){
+            if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                 if (conversationListFragment != null){
                     conversationListFragment.refresh();
                     }

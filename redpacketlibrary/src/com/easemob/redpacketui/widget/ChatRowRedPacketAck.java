@@ -46,7 +46,7 @@ public class ChatRowRedPacketAck extends EaseChatRow {
                     mTvMessage.setText(String.format(getResources().getString(R.string.msg_take_someone_red_packet), fromUser));
                 }
             } else {
-                mTvMessage.setText(String.format(getResources().getString(R.string.msg_take_someone_red_packet), toUser));
+                mTvMessage.setText(String.format(getResources().getString(R.string.msg_take_someone_red_packet), fromUser));
             }
         } else {
             mTvMessage.setText(String.format(getResources().getString(R.string.msg_someone_take_red_packet), toUser));

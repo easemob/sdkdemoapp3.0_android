@@ -814,8 +814,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 
 		@Override
-		public void onInvitationAccepted(String groupId, String inviter,
-										 String reason) {
+		public void onInvitationAccepted(String groupId, String inviter, String reason) {
 			runOnUiThread(new Runnable(){
 
 				@Override
