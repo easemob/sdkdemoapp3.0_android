@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.easemob.chat.EMMessage;
+import com.easemob.chat.EMMessage.Status;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.redpacketui.R;
 import com.easemob.redpacketui.RedPacketConstant;
@@ -54,7 +55,8 @@ public class ChatRowRedPacket extends EaseChatRow {
 
     protected void handleTextMessage() {
         if (message.direct == EMMessage.Direct.SEND) {
-            setMessageSendCallback();
+        	if(message.status != Status.SUCCESS && message.status != Status.FAIL)
+        		setMessageSendCallback();
             switch (message.status) {
                 case CREATE:
                     progressBar.setVisibility(View.GONE);
