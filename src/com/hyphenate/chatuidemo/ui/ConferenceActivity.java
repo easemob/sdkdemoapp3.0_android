@@ -1,5 +1,25 @@
 package com.hyphenate.chatuidemo.ui;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.hyphenate.chat.EMCallConference;
+import com.hyphenate.chat.EMCallManager;
+import com.hyphenate.chat.EMCallManager.EMCallType;
+import com.hyphenate.chat.EMCallStream;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
+import com.hyphenate.util.EMLog;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,26 +38,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.chat.EMCallManager;
-import com.hyphenate.chat.EMCallManager.EMCallType;
-import com.hyphenate.chat.EMCallSession;
-import com.hyphenate.chat.EMCallStream;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
-import com.hyphenate.util.EMLog;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * Created by linan on 16/5/30.
  */
@@ -46,7 +46,7 @@ public class ConferenceActivity extends Activity implements View.OnClickListener
     
     private LayoutInflater inflater;
     SubscribeAdapter subscribableAdapter = null;
-    EMCallSession currentSession;
+    EMCallConference currentConference;
     boolean isOwner = false;
     List<String> conferenceMembers = Collections.synchronizedList(new ArrayList<String>());
     List<String> publishedNames = Collections.synchronizedList(new ArrayList<String>());
@@ -120,7 +120,7 @@ public class ConferenceActivity extends Activity implements View.OnClickListener
 
         @Override
         public void onConferenceMembersUpdated(String callId) {
-            if (callId == null || !callId.equals(currentSession)) {
+            if (callId == null || !callId.equals(currentConference.getCallId())) {
                 EMLog.d(TAG, "onConferenceMembersUpdated not match:" + callId == null ? "is empty" : callId);
             } else {
                 EMLog.d(TAG, "onConferenceMembersUpdated: " + callId);
@@ -145,8 +145,7 @@ public class ConferenceActivity extends Activity implements View.OnClickListener
     public void refreshList(String callId) {
         
         EMLog.d(TAG, "refreshList:" + callId);
-        
-        final List<EMCallStream> streams = EMClient.getInstance().callManager().getSubscribableStreams(callId);
+        final List<EMCallStream> streams = currentConference.getSubscribableStreams();
         runOnUiThread(new Runnable() {
             
             @Override
@@ -268,13 +267,13 @@ public class ConferenceActivity extends Activity implements View.OnClickListener
             @Override
             public void run() {
                 try  {
-                    currentSession = EMClient.getInstance().callManager().createAndJoinConference(EMCallType.VIDEO, password);
+                    currentConference = EMClient.getInstance().callManager().createAndJoinConference(EMCallType.VIDEO, password);
                     
                     for (int i = 0; i < members.length; i++) {
-                        inviteJoinConference(members[i], currentSession.getConferenceId(), password);
+                        inviteJoinConference(members[i], currentConference.getCallId(), password);
                     }
 
-                    EMClient.getInstance().callManager().asyncPublishConferenceStream(currentSession.getConferenceId());
+                    EMClient.getInstance().callManager().asyncPublishConferenceStream(currentConference.getCallId());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -294,13 +293,13 @@ public class ConferenceActivity extends Activity implements View.OnClickListener
             @Override
             public void run() {
                 try {
-                    currentSession = EMClient.getInstance().callManager().joinConference(conferenceId, password);
-
+                    currentConference = EMClient.getInstance().callManager().joinConference(conferenceId, password);
+                    
 //                    EMClient.getInstance().callManager().asyncPublishConferenceStream(callSession.getCallId());
                     
 //                    EMClient.getInstance().callManager().asyncPublishConferenceStream(conferenceId);
                     
-                    refreshList(currentSession.getCallId());
+                    refreshList(currentConference.getCallId());
 
                 } catch (HyphenateException e) {
                     e.printStackTrace();
@@ -317,9 +316,9 @@ public class ConferenceActivity extends Activity implements View.OnClickListener
             public void run() {
                 try {
                     if (isOwner) {
-                        EMClient.getInstance().callManager().deleteConference(currentSession.getCallId());
+                        EMClient.getInstance().callManager().deleteConference(currentConference.getCallId());
                     } else {
-                        EMClient.getInstance().callManager().leaveConference(currentSession.getCallId());
+                        EMClient.getInstance().callManager().leaveConference(currentConference.getCallId());
                     }
                     
                     if (listener != null) {
@@ -423,9 +422,9 @@ public class ConferenceActivity extends Activity implements View.OnClickListener
                         if (holder == null || holder.callStream == null) {
                             return;
                         }
-                        EMLog.d(TAG, "asyncSubscribeConferenceStream callId:" + currentSession.getCallId());
+                        EMLog.d(TAG, "asyncSubscribeConferenceStream callId:" + currentConference.getCallId());
                         EMCallStream callStream = holder.callStream;
-                        EMClient.getInstance().callManager().asyncSubscribeConferenceStream(currentSession.getCallId(), callStream, oppositeSurfaceView);
+                        EMClient.getInstance().callManager().asyncSubscribeConferenceStream(currentConference.getCallId(), callStream, oppositeSurfaceView);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -433,7 +432,7 @@ public class ConferenceActivity extends Activity implements View.OnClickListener
                                 streamText.setText(holder.callStream.getUserName());
                             }
                         });  
-                        refreshList(currentSession.getCallId());
+                        refreshList(currentConference.getCallId());
                     } catch (HyphenateException e) {
                         e.printStackTrace();
                     }
@@ -464,9 +463,9 @@ public class ConferenceActivity extends Activity implements View.OnClickListener
                     if (holder == null || holder.callStream == null) {
                         return;
                     }
-                    EMLog.d(TAG, "asyncSubscribeConferenceStream callId:" + currentSession.getCallId());
+                    EMLog.d(TAG, "asyncSubscribeConferenceStream callId:" + currentConference.getCallId());
                     EMCallStream callStream = holder.callStream;
-                    EMClient.getInstance().callManager().asyncSubscribeConferenceStream(currentSession.getCallId(), callStream, oppositeView);
+                    EMClient.getInstance().callManager().asyncSubscribeConferenceStream(currentConference.getCallId(), callStream, oppositeView);
                     TextView streamText = (TextView)oppositeView.findViewById(R.id.stream_name);
                     streamText.setText(callStream.getUserName());
                 } catch (HyphenateException e) {
