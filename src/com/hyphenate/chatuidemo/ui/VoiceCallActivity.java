@@ -58,7 +58,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	
 	private TextView callStateTextView;
 	private boolean endCallTriggerByMe = false;
-    private Chronometer chronometer;
+	private Chronometer chronometer;
 	String st1;
 	private LinearLayout voiceContronlLayout;
     private TextView netwrokStatusVeiw;
