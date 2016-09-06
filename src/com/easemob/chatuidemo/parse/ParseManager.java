@@ -47,11 +47,11 @@ public class ParseManager {
 	public void onInit(Context context) {
 		this.appContext = context.getApplicationContext();
 		Parse.enableLocalDatastore(appContext);
-		Parse.initialize(context, ParseAppID, ParseClientKey);
-//		Parse.initialize(new Parse.Configuration.Builder(appContext)
-//		        .applicationId(ParseAppID)
-//		        .server(SERVER_URL)
-//		        .build());
+//		Parse.initialize(context, ParseAppID, ParseClientKey);
+		Parse.initialize(new Parse.Configuration.Builder(appContext)
+		        .applicationId(ParseAppID)
+		        .server(SERVER_URL)
+		        .build());
 	}
 
 	public boolean updateParseNickName(final String nickname) {
@@ -192,6 +192,7 @@ public class ParseManager {
 	}
 
 	public String uploadParseAvatar(byte[] data) {
+		EMLog.d(TAG, "uploadParseAvatar");
 		String username = EMChatManager.getInstance().getCurrentUser();
 		ParseQuery<ParseObject> pQuery = ParseQuery.getQuery(CONFIG_TABLE_NAME);
 		pQuery.whereEqualTo(CONFIG_USERNAME, username);
@@ -205,6 +206,7 @@ public class ParseManager {
 			ParseFile pFile = new ParseFile(data);
 			pUser.put(CONFIG_AVATAR, pFile);
 			pUser.save();
+			EMLog.d(TAG, "uploadParseAvatar step1: url: " + pFile.getUrl());
 			return pFile.getUrl();
 		} catch (ParseException e) {
 			if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
@@ -214,6 +216,7 @@ public class ParseManager {
 					ParseFile pFile = new ParseFile(data);
 					pUser.put(CONFIG_AVATAR, pFile);
 					pUser.save();
+					EMLog.d(TAG, "uploadParseAvatar step2: url: " + pFile.getUrl());
 					return pFile.getUrl();
 				} catch (ParseException e1) {
 					e1.printStackTrace();
