@@ -916,7 +916,6 @@ public class DemoHelper {
 		try {
 			EMChatManager.getInstance().endCall();
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 	

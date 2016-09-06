@@ -24,6 +24,8 @@ import io.fabric.sdk.android.Fabric;
 // ================== fabric end
 
 
+
+
 public class DemoApplication extends Application {
 
 	public static Context applicationContext;
@@ -60,6 +62,7 @@ public class DemoApplication extends Application {
 		super.attachBaseContext(base);
 		MultiDex.install(this);
 	}
+
 
 
 	public static DemoApplication getInstance() {
