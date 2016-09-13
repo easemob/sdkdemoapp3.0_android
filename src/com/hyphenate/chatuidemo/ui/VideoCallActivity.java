@@ -543,6 +543,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     + "\nLocalBitrate：" + callHelper.getLocalBitrate()
                                     + "\nRemoteBitrate：" + callHelper.getRemoteBitrate());
                             
+                            ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
+                                    ? R.string.direct_call : R.string.relay_call);                            
                         }
                     });
                     try {
