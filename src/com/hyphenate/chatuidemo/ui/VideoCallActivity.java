@@ -277,6 +277,14 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                     });
                     break;
+                case NETWORK_DISCONNECTED:
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            netwrokStatusVeiw.setVisibility(View.VISIBLE);
+                            netwrokStatusVeiw.setText(R.string.network_unavailable);
+                        }
+                    });
+                    break;
                 case NETWORK_UNSTABLE:
                     runOnUiThread(new Runnable() {
                         public void run() {
