@@ -121,6 +121,9 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			ringtone = RingtoneManager.getRingtone(this, ringUri);
 			ringtone.play();
 		}
+        final int MAKE_CALL_TIMEOUT = 50 * 1000;
+        handler.removeCallbacks(timeoutHangup);
+        handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
 	}
 
 	/**

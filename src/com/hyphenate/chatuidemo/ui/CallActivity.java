@@ -181,10 +181,6 @@ public class CallActivity extends BaseActivity {
                     } else { 
                         EMClient.getInstance().callManager().makeVoiceCall(username);
                     }
-                    
-                    final int MAKE_CALL_TIMEOUT = 50 * 1000;
-                    handler.removeCallbacks(timeoutHangup);
-                    handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
                 } catch (final EMServiceNotReadyException e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
