@@ -245,6 +245,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                         public void run() {
                             chronometer.stop();
                             callDruationText = chronometer.getText().toString();
+                            String st1 = getResources().getString(R.string.Refused);
                             String st2 = getResources().getString(R.string.The_other_party_refused_to_accept);
                             String st3 = getResources().getString(R.string.Connection_failure);
                             String st4 = getResources().getString(R.string.The_other_party_is_not_online);
@@ -259,7 +260,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             String st11 = getResources().getString(R.string.hang_up);
                             
                             if (fError == CallError.REJECTED) {
-                                callingState = CallingState.BEREFUESD;
+                                callingState = CallingState.BEREFUSED;
                                 callStateTextView.setText(st2);
                             } else if (fError == CallError.ERROR_TRANSPORT) {
                                 callStateTextView.setText(st3);
@@ -270,13 +271,17 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                 callingState = CallingState.BUSY;
                                 callStateTextView.setText(st5);
                             } else if (fError == CallError.ERROR_NORESPONSE) {
-                                callingState = CallingState.NORESPONSE;
+                                callingState = CallingState.NO_RESPONSE;
                                 callStateTextView.setText(st6);
                             } else if (fError == CallError.ERROR_LOCAL_VERSION_SMALLER || fError == CallError.ERROR_PEER_VERSION_SMALLER){
                                 callingState = CallingState.VERSION_NOT_SAME;
                                 callStateTextView.setText(R.string.call_version_inconsistent);
                             } else {
-                                if (isAnswered) {
+                                if (isRefused) {
+                                    callingState = CallingState.REFUSED;
+                                    callStateTextView.setText(st1);
+                                }
+                                else if (isAnswered) {
                                     callingState = CallingState.NORMAL;
                                     if (endCallTriggerByMe) {
 //                                        callStateTextView.setText(st7);
@@ -289,7 +294,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                         callStateTextView.setText(st9);
                                     } else {
                                         if (callingState != CallingState.NORMAL) {
-                                            callingState = CallingState.CANCED;
+                                            callingState = CallingState.CANCELLED;
                                             callStateTextView.setText(st10);
                                         }else {
                                             callStateTextView.setText(st11);
@@ -317,6 +322,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_refuse_call:
+		    isRefused = true;
 		    refuseBtn.setEnabled(false);
 		    handler.sendEmptyMessage(MSG_CALL_REJECT);
 			break;

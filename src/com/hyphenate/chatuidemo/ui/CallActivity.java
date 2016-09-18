@@ -1,7 +1,15 @@
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.SoundPool;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
+import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
@@ -19,16 +27,8 @@ import com.hyphenate.media.EMLocalSurfaceView;
 import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.util.EMLog;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.media.AudioManager;
-import android.media.Ringtone;
-import android.media.SoundPool;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
-import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressLint("Registered")
 public class CallActivity extends BaseActivity {
@@ -42,8 +42,9 @@ public class CallActivity extends BaseActivity {
     protected final int MSG_CALL_SWITCH_CAMERA = 6;
 
     protected boolean isInComingCall;
+    protected boolean isRefused = false;
     protected String username;
-    protected CallingState callingState = CallingState.CANCED;
+    protected CallingState callingState = CallingState.CANCELLED;
     protected String callDruationText;
     protected String msgid;
     protected AudioManager audioManager;
@@ -201,6 +202,7 @@ public class CallActivity extends BaseActivity {
                 }
                 break;
             case MSG_CALL_ANSWER:
+                EMLog.d(TAG, "MSG_CALL_ANSWER");
                 if (ringtone != null)
                     ringtone.stop();
                 if (isInComingCall) {
@@ -229,6 +231,8 @@ public class CallActivity extends BaseActivity {
                         finish();
                         return;
                     }
+                } else {
+                    EMLog.d(TAG, "answer call isInComingCall:false");
                 }
                 break;
             case MSG_CALL_REJECT:
@@ -241,7 +245,7 @@ public class CallActivity extends BaseActivity {
                     saveCallRecord();
                     finish();
                 }
-                callingState = CallingState.REFUESD;
+                callingState = CallingState.REFUSED;
                 break;
             case MSG_CALL_END:
                 if (soundPool != null)
@@ -358,10 +362,10 @@ public class CallActivity extends BaseActivity {
         case NORMAL:
             txtBody = new EMTextMessageBody(st1 + callDruationText);
             break;
-        case REFUESD:
+        case REFUSED:
             txtBody = new EMTextMessageBody(st2);
             break;
-        case BEREFUESD:
+        case BEREFUSED:
             txtBody = new EMTextMessageBody(st3);
             break;
         case OFFLINE:
@@ -370,7 +374,7 @@ public class CallActivity extends BaseActivity {
         case BUSY:
             txtBody = new EMTextMessageBody(st5);
             break;
-        case NORESPONSE:
+        case NO_RESPONSE:
             txtBody = new EMTextMessageBody(st6);
             break;
         case UNANSWERED:
@@ -399,6 +403,6 @@ public class CallActivity extends BaseActivity {
     }
 
     enum CallingState {
-        CANCED, NORMAL, REFUESD, BEREFUESD, UNANSWERED, OFFLINE, NORESPONSE, BUSY, VERSION_NOT_SAME
+        CANCELLED, NORMAL, REFUSED, BEREFUSED, UNANSWERED, OFFLINE, NO_RESPONSE, BUSY, VERSION_NOT_SAME
     }
 }

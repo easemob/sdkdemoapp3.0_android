@@ -44,6 +44,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.media.EMLocalSurfaceView;
 import com.hyphenate.media.EMOppositeSurfaceView;
+import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 
 import java.util.UUID;
@@ -369,9 +370,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             String s7 = getResources().getString(R.string.The_other_is_hang_up);
                             String s8 = getResources().getString(R.string.did_not_answer);
                             String s9 = getResources().getString(R.string.Has_been_cancelled);
+                            String s10 = getResources().getString(R.string.Refused);
                             
                             if (fError == CallError.REJECTED) {
-                                callingState = CallingState.BEREFUESD;
+                                callingState = CallingState.BEREFUSED;
                                 callStateTextView.setText(s1);
                             } else if (fError == CallError.ERROR_TRANSPORT) {
                                 callStateTextView.setText(s2);
@@ -382,13 +384,17 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                 callingState = CallingState.BUSY;
                                 callStateTextView.setText(s4);
                             } else if (fError == CallError.ERROR_NORESPONSE) {
-                                callingState = CallingState.NORESPONSE;
+                                callingState = CallingState.NO_RESPONSE;
                                 callStateTextView.setText(s5);
                             }else if (fError == CallError.ERROR_LOCAL_VERSION_SMALLER || fError == CallError.ERROR_PEER_VERSION_SMALLER){
                                 callingState = CallingState.VERSION_NOT_SAME;
                                 callStateTextView.setText(R.string.call_version_inconsistent);
                             }  else {
-                                if (isAnswered) {
+                                if (isRefused) {
+                                    callingState = CallingState.REFUSED;
+                                    callStateTextView.setText(s10);
+                                }
+                                else if (isAnswered) {
                                     callingState = CallingState.NORMAL;
                                     if (endCallTriggerByMe) {
 //                                        callStateTextView.setText(s6);
@@ -401,7 +407,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                         callStateTextView.setText(s8);
                                     } else {
                                         if (callingState != CallingState.NORMAL) {
-                                            callingState = CallingState.CANCED;
+                                            callingState = CallingState.CANCELLED;
                                             callStateTextView.setText(s9);
                                         } else {
                                             callStateTextView.setText(s6);
@@ -429,11 +435,13 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
         case R.id.btn_refuse_call: // decline the call
+            isRefused = true;
             refuseBtn.setEnabled(false);
             handler.sendEmptyMessage(MSG_CALL_REJECT);
             break;
 
         case R.id.btn_answer_call: // answer the call
+            EMLog.d(TAG, "btn_answer_call clicked");
             answerBtn.setEnabled(false);
             openSpeakerOn();
             if (ringtone != null)
