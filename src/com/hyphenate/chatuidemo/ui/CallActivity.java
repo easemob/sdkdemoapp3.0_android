@@ -197,6 +197,7 @@ public class CallActivity extends BaseActivity {
                                 st2 = getResources().getString(R.string.The_other_is_on_the_phone);
                             }
                             Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     });
                 }

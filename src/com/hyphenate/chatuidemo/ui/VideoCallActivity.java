@@ -386,10 +386,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             } else if (fError == CallError.ERROR_NORESPONSE) {
                                 callingState = CallingState.NO_RESPONSE;
                                 callStateTextView.setText(s5);
-                            }else if (fError == CallError.ERROR_LOCAL_VERSION_SMALLER || fError == CallError.ERROR_PEER_VERSION_SMALLER){
+                            } else if (fError == CallError.ERROR_LOCAL_VERSION_SMALLER || fError == CallError.ERROR_PEER_VERSION_SMALLER){
                                 callingState = CallingState.VERSION_NOT_SAME;
                                 callStateTextView.setText(R.string.call_version_inconsistent);
-                            }  else {
+                            } else {
                                 if (isRefused) {
                                     callingState = CallingState.REFUSED;
                                     callStateTextView.setText(s10);
