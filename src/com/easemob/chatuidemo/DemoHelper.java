@@ -66,7 +66,7 @@ import com.easemob.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.easemob.easeui.utils.EaseACKUtil;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.exceptions.EaseMobException;
-import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.easemob.util.EMLog;
 
@@ -703,9 +703,9 @@ public class DemoHelper {
                             EaseCommonUtils.receiveRevokeMessage(appContext, message);
                         }
                         //red packet code : 处理红包回执透传消息
-                        if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+                        if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                             RedPacketUtil.receiveRedPacketAckMessage(message);
-                            broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
+                            broadcastManager.sendBroadcast(new Intent(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
                         //end of red packet code
                     }
@@ -723,7 +723,7 @@ public class DemoHelper {
                             public void onReceive(Context context, Intent intent) {
                                 // TODO Auto-generated method stub
                                 //red packet code : 过滤掉红包回执消息的toast
-                                if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+                                if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                                     return;
                                 }
                                 //end of red packet code
