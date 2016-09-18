@@ -9,8 +9,8 @@ import android.widget.TextView;
 import com.easemob.chat.EMMessage;
 import com.easemob.chat.EMMessage.Status;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.R;
-import com.easemob.redpacketui.RedPacketConstant;
 
 public class ChatRowRedPacket extends EaseChatRow {
 
@@ -24,7 +24,7 @@ public class ChatRowRedPacket extends EaseChatRow {
 
     @Override
     protected void onInflatView() {
-        if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
+        if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
             inflater.inflate(message.direct == EMMessage.Direct.RECEIVE ?
                     R.layout.em_row_received_red_packet : R.layout.em_row_sent_red_packet, this);
         }
@@ -39,12 +39,12 @@ public class ChatRowRedPacket extends EaseChatRow {
 
     @Override
     protected void onSetUpView() {
-        String sponsorName = message.getStringAttribute(RedPacketConstant.EXTRA_SPONSOR_NAME, "");
-        String greetings = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_GREETING, "");
+        String sponsorName = message.getStringAttribute(RPConstant.EXTRA_SPONSOR_NAME, "");
+        String greetings = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_GREETING, "");
         mTvGreeting.setText(greetings);
         mTvSponsorName.setText(sponsorName);
-        String packetType = message.getStringAttribute(RedPacketConstant.MESSAGE_ATTR_RED_PACKET_TYPE, "");
-        if (!TextUtils.isEmpty(packetType) && TextUtils.equals(packetType, RedPacketConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
+        String packetType = message.getStringAttribute(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE, "");
+        if (!TextUtils.isEmpty(packetType) && TextUtils.equals(packetType, RPConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
             mTvPacketType.setVisibility(VISIBLE);
             mTvPacketType.setText(R.string.exclusive_red_packet);
         } else {
@@ -55,8 +55,8 @@ public class ChatRowRedPacket extends EaseChatRow {
 
     protected void handleTextMessage() {
         if (message.direct == EMMessage.Direct.SEND) {
-        	if(message.status != Status.SUCCESS && message.status != Status.FAIL)
-        		setMessageSendCallback();
+            if (message.status != Status.SUCCESS && message.status != Status.FAIL)
+                setMessageSendCallback();
             switch (message.status) {
                 case CREATE:
                     progressBar.setVisibility(View.GONE);

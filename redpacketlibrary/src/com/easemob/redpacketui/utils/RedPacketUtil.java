@@ -19,12 +19,11 @@ import com.easemob.easeui.domain.EaseUser;
 import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.easeui.widget.EaseChatMessageList;
 import com.easemob.exceptions.EaseMobException;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketsdk.bean.RPUserBean;
 import com.easemob.redpacketsdk.bean.RedPacketInfo;
 import com.easemob.redpacketsdk.bean.TokenData;
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.R;
-import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketui.callback.GroupMemberCallback;
 import com.easemob.redpacketui.callback.NotifyGroupMemberCallback;
 import com.easemob.redpacketui.ui.activity.RPChangeActivity;
@@ -133,17 +132,17 @@ public class RedPacketUtil {
      * @return
      */
     public static EMMessage createRPMessage(Context context, Intent data, String toChatUsername) {
-        String greetings = data.getStringExtra(RedPacketConstant.EXTRA_RED_PACKET_GREETING);
-        String moneyID = data.getStringExtra(RedPacketConstant.EXTRA_RED_PACKET_ID);
-        String specialReceiveId = data.getStringExtra(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_ID);
-        String redPacketType = data.getStringExtra(RedPacketConstant.EXTRA_RED_PACKET_TYPE);
+        String greetings = data.getStringExtra(RPConstant.EXTRA_RED_PACKET_GREETING);
+        String moneyID = data.getStringExtra(RPConstant.EXTRA_RED_PACKET_ID);
+        String specialReceiveId = data.getStringExtra(RPConstant.EXTRA_RED_PACKET_RECEIVER_ID);
+        String redPacketType = data.getStringExtra(RPConstant.EXTRA_RED_PACKET_TYPE);
         EMMessage message = EMMessage.createTxtSendMessage("[" + context.getResources().getString(R.string.easemob_red_packet) + "]" + greetings, toChatUsername);
-        message.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, true);
-        message.setAttribute(RedPacketConstant.EXTRA_SPONSOR_NAME, context.getResources().getString(R.string.easemob_red_packet));
-        message.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_GREETING, greetings);
-        message.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_ID, moneyID);
-        message.setAttribute(RedPacketConstant.MESSAGE_ATTR_RED_PACKET_TYPE, redPacketType);
-        message.setAttribute(RedPacketConstant.MESSAGE_ATTR_SPECIAL_RECEIVER_ID, specialReceiveId);
+        message.setAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, true);
+        message.setAttribute(RPConstant.EXTRA_SPONSOR_NAME, context.getResources().getString(R.string.easemob_red_packet));
+        message.setAttribute(RPConstant.EXTRA_RED_PACKET_GREETING, greetings);
+        message.setAttribute(RPConstant.EXTRA_RED_PACKET_ID, moneyID);
+        message.setAttribute(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE, redPacketType);
+        message.setAttribute(RPConstant.MESSAGE_ATTR_SPECIAL_RECEIVER_ID, specialReceiveId);
         return message;
     }
 
@@ -166,7 +165,7 @@ public class RedPacketUtil {
         //接收者昵称 默认值为当前用户ID
         String toNickname = EMChatManager.getInstance().getCurrentUser();
         String currentUserId = toNickname;
-        String redpacketId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_ID, "");
+        String redpacketId = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_ID, "");
         if (message.direct == EMMessage.Direct.SEND) {
             messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
         } else {
@@ -180,9 +179,9 @@ public class RedPacketUtil {
         String specialAvatarUrl = "none";
         String specialNickname = "";
         String packetType;
-        packetType = message.getStringAttribute(RedPacketConstant.MESSAGE_ATTR_RED_PACKET_TYPE, "");
-        String specialReceiveId = message.getStringAttribute(RedPacketConstant.MESSAGE_ATTR_SPECIAL_RECEIVER_ID, "");
-        if (!TextUtils.isEmpty(packetType) && packetType.equals(RedPacketConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
+        packetType = message.getStringAttribute(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE, "");
+        String specialReceiveId = message.getStringAttribute(RPConstant.MESSAGE_ATTR_SPECIAL_RECEIVER_ID, "");
+        if (!TextUtils.isEmpty(packetType) && packetType.equals(RPConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
             EaseUser userInfo = EaseUserUtils.getUserInfo(specialReceiveId);
             if (userInfo != null) {
                 specialAvatarUrl = TextUtils.isEmpty(userInfo.getAvatar()) ? "none" : userInfo.getAvatar();
@@ -199,13 +198,13 @@ public class RedPacketUtil {
         redPacketInfo.toUserId = currentUserId;
         redPacketInfo.chatType = chatType;
         TokenData tokenData = getTokenData();
-        if (packetType.equals(RedPacketConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
+        if (packetType.equals(RPConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
             redPacketInfo.specialAvatarUrl = specialAvatarUrl;
             redPacketInfo.specialNickname = specialNickname;
         }
         RPOpenPacketUtil.getInstance().openRedPacket(redPacketInfo, tokenData, activity, new RPOpenPacketUtil.RPOpenPacketCallBack() {
             @Override
-            public void onSuccess(String senderId, String senderNickname) {
+            public void onSuccess(String senderId, String senderNickname,String myAmount) {
                 //领取红包成功 发送消息到聊天窗
                 String receiverId = EMChatManager.getInstance().getCurrentUser();
                 //设置默认值为id
@@ -216,9 +215,9 @@ public class RedPacketUtil {
                 }
                 if (chatType == EaseConstant.CHATTYPE_SINGLE) {
                     EMMessage msg = EMMessage.createTxtSendMessage(String.format(activity.getResources().getString(R.string.msg_someone_take_red_packet), receiverNickname), toChatUsername);
-                    msg.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
-                    msg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
-                    msg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
+                    msg.setAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
+                    msg.setAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
+                    msg.setAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
                     try {
                         EMChatManager.getInstance().sendMessage(msg);
                     } catch (EaseMobException e) {
@@ -291,16 +290,16 @@ public class RedPacketUtil {
         //创建透传消息
         final EMMessage cmdMsg = EMMessage.createSendMessage(EMMessage.Type.CMD);
         cmdMsg.setChatType(EMMessage.ChatType.Chat);
-        EMCmdMessageBody cmdBody = new EMCmdMessageBody(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION);
+        EMCmdMessageBody cmdBody = new EMCmdMessageBody(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         cmdMsg.addBody(cmdBody);
         cmdMsg.setReceipt(senderId);
         //设置扩展属性
-        cmdMsg.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
-        cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
-        cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
-        cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
-        cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_ID, receiverId);
-        cmdMsg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_GROUP_ID, message.getTo());
+        cmdMsg.setAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
+        cmdMsg.setAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
+        cmdMsg.setAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
+        cmdMsg.setAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
+        cmdMsg.setAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_ID, receiverId);
+        cmdMsg.setAttribute(RPConstant.EXTRA_RED_PACKET_GROUP_ID, message.getTo());
         cmdMsg.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -313,10 +312,10 @@ public class RedPacketUtil {
                 sendMessage.setMsgTime(cmdMsg.getMsgTime());
                 sendMessage.setUnread(false);//去掉未读的显示
                 sendMessage.direct = EMMessage.Direct.SEND;
-                sendMessage.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
-                sendMessage.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
-                sendMessage.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
-                sendMessage.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
+                sendMessage.setAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
+                sendMessage.setAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
+                sendMessage.setAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
+                sendMessage.setAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
                 EMChatManager.getInstance().saveMessage(sendMessage);
                 callBack.onSuccess();
             }
@@ -342,11 +341,11 @@ public class RedPacketUtil {
      * 使用cmd消息收取领到红包之后的回执消息
      */
     public static void receiveRedPacketAckMessage(EMMessage message) {
-        String senderNickname = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, "");
-        String receiverNickname = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
-        String senderId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, "");
-        String receiverId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_ID, "");
-        String groupId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_GROUP_ID, "");
+        String senderNickname = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, "");
+        String receiverNickname = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
+        String senderId = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_ID, "");
+        String receiverId = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_ID, "");
+        String groupId = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_GROUP_ID, "");
         String currentUser = EMChatManager.getInstance().getCurrentUser();
         //更新UI为 xx领取了你的红包
         if (currentUser.equals(senderId) && !receiverId.equals(senderId)) {//如果不是自己领取的红包更新此类消息UI
@@ -362,10 +361,10 @@ public class RedPacketUtil {
             msg.setMsgTime(message.getMsgTime());
             msg.direct = EMMessage.Direct.RECEIVE;
             msg.setUnread(false);//去掉未读的显示
-            msg.setAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
-            msg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
-            msg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
-            msg.setAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
+            msg.setAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
+            msg.setAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);
+            msg.setAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, receiverNickname);
+            msg.setAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);
             //保存消息
             EMChatManager.getInstance().saveMessage(msg);
         }
