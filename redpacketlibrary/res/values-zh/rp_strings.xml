@@ -82,12 +82,11 @@
     <string name="input_transfer_error">金额输入错误</string>
     <string name="default_money_greeting">恭喜发财，大吉大利！</string>
     <string name="no_network_connected">未连接到网络，请稍后重试</string>
-    <string name="name_str_format_received">%1$s共收到</string>
-    <string name="name_str_format_send">%1$s共发出</string>
+    <string name="name_str_format_received">共收到</string>
+    <string name="name_str_format_send">共发出</string>
     <string name="btn_str_resend">重新获取</string>
     <string name="str_format_send_sms">已发送到尾号%1$s的手机上</string>
     <string name="str_send_sms_code">验证码已发送</string>
-    <string name="money_detail_nickname">%1$s的红包</string>
     <string name="money_detail_money_unit">%1$s元</string>
     <string name="detail_money_sign">￥%1$s</string>
     <string name="btn_text_open_money">拆红包</string>
@@ -136,7 +135,7 @@
     <string name="group_money_unavailable_avg_sender">%1$s个红包共%2$s元</string>
     <string name="group_money_unavailable_avg_receiver">%1$s个红包</string>
     <string name="group_money_expired">%1$s个红包共%2$s元，红包已过期</string>
-    <string name="money_username_format">%1$s的红包</string>
+    <string name="money_username_format">的红包</string>
     <string name="send_money_bottom_text">未领取的红包，将于24小时后发起退款</string>
     <string name="retry_str">"%1$s 秒后重试"</string>
     <string name="my_change">我的零钱（余额￥%1$s）</string>
@@ -195,9 +194,9 @@
     <string name="money_record_status">已领取%1$s/%2$s个</string>
     <string name="hint_title">提示</string>
     <string name="limit_hint_title">支付超限</string>
-    <string name="single_limit_msg">单日发出金额超限，剩余额度%1$s元，请修改金额。</string>
+    <string name="single_limit_msg">当日限额还剩%1$s元，请修改金额</string>
     <string name="jd_limit_msg">零钱不足。%1$s尾号%2$s京东支付今日剩余额度%3$s元，请修改金额。</string>
-    <string name="single_out_msg">单日发出金额已达上限。</string>
+    <string name="single_out_msg">当日限额还剩0元，请明天再试</string>
     <string name="sms_error_title">验证码输入错误</string>
     <string name="sms_error_msg">重新输入，或者等倒计时结束后重新获取一个再试。</string>
     <string name="change_limit_msg">为了账户安全，需通过银行卡信息验证是您本人操作后，前往设置支付密码。</string>

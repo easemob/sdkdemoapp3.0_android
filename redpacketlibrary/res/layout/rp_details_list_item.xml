@@ -28,10 +28,10 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/iv_item_avatar_icon"
             android:layout_marginLeft="@dimen/size30px"
-            android:layout_toLeftOf="@+id/tv_item_money_amount"
             android:layout_toRightOf="@id/iv_item_avatar_icon"
-            android:maxLength="18"
-            android:singleLine="true"
+            android:ellipsize="end"
+            android:maxEms="10"
+            android:maxLines="1"
             android:textColor="@color/text_black"
             android:textSize="@dimen/font45px"
             />
