@@ -202,4 +202,23 @@
         style="@style/SendMoneyBottomTextStyle"
         android:text="@string/send_money_bottom_text"
         />
+
+    <RelativeLayout
+        android:id="@+id/pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size63px"
+        android:background="@color/msg_red"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/tv_popup_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textColor="@color/text_yellow"
+            android:textSize="@dimen/font45px"
+            />
+    </RelativeLayout>
 </RelativeLayout>

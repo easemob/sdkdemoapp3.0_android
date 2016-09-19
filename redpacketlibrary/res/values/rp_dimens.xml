@@ -58,7 +58,7 @@ RecyclerView's bounds.-->
     <dimen name="font132px">44sp</dimen>
     <dimen name="font105px">35sp</dimen>
     <dimen name="size84px">28dp</dimen>
-    <dimen name="dialogWidth">307dp</dimen>
+    <dimen name="dialogWidth">288dp</dimen>
     <dimen name="dialogHeight">401dp</dimen>
     <dimen name="size99px">33dp</dimen>
     <dimen name="size108px">36dp</dimen>

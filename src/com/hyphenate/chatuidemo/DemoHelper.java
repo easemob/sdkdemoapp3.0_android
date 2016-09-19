@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
@@ -750,9 +750,9 @@ public class DemoHelper {
                     final String action = cmdMsgBody.action();//获取自定义action
                     //red packet code : 处理红包回执透传消息
                     if(!easeUI.hasForegroundActivies()){
-                        if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+                        if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                             RedPacketUtil.receiveRedPacketAckMessage(message);
-                            broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
+                            broadcastManager.sendBroadcast(new Intent(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
                     }
                     //end of red packet code

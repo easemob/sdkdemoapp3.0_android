@@ -5,7 +5,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.easemob.redpacketui.R;
-import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
@@ -20,7 +20,7 @@ public class ChatRowRedPacketAck extends EaseChatRow {
 
     @Override
     protected void onInflateView() {
-        if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
+        if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
             inflater.inflate(message.direct() == EMMessage.Direct.RECEIVE ?
                     R.layout.em_row_red_packet_ack_message : R.layout.em_row_red_packet_ack_message, this);
         }
@@ -34,12 +34,12 @@ public class ChatRowRedPacketAck extends EaseChatRow {
     @Override
     protected void onSetUpView() {
         String currentUser = EMClient.getInstance().getCurrentUser();
-        String fromUser = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, "");//红包发送者
-        String toUser = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");//红包接收者
+        String fromUser = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, "");//红包发送者
+        String toUser = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");//红包接收者
         String senderId;
         if (message.direct() == EMMessage.Direct.SEND) {
             if (message.getChatType().equals(EMMessage.ChatType.GroupChat)) {
-                senderId = message.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_ID, "");
+                senderId = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_ID, "");
                 if (senderId.equals(currentUser)) {
                     mTvMessage.setText(R.string.msg_take_red_packet);
                 } else {

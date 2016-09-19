@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dialogWidth"
-    android:layout_height="@dimen/dialogHeight"
-    android:orientation="vertical">
+                android:layout_width="@dimen/dialogWidth"
+                android:layout_height="@dimen/dialogHeight"
+    >
 
     <ImageView
         android:id="@+id/iv_open_bg"
@@ -10,20 +10,23 @@
         android:layout_height="match_parent"
         android:background="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/rp_open_packet_bg" />
+        android:src="@drawable/rp_open_packet_bg"
+        />
 
     <RelativeLayout
         android:id="@+id/layout_closed"
         android:layout_width="@dimen/size114px"
         android:layout_height="@dimen/size114px"
-        android:clickable="true">
+        android:clickable="true"
+        >
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@drawable/rp_closed_yellow_icon"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"
+            />
     </RelativeLayout>
 
     <FrameLayout
@@ -31,16 +34,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_closed"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="@dimen/size60px"
-        android:background="@drawable/rp_bg_circular_yellow">
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/size63px"
+        android:background="@drawable/rp_bg_circular_yellow"
+        >
 
         <ImageView
             android:id="@+id/iv_avatar"
             android:layout_width="@dimen/size198px"
             android:layout_height="@dimen/size198px"
             android:layout_gravity="center"
-            android:src="@drawable/rp_avatar" />
+            android:src="@drawable/rp_avatar"
+            />
     </FrameLayout>
 
 
@@ -54,7 +59,8 @@
         android:maxLength="18"
         android:singleLine="true"
         android:textColor="@color/money_white"
-        android:textSize="@dimen/font42px" />
+        android:textSize="@dimen/font42px"
+        />
 
     <TextView
         android:id="@+id/tv_open_title"
@@ -68,7 +74,8 @@
         android:singleLine="true"
         android:text="@string/send_you_money"
         android:textColor="@color/money_white"
-        android:textSize="@dimen/font42px" />
+        android:textSize="@dimen/font42px"
+        />
 
 
     <TextView
@@ -83,7 +90,8 @@
         android:lines="2"
         android:maxLength="22"
         android:textColor="@color/title_color"
-        android:textSize="@dimen/font69px" />
+        android:textSize="@dimen/font69px"
+        />
 
 
     <!--群红包用的到-->
@@ -97,7 +105,8 @@
         android:gravity="center"
         android:text="@string/check_lucky"
         android:textColor="@color/title_color"
-        android:textSize="@dimen/font42px" />
+        android:textSize="@dimen/font42px"
+        />
 
 
     <Button
@@ -111,12 +120,14 @@
         android:background="@drawable/rp_btn_open_selector"
         android:text="@string/btn_text_open_money"
         android:textColor="@color/top_red_color"
-        android:textSize="@dimen/font54px" />
+        android:textSize="@dimen/font54px"
+        />
 
     <LinearLayout
         android:id="@+id/target_layout"
         android:layout_width="@dimen/size180px"
         android:layout_height="@dimen/size180px"
         android:layout_centerInParent="true"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        />
 </RelativeLayout>
