@@ -230,6 +230,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                         @Override
                                         public void run() {
                                             Log.d("AAA", "CALL DISCONNETED");
+                                            removeCallStateListener();
                                             saveCallRecord();
                                             Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                             animation.setDuration(800);
@@ -317,6 +318,10 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         };
 		EMClient.getInstance().callManager().addCallStateChangeListener(callStateListener);
 	}
+	
+    void removeCallStateListener() {
+        EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
+    }
 
 	@Override
 	public void onClick(View v) {

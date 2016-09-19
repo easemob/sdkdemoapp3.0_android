@@ -346,6 +346,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                                 @Override
                                 public void run() {
+                                    removeCallStateListener();
                                     saveCallRecord();
                                     Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                     animation.setDuration(1200);
@@ -429,6 +430,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             }
         };
         EMClient.getInstance().callManager().addCallStateChangeListener(callStateListener);
+    }
+    
+    void removeCallStateListener() {
+        EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
     }
 
     @Override
@@ -524,9 +529,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         default:
             break;
         }
-
     }
-
+    
     @Override
     protected void onDestroy() {
         DemoHelper.getInstance().isVideoCalling = false;
