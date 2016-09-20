@@ -10,10 +10,15 @@
         android:id="@+id/no_pwd_rl"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size132px">
-
-        <ImageButton
+        <LinearLayout
             android:id="@+id/ib_pay_closed"
+            android:layout_width="@dimen/size132px"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+        <ImageButton
+            android:layout_gravity="center"
             style="@style/DialogClosedButtonStyle" />
+        </LinearLayout>
 
         <TextView
             style="@style/DialogTitleStyle"

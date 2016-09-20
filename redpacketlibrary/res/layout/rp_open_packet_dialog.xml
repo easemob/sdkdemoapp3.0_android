@@ -51,13 +51,15 @@
 
     <TextView
         android:id="@+id/tv_username"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_avatar"
+        android:layout_centerInParent="true"
         android:layout_marginTop="@dimen/size30px"
+        android:ellipsize="end"
         android:gravity="center"
-        android:maxLength="18"
-        android:singleLine="true"
+        android:maxEms="10"
+        android:maxLines="1"
         android:textColor="@color/money_white"
         android:textSize="@dimen/font42px"
         />
@@ -71,7 +73,7 @@
         android:layout_marginRight="@dimen/size60px"
         android:layout_marginTop="@dimen/size9px"
         android:gravity="center"
-        android:singleLine="true"
+        android:maxLines="1"
         android:text="@string/send_you_money"
         android:textColor="@color/money_white"
         android:textSize="@dimen/font42px"
