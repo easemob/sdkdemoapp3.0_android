@@ -41,6 +41,7 @@ import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.media.EMLocalSurfaceView;
 import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.util.EMLog;
@@ -114,7 +115,14 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         	return;
         }
         setContentView(R.layout.em_activity_video_call);
-        
+
+        /**
+         * This function is only meaningful when your app need recording feature
+         * If not, remove it.
+         * This function need be called before the video stream started, so we set it in onCreate function.
+         * This method will set the preferred video record encoding codec.
+         * Using default encoding format, recorded file can not be played by mobile player.
+         */
         DemoHelper.getInstance().isVideoCalling = true;
         callType = 1;
         
@@ -144,6 +152,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
         recordBtn = (Button) findViewById(R.id.btn_record_video);
         Button switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
+        Button captureImageBtn = (Button) findViewById(R.id.btn_capture_image);
         SeekBar YDeltaSeekBar = (SeekBar) findViewById(R.id.seekbar_y_detal);
 
         refuseBtn.setOnClickListener(this);
@@ -154,6 +163,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         rootContainer.setOnClickListener(this);
         recordBtn.setOnClickListener(this);
         switchCameraBtn.setOnClickListener(this);
+        captureImageBtn.setOnClickListener(this);
+
         YDeltaSeekBar.setOnSeekBarChangeListener(new YDeltaSeekBarListener());
 
         msgid = UUID.randomUUID().toString();
@@ -199,7 +210,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
         // get instance of call helper, should be called after setSurfaceView was called
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
-        
+        callHelper.setPreferMovFormatEnable(true);
+
         EMClient.getInstance().callManager().setCameraDataProcessor(dataProcessor);
     }
     
@@ -477,12 +489,20 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             if (isMuteState) {
                 // resume voice transfer
                 muteImage.setImageResource(R.drawable.em_icon_mute_normal);
-                EMClient.getInstance().callManager().resumeVoiceTransfer();
+                try {
+                    EMClient.getInstance().callManager().resumeVoiceTransfer();
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
                 isMuteState = false;
             } else {
                 // pause voice transfer
                 muteImage.setImageResource(R.drawable.em_icon_mute_on);
-                EMClient.getInstance().callManager().pauseVoiceTransfer();
+                try {
+                    EMClient.getInstance().callManager().pauseVoiceTransfer();
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
                 isMuteState = true;
             }
             break;
@@ -500,7 +520,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             break;
         case R.id.btn_record_video: //record the video
             if(!isRecording){
-                callHelper.startVideoRecord(PathUtil.getInstance().getVideoPath().getAbsolutePath());
+//                callHelper.startVideoRecord(PathUtil.getInstance().getVideoPath().getAbsolutePath());
+                callHelper.startVideoRecord("/sdcard/");
+                EMLog.d(TAG, "startVideoRecord:" + PathUtil.getInstance().getVideoPath().getAbsolutePath());
                 isRecording = true;
                 recordBtn.setText(R.string.stop_record);
             }else{
@@ -525,6 +547,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             break;
         case R.id.btn_switch_camera: //switch camera
             handler.sendEmptyMessage(MSG_CALL_SWITCH_CAMERA);
+            break;
+        case R.id.btn_capture_image:
+            EMClient.getInstance().callManager().getVideoCallHelper().takePicture("/sdcard/1.jpg");
+            break;
         default:
             break;
         }
@@ -587,7 +613,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
         if(isInCalling){
-            EMClient.getInstance().callManager().pauseVideoTransfer();
+            try {
+                EMClient.getInstance().callManager().pauseVideoTransfer();
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -595,7 +625,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         if(isInCalling){
-            EMClient.getInstance().callManager().resumeVideoTransfer();
+            try {
+                EMClient.getInstance().callManager().resumeVideoTransfer();
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
         }
     }
 

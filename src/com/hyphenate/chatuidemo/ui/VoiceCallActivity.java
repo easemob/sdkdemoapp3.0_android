@@ -37,6 +37,7 @@ import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
 import java.util.UUID;
@@ -353,11 +354,19 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		case R.id.iv_mute:
 			if (isMuteState) {
 				muteImage.setImageResource(R.drawable.em_icon_mute_normal);
-				EMClient.getInstance().callManager().resumeVoiceTransfer();
+                try {
+                    EMClient.getInstance().callManager().resumeVoiceTransfer();
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
 				isMuteState = false;
 			} else {
 				muteImage.setImageResource(R.drawable.em_icon_mute_on);
-				EMClient.getInstance().callManager().pauseVoiceTransfer();
+                try {
+                    EMClient.getInstance().callManager().pauseVoiceTransfer();
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
 				isMuteState = true;
 			}
 			break;

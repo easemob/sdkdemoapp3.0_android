@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketui.utils.RedPacketUtil;
@@ -753,6 +754,11 @@ public class DemoHelper {
                             RedPacketUtil.receiveRedPacketAckMessage(message);
                             broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
+                    }
+
+                    if (action.equals("__Call_ReqP2P_ConferencePattern")) {
+                        String title = message.getStringAttribute("em_apns_ext", "conference call");
+                        Toast.makeText(appContext, title, Toast.LENGTH_LONG).show();
                     }
                     //end of red packet code
                     //获取扩展属性 此处省略

@@ -47,6 +47,7 @@
     <string name="recording_video">录制视频</string>
     <string name="stop_record">停止录制</string>
     <string name="switch_camera">切换摄像头</string>
+    <string name="capture_image">抓取图片</string>
     <string name="record_finish_toast">录制完毕，文件存储在%s</string>
     <string name="location_prefix">[我的位置]</string>
     <string name="picture">[图片]</string>
