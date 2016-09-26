@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.util.EasyUtils;
 
 /**
  * 开屏页
@@ -52,8 +53,14 @@ public class SplashActivity extends BaseActivity {
 							e.printStackTrace();
 						}
 					}
-					//enter main screen
-					startActivity(new Intent(SplashActivity.this, MainActivity.class));
+					String topActivityName = EasyUtils.getTopActivityName(EMClient.getInstance().getContext());
+					if (topActivityName != null && (topActivityName.equals(VideoCallActivity.class.getName()) || topActivityName.equals(VoiceCallActivity.class.getName()))) {
+						// nop
+						// avoid main screen overlap Calling Activity
+					} else {
+						//enter main screen
+						startActivity(new Intent(SplashActivity.this, MainActivity.class));
+					}
 					finish();
 				}else {
 					try {

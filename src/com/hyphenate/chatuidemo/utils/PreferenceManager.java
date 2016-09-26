@@ -35,6 +35,7 @@ public class PreferenceManager {
     private static String SHARED_KEY_SETTING_DELETE_MESSAGES_WHEN_EXIT_GROUP = "shared_key_setting_delete_messages_when_exit_group";
     private static String SHARED_KEY_SETTING_AUTO_ACCEPT_GROUP_INVITATION = "shared_key_setting_auto_accept_group_invitation";
     private static String SHARED_KEY_SETTING_ADAPTIVE_VIDEO_ENCODE = "shared_key_setting_adaptive_video_encode";
+	private static String SHARED_KEY_SETTING_OFFLINE_PUSH_CALL = "shared_key_setting_offline_push_call";
 
 	private static String SHARED_KEY_SETTING_GROUPS_SYNCED = "SHARED_KEY_SETTING_GROUPS_SYNCED";
 	private static String SHARED_KEY_SETTING_CONTACT_SYNCED = "SHARED_KEY_SETTING_CONTACT_SYNCED";
@@ -147,6 +148,15 @@ public class PreferenceManager {
         return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_ADAPTIVE_VIDEO_ENCODE, false);
     }
 
+	public void setPushCall(boolean value) {
+		editor.putBoolean(SHARED_KEY_SETTING_OFFLINE_PUSH_CALL, value);
+		editor.apply();
+	}
+
+	public boolean isPushCall() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_OFFLINE_PUSH_CALL, false);
+	}
+    
 	public void setGroupsSynced(boolean synced){
 	    editor.putBoolean(SHARED_KEY_SETTING_GROUPS_SYNCED, synced);
         editor.apply();

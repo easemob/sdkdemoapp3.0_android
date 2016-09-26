@@ -243,6 +243,14 @@ public class DemoModel {
         return PreferenceManager.getInstance().isAdaptiveVideoEncode();
     }
 
+    public void setPushCall(boolean value) {
+        PreferenceManager.getInstance().setPushCall(value);
+    }
+
+    public boolean isPushCall() {
+        return PreferenceManager.getInstance().isPushCall();
+    }
+
     public void setRestServer(String restServer){
         PreferenceManager.getInstance().setRestServer(restServer);
     }
