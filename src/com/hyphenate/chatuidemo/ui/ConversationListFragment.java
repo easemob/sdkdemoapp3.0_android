@@ -86,6 +86,15 @@ public class ConversationListFragment extends EaseConversationListFragment{
                         }
                     }
                     return msg;
+                } else if (lastMessage.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
+                    String transferAmount = lastMessage.getStringAttribute(RPConstant.EXTRA_TRANSFER_AMOUNT, "");
+                    String msg;
+                    if (lastMessage.direct() == EMMessage.Direct.RECEIVE) {
+                        msg =  String.format(getResources().getString(R.string.msg_transfer_to_you), transferAmount);
+                    } else {
+                        msg =  String.format(getResources().getString(R.string.msg_transfer_from_you),transferAmount);
+                    }
+                    return msg;
                 }
                 return null;
             }
