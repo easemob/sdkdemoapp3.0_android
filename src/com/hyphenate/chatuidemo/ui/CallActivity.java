@@ -75,18 +75,6 @@ public class CallActivity extends BaseActivity {
                 // update local message text
                 EMConversation conv = EMClient.getInstance().chatManager().getConversation(oldMsg.getTo());
                 conv.removeMessage(oldMsg.getMsgId());
-
-                EMMessage newMsg = EMMessage.createTxtSendMessage("Opposite is offline", to);
-                newMsg.setStatus(Status.SUCCESS);
-                if(callType == 0) {
-                    newMsg.setAttribute("is_voice_call", true);
-                } else {
-                    newMsg.setAttribute("is_video_call", true);
-                }
-
-                List<EMMessage> importMsgs = new ArrayList<EMMessage>();
-                importMsgs.add(newMsg);
-                EMClient.getInstance().chatManager().importMessages(importMsgs);
             }
 
             @Override
