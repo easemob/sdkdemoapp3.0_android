@@ -429,6 +429,10 @@
 
 ```
 
+### 4.拆红包音效
+
+* 在assets目录下添加open_packet_sound.mp3或者open_packet_sound.wav文件即可(文件大小不要超过1M)。
+
 * **提示: 如果不需要红包相关功能可全局搜索关键字red packet去掉红包相关的代码以及redpacketlibray**。
 
 
