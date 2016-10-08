@@ -241,6 +241,7 @@
     <string name="choose_pay_jd_limit">单笔限额%1$s元，当日剩余额度%2$s元</string>
     <string name="msg_review_going">审核中</string>
     <string name="msg_you_are_remove_bankcard">确定要解除这张银行卡吗？</string>
+    <string name="msg_you_are_go_bankcard">这张卡似乎已经添加过，确定要继续吗？</string>
     <string name="msg_remove_bankcard_success">移除卡成功</string>
     <string name="error_sd_card">请挂载SD卡！</string>
     <string name="btn_silence_turn_off">默默关掉</string>
