@@ -136,7 +136,7 @@
     }
 ```
 
-### 3.4 ChatFragment中增加收发红包的功能
+### 3.4 ChatFragment中增加收、发红包和转账的功能
 
 * 需要导入的包
 
@@ -239,6 +239,7 @@
             RedPacketUtil.startTransferActivityForResult(this, toChatUsername, REQUEST_CODE_SEND_TRANSFER_PACKET);
             break;
         default:
+            break;
         }
         //不覆盖已有的点击事件
         return false;
