@@ -4,7 +4,12 @@
     <string name="msg_someone_take_red_packet">%1$s got your Red Packet</string>
     <string name="easemob_red_packet">Easemob Red Packet</string>
     <string name="attach_red_packet">Red Packet</string>
+    <string name="attach_transfer_money">Transfer</string>
     <string name="change">Change</string>
     <string name="exclusive_red_packet">Exclusive Red Packet</string>
-
+    <string name="easemob_transfer_packet">[Transfer]Transfer%1$syuan</string>
+    <string name="easemob_transfer_msg_sent">Your money transfer has been received</string>
+    <string name="easemob_transfer_msg_received">You have received the transfer</string>
+    <string name="msg_transfer_to_you">[Transfer]Transfer to you %1$s yuan</string>
+    <string name="msg_transfer_from_you">[Transfer]Transfer%1$syuan</string>
 </resources>

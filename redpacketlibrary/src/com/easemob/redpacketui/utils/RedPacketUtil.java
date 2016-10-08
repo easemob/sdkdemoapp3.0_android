@@ -28,6 +28,8 @@ import com.easemob.redpacketui.callback.GroupMemberCallback;
 import com.easemob.redpacketui.callback.NotifyGroupMemberCallback;
 import com.easemob.redpacketui.ui.activity.RPChangeActivity;
 import com.easemob.redpacketui.ui.activity.RPRedPacketActivity;
+import com.easemob.redpacketui.ui.activity.RPTransferActivity;
+import com.easemob.redpacketui.ui.activity.RPTransferDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +126,43 @@ public class RedPacketUtil {
     }
 
     /**
+     * 进入转账页面
+     * @param fragment
+     * @param toChatUsername
+     * @param requestCode
+     */
+    public static void startTransferActivityForResult(Fragment fragment, final String toChatUsername, int requestCode) {
+        //发送者头像url
+        String fromAvatarUrl = "none";
+        //发送者昵称 设置了昵称就传昵称 否则传id
+        String fromNickname = EMChatManager.getInstance().getCurrentUser();
+        EaseUser easeUser = EaseUserUtils.getUserInfo(fromNickname);
+        if (easeUser != null) {
+            fromAvatarUrl = TextUtils.isEmpty(easeUser.getAvatar()) ? "none" : easeUser.getAvatar();
+            fromNickname = TextUtils.isEmpty(easeUser.getNick()) ? easeUser.getUsername() : easeUser.getNick();
+        }
+        String toAvatarUrl = "none";
+        String toUserName = "";
+        EaseUser easeToUser = EaseUserUtils.getUserInfo(toChatUsername);
+        if (easeToUser != null) {
+            toAvatarUrl = TextUtils.isEmpty(easeToUser.getAvatar()) ? "none" : easeToUser.getAvatar();
+            toUserName = TextUtils.isEmpty(easeToUser.getNick()) ? easeToUser.getUsername() : easeToUser.getNick();
+        }
+        RedPacketInfo redPacketInfo = new RedPacketInfo();
+        redPacketInfo.fromAvatarUrl = fromAvatarUrl;
+        redPacketInfo.fromNickName = fromNickname;
+        //接收者Id
+        redPacketInfo.toUserId = toChatUsername;
+        redPacketInfo.toNickName = toUserName;
+        redPacketInfo.toAvatarUrl = toAvatarUrl;
+
+        Intent intent = new Intent(fragment.getContext(), RPTransferActivity.class);
+        intent.putExtra(RPConstant.EXTRA_RED_PACKET_INFO, redPacketInfo);
+        intent.putExtra(RPConstant.EXTRA_TOKEN_DATA, getTokenData());
+        fragment.startActivityForResult(intent, requestCode);
+    }
+
+    /**
      * 创建一条红包消息
      *
      * @param context        上下文
@@ -147,6 +186,23 @@ public class RedPacketUtil {
     }
 
     /**
+     * 创建转账消息
+     * @param context
+     * @param data
+     * @param toChatUsername
+     * @return
+     */
+    public static EMMessage createTRMessage(Context context, Intent data, String toChatUsername) {
+        String transferAmount = data.getStringExtra(RPConstant.EXTRA_TRANSFER_AMOUNT);
+        String transferTime = data.getStringExtra(RPConstant.EXTRA_TRANSFER_PACKET_TIME);
+        EMMessage message = EMMessage.createTxtSendMessage(String.format(context.getResources().getString(R.string.easemob_transfer_packet), transferAmount), toChatUsername);
+        message.setAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, true);
+        message.setAttribute(RPConstant.EXTRA_TRANSFER_AMOUNT, transferAmount);
+        message.setAttribute(RPConstant.EXTRA_TRANSFER_PACKET_TIME, transferTime);
+        return message;
+    }
+
+    /**
      * 拆红包的方法
      *
      * @param activity       FragmentActivity
@@ -165,7 +221,7 @@ public class RedPacketUtil {
         //接收者昵称 默认值为当前用户ID
         String toNickname = EMChatManager.getInstance().getCurrentUser();
         String currentUserId = toNickname;
-        String redpacketId = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_ID, "");
+        String redPacketId = message.getStringAttribute(RPConstant.EXTRA_RED_PACKET_ID, "");
         if (message.direct == EMMessage.Direct.SEND) {
             messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
         } else {
@@ -191,7 +247,7 @@ public class RedPacketUtil {
             }
         }
         RedPacketInfo redPacketInfo = new RedPacketInfo();
-        redPacketInfo.redPacketId = redpacketId;
+        redPacketInfo.redPacketId = redPacketId;
         redPacketInfo.toAvatarUrl = toAvatarUrl;
         redPacketInfo.toNickName = toNickname;
         redPacketInfo.moneyMsgDirect = messageDirect;
@@ -258,6 +314,40 @@ public class RedPacketUtil {
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    /**
+     * 进入转账详情
+     *
+     * @param context
+     * @param message
+     */
+    public static void openTransferPacket(Context context, EMMessage message) {
+        String fromNickname = EMChatManager.getInstance().getCurrentUser();
+        String fromAvatarUrl = "none";
+        EaseUser easeUser = EaseUserUtils.getUserInfo(EMChatManager.getInstance().getCurrentUser());
+        if (easeUser != null) {
+            fromAvatarUrl = TextUtils.isEmpty(easeUser.getAvatar()) ? "none" : easeUser.getAvatar();
+            fromNickname = TextUtils.isEmpty(easeUser.getNick()) ? easeUser.getUsername() : easeUser.getNick();
+        }
+        String messageDirect;
+        String transferAmount = message.getStringAttribute(RPConstant.EXTRA_TRANSFER_AMOUNT, "");
+        String time = message.getStringAttribute(RPConstant.EXTRA_TRANSFER_PACKET_TIME, "");
+        if (message.direct == EMMessage.Direct.SEND) {
+            messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
+        } else {
+            messageDirect = RPConstant.MESSAGE_DIRECT_RECEIVE;
+        }
+        RedPacketInfo redPacketInfo = new RedPacketInfo();
+        redPacketInfo.moneyMsgDirect = messageDirect;
+        redPacketInfo.redPacketAmount = transferAmount;
+        redPacketInfo.fromNickName = fromNickname;
+        redPacketInfo.fromAvatarUrl = fromAvatarUrl;
+        redPacketInfo.transferTime = time;
+        Intent intent = new Intent(context, RPTransferDetailActivity.class);
+        intent.putExtra(RPConstant.EXTRA_RED_PACKET_INFO, redPacketInfo);
+        intent.putExtra(RPConstant.EXTRA_TOKEN_DATA, getTokenData());
+        context.startActivity(intent);
     }
 
     /**
