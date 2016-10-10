@@ -63,6 +63,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	String st1;
 	private LinearLayout voiceContronlLayout;
     private TextView netwrokStatusVeiw;
+    private boolean monitor = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +183,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             String str4 = getResources().getString(R.string.In_the_call);
                             callStateTextView.setText(str4);
                             callingState = CallingState.NORMAL;
+                            startMonitor();
                         }
                     });
                     break;
@@ -388,12 +390,41 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         DemoHelper.getInstance().isVoiceCalling = false;
+        stopMonitor();
+        super.onDestroy();
     }
 
 	@Override
 	public void onBackPressed() {
 		callDruationText = chronometer.getText().toString();
 	}
+
+    /**
+     * for debug & testing, you can remove this when release
+     */
+    void startMonitor(){
+        monitor = true;
+        new Thread(new Runnable() {
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
+                                ? R.string.direct_call : R.string.relay_call);
+                    }
+                });
+                while(monitor){
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+        }, "CallMonitor").start();
+    }
+
+    void stopMonitor() {
+
+    }
+
 }

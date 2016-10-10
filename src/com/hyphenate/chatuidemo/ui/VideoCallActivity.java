@@ -611,7 +611,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     }
                 }
             }
-        }).start();
+        }, "CallMonitor").start();
     }
     
     void stopMonitor(){

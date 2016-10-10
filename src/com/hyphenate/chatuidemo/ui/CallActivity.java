@@ -27,9 +27,6 @@ import com.hyphenate.media.EMLocalSurfaceView;
 import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.util.EMLog;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SuppressLint("Registered")
 public class CallActivity extends BaseActivity {
     public final static String TAG = "CallActivity";
@@ -180,6 +177,8 @@ public class CallActivity extends BaseActivity {
                                 st2 = getResources().getString(R.string.illegal_user_name);
                             } else if (e.getErrorCode() == EMError.CALL_BUSY) {
                                 st2 = getResources().getString(R.string.The_other_is_on_the_phone);
+                            } else if (e.getErrorCode() == EMError.NETWORK_ERROR) {
+                                st2 = getResources().getString(R.string.can_not_connect_chat_server_connection);
                             }
                             Toast.makeText(CallActivity.this, st2, Toast.LENGTH_SHORT).show();
                             finish();
