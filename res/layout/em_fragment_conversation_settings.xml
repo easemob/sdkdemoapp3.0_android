@@ -218,6 +218,43 @@
                     android:background="@color/btn_gray_normal" />
 
                 <RelativeLayout
+                    android:id="@+id/rl_custom_appkey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/em_btn_bottom_selector"
+                    android:padding="10dip" >
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edit_custom_appkey"
+                        android:minWidth="100dp"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="10dip"
+                        android:text="@string/set_custom_server"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:typeface="serif" />
+
+                    <com.hyphenate.easeui.widget.EaseSwitchButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/switch_custom_appkey"
+                        app:switchStatus="close"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/set_custom_appkey"
+                        android:textSize="@dimen/size36px"
+                        android:layout_toLeftOf="@id/switch_custom_appkey"
+                        android:layout_centerVertical="true"/>
+                </RelativeLayout>
+
+
+                <RelativeLayout
                     android:id="@+id/rl_custom_server"
                     android:layout_width="match_parent"
                     android:layout_height="50dip"

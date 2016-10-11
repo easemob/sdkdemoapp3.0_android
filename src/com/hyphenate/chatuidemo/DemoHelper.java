@@ -199,10 +199,16 @@ public class DemoHelper {
                 options.setImPort(Integer.valueOf(demoModel.getIMServer().split(":")[1]));
             }
         }
+
+        if (demoModel.isCustomAppkeyEnabled() && demoModel.getCutomAppkey() != null && !demoModel.getCutomAppkey().isEmpty()) {
+            options.setAppKey(demoModel.getCutomAppkey());
+        }
         
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
+
+
         return options;
     }
 
