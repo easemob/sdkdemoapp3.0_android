@@ -48,6 +48,8 @@ public class PreferenceManager {
 	private static String SHARED_KEY_REST_SERVER = "SHARED_KEY_REST_SERVER";
 	private static String SHARED_KEY_IM_SERVER = "SHARED_KEY_IM_SERVER";
 	private static String SHARED_KEY_ENABLE_CUSTOM_SERVER = "SHARED_KEY_ENABLE_CUSTOM_SERVER";
+	private static String SHARED_KEY_ENABLE_CUSTOM_APPKEY = "SHARED_KEY_ENABLE_CUSTOM_APPKEY";
+	private static String SHARED_KEY_CUSTOM_APPKEY = "SHARED_KEY_CUSTOM_APPKEY";
 
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
@@ -64,7 +66,7 @@ public class PreferenceManager {
 	/**
 	 * get instance of PreferenceManager
 	 *
-	 * @param cxt
+	 * @param
 	 * @return
 	 */
 	public synchronized static PreferenceManager getInstance() {
@@ -238,6 +240,23 @@ public class PreferenceManager {
 		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_CUSTOM_SERVER, false);
 	}
 
+	public void enableCustomAppkey(boolean enable) {
+		editor.putBoolean(SHARED_KEY_ENABLE_CUSTOM_APPKEY, enable);
+		editor.apply();
+	}
+
+	public boolean isCustomAppkeyEnabled() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_CUSTOM_APPKEY, false);
+	}
+
+	public String getCustomAppkey() {
+		return mSharedPreferences.getString(SHARED_KEY_CUSTOM_APPKEY, "");
+	}
+
+	public void setCustomAppkey(String appkey) {
+		editor.putString(SHARED_KEY_CUSTOM_APPKEY, appkey);
+		editor.apply();
+	}
 
 	public void removeCurrentUserInfo() {
 		editor.remove(SHARED_KEY_CURRENTUSER_NICK);

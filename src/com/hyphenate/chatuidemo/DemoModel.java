@@ -274,7 +274,23 @@ public class DemoModel {
     public boolean isCustomServerEnable(){
         return PreferenceManager.getInstance().isCustomServerEnable();
     }
-    
+
+    public void enableCustomAppkey(boolean enable) {
+        PreferenceManager.getInstance().enableCustomAppkey(enable);
+    }
+
+    public boolean isCustomAppkeyEnabled() {
+        return PreferenceManager.getInstance().isCustomAppkeyEnabled();
+    }
+
+    public void setCustomAppkey(String appkey) {
+        PreferenceManager.getInstance().setCustomAppkey(appkey);
+    }
+
+    public String getCutomAppkey() {
+        return PreferenceManager.getInstance().getCustomAppkey();
+    }
+
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,
