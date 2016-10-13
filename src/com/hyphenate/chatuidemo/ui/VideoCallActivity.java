@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.hyphenate.chat.EMCallManager.EMCameraDataProcessor;
 import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
 import com.hyphenate.chat.EMCallStateChangeListener;
@@ -48,6 +49,8 @@ import com.hyphenate.util.EMLog;
 import com.hyphenate.util.PathUtil;
 import com.superrtc.sdk.VideoView;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
@@ -558,7 +561,16 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             handler.sendEmptyMessage(MSG_CALL_SWITCH_CAMERA);
             break;
         case R.id.btn_capture_image:
-            EMClient.getInstance().callManager().getVideoCallHelper().takePicture("/sdcard/1.jpg");
+            DateFormat df = DateFormat.getDateTimeInstance();
+            Date d = new Date();
+            final String filename = "/sdcard/" + df.format(d) + ".jpg";
+            EMClient.getInstance().callManager().getVideoCallHelper().takePicture(filename);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(VideoCallActivity.this, "saved image to:" + filename, Toast.LENGTH_SHORT).show();
+                }
+            });
             break;
         default:
             break;
