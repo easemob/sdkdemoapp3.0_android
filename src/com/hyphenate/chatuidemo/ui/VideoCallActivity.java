@@ -563,7 +563,14 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         case R.id.btn_capture_image:
             DateFormat df = DateFormat.getDateTimeInstance();
             Date d = new Date();
-            EMClient.getInstance().callManager().getVideoCallHelper().takePicture("/sdcard/" + df.format(d) + ".jpg");
+            final String filename = "/sdcard/" + df.format(d) + ".jpg";
+            EMClient.getInstance().callManager().getVideoCallHelper().takePicture(filename);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(VideoCallActivity.this, "saved image to:" + filename, Toast.LENGTH_SHORT).show();
+                }
+            });
             break;
         default:
             break;
