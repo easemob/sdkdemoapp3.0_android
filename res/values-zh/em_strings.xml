@@ -70,6 +70,7 @@
     <string name="exit_group">退出</string>
     <string name="connect_conflict">同一帐号已在其他设备登录</string>
     <string name="em_user_remove">此用户已被移除</string>
+    <string name="user_forbidden">用户被服务器限制连接</string>
     <string name="set">设置</string>
     <string name="notify">新消息提醒</string>
     <string name="newnotify">接收新消息通知</string>

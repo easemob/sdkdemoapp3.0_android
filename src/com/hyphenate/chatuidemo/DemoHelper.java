@@ -163,7 +163,7 @@ public class DemoHelper {
 			//initialize profile manager
 			getUserProfileManager().init(context);
 			
-			EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());			
+			EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
 
 			setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
@@ -377,10 +377,13 @@ public class DemoHelper {
         connectionListener = new EMConnectionListener() {
             @Override
             public void onDisconnected(int error) {
+                EMLog.d("global listener", "onDisconnect" + error);
                 if (error == EMError.USER_REMOVED) {
-                    onCurrentAccountRemoved();
+                    onUserException(Constant.ACCOUNT_REMOVED);
                 } else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
-                    onConnectionConflict();
+                    onUserException(Constant.ACCOUNT_CONFLICT);
+                } else if (error == EMError.SERVER_SERVICE_RESTRICTED) {
+                    onUserException(Constant.ACCOUNT_FORBIDDEN);
                 }
             }
 
@@ -687,27 +690,18 @@ public class DemoHelper {
         // notify there is new message
         getNotifier().vibrateAndPlayTone(null);
     }
-    
+
     /**
-     * user has logged into another device
+     * user met some exception: conflict, removed or forbidden
      */
-    protected void onConnectionConflict(){
+    protected void onUserException(String exception){
+        EMLog.e(TAG, "onUserException: " + exception);
         Intent intent = new Intent(appContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Constant.ACCOUNT_CONFLICT, true);
+        intent.putExtra(exception, true);
         appContext.startActivity(intent);
     }
-    
-    /**
-     * account is removed
-     */
-    protected void onCurrentAccountRemoved(){
-        Intent intent = new Intent(appContext, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(Constant.ACCOUNT_REMOVED, true);
-        appContext.startActivity(intent);
-    }
-	
+ 
 	private EaseUser getUserInfo(String username){
 		// To get instance of EaseUser, here we get it from the user list in memory
 		// You'd better cache it if you get it from your server
