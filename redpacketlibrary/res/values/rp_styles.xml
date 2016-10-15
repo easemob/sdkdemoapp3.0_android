@@ -216,24 +216,9 @@
         <item name="android:textSize">@dimen/font36px</item>
     </style>
 
-    <style name="EMDialogStyle">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowAnimationStyle">@style/dialog_animation</item>
-        <item name="android:backgroundDimEnabled">true</item>
-    </style>
-
-    <style name="dialog_animation" parent="@android:style/Animation.Dialog">
-        <item name="android:windowEnterAnimation">@anim/rp_fade_in</item>
-        <item name="android:windowExitAnimation">@anim/rp_fade_out</item>
-    </style>
-
     <style name="LoadingProgressStyle" parent="@android:style/Widget.ProgressBar">
-        <item name="android:indeterminateDrawable">@anim/rp_progress_loading</item>
+        <item name="android:indeterminateDrawable">@drawable/rp_loading_anim</item>
+        <item name="android:indeterminateBehavior">repeat</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:layout_width">@dimen/size84px</item>
         <item name="android:layout_height">@dimen/size84px</item>
@@ -329,9 +314,5 @@
         <item name="android:layout_marginLeft">@dimen/size45px</item>
     </style>
 
-    <style name="ChooseRecordStyle" parent="android:Animation">
-        <item name="android:windowEnterAnimation">@anim/rp_top_in</item>
-        <item name="android:windowExitAnimation">@anim/rp_top_out</item>
-    </style>
 
 </resources>

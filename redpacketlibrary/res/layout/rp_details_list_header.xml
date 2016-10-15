@@ -40,9 +40,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:maxLength="22"
-            android:singleLine="true"
-            android:text="Max的红包"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxEms="10"
+            android:maxLines="1"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/font45px"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/money_username_format"
             android:textColor="@color/text_black"
             android:textSize="@dimen/font45px"
             />
@@ -65,8 +75,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/size42px"
         android:layout_marginTop="@dimen/size18px"
-        android:maxLength="22"
-        android:singleLine="true"
+        android:maxLines="1"
         android:textColor="@color/text_light_grey"
         android:textSize="@dimen/font36px"
         />

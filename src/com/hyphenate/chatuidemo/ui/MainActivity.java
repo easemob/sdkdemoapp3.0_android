@@ -34,7 +34,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
@@ -225,7 +225,7 @@ public class MainActivity extends BaseActivity {
 			for (EMMessage message : messages) {
 				EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
 				final String action = cmdMsgBody.action();//获取自定义action
-				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
+				if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
 					RedPacketUtil.receiveRedPacketAckMessage(message);
 				}
 			}
@@ -270,7 +270,7 @@ public class MainActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
-		intentFilter.addAction(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION);
+		intentFilter.addAction(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
             
             @Override
@@ -294,7 +294,7 @@ public class MainActivity extends BaseActivity {
                     }
                 }
 				//red packet code : 处理红包回执透传消息
-				if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+				if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
 					if (conversationListFragment != null){
 						conversationListFragment.refresh();
 					}

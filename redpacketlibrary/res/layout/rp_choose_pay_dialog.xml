@@ -10,13 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/size132px"
         >
-
-        <ImageButton
+        <LinearLayout
             android:id="@+id/ib_choose_pay_back"
+            android:layout_width="@dimen/size132px"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+        <ImageButton
             style="@style/DialogClosedButtonStyle"
+            android:layout_gravity="center"
             android:background="@drawable/rp_back_arrow_grey"
             />
-
+        </LinearLayout>
         <TextView
             style="@style/DialogTitleStyle"
             android:text="@string/choose_pay_type_title"

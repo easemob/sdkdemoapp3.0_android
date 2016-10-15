@@ -5,6 +5,7 @@
                 android:background="@color/money_bg_color"
     >
 
+
     <LinearLayout
         android:id="@+id/group_main"
         android:layout_width="match_parent"
@@ -24,13 +25,30 @@
                 android:text="@string/tv_who_can_receive"
                 />
 
+            <ImageView
+                android:id="@+id/iv_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/size30px"
+                android:layout_marginRight="@dimen/size45px"
+                android:src="@drawable/rp_arrow_forward"
+                />
+
             <TextView
                 android:id="@+id/tv_receive_name"
-                style="@style/AddBankCardTextViewStyle"
-                android:layout_toRightOf="@id/tv_receive"
-                android:paddingRight="@dimen/size42px"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_toLeftOf="@id/iv_arrow"
+                android:ellipsize="end"
+                android:gravity="center|right"
+                android:maxEms="11"
+                android:maxLines="1"
                 android:text="@string/tv_all_person"
                 android:textColor="@color/text_black"
+                android:textSize="@dimen/font45px"
                 />
         </RelativeLayout>
 
@@ -202,4 +220,23 @@
         style="@style/SendMoneyBottomTextStyle"
         android:text="@string/send_money_bottom_text"
         />
+
+    <RelativeLayout
+        android:id="@+id/pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size63px"
+        android:background="@color/msg_red"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/tv_popup_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textColor="@color/text_yellow"
+            android:textSize="@dimen/font45px"
+            />
+    </RelativeLayout>
 </RelativeLayout>
