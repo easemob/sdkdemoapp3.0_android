@@ -122,11 +122,7 @@ public class MainActivity extends BaseActivity {
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
 
-		if (getIntent().getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
-			showConflictDialog();
-		} else if (getIntent().getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
-			showAccountRemovedDialog();
-		}
+		showExceptionDialogFromIntent(getIntent());
 
 		inviteMessgeDao = new InviteMessgeDao(this);
 		UserDao userDao = new UserDao(this);
@@ -338,9 +334,10 @@ public class MainActivity extends BaseActivity {
 	protected void onDestroy() {
 		super.onDestroy();		
 		
-		if (conflictBuilder != null) {
-			conflictBuilder.create().dismiss();
-			conflictBuilder = null;
+		if (exceptionBuilder != null) {
+		    exceptionBuilder.create().dismiss();
+		    exceptionBuilder = null;
+		    isExceptionDialogShow = false;
 		}
 		unregisterBroadcastReceiver();
 
@@ -452,95 +449,74 @@ public class MainActivity extends BaseActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private android.app.AlertDialog.Builder conflictBuilder;
-	private android.app.AlertDialog.Builder accountRemovedBuilder;
-	private boolean isConflictDialogShow;
-	private boolean isAccountRemovedDialogShow;
+	private android.app.AlertDialog.Builder exceptionBuilder;
+	private boolean isExceptionDialogShow =  false;
     private BroadcastReceiver internalDebugReceiver;
     private ConversationListFragment conversationListFragment;
     private BroadcastReceiver broadcastReceiver;
     private LocalBroadcastManager broadcastManager;
 
+    private int getExceptionMessageId(String exceptionType) {
+         if(exceptionType.equals(Constant.ACCOUNT_CONFLICT)) {
+             return R.string.connect_conflict;
+         } else if (exceptionType.equals(Constant.ACCOUNT_REMOVED)) {
+             return R.string.em_user_remove;
+         } else if (exceptionType.equals(Constant.ACCOUNT_FORBIDDEN)) {
+             return R.string.user_forbidden;
+         }
+         return R.string.Network_error;
+    }
 	/**
-	 * show the dialog when user logged into another device
+	 * show the dialog when user met some exception: such as login on another device, user removed or user forbidden
 	 */
-	private void showConflictDialog() {
-		isConflictDialogShow = true;
+	private void showExceptionDialog(String exceptionType) {
+	    isExceptionDialogShow = true;
 		DemoHelper.getInstance().logout(false,null);
 		String st = getResources().getString(R.string.Logoff_notification);
 		if (!MainActivity.this.isFinishing()) {
 			// clear up global variables
 			try {
-				if (conflictBuilder == null)
-					conflictBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-				conflictBuilder.setTitle(st);
-				conflictBuilder.setMessage(R.string.connect_conflict);
-				conflictBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				if (exceptionBuilder == null)
+				    exceptionBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
+				    exceptionBuilder.setTitle(st);
+				    exceptionBuilder.setMessage(getExceptionMessageId(exceptionType));	
+				    exceptionBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
-						conflictBuilder = null;
+						exceptionBuilder = null;
+						isExceptionDialogShow = false;
 						finish();
 						Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}
 				});
-				conflictBuilder.setCancelable(false);
-				conflictBuilder.create().show();
+				exceptionBuilder.setCancelable(false);
+				exceptionBuilder.create().show();
 				isConflict = true;
 			} catch (Exception e) {
 				EMLog.e(TAG, "---------color conflictBuilder error" + e.getMessage());
 			}
-
 		}
-
 	}
 
-	/**
-	 * show the dialog if user account is removed
-	 */
-	private void showAccountRemovedDialog() {
-		isAccountRemovedDialogShow = true;
-		DemoHelper.getInstance().logout(false,null);
-		String st5 = getResources().getString(R.string.Remove_the_notification);
-		if (!MainActivity.this.isFinishing()) {
-			// clear up global variables
-			try {
-				if (accountRemovedBuilder == null)
-					accountRemovedBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-				accountRemovedBuilder.setTitle(st5);
-				accountRemovedBuilder.setMessage(R.string.em_user_remove);
-				accountRemovedBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						accountRemovedBuilder = null;
-						finish();
-						startActivity(new Intent(MainActivity.this, LoginActivity.class));
-					}
-				});
-				accountRemovedBuilder.setCancelable(false);
-				accountRemovedBuilder.create().show();
-				isCurrentAccountRemoved = true;
-			} catch (Exception e) {
-				EMLog.e(TAG, "---------color userRemovedBuilder error" + e.getMessage());
-			}
-
-		}
-
+	private void showExceptionDialogFromIntent(Intent intent) {
+	    EMLog.e(TAG, "showExceptionDialogFromIntent");
+	    if (!isExceptionDialogShow && intent.getBooleanExtra(Constant.ACCOUNT_CONFLICT, false)) {
+            showExceptionDialog(Constant.ACCOUNT_CONFLICT);
+        } else if (!isExceptionDialogShow && intent.getBooleanExtra(Constant.ACCOUNT_REMOVED, false)) {
+            showExceptionDialog(Constant.ACCOUNT_REMOVED);
+        } else if (!isExceptionDialogShow && intent.getBooleanExtra(Constant.ACCOUNT_FORBIDDEN, false)) {
+            showExceptionDialog(Constant.ACCOUNT_FORBIDDEN);
+        }   
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		if (intent.getBooleanExtra(Constant.ACCOUNT_CONFLICT, false) && !isConflictDialogShow) {
-			showConflictDialog();
-		} else if (intent.getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
-			showAccountRemovedDialog();
-		}
+		showExceptionDialogFromIntent(intent);
 	}
 	
 	/**
@@ -559,7 +535,6 @@ public class MainActivity extends BaseActivity {
                             public void run() {
                                 finish();
                                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                                
                             }
                         });
                     }
