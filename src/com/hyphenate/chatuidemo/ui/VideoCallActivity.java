@@ -46,7 +46,6 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.media.EMLocalSurfaceView;
 import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.util.EMLog;
-import com.hyphenate.util.PathUtil;
 import com.superrtc.sdk.VideoView;
 
 import java.text.DateFormat;
@@ -82,7 +81,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
     private boolean isInCalling;
     boolean isRecording = false;
-    private Button recordBtn;
+//    private Button recordBtn;
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
     
@@ -147,7 +146,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         bottomContainer = (LinearLayout) findViewById(R.id.ll_bottom_container);
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
-        recordBtn = (Button) findViewById(R.id.btn_record_video);
+//        recordBtn = (Button) findViewById(R.id.btn_record_video);
         Button switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
         Button captureImageBtn = (Button) findViewById(R.id.btn_capture_image);
         SeekBar YDeltaSeekBar = (SeekBar) findViewById(R.id.seekbar_y_detal);
@@ -158,7 +157,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         muteImage.setOnClickListener(this);
         handsFreeImage.setOnClickListener(this);
         rootContainer.setOnClickListener(this);
-        recordBtn.setOnClickListener(this);
+//        recordBtn.setOnClickListener(this);
         switchCameraBtn.setOnClickListener(this);
         captureImageBtn.setOnClickListener(this);
 
@@ -214,6 +213,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
         // get instance of call helper, should be called after setSurfaceView was called
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
+
         /**
          * This function is only meaningful when your app need recording
          * If not, remove it.
@@ -221,7 +221,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
          * This method will set the preferred video record encoding codec.
          * Using default encoding format, recorded file may not be played by mobile player.
          */
-        callHelper.setPreferMovFormatEnable(true);
+//        callHelper.setPreferMovFormatEnable(true);
 
         EMClient.getInstance().callManager().setCameraDataProcessor(dataProcessor);
     }
@@ -297,7 +297,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             chronometer.start();
                             nickTextView.setVisibility(View.INVISIBLE);
                             callStateTextView.setText(R.string.In_the_call);
-                            recordBtn.setVisibility(View.VISIBLE);
+//                            recordBtn.setVisibility(View.VISIBLE);
                             callingState = CallingState.NORMAL;
                             startMonitor();
                         }
@@ -529,6 +529,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 isHandsfreeState = true;
             }
             break;
+        /*
         case R.id.btn_record_video: //record the video
             if(!isRecording){
 //                callHelper.startVideoRecord(PathUtil.getInstance().getVideoPath().getAbsolutePath());
@@ -543,6 +544,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 Toast.makeText(getApplicationContext(), String.format(getString(R.string.record_finish_toast), filepath), Toast.LENGTH_LONG).show();
             }
             break;
+        */
         case R.id.root_layout:
             if (callingState == CallingState.NORMAL) {
                 if (bottomContainer.getVisibility() == View.VISIBLE) {
@@ -585,7 +587,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             callHelper.stopVideoRecord();
             isRecording = false;
         }
+        localSurface.getRenderer().dispose();
         localSurface = null;
+        oppositeSurface.getRenderer().dispose();
 		oppositeSurface = null;
         super.onDestroy();
     }
