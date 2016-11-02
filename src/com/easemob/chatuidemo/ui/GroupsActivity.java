@@ -13,16 +13,14 @@
  */
 package com.easemob.chatuidemo.ui;
 
-import java.util.List;
-
-import org.apache.harmony.javax.security.auth.Refreshable;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -30,6 +28,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -39,7 +39,8 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.adapter.GroupAdapter;
-import com.easemob.util.EMLog;
+
+import java.util.List;
 
 public class GroupsActivity extends BaseActivity {
 	public static final String TAG = "GroupsActivity";
@@ -50,6 +51,9 @@ public class GroupsActivity extends BaseActivity {
 	public static GroupsActivity instance;
 	private View progressBar;
 	private SwipeRefreshLayout swipeRefreshLayout;
+
+	EditText query;
+	ImageButton clearSearch;
 	
 	
 	Handler handler = new Handler(){
@@ -82,6 +86,11 @@ public class GroupsActivity extends BaseActivity {
 		//show group list
         groupAdapter = new GroupAdapter(this, 1, grouplist);
         groupListView.setAdapter(groupAdapter);
+
+		// 搜索框
+		query = (EditText) findViewById(R.id.query);
+		// 搜索框中清除button
+		clearSearch = (ImageButton) findViewById(R.id.search_clear);
 		
 		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
 		swipeRefreshLayout.setColorSchemeResources(R.color.holo_blue_bright, R.color.holo_green_light,
@@ -92,12 +101,12 @@ public class GroupsActivity extends BaseActivity {
 			@Override
 			public void onRefresh() {
 			    EMGroupManager.getInstance().asyncGetGroupsFromServer(new EMValueCallBack<List<EMGroup>>() {
-                    
+
                     @Override
                     public void onSuccess(List<EMGroup> value) {
                         handler.sendEmptyMessage(0);
                     }
-                    
+
                     @Override
                     public void onError(int error, String errorMsg) {
                         handler.sendEmptyMessage(1);
@@ -110,10 +119,10 @@ public class GroupsActivity extends BaseActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (position == 1) {
+				if (position == 0) {
 					// 新建群聊
 					startActivityForResult(new Intent(GroupsActivity.this, NewGroupActivity.class), 0);
-				} else if (position == 2) {
+				} else if (position == 1) {
 					// 添加公开群
 					startActivityForResult(new Intent(GroupsActivity.this, PublicGroupsActivity.class), 0);
 				} else {
@@ -137,6 +146,29 @@ public class GroupsActivity extends BaseActivity {
 								InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 				return false;
+			}
+		});
+
+		query.addTextChangedListener(new TextWatcher() {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				groupAdapter.getFilter().filter(s);
+				if (s.length() > 0) {
+					clearSearch.setVisibility(View.VISIBLE);
+				} else {
+					clearSearch.setVisibility(View.INVISIBLE);
+				}
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			public void afterTextChanged(Editable s) {
+			}
+		});
+		clearSearch.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				query.getText().clear();
 			}
 		});
 		

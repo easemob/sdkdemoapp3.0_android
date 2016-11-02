@@ -13,6 +13,7 @@
  */
 package com.easemob.chatuidemo.ui;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,10 +48,8 @@ import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.utils.EaseCommonUtils;
-import com.easemob.redpacketsdk.RedPacket;
 import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketui.utils.RedPacketUtil;
-import com.easemob.util.EMLog;
 import com.easemob.util.NetUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -316,10 +315,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	protected void onDestroy() {
 		super.onDestroy();		
 		
-		if (conflictBuilder != null) {
-			conflictBuilder.create().dismiss();
-			conflictBuilder = null;
-		}
 		unregisterBroadcastReceiver();
 
 		try {
@@ -478,10 +473,9 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		return super.onKeyDown(keyCode, event);
 	}
 
-	private android.app.AlertDialog.Builder conflictBuilder;
-	private android.app.AlertDialog.Builder accountRemovedBuilder;
 	private boolean isConflictDialogShow;
 	private boolean isAccountRemovedDialogShow;
+	private boolean isAccountBlockedDialogShow;
     private BroadcastReceiver internalDebugReceiver;
     private ConversationListFragment conversationListFragment;
     private BroadcastReceiver broadcastReceiver;
@@ -495,29 +489,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		DemoHelper.getInstance().logout(false,null);
 		String st = getResources().getString(R.string.Logoff_notification);
 		if (!MainActivity.this.isFinishing()) {
-			// clear up global variables
-			try {
-				if (conflictBuilder == null)
-					conflictBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-				conflictBuilder.setTitle(st);
-				conflictBuilder.setMessage(R.string.connect_conflict);
-				conflictBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						conflictBuilder = null;
-						finish();
-						startActivity(new Intent(MainActivity.this, LoginActivity.class));
-					}
-				});
-				conflictBuilder.setCancelable(false);
-				conflictBuilder.create().show();
-				isConflict = true;
-			} catch (Exception e) {
-				EMLog.e(TAG, "---------color conflictBuilder error" + e.getMessage());
-			}
-
+			showAlertDialog(st, getString(R.string.connect_conflict));
+			isConflict = true;
 		}
 
 	}
@@ -528,33 +501,40 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	private void showAccountRemovedDialog() {
 		isAccountRemovedDialogShow = true;
 		DemoHelper.getInstance().logout(false,null);
-		String st5 = getResources().getString(R.string.Remove_the_notification);
+		String title = getString(R.string.Remove_the_notification);
+		String message = getString(R.string.em_user_remove);
 		if (!MainActivity.this.isFinishing()) {
-			// clear up global variables
-			try {
-				if (accountRemovedBuilder == null)
-					accountRemovedBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
-				accountRemovedBuilder.setTitle(st5);
-				accountRemovedBuilder.setMessage(R.string.em_user_remove);
-				accountRemovedBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						accountRemovedBuilder = null;
-						finish();
-						startActivity(new Intent(MainActivity.this, LoginActivity.class));
-					}
-				});
-				accountRemovedBuilder.setCancelable(false);
-				accountRemovedBuilder.create().show();
-				isCurrentAccountRemoved = true;
-			} catch (Exception e) {
-				EMLog.e(TAG, "---------color userRemovedBuilder error" + e.getMessage());
-			}
-
+			showAlertDialog(title, message);
+			isCurrentAccountRemoved = true;
 		}
+	}
 
+	private void showAccountBlockedDialog(){
+		isAccountBlockedDialogShow = true;
+		DemoHelper.getInstance().logout(false,null);
+		String title = getString(R.string.Remove_the_notification);
+		String message = getString(R.string.em_user_remove);
+		if (!MainActivity.this.isFinishing()) {
+			showAlertDialog(title, message);
+			isCurrentAccountRemoved = true;
+		}
+	}
+
+	private void showAlertDialog(String title, String message){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(title);
+		builder.setMessage(message);
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+				finish();
+				startActivity(new Intent(MainActivity.this, LoginActivity.class));
+			}
+		});
+		builder.setCancelable(false);
+		builder.create().show();
 	}
 
 	@Override
@@ -564,6 +544,8 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			showConflictDialog();
 		} else if (intent.getBooleanExtra(Constant.ACCOUNT_REMOVED, false) && !isAccountRemovedDialogShow) {
 			showAccountRemovedDialog();
+		} else if (intent.getBooleanExtra(Constant.ACCOUNT_BE_BLOCKED, false) && !isAccountBlockedDialogShow) {
+			showAccountBlockedDialog();
 		}
 	}
 	

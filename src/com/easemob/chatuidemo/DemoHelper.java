@@ -1,14 +1,5 @@
 package com.easemob.chatuidemo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -69,6 +60,12 @@ import com.easemob.exceptions.EaseMobException;
 import com.easemob.redpacketui.RedPacketConstant;
 import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.easemob.util.EMLog;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class DemoHelper {
     /**
@@ -160,7 +157,7 @@ public class DemoHelper {
 	public void init(Context context) {
 		if (EaseUI.getInstance().init(context)) {
 		    appContext = context;
-		    
+
 		    //if your app is supposed to user Google Push, please set project number
             String projectNumber = "562451699741";
             //不使用GCM推送的注释掉这行
@@ -362,6 +359,8 @@ public class DemoHelper {
                     onCurrentAccountRemoved();
                 }else if (error == EMError.CONNECTION_CONFLICT) {
                     onConnectionConflict();
+                }else if(error == EMError.USER_BE_BLOCKED) {
+                    onUserBeBlocked();
                 }
             }
 
@@ -630,7 +629,14 @@ public class DemoHelper {
         intent.putExtra(Constant.ACCOUNT_CONFLICT, true);
         appContext.startActivity(intent);
     }
-    
+
+    protected void onUserBeBlocked(){
+        Intent intent = new Intent(appContext, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Constant.ACCOUNT_BE_BLOCKED, true);
+        appContext.startActivity(intent);
+    }
+
     /**
      * 账号被移除
      */
@@ -894,7 +900,7 @@ public class DemoHelper {
 	 /**
      * update user list to cach And db
      *
-     * @param contactList
+     * @param contactInfoList
      */
     public void updateContactList(List<EaseUser> contactInfoList) {
          for (EaseUser u : contactInfoList) {
