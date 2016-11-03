@@ -10,10 +10,9 @@
 
 * libs ：包含了集成红包功能所依赖的jar包。(红包使用了glide库做图片加载，由于已经依赖了easeui这里不重复添加)
 * res ：包含了红包SDK和聊天页面中的资源文件。（红包SDK相关以rp开头，聊天页面相关以em开头）
-* utils ： 封装了收发红包的相关方法。
-* widget ：聊天界面中的红包以及领取红包后的chatrow。
-* RedPacketConstant.java 红包功能需要的常量。
-* **注意: 由于RedPacketUtil类中使用了环信SDK中相关方法，redpacketlibrary依赖了easeui。**。
+* utils ： 封装了收、发红包以及转账的相关方法。
+* widget ：聊天界面中的红包、红包回执以及转账的chatrow(如不使用easeui可继承自己的ChatRow基类)。
+* **注意: 由于RedPacketUtil类中使用了环信SDK中相关方法，redpacketlibrary依赖了easeui，如不使用easeui可替换掉相关的方法**。
 
 ## 3. 集成步骤
 
@@ -103,6 +102,19 @@ include ':EaseUI', ':redpacketlibrary'
             android:screenOrientation="behind"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
+         <activity
+            android:name="com.easemob.redpacketui.ui.activity.RPTransferActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan|stateVisible"
+            />
+                    
+         <activity
+            android:name="com.easemob.redpacketui.ui.activity.RPTransferDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            />
         <!--红包相关界面end-->    
 ```
 
@@ -121,17 +133,19 @@ include ':EaseUI', ':redpacketlibrary'
     }
 ```
 
-### 3.4 ChatFragment中增加收发红包的功能 
+### 3.4 ChatFragment中增加收、发红包和转账的功能 
 * 需要导入的包
 
 ```
-    import com.easemob.redpacketui.RedPacketConstant;
+    import com.easemob.redpacketsdk.constant.RPConstant;
     import com.easemob.redpacketui.utils.RedPacketUtil;
     import com.easemob.redpacketui.widget.ChatRowRedPacket;
     import com.easemob.redpacketui.widget.ChatRowRedPacketAck;
+    import com.easemob.redpacketui.widget.ChatRowTransfer;
+
 ```
 
-* 添加红包相关常量
+* 添加红包、转账相关常量
 
 
 ```
@@ -143,12 +157,20 @@ include ':EaseUI', ':redpacketlibrary'
     
     private static final int MESSAGE_TYPE_RECV_RED_PACKET_ACK = 8;
     
+    private static final int MESSAGE_TYPE_RECV_TRANSFER_PACKET = 9;
+    
+    private static final int MESSAGE_TYPE_SEND_TRANSFER_PACKET = 10;
+    
     private static final int ITEM_RED_PACKET = 16;
     
     private static final int REQUEST_CODE_SEND_RED_PACKET = 15;
+    
+    private static final int REQUEST_CODE_SEND_TRANSFER_PACKET = 16;
+    
+    private static final int ITEM_TRANSFER_PACKET = 17;
 
 ```
-* 添加红包入口
+* 添加红包、转账入口
 
 
 ```
@@ -160,26 +182,44 @@ include ':EaseUI', ':redpacketlibrary'
         if (chatType != Constant.CHATTYPE_CHATROOM) {
             inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_red_packet_selector, ITEM_RED_PACKET, extendMenuItemClickListener);
         }
+        //只在单聊中支持转账功能
+        if (chatType == Constant.CHATTYPE_SINGLE) {
+            inputMenu.registerExtendMenuItem(R.string.attach_transfer_money, R.drawable.em_chat_transfer_selector, ITEM_TRANSFER_PACKET, extendMenuItemClickListener);
+        }
     }
 ```
 
-* 添加自定义chatrow到CustomChatRowProvider，详见ChatFragment中的CustomChatRowProvider。
+* 添加自定义chatrow(红包、红包回执、转账)到CustomChatRowProvider，详见ChatFragment中的CustomChatRowProvider。
 
-* ContextMenuActivity的onCreate(）中屏蔽红包消息的转发功能。
+* ContextMenuActivity的onCreate(）中屏蔽红包、转账消息的转发和撤回功能。
 
 
 ```
    if (type == EMMessage.Type.TXT.ordinal()) {
             if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false) ||
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
-                    || message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
+                    || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
+                    || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)){
                 setContentView(R.layout.em_context_menu_for_location);
             }
+   }
+   
+   
+   // 这里根据消息是发送方还是接收放判断是否显示撤回菜单项
+   if (message.direct == EMMessage.Direct.RECEIVE || message.getChatType() == EMMessage.ChatType.ChatRoom
+   //red packet code : 屏蔽红包消息、转账消息的撤回功能
+   || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
+   || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
+   //end of red packet code
+        View view = findViewById(R.id.text_revoke);
+        if(view != null){
+            view.setVisibility(View.GONE);
         }
+   }
 
 ```
 
-* 进入发红包页面
+* 进入发红包、转账页面
 
 
 ```
@@ -190,6 +230,9 @@ include ':EaseUI', ':redpacketlibrary'
         case ITEM_RED_PACKET:
             RedPacketUtils.startRedPacketActivityForResult(this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
             break;
+        case ITEM_TRANSFER_PACKET://进入转账页面
+            RedPacketUtil.startTransferActivityForResult(this, toChatUsername, REQUEST_CODE_SEND_TRANSFER_PACKET);
+            break;
         default:
             break;
         }
@@ -198,7 +241,7 @@ include ':EaseUI', ':redpacketlibrary'
     }
 ```
 
-* 发送红包消息到聊天窗口
+* 发送红包、转账消息到聊天窗口
 
 ```
    @Override
@@ -211,6 +254,11 @@ include ':EaseUI', ':redpacketlibrary'
             case REQUEST_CODE_SEND_RED_PACKET:
                 if (data != null){
                     sendMessage(RedPacketUtils.createRPMessage(getActivity(), data, toChatUsername));
+                }
+                break;
+            case REQUEST_CODE_SEND_TRANSFER_PACKET://发送转账消息
+                if (data != null) {
+                    sendMessage(RedPacketUtil.createTRMessage(getActivity(), data, toChatUsername));
                 }
                 break;
             default:
@@ -227,7 +275,7 @@ include ':EaseUI', ':redpacketlibrary'
     @Override
     public boolean onMessageBubbleClick(EMMessage message) {
         //消息框点击事件，demo这里不做覆盖，如需覆盖，return true
-        if (message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
+        if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
             RedPacketUtils.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
             return true;
         }
@@ -244,7 +292,7 @@ include ':EaseUI', ':redpacketlibrary'
                   EMMessage cmdMessage = (EMMessage) event.getData();
                   CmdMessageBody cmdMsgBody = (CmdMessageBody) cmdMessage.getBody();
                   final String action = cmdMsgBody.action;//获取自定义action
-                  if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
+                  if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
                       RedPacketUtil.receiveRedPacketAckMessage(cmdMessage);
                       messageList.refresh();
                   }
@@ -257,7 +305,7 @@ include ':EaseUI', ':redpacketlibrary'
 * MainActivity中群红包领取回执的处理(导航页面)
 
 ```
-    import com.easemob.redpacketui.RedPacketConstant;
+    import com.easemob.redpacketsdk.constant.RPConstant;
     import com.easemob.redpacketui.utils.RedPacketUtils;
     
     @Override
@@ -270,7 +318,7 @@ include ':EaseUI', ':redpacketlibrary'
             CmdMessageBody cmdMsgBody = (CmdMessageBody) cmdMessage.getBody();
             final String action = cmdMsgBody.action;//获取自定义action
             ...
-            if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
+            if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
                 RedPacketUtil.receiveRedPacketAckMessage(cmdMessage);
             }
             refreshUIWithMessage();
@@ -286,7 +334,7 @@ include ':EaseUI', ':redpacketlibrary'
 * DemoHelper中
 
 ```
-    import com.easemob.redpacketui.RedPacketConstant;
+    import com.easemob.redpacketsdk.constant.RPConstant;
     import com.easemob.redpacketui.utils.RedPacketUtils;
     
      protected void registerEventListener() {
@@ -301,9 +349,9 @@ include ':EaseUI', ':redpacketlibrary'
                             CmdMessageBody cmdMsgBody = (CmdMessageBody) message.getBody();
                             final String action = cmdMsgBody.action;//获取自定义action
                             if(!easeUI.hasForegroundActivies()){
-                                if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+                                if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                                     RedPacketUtil.receiveRedPacketAckMessage(message);
-                                    broadcastManager.sendBroadcast(new Intent(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION));
+                                    broadcastManager.sendBroadcast(new Intent(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                                 }
                             }
                             break;
@@ -318,7 +366,7 @@ include ':EaseUI', ':redpacketlibrary'
 * MainActivity中
 
 ```
-    import com.easemob.redpacketui.RedPacketConstant;
+    import com.easemob.redpacketsdk.constant.RPConstant;
     import com.easemob.redpacketui.utils.RedPacketUtils;
     
     private void registerBroadcastReceiver() {
@@ -326,13 +374,13 @@ include ':EaseUI', ':redpacketlibrary'
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
             intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
-            intentFilter.addAction(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION);
+            intentFilter.addAction(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
             broadcastReceiver = new BroadcastReceiver() {
                 
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     ...
-                    if (action.equals(RedPacketConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+                    if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
                          if (conversationListFragment != null){
                              conversationListFragment.refresh();
                          }
@@ -344,10 +392,10 @@ include ':EaseUI', ':redpacketlibrary'
         
 ```
 
-###3.6 ConversationListFragment中对红包回执消息的处理
+###3.6 ConversationListFragment中对红包回执消息和转账消息的处理
 
 ```
-   import com.easemob.redpacketui.RedPacketConstant;
+   import com.easemob.redpacketsdk.constant.RPConstant;
 
    @Override
     protected void setUpView() {
@@ -355,9 +403,9 @@ include ':EaseUI', ':redpacketlibrary'
        conversationListView.setConversationListHelper(new EaseConversationListHelper() {
                    @Override
                    public String onSetItemSecondaryText(EMMessage lastMessage) {
-                       if (lastMessage.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
-                           String sendNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_SENDER_NAME, "");
-                           String receiveNick = lastMessage.getStringAttribute(RedPacketConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
+                       if (lastMessage.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
+                           String sendNick = lastMessage.getStringAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, "");
+                           String receiveNick = lastMessage.getStringAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
                            String msg;
                            if (lastMessage.direct == EMMessage.Direct.RECEIVE) {
                                msg = String.format(getResources().getString(R.string.msg_someone_take_red_packet), receiveNick);
@@ -369,7 +417,16 @@ include ':EaseUI', ':redpacketlibrary'
                                }
                            }
                            return msg;
-                       }
+                       } else if (lastMessage.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
+                                            String transferAmount = lastMessage.getStringAttribute(RPConstant.EXTRA_TRANSFER_AMOUNT, "");
+                                            String msg;
+                                            if (lastMessage.direct == EMMessage.Direct.RECEIVE) {
+                                                msg =  String.format(getResources().getString(R.string.msg_transfer_to_you), transferAmount);
+                                            } else {
+                                                msg =  String.format(getResources().getString(R.string.msg_transfer_from_you),transferAmount);
+                                            }
+                                            return msg;
+                                        }
                        return null;
                    }
        });
@@ -389,6 +446,9 @@ include ':EaseUI', ':redpacketlibrary'
 
 ```
 
+### 4.拆红包音效
+
+* 在assets目录下添加open_packet_sound.mp3或者open_packet_sound.wav文件即可(文件大小不要超过1M)。
 
 * **提示: 如果不需要红包相关功能可全局搜索关键字red packet去掉红包相关的代码以及redpacketlibray**。
 

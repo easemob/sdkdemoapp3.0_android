@@ -21,7 +21,7 @@ import com.easemob.chat.EMMessage;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.EaseConstant;
-import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketsdk.constant.RPConstant;
 
 public class ContextMenuActivity extends BaseActivity {
 	public static final int RESULT_CODE_COPY = 1;
@@ -41,8 +41,9 @@ public class ContextMenuActivity extends BaseActivity {
     		if (type == EMMessage.Type.TXT.ordinal()) {
     		    if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
     		            || message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
-						//red packet code : 屏蔽红包消息的转发功能
-						|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
+						//red packet code : 屏蔽红包消息、转账消息的转发功能
+						|| message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
+						|| message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)
 						//end of red packet code
 						) {
     		        setContentView(R.layout.em_context_menu_for_delete);
@@ -65,8 +66,9 @@ public class ContextMenuActivity extends BaseActivity {
 		}
 		// 这里根据消息是发送方还是接收放判断是否显示撤回菜单项
 		if (message.direct == EMMessage.Direct.RECEIVE || message.getChatType() == EMMessage.ChatType.ChatRoom
-				//red packet code : 屏蔽红包消息的撤回功能
-				|| message.getBooleanAttribute(RedPacketConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
+				//red packet code : 屏蔽红包消息、转账消息的撤回功能
+				|| message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
+				|| message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
 			    //end of red packet code
 			View view = findViewById(R.id.text_revoke);
 			if(view != null){

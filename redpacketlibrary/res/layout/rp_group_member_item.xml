@@ -23,6 +23,9 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/item_image"
+        android:ellipsize="end"
+        android:maxEms="11"
+        android:maxLines="1"
         android:textColor="@color/text_black"
         android:textSize="@dimen/font48px"
         />
