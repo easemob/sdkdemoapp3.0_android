@@ -3,13 +3,13 @@ buildscript {
     repositories {
         jcenter()
         // ========== fabric start
-//        maven { url 'https://maven.fabric.io/public' }
+        maven { url 'https://maven.fabric.io/public' }
         // ========== fabric end
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.1'
         // ========== fabric start
-//        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.+'
         // ========== fabric end
     }
 }
@@ -22,13 +22,13 @@ allprojects {
 
 apply plugin: 'com.android.application'
 // ========== fabric start
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 // ========== fabric end
 
 // ========== fabric start
-//repositories {
-//    maven { url 'https://maven.fabric.io/public' }
-//}
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 // ========== fabric end
 
 
@@ -82,8 +82,8 @@ dependencies {
     compile fileTree(include: '*.jar', exclude: 'android-support-multidex.jar', dir: 'libs')
 
     // ========== fabric start
-//    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
-//        transitive = true;
-//    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
+        transitive = true;
+    }
     // ========== fabric end
 }
