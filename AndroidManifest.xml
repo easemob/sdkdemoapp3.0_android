@@ -478,6 +478,7 @@
                 <action android:name="com.huawei.android.push.intent.REGISTRATION" />
                 <!-- 必须，用于接收消息 -->
                 <action android:name="com.huawei.android.push.intent.RECEIVE" />
+                <action android:name="com.huawei.android.push.intent.CLICK" />
             </intent-filter>
             />
             <meta-data android:name="CS_cloud_ablitity" android:value="successRateAnalytics"/>
