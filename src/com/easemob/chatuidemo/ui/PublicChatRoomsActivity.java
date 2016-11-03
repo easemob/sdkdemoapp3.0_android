@@ -44,9 +44,10 @@ import android.widget.Toast;
 import com.easemob.EMChatRoomChangeListener;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMChatRoom;
-import com.easemob.chat.EMCursorResult;
+import com.easemob.chat.EMPageResult;
 import com.easemob.chatuidemo.R;
 import com.easemob.exceptions.EaseMobException;
+import com.easemob.util.EMLog;
 
 public class PublicChatRoomsActivity extends BaseActivity {
 	private ProgressBar pb;
@@ -58,8 +59,9 @@ public class PublicChatRoomsActivity extends BaseActivity {
 	private boolean isLoading;
 	private boolean isFirstLoading = true;
 	private boolean hasMoreData = true;
-	private String cursor;
-	private final int pagesize = 50;
+	private int pagenum = 0;
+	private final int pagesize = 20;
+	private int pageCount = -1;
     private LinearLayout footLoadingLayout;
     private ProgressBar footLoadingPB;
     private TextView footLoadingText;
@@ -179,7 +181,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if(scrollState == OnScrollListener.SCROLL_STATE_IDLE){
-                    if(cursor != null){
+                    if(pageCount != 0){
                         int lasPos = view.getLastVisiblePosition();
                         if(hasMoreData && !isLoading && lasPos == listView.getCount()-1){
                             loadAndShowData();
@@ -209,19 +211,16 @@ public class PublicChatRoomsActivity extends BaseActivity {
             public void run() {
                 try {
                     isLoading = true;
-                    final EMCursorResult<EMChatRoom> result = EMChatManager.getInstance().fetchPublicChatRoomsFromServer(pagesize, cursor);
+                    pagenum += 1;
+                    final EMPageResult<EMChatRoom> result = EMChatManager.getInstance().fetchPublicChatRoomsFromServer(pagenum, pagesize);
                     //获取group list
                     final List<EMChatRoom> chatRooms = result.getData();
+                    pageCount = result.getPageCount();
                     runOnUiThread(new Runnable() {
 
                         public void run() {
                             chatRoomList.addAll(chatRooms);
-                            if(chatRooms.size() != 0){
-                                //获取cursor
-                                cursor = result.getCursor();
-//                                if(chatRooms.size() == pagesize)
-//                                    footLoadingLayout.setVisibility(View.VISIBLE);
-                            }
+
                             if(isFirstLoading){
                                 pb.setVisibility(View.INVISIBLE);
                                 isFirstLoading = false;
