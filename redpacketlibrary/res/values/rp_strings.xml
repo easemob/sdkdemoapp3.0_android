@@ -9,6 +9,10 @@
     <string name="btn_put_money">塞钱进红包</string>
     <string name="greetings_hint">打赏你哒!</string>
     <string name="send_money_title">发红包</string>
+    <string name="transfer_money_title">转账给朋友</string>
+    <string name="transfer_detail_title">转账详情</string>
+    <string name="transfer_money">转账</string>
+    <string name="transfer_amount">转账金额</string>
     <string name="title_send_group_money">发群红包</string>
     <string name="dialog_title_pay">支付</string>
     <string name="red_money">红包</string>
@@ -18,7 +22,7 @@
     <string name="wx_pay">微信支付</string>
     <string name="input_pay_pwd">请输入支付密码</string>
     <string name="btn_ok">确定</string>
-    <string name="btn_know">知道了</string>
+    <string name="btn_know">我知道了</string>
     <string name="check_money">查看红包</string>
     <!--绑定银行卡-->
     <string name="pay_bank_card">支付银行卡</string>
@@ -29,7 +33,6 @@
     <string name="phone_number">手机号码</string>
     <string name="operation_user_agreement">该操作代表我同意《%1$s用户服务协议》</string>
     <string name="operation_user_agreement_default">该操作代表我同意《用户服务协议》</string>
-    <string name="operation_tpy_agreement">我愿意免费投保太平洋保险《个人账户资金损失保险》</string>
     <string name="title_amount_agreement">个人账户资金损失保险</string>
     <string name="jd_pay_agreement_hint">银行卡付款业务由京东支付支持</string>
     <string name="insurance_agreement_hint">因账户被盗导致的资金损失由太平洋保险提供赔付保障</string>
@@ -60,6 +63,8 @@
     <string name="common_error_msg">抱歉，系统出错了!\n请点击屏幕重试~</string>
     <string name="common_no_network_msg">暂未连接上网络!\n请连接后点击屏幕重试~</string>
     <string name="btn_str_send_sms_code">发送验证码</string>
+    <string name="input_transfer_amount">请输入转账金额</string>
+    <string name="input_transfer_limited">单笔最高限额为%1$s元</string>
     <string name="input_money_amount">请输入红包金额</string>
     <string name="input_money_limited_minimum">单个红包金额不能少于%1$s元</string>
     <string name="input_money_limited">单个红包金额不能超过%1$s元</string>
@@ -74,14 +79,14 @@
     <string name="load_more_end">没有更多了</string>
     <string name="money_record_title">收到的红包</string>
     <string name="input_money_zero">红包金额不能为0</string>
+    <string name="input_transfer_error">金额输入错误</string>
     <string name="default_money_greeting">恭喜发财，大吉大利！</string>
     <string name="no_network_connected">未连接到网络，请稍后重试</string>
-    <string name="name_str_format_received">%1$s共收到</string>
-    <string name="name_str_format_send">%1$s共发出</string>
+    <string name="name_str_format_received">共收到</string>
+    <string name="name_str_format_send">共发出</string>
     <string name="btn_str_resend">重新获取</string>
     <string name="str_format_send_sms">已发送到尾号%1$s的手机上</string>
     <string name="str_send_sms_code">验证码已发送</string>
-    <string name="money_detail_nickname">%1$s的红包</string>
     <string name="money_detail_money_unit">%1$s元</string>
     <string name="detail_money_sign">￥%1$s</string>
     <string name="btn_text_open_money">拆红包</string>
@@ -130,7 +135,7 @@
     <string name="group_money_unavailable_avg_sender">%1$s个红包共%2$s元</string>
     <string name="group_money_unavailable_avg_receiver">%1$s个红包</string>
     <string name="group_money_expired">%1$s个红包共%2$s元，红包已过期</string>
-    <string name="money_username_format">%1$s的红包</string>
+    <string name="money_username_format">的红包</string>
     <string name="send_money_bottom_text">未领取的红包，将于24小时后发起退款</string>
     <string name="retry_str">"%1$s 秒后重试"</string>
     <string name="my_change">我的零钱（余额￥%1$s）</string>
@@ -167,7 +172,7 @@
     <string name="give_up_set_pay_pwd">放弃支付密码设置吗？</string>
     <string name="document_recover_pwd">请重新验证银行卡以找回密码</string>
     <string name="document_add_bankcard">添加一张银行储蓄卡</string>
-    <string name="document_add_bankcard_verify_identity">添加银行储蓄卡以验证身份</string>
+    <string name="document_add_bankcard_verify_identity">通过银行储蓄卡验证身份</string>
     <string name="document_add_pay_bankcard">添加可用于支付的银行储蓄卡</string>
     <string name="str_set_psd_success">设置密码成功</string>
     <string name="input_sms_captcha">输入短信验证码</string>
@@ -189,12 +194,13 @@
     <string name="money_record_status">已领取%1$s/%2$s个</string>
     <string name="hint_title">提示</string>
     <string name="limit_hint_title">支付超限</string>
-    <string name="single_limit_msg">单日红包发出金额超限，剩余额度%1$s元，请修改红包金额。</string>
-    <string name="jd_limit_msg">零钱不足。%1$s尾号%2$s京东支付今日剩余额度%3$s元，请修改红包金额。</string>
-    <string name="single_out_msg">单日红包发出金额已达上限。</string>
+    <string name="single_limit_msg">当日限额还剩%1$s元，请修改金额</string>
+    <string name="jd_limit_msg">零钱不足。%1$s尾号%2$s京东支付今日剩余额度%3$s元，请修改金额。</string>
+    <string name="single_out_msg">当日限额还剩0元，请明天再试</string>
     <string name="sms_error_title">验证码输入错误</string>
     <string name="sms_error_msg">重新输入，或者等倒计时结束后重新获取一个再试。</string>
-    <string name="change_limit_msg">为了你的账户安全，需要通过添加一张银行卡验证你的身份信息。</string>
+    <string name="change_limit_msg">为了账户安全，需通过银行卡信息验证是您本人操作后，前往设置支付密码。</string>
+    <string name="no_pwd_msg">为了你的账户安全，需要通过添加一张银行卡验证你的身份信息。</string>
     <string name="withdraw_not_psd_msg">为了你的账户安全，需要通过一张银行卡验证你的身份信息。</string>
     <string name="btn_retry">重试</string>
     <string name="change_default">￥0.00</string>
@@ -235,6 +241,7 @@
     <string name="choose_pay_jd_limit">单笔限额%1$s元，当日剩余额度%2$s元</string>
     <string name="msg_review_going">审核中</string>
     <string name="msg_you_are_remove_bankcard">确定要解除这张银行卡吗？</string>
+    <string name="msg_you_are_go_bankcard">这张卡似乎已经添加过，确定要继续吗？</string>
     <string name="msg_remove_bankcard_success">移除卡成功</string>
     <string name="error_sd_card">请挂载SD卡！</string>
     <string name="btn_silence_turn_off">默默关掉</string>
@@ -248,5 +255,9 @@
     <string name="single_withdraw_min_limit">单笔提现最少%1$s元</string>
     <string name="str_choose_camera">选择相机</string>
     <string name="str_choose_album">选择相册</string>
-
+    <string name="transfer_success">交易成功</string>
+    <string name="transfer_change">已存入零钱，</string>
+    <string name="transfer_see_change">查看零钱</string>
+    <string name="transfer_time">转账时间：</string>
+    <string name="safe_hint_title">安全提示</string>
 </resources>
