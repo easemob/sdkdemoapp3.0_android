@@ -2,8 +2,8 @@
 <manifest package="com.easemob.chatuidemo"
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          android:versionCode="32"
-          android:versionName="2.3.2"
+          android:versionCode="33"
+          android:versionName="2.3.3"
     >
 
     <uses-sdk
@@ -91,14 +91,6 @@
         <!-- 聊天页面 -->
         <activity
             android:name="com.easemob.chatuidemo.ui.ChatActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize" >
-        </activity>
-        <!-- 聊天页面 -->
-        <activity
-            android:name="com.easemob.applib.ui.ChatActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
