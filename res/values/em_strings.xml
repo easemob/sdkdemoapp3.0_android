@@ -217,7 +217,7 @@
     <string name="Invite_you_to_join_a_group_chat"> Invite you to join this group</string>
     <string name="Agreed_to_your_group_chat_application">Accepted your group application</string>
     <string name="Logoff_notification">Logoff notification</string>
-    <string name="Remove_the_notification">Remove the notification</string>
+    <string name="Remove_the_notification">Account remove notification</string>
     <string name="Group_name_cannot_be_empty">Group name cannot be empty</string>
     <string name="Is_to_create_a_group_chat">Creating the group</string>
     <string name="Failed_to_create_groups">Failed to create groups</string>
