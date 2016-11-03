@@ -132,7 +132,6 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 		// 注册群组和联系人监听
         DemoHelper.getInstance().registerGroupAndContactListener();
 		registerBroadcastReceiver();
-		git co 
 		
 		//内部测试方法，请忽略
         registerInternalDebugReceiver();
