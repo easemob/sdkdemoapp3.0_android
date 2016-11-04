@@ -72,6 +72,7 @@
     <string name="exit_group">Exit</string>
     <string name="connect_conflict">The same account was loggedin in other device</string>
     <string name="em_user_remove">This user has been removed</string>
+    <string name="user_blocked_hint">This user has been blocked</string>
     <string name="set">Settings</string>
     <string name="notify">New message notification</string>
     <string name="newnotify">Receiving a new message</string>
@@ -218,6 +219,7 @@
     <string name="Agreed_to_your_group_chat_application">Accepted your group application</string>
     <string name="Logoff_notification">Logoff notification</string>
     <string name="Remove_the_notification">Account remove notification</string>
+    <string name="user_be_blocked">User blocked notification</string>
     <string name="Group_name_cannot_be_empty">Group name cannot be empty</string>
     <string name="Is_to_create_a_group_chat">Creating the group</string>
     <string name="Failed_to_create_groups">Failed to create groups</string>

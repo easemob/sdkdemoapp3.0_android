@@ -511,11 +511,10 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 	private void showAccountBlockedDialog(){
 		isAccountBlockedDialogShow = true;
 		DemoHelper.getInstance().logout(false,null);
-		String title = getString(R.string.Remove_the_notification);
-		String message = getString(R.string.em_user_remove);
+		String title = getString(R.string.user_be_blocked);
+		String message = getString(R.string.user_blocked_hint);
 		if (!MainActivity.this.isFinishing()) {
 			showAlertDialog(title, message);
-			isCurrentAccountRemoved = true;
 		}
 	}
 
