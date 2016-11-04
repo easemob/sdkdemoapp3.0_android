@@ -534,11 +534,13 @@ public class DemoHelper {
         public void onContactAdded(List<String> usernameList) {         
             // 保存增加的联系人
             Map<String, EaseUser> localUsers = getContactList();
-            for (String username : usernameList) {
-                EaseUser user = new EaseUser(username);
-                // 添加好友时可能会回调added方法两次
-                if (!localUsers.containsKey(username)) {
-                    saveContact(user);
+            synchronized (localUsers) {
+                for (String username : usernameList) {
+                    EaseUser user = new EaseUser(username);
+                    // 添加好友时可能会回调added方法两次
+                    if (!localUsers.containsKey(username)) {
+                        saveContact(user);
+                    }
                 }
             }
             //发送好友变动广播
@@ -548,13 +550,15 @@ public class DemoHelper {
         @Override
         public void onContactDeleted(final List<String> usernameList) {
             // 被删除
-            Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
-            for (String username : usernameList) {
-                localUsers.remove(username);
-                userDao.deleteContact(username);
-                inviteMessgeDao.deleteMessage(username);
+            Map<String, EaseUser> localUsers = getContactList();
+            synchronized (localUsers) {
+                for (String username : usernameList) {
+                    localUsers.remove(username);
+                    userDao.deleteContact(username);
+                    inviteMessgeDao.deleteMessage(username);
+                }
+                broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
             }
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
         @Override
