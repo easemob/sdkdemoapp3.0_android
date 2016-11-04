@@ -223,6 +223,7 @@
     <string name="Agreed_to_your_group_chat_application">同意了你的群聊申请</string>
     <string name="Logoff_notification">下线通知</string>
     <string name="Remove_the_notification">移除通知</string>
+    <string name="user_be_blocked">封禁通知</string>
     <string name="Group_name_cannot_be_empty">群组名称不能为空</string>
     <string name="Is_to_create_a_group_chat">正在创建群聊...</string>
     <string name="Failed_to_create_groups">创建群组失败:</string>
