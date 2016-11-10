@@ -158,7 +158,6 @@ public class CallActivity extends BaseActivity {
             case MSG_CALL_MAKE_VIDEO:
             case MSG_CALL_MAKE_VOICE:
                 try {
-                    streamID = playMakeCallSounds();
                     if (msg.what == MSG_CALL_MAKE_VIDEO) {
                         EMClient.getInstance().callManager().makeVideoCall(username);
                     } else { 
