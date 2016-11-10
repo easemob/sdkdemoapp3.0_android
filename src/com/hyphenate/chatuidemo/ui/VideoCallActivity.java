@@ -190,6 +190,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             callStateTextView.setText(st);
             EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
             handler.sendEmptyMessage(MSG_CALL_MAKE_VIDEO);
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    streamID = playMakeCallSounds();
+                }
+            }, 300);
         } else { // incoming call
 
             if(EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.IDLE
