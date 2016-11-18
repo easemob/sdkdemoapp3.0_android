@@ -62,6 +62,7 @@ public class RobotsActivity extends BaseActivity {
 		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		ListView mListView = (ListView) findViewById(R.id.list);
 		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
+		@TargetApi(14)
 		if (android.os.Build.VERSION.SDK_INT >= 14) {
 			swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
 					android.R.color.holo_orange_light, android.R.color.holo_red_light);
