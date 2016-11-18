@@ -19,6 +19,7 @@ import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
@@ -570,7 +571,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         case R.id.btn_capture_image:
             DateFormat df = DateFormat.getDateTimeInstance();
             Date d = new Date();
-            final String filename = "/sdcard/" + df.format(d) + ".jpg";
+            final String filename = Environment.getExternalStorageDirectory() + df.format(d) + ".jpg";
             EMClient.getInstance().callManager().getVideoCallHelper().takePicture(filename);
             runOnUiThread(new Runnable() {
                 @Override
