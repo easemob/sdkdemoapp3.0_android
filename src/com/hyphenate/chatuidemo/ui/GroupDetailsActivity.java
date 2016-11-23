@@ -147,10 +147,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						return true;
 					}
 					break;
+				case MotionEvent.ACTION_UP:
+				    v.performClick();
+				    break;
 				default:
 					break;
 				}
-				return false;
+				return true;
 			}
 		});
 

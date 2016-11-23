@@ -13,6 +13,7 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,12 +57,14 @@ public class RobotsActivity extends BaseActivity {
 	private SwipeRefreshLayout swipeRefreshLayout;
 
 	@Override
+    @TargetApi(14)
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		setContentView(R.layout.em_fragment_robots);
 		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		ListView mListView = (ListView) findViewById(R.id.list);
 		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
+
 		if (android.os.Build.VERSION.SDK_INT >= 14) {
 			swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
 					android.R.color.holo_orange_light, android.R.color.holo_red_light);
