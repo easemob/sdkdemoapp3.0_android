@@ -62,9 +62,9 @@
         <attr name="RPstackFromEnd" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="RPRoundCard">
-        <attr name="RPCardBgImg" format="reference"></attr>
-        <attr name="RPCardBgColor" format="reference|color"></attr>
-        <attr name="RPCardRadius" format="dimension"></attr>
-        <attr name="RPCardBgType" format="integer"></attr>
+        <attr name="RPCardBgImg" format="reference"/>
+        <attr name="RPCardBgColor" format="reference|color"/>
+        <attr name="RPCardRadius" format="dimension"/>
+        <attr name="RPCardBgType" format="integer"/>
     </declare-styleable>
 </resources>

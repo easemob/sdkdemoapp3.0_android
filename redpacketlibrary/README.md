@@ -228,7 +228,21 @@ include ':EaseUI', ':redpacketlibrary'
         switch (itemId) {
         ...
         case ITEM_RED_PACKET:
-            RedPacketUtils.startRedPacketActivityForResult(this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
+            //单聊红包修改进入红包的方法，可以在小额随机红包和普通单聊红包之间切换
+            RedPacketUtil.startRandomPacket(new RPRedPacketUtil.RPRandomCallback() {
+                    @Override
+                    public void onSendPacketSuccess(Intent data) {
+                        sendMessage(RedPacketUtil.createRPMessage(getActivity(), data, toChatUsername));
+                    }
+
+                    @Override
+                    public void switchToNormalPacket() {
+                        RedPacketUtil.startRedPacketActivityForResult(ChatFragment.this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
+                    }
+                },getActivity(),toChatUsername);
+            } else {
+                RedPacketUtil.startRedPacketActivityForResult(this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
+            }
             break;
         case ITEM_TRANSFER_PACKET://进入转账页面
             RedPacketUtil.startTransferActivityForResult(this, toChatUsername, REQUEST_CODE_SEND_TRANSFER_PACKET);
@@ -276,7 +290,14 @@ include ':EaseUI', ':redpacketlibrary'
     public boolean onMessageBubbleClick(EMMessage message) {
         //消息框点击事件，demo这里不做覆盖，如需覆盖，return true
         if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
-            RedPacketUtils.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
+            if (RedPacketUtil.isRandomRedPacket(message)){
+                RedPacketUtil.openRandomPacket(getActivity(),message);
+            } else {
+                RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
+            }
+            return true;
+        } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
+            RedPacketUtil.openTransferPacket(getActivity(), message);
             return true;
         }
         return false;

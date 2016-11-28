@@ -50,7 +50,7 @@
         android:layout_marginTop="@dimen/size60px"
         android:gravity="center"
         android:maxLength="22"
-        android:textColor="@color/title_color"
+        android:textColor="@color/rp_title_color"
         android:textSize="@dimen/font69px"
         android:visibility="gone"
         />
@@ -114,7 +114,7 @@
         android:gravity="center"
         android:maxEms="10"
         android:maxLines="1"
-        android:textColor="@color/money_white"
+        android:textColor="@color/rp_money_white"
         android:textSize="@dimen/font42px"
         android:visibility="visible"
         />
@@ -132,7 +132,7 @@
         android:gravity="center|top"
         android:lines="2"
         android:text="@string/send_you_money"
-        android:textColor="@color/money_white"
+        android:textColor="@color/rp_money_white"
         android:textSize="@dimen/font45px"
         android:visibility="visible"
         />
@@ -148,8 +148,7 @@
         android:layout_marginRight="@dimen/size81px"
         android:gravity="center"
         android:maxLines="1"
-        android:text="￥8.00"
-        android:textColor="@color/title_color"
+        android:textColor="@color/rp_title_color"
         android:textSize="@dimen/font129px"
         android:visibility="gone"
         />
@@ -164,7 +163,7 @@
         android:layout_marginRight="@dimen/size225px"
         android:background="@drawable/rp_btn_open_selector_unsolid"
         android:text="@string/btn_text_open_money"
-        android:textColor="@color/title_color"
+        android:textColor="@color/rp_title_color"
         android:textSize="@dimen/font54px"
         />
 
