@@ -90,7 +90,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private RelativeLayout rl_switch_adaptive_video_encode;
 	private RelativeLayout rl_custom_appkey;
     private RelativeLayout rl_custom_server;
-	private RelativeLayout rl_switch_offline_call_push;
+	private LinearLayout   ll_call_option;
 
 	/**
 	 * Diagnose
@@ -111,7 +111,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton switch_adaptive_video_encode;
 	private EaseSwitchButton customServerSwitch;
 	private EaseSwitchButton customAppkeySwitch;
-	private EaseSwitchButton switch_offline_call_push;
     private DemoModel settingsModel;
     private EMOptions chatOptions;
 	private EditText edit_custom_appkey;
@@ -136,7 +135,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_adaptive_video_encode = (RelativeLayout) getView().findViewById(R.id.rl_switch_adaptive_video_encode);
 		rl_custom_appkey = (RelativeLayout) getView().findViewById(R.id.rl_custom_appkey);
 		rl_custom_server = (RelativeLayout) getView().findViewById(R.id.rl_custom_server);
-		rl_switch_offline_call_push =  (RelativeLayout) getView().findViewById(R.id.rl_switch_offline_call_push);
+		ll_call_option = (LinearLayout) getView().findViewById(R.id.ll_call_option);
 		
 		notifySwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
 		soundSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_sound);
@@ -146,7 +145,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		switch_delete_msg_when_exit_group = (EaseSwitchButton) getView().findViewById(R.id.switch_delete_msg_when_exit_group);
 		switch_auto_accept_group_invitation = (EaseSwitchButton) getView().findViewById(R.id.switch_auto_accept_group_invitation);
 		switch_adaptive_video_encode = (EaseSwitchButton) getView().findViewById(R.id.switch_adaptive_video_encode);
-		switch_offline_call_push = (EaseSwitchButton) getView().findViewById(R.id.switch_offline_call_push);
 		LinearLayout llChange = (LinearLayout) getView().findViewById(R.id.ll_change);
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
 		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
@@ -183,7 +181,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_delete_msg_when_exit_group.setOnClickListener(this);
 		rl_switch_auto_accept_group_invitation.setOnClickListener(this);
 		rl_switch_adaptive_video_encode.setOnClickListener(this);
-		rl_switch_offline_call_push.setOnClickListener(this);
+		ll_call_option.setOnClickListener(this);
 		llChange.setOnClickListener(this);
 
 		// the vibrate and sound notification are allowed or not?
@@ -247,13 +245,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		}else{
 			customServerSwitch.closeSwitch();
         }
-		if (settingsModel.isPushCall()) {
-			switch_offline_call_push.openSwitch();
-			EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(true);
-		} else {
-			switch_offline_call_push.closeSwitch();
-            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(false);
-		}
 
 		if (settingsModel.isCustomAppkeyEnabled()) {
 			customAppkeySwitch.openSwitch();
@@ -373,18 +364,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 					EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(true);
 				}
 				break;
-		case R.id.rl_switch_offline_call_push:
-				EMLog.d("switch", "" + !switch_offline_call_push.isSwitchOpen());
-				if (switch_offline_call_push.isSwitchOpen()){
-					switch_offline_call_push.closeSwitch();
-					settingsModel.setPushCall(false);
-					EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(false);
-				}else{
-					switch_offline_call_push.openSwitch();
-					settingsModel.setPushCall(true);
-					EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(true);
-				}
-				break;
 			case R.id.btn_logout:
 				logout();
 				break;
@@ -396,6 +375,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				break;
 			case R.id.ll_set_push_nick:
 				startActivity(new Intent(getActivity(), OfflinePushNickActivity.class));
+				break;
+			case R.id.ll_call_option:
+				startActivity(new Intent(getActivity(), CallOptionActivity.class));
 				break;
 			case R.id.ll_user_profile:
 				startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra("setting", true)

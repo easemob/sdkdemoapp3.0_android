@@ -95,6 +95,7 @@
     <string name="black_item">Black list</string>
     <string name="diagnose">Debug</string>
     <string name="push_nick">nickname for Notification</string>
+    <string name="call_option">Call Option</string>
     <string name="Current_version">SDK version</string>
     <string name="Not_Set">Not set</string>
     <string name="Upload_the_log">Uploading the log</string>
