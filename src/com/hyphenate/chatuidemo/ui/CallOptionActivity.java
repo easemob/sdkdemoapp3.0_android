@@ -33,9 +33,9 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
 
         // EMClient.getInstance().callManager().getOptions().xxx set initial values resident at DemoHelper
 
-        // min bit rate
+        // min video kbps
         EditText editMinBitRate = (EditText)findViewById(R.id.edit_min_bit_rate);
-        editMinBitRate.setText("" + PreferenceManager.getInstance().getCallMinBitRate());
+        editMinBitRate.setText("" + PreferenceManager.getInstance().getCallMinVideoKbps());
         editMinBitRate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -43,7 +43,26 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     EMClient.getInstance().callManager().getCallOptions().setMinVideoKbps(new Integer(s.toString()).intValue());
-                    PreferenceManager.getInstance().setCallMinBitRate(new Integer(s.toString()).intValue());
+                    PreferenceManager.getInstance().setCallMinVideoKbps(new Integer(s.toString()).intValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        // max video kbps
+        EditText editMaxBitRate = (EditText)findViewById(R.id.edit_max_bit_rate);
+        editMaxBitRate.setText("" + PreferenceManager.getInstance().getCallMaxVideoKbps());
+        editMaxBitRate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    EMClient.getInstance().callManager().getCallOptions().setMaxVideoKbps(new Integer(s.toString()).intValue());
+                    PreferenceManager.getInstance().setCallMaxVideoKbps(new Integer(s.toString()).intValue());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -274,15 +293,17 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.switch_fix_sample_rate:
+            case R.id.rl_switch_fix_sample_rate:
                 EaseSwitchButton swFixedSampleRate = (EaseSwitchButton)findViewById(R.id.switch_fix_sample_rate);
                 if (swFixedSampleRate.isSwitchOpen()) {
                     EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(false);
                     swFixedSampleRate.closeSwitch();
+                    PreferenceManager.getInstance().setCallFixedSampleRate(false);
 
                 } else {
                     EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(true);
                     swFixedSampleRate.openSwitch();
+                    PreferenceManager.getInstance().setCallFixedSampleRate(true);
                 }
                 break;
             case R.id.rl_switch_offline_call_push:
@@ -290,9 +311,11 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                 if (swOfflineCallPush.isSwitchOpen()) {
                     EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(false);
                     swOfflineCallPush.closeSwitch();
+                    PreferenceManager.getInstance().setPushCall(false);
                 } else {
                     EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(true);
                     swOfflineCallPush.openSwitch();
+                    PreferenceManager.getInstance().setPushCall(true);
                 }
                 break;
             default:

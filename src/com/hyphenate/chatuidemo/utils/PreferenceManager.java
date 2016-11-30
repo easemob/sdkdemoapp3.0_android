@@ -51,7 +51,8 @@ public class PreferenceManager {
 	private static String SHARED_KEY_ENABLE_CUSTOM_APPKEY = "SHARED_KEY_ENABLE_CUSTOM_APPKEY";
 	private static String SHARED_KEY_CUSTOM_APPKEY = "SHARED_KEY_CUSTOM_APPKEY";
 
-	private static String SHARED_KEY_CALL_MIN_BIT_RATE = "SHARED_KEY_CALL_MIN_BIT_RATE";
+	private static String SHARED_KEY_CALL_MIN_VIDEO_KBPS = "SHARED_KEY_CALL_MIN_VIDEO_KBPS";
+	private static String SHARED_KEY_CALL_MAX_VIDEO_KBPS = "SHARED_KEY_CALL_Max_VIDEO_KBPS";
 	private static String SHARED_KEY_CALL_MAX_FRAME_RATE = "SHARED_KEY_CALL_MAX_FRAME_RATE";
 	private static String SHARED_KEY_CALL_AUDIO_SAMPLE_RATE = "SHARED_KEY_CALL_AUDIO_SAMPLE_RATE";
 	private static String SHARED_KEY_CALL_BACK_CAMERA_RESOLUTION = "SHARED_KEY_CALL_BACK_CAMERA_RESOLUTION";
@@ -276,16 +277,30 @@ public class PreferenceManager {
 	 */
 
 	/**
-	 * Min Bit rate
+	 * Min Video kbps
 	 * if no value was set, return -1
 	 * @return
 	 */
-	public int getCallMinBitRate() {
-		return mSharedPreferences.getInt(SHARED_KEY_CALL_MIN_BIT_RATE, -1);
+	public int getCallMinVideoKbps() {
+		return mSharedPreferences.getInt(SHARED_KEY_CALL_MIN_VIDEO_KBPS, -1);
 	}
 
-	public void setCallMinBitRate(int minBitRate) {
-		editor.putInt(SHARED_KEY_CALL_MIN_BIT_RATE, minBitRate);
+	public void setCallMinVideoKbps(int minBitRate) {
+		editor.putInt(SHARED_KEY_CALL_MIN_VIDEO_KBPS, minBitRate);
+		editor.apply();
+	}
+
+	/**
+	 * Max Video kbps
+	 * if no value was set, return -1
+	 * @return
+	 */
+	public int getCallMaxVideoKbps() {
+		return mSharedPreferences.getInt(SHARED_KEY_CALL_MAX_VIDEO_KBPS, -1);
+	}
+
+	public void setCallMaxVideoKbps(int maxBitRate) {
+		editor.putInt(SHARED_KEY_CALL_MAX_VIDEO_KBPS, maxBitRate);
 		editor.apply();
 	}
 
