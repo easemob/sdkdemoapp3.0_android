@@ -164,10 +164,16 @@ public class DemoHelper {
 			getUserProfileManager().init(context);
 
             // TODO: set Call options
-            // min bit rate
-            int minBitRate = PreferenceManager.getInstance().getCallMinBitRate();
+            // min video kbps
+            int minBitRate = PreferenceManager.getInstance().getCallMinVideoKbps();
             if (minBitRate != -1) {
                 EMClient.getInstance().callManager().getCallOptions().setMinVideoKbps(minBitRate);
+            }
+
+            // max video kbps
+            int maxBitRate = PreferenceManager.getInstance().getCallMaxVideoKbps();
+            if (maxBitRate != -1) {
+                EMClient.getInstance().callManager().getCallOptions().setMaxVideoKbps(maxBitRate);
             }
 
             // max frame rate
