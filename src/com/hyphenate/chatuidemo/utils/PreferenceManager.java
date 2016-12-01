@@ -365,11 +365,11 @@ public class PreferenceManager {
 	 *  if no value was set, return false
 	 * @return
      */
-	public boolean isCallFixedVideoSampleRate() {
+	public boolean isCallFixedVideoResolution() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_CALL_FIX_SAMPLE_RATE, false);
 	}
 
-	public void setCallFixedSampleRate(boolean enable) {
+	public void setCallFixedVideoResolution(boolean enable) {
 		editor.putBoolean(SHARED_KEY_CALL_FIX_SAMPLE_RATE, enable);
 		editor.apply();
 	}
