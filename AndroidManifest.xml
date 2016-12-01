@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hyphenate.chatuidemo"
     android:versionCode="36"
-    android:versionName="3.2.1">
+    android:versionName="3.2.2">
 
     <uses-sdk
         android:minSdkVersion="11"
