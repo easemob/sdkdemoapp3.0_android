@@ -204,7 +204,7 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/rl_switch_fix_sample_rate"
+            android:id="@+id/rl_switch_fix_video_resolution"
             android:layout_width="match_parent"
             android:layout_height="50dip"
             android:background="@drawable/em_btn_bottom_selector"
@@ -215,7 +215,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingLeft="10dip"
-                android:text="fix_sample_rate"
+                android:text="fix_video_resolution"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:typeface="serif" />
@@ -223,7 +223,7 @@
             <com.hyphenate.easeui.widget.EaseSwitchButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/switch_fix_sample_rate"
+                android:id="@+id/switch_fix_video_resolution"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true" />
         </RelativeLayout>

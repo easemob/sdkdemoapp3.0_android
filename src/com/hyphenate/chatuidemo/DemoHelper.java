@@ -203,7 +203,7 @@ public class DemoHelper {
             }
 
             // enabled fixed sample rate
-            boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoSampleRate();
+            boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
             EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
 
             // Offline call push

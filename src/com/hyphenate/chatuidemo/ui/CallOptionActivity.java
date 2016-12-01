@@ -101,10 +101,10 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
 
 
         // fixed sample rate
-        RelativeLayout rlSwitchSampleRate = (RelativeLayout)findViewById(R.id.rl_switch_fix_sample_rate);
+        RelativeLayout rlSwitchSampleRate = (RelativeLayout)findViewById(R.id.rl_switch_fix_video_resolution);
         rlSwitchSampleRate.setOnClickListener(this);
-        EaseSwitchButton swFixedSampleRate = (EaseSwitchButton)findViewById(R.id.switch_fix_sample_rate);
-        if (PreferenceManager.getInstance().isCallFixedVideoSampleRate()) {
+        EaseSwitchButton swFixedSampleRate = (EaseSwitchButton)findViewById(R.id.switch_fix_video_resolution);
+        if (PreferenceManager.getInstance().isCallFixedVideoResolution()) {
             swFixedSampleRate.openSwitch();
         } else {
             swFixedSampleRate.closeSwitch();
@@ -293,17 +293,17 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.rl_switch_fix_sample_rate:
-                EaseSwitchButton swFixedSampleRate = (EaseSwitchButton)findViewById(R.id.switch_fix_sample_rate);
-                if (swFixedSampleRate.isSwitchOpen()) {
+            case R.id.rl_switch_fix_video_resolution:
+                EaseSwitchButton swFixedVideoResolution = (EaseSwitchButton)findViewById(R.id.switch_fix_video_resolution);
+                if (swFixedVideoResolution.isSwitchOpen()) {
                     EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(false);
-                    swFixedSampleRate.closeSwitch();
-                    PreferenceManager.getInstance().setCallFixedSampleRate(false);
+                    swFixedVideoResolution.closeSwitch();
+                    PreferenceManager.getInstance().setCallFixedVideoResolution(false);
 
                 } else {
                     EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(true);
-                    swFixedSampleRate.openSwitch();
-                    PreferenceManager.getInstance().setCallFixedSampleRate(true);
+                    swFixedVideoResolution.openSwitch();
+                    PreferenceManager.getInstance().setCallFixedVideoResolution(true);
                 }
                 break;
             case R.id.rl_switch_offline_call_push:
