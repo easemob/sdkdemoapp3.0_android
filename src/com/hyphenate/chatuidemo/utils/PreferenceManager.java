@@ -51,6 +51,14 @@ public class PreferenceManager {
 	private static String SHARED_KEY_ENABLE_CUSTOM_APPKEY = "SHARED_KEY_ENABLE_CUSTOM_APPKEY";
 	private static String SHARED_KEY_CUSTOM_APPKEY = "SHARED_KEY_CUSTOM_APPKEY";
 
+	private static String SHARED_KEY_CALL_MIN_VIDEO_KBPS = "SHARED_KEY_CALL_MIN_VIDEO_KBPS";
+	private static String SHARED_KEY_CALL_MAX_VIDEO_KBPS = "SHARED_KEY_CALL_Max_VIDEO_KBPS";
+	private static String SHARED_KEY_CALL_MAX_FRAME_RATE = "SHARED_KEY_CALL_MAX_FRAME_RATE";
+	private static String SHARED_KEY_CALL_AUDIO_SAMPLE_RATE = "SHARED_KEY_CALL_AUDIO_SAMPLE_RATE";
+	private static String SHARED_KEY_CALL_BACK_CAMERA_RESOLUTION = "SHARED_KEY_CALL_BACK_CAMERA_RESOLUTION";
+	private static String SHARED_KEY_CALL_FRONT_CAMERA_RESOLUTION = "SHARED_KEY_FRONT_CAMERA_RESOLUTIOIN";
+	private static String SHARED_KEY_CALL_FIX_SAMPLE_RATE = "SHARED_KEY_CALL_FIX_SAMPLE_RATE";
+
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
 		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -263,4 +271,107 @@ public class PreferenceManager {
 		editor.remove(SHARED_KEY_CURRENTUSER_AVATAR);
 		editor.apply();
 	}
+
+	/**
+	 * ----------------------------------------- Call Option -----------------------------------------
+	 */
+
+	/**
+	 * Min Video kbps
+	 * if no value was set, return -1
+	 * @return
+	 */
+	public int getCallMinVideoKbps() {
+		return mSharedPreferences.getInt(SHARED_KEY_CALL_MIN_VIDEO_KBPS, -1);
+	}
+
+	public void setCallMinVideoKbps(int minBitRate) {
+		editor.putInt(SHARED_KEY_CALL_MIN_VIDEO_KBPS, minBitRate);
+		editor.apply();
+	}
+
+	/**
+	 * Max Video kbps
+	 * if no value was set, return -1
+	 * @return
+	 */
+	public int getCallMaxVideoKbps() {
+		return mSharedPreferences.getInt(SHARED_KEY_CALL_MAX_VIDEO_KBPS, -1);
+	}
+
+	public void setCallMaxVideoKbps(int maxBitRate) {
+		editor.putInt(SHARED_KEY_CALL_MAX_VIDEO_KBPS, maxBitRate);
+		editor.apply();
+	}
+
+	/**
+	 * Max frame rate
+	 * if no value was set, return -1
+	 * @return
+	 */
+	public int getCallMaxFrameRate() {
+		return mSharedPreferences.getInt(SHARED_KEY_CALL_MAX_FRAME_RATE, -1);
+	}
+
+	public void setCallMaxFrameRate(int maxFrameRate) {
+		editor.putInt(SHARED_KEY_CALL_MAX_FRAME_RATE, maxFrameRate);
+		editor.apply();
+	}
+
+	/**
+	 * audio sample rate
+	 * if no value was set, return -1
+	 * @return
+	 */
+	public int getCallAudioSampleRate() {
+		return mSharedPreferences.getInt(SHARED_KEY_CALL_AUDIO_SAMPLE_RATE, -1);
+	}
+
+	public void setCallAudioSampleRate(int audioSampleRate) {
+		editor.putInt(SHARED_KEY_CALL_AUDIO_SAMPLE_RATE, audioSampleRate);
+		editor.apply();
+	}
+
+	/**
+	 * back camera resolution
+	 * format: 320x240
+	 * if no value was set, return ""
+	 */
+	public String getCallBackCameraResolution() {
+		return mSharedPreferences.getString(SHARED_KEY_CALL_BACK_CAMERA_RESOLUTION, "");
+	}
+
+	public void setCallBackCameraResolution(String resolution) {
+		editor.putString(SHARED_KEY_CALL_BACK_CAMERA_RESOLUTION, resolution);
+		editor.apply();
+	}
+
+	/**
+	 * front camera resolution
+	 * format: 320x240
+	 * if no value was set, return ""
+	 */
+	public String getCallFrontCameraResolution() {
+		return mSharedPreferences.getString(SHARED_KEY_CALL_FRONT_CAMERA_RESOLUTION, "");
+	}
+
+	public void setCallFrontCameraResolution(String resolution) {
+		editor.putString(SHARED_KEY_CALL_FRONT_CAMERA_RESOLUTION, resolution);
+		editor.apply();
+	}
+
+	/**
+	 * fixed video sample rate
+	 *  if no value was set, return false
+	 * @return
+     */
+	public boolean isCallFixedVideoResolution() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_CALL_FIX_SAMPLE_RATE, false);
+	}
+
+	public void setCallFixedVideoResolution(boolean enable) {
+		editor.putBoolean(SHARED_KEY_CALL_FIX_SAMPLE_RATE, enable);
+		editor.apply();
+	}
+
 }

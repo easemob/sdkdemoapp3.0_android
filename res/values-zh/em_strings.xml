@@ -98,6 +98,7 @@
     <string name="black_item">黑名单</string>
     <string name="diagnose">诊断</string>
     <string name="push_nick">iOS离线推送昵称</string>
+    <string name="call_option">通话设置</string>
     <string name="Current_version">当前版本</string>
     <string name="Not_Set">未设置</string>
     <string name="Upload_the_log">上传日志中</string>

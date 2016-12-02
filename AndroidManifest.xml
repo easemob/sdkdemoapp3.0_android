@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hyphenate.chatuidemo"
     android:versionCode="36"
-    android:versionName="3.2.1">
+    android:versionName="3.2.2">
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -45,8 +45,6 @@
         android:protectionLevel="signatureOrSystem" />
 
     <uses-permission android:name="com.hyphenate.chatuidemo.permission.MIPUSH_RECEIVE" />
-
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".DemoApplication"
@@ -269,6 +267,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             />
+
+        <activity
+            android:name=".ui.CallOptionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide" />
 
         <!-- 红包相关Activity start -->
         <!-- 发红包 -->
