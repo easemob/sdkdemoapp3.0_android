@@ -129,7 +129,7 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
             Camera.Parameters parameters = mCameraDevice.getParameters();
 
             final List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
-            List<String> strSizes = new ArrayList<>();
+            List<String> strSizes = new ArrayList<String>();
             strSizes.add("Not Set");
 
             for (Camera.Size size : sizes) {
@@ -234,7 +234,7 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
     }
 
     void initAudioSampleRateSpinner(int spinnerId) {
-        final List<String> sampleRateList = new ArrayList<>();
+        final List<String> sampleRateList = new ArrayList<String>();
         sampleRateList.add("Not set");
         sampleRateList.add("8000Hz");
         sampleRateList.add("11025Hz");
