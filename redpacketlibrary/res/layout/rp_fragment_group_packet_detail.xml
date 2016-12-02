@@ -3,7 +3,7 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/money_white"
+                android:background="@color/rp_money_white"
     >
 
     <com.easemob.redpacketui.recyclerview.widget.RecyclerView

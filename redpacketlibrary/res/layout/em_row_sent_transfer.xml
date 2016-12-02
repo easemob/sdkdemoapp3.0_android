@@ -5,11 +5,12 @@
               android:gravity="center_horizontal"
               android:orientation="vertical"
               android:paddingTop="13dp">
+
     <TextView
         android:id="@+id/timestamp"
         style="@style/chat_text_date_style"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -38,18 +39,19 @@
 
             <ImageView
                 android:id="@+id/iv_money_icon"
-                android:src="@drawable/em_transfer_icon"
                 style="@style/RedPacketIconStyle"
+                android:src="@drawable/em_transfer_icon"
                 />
 
             <TextView
                 android:id="@+id/tv_money_greeting"
                 style="@style/RedPacketGreetingStyle"
                 android:text="@string/easemob_transfer_msg_sent"/>
+
             <TextView
                 android:id="@+id/tv_transfer_received"
-                android:text=""
                 style="@style/RedPacketCheckStyle"
+                android:text=""
                 />
 
             <RelativeLayout
@@ -62,17 +64,7 @@
                     android:id="@+id/tv_transfer_sponsor_name"
                     style="@style/RedPacketSponsorStyle"
                     android:text="@string/attach_transfer_money"/>
-                <TextView
-                    android:id="@+id/tv_packet_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="3dp"
-                    android:textSize="12sp"
-                    android:visibility="gone"
-                    android:textColor="@color/top_red_color"
-                    />
+
                 <ImageView
                     style="@style/RedPacketSponsorIconStyle"
                     />

@@ -33,7 +33,7 @@
         android:id="@+id/pay_type_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/money_bg_color"
+        android:background="@color/rp_money_bg_color"
         android:scrollbars="vertical"
         />
 
