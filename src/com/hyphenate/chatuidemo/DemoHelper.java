@@ -165,10 +165,54 @@ public class DemoHelper {
 			PreferenceManager.init(context);
 			//initialize profile manager
 			getUserProfileManager().init(context);
-			
-			EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
 
-			setGlobalListeners();
+            // TODO: set Call options
+            // min video kbps
+            int minBitRate = PreferenceManager.getInstance().getCallMinVideoKbps();
+            if (minBitRate != -1) {
+                EMClient.getInstance().callManager().getCallOptions().setMinVideoKbps(minBitRate);
+            }
+
+            // max video kbps
+            int maxBitRate = PreferenceManager.getInstance().getCallMaxVideoKbps();
+            if (maxBitRate != -1) {
+                EMClient.getInstance().callManager().getCallOptions().setMaxVideoKbps(maxBitRate);
+            }
+
+            // max frame rate
+            int maxFrameRate = PreferenceManager.getInstance().getCallMaxFrameRate();
+            if (maxFrameRate != -1) {
+                EMClient.getInstance().callManager().getCallOptions().setMaxVideoFrameRate(maxFrameRate);
+            }
+
+            // audio sample rate
+            int audioSampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
+            if (audioSampleRate != -1) {
+                EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
+            }
+
+            // resolution
+            String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
+            if (resolution.equals("")) {
+                resolution = PreferenceManager.getInstance().getCallFrontCameraResolution();
+            }
+            String[] wh = resolution.split("x");
+            if (wh.length == 2) {
+                try {
+                    EMClient.getInstance().callManager().getCallOptions().setVideoResolution(new Integer(wh[0]).intValue(), new Integer(wh[1]).intValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // enabled fixed sample rate
+            boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
+            EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
+
+            // Offline call push
+            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
+
+            setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
 	        initDbDao();
 		}
@@ -210,7 +254,6 @@ public class DemoHelper {
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
-
 
         return options;
     }
