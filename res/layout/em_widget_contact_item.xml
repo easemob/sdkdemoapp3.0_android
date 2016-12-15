@@ -23,7 +23,7 @@
         android:background="@drawable/ease_mm_listitem"
         android:duplicateParentState="true" >
 
-        <ImageView
+        <com.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/avatar"
             android:layout_width="43dp"
             android:layout_height="43dp"

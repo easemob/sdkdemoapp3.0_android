@@ -78,6 +78,7 @@
     <string name="shake">震动</string>
     <string name="chatset">聊天设置</string>
     <string name="yangshengqi">使用扬声器播放语音</string>
+    <string name="push_settings">消息推送设置</string>
     <string name="book_black">通讯录黑名单</string>
     <string name="set_custom_appkey">自定义App key</string>
     <string name="set_custom_server">自定义server</string>
@@ -112,6 +113,7 @@
     <string name="serach_group_message">消息搜索</string>
     <string name="Empty_the_chat_record">清空聊天记录</string>
     <string name="Shielding_of_the_message">屏蔽群消息</string>
+    <string name="block_offline_group_push">屏蔽离线消息推送</string>
     <string name="dismiss_group">解散群聊</string>
     <string name="Select_the_contact">选择联系人</string>
     <string name="Group_chat_information">群聊资料</string>
@@ -340,4 +342,11 @@
     <!-- lint -->
     <string name="delete_contact">删除联系人</string>
     <string name="loading_more">正在加载更多...</string>
+
+    <string name="push_no_disturb">推送消息免打扰(针对GCM、小米、华为等推送)</string>
+    <string name="push_no_disturb_on">开启</string>
+    <string name="push_only_on">只在夜间开启(22:00 - 7:00)</string>
+    <string name="push_no_disturb_off">关闭</string>
+    <string name="push_saving_settings">正在保存...</string>
+    <string name="push_save_failed">保存失败</string>
 </resources>

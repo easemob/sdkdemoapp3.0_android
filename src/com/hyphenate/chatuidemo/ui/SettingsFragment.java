@@ -91,6 +91,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	private RelativeLayout rl_custom_appkey;
     private RelativeLayout rl_custom_server;
 	private RelativeLayout rl_switch_offline_call_push;
+	RelativeLayout rl_push_settings;
 
 	/**
 	 * Diagnose
@@ -137,7 +138,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_custom_appkey = (RelativeLayout) getView().findViewById(R.id.rl_custom_appkey);
 		rl_custom_server = (RelativeLayout) getView().findViewById(R.id.rl_custom_server);
 		rl_switch_offline_call_push =  (RelativeLayout) getView().findViewById(R.id.rl_switch_offline_call_push);
-		
+		rl_push_settings = (RelativeLayout) getView().findViewById(R.id.rl_push_settings);
+
 		notifySwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
 		soundSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_sound);
 		vibrateSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_vibrate);
@@ -184,6 +186,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_auto_accept_group_invitation.setOnClickListener(this);
 		rl_switch_adaptive_video_encode.setOnClickListener(this);
 		rl_switch_offline_call_push.setOnClickListener(this);
+		rl_push_settings.setOnClickListener(this);
 		llChange.setOnClickListener(this);
 
 		// the vibrate and sound notification are allowed or not?
@@ -422,6 +425,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				break;
 			case R.id.rl_custom_server:
 				startActivity(new Intent(getActivity(), SetServersActivity.class));
+				break;
+			case R.id.rl_push_settings:
+				startActivity(new Intent(getActivity(), OfflinePushSettingsActivity.class));
 				break;
 			default:
 				break;
