@@ -13,24 +13,6 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hyphenate.EMGroupChangeListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMConversation.EMConversationType;
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chatuidemo.R;
-import com.hyphenate.easeui.utils.EaseUserUtils;
-import com.hyphenate.easeui.widget.EaseAlertDialog;
-import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
-import com.hyphenate.easeui.widget.EaseExpandGridView;
-import com.hyphenate.easeui.widget.EaseSwitchButton;
-import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.util.EMLog;
-import com.hyphenate.util.NetUtils;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -51,6 +33,25 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hyphenate.EMGroupChangeListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMConversation.EMConversationType;
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMPushConfigs;
+import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
+import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
+import com.hyphenate.easeui.widget.EaseExpandGridView;
+import com.hyphenate.easeui.widget.EaseSwitchButton;
+import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
+import com.hyphenate.util.NetUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupDetailsActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "GroupDetailsActivity";
@@ -73,6 +74,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	String st = "";
 
 	private EaseSwitchButton switchButton;
+	private EaseSwitchButton offlinePushSwitch;
+	private EMPushConfigs pushConfigs;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +109,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		switchButton = (EaseSwitchButton) findViewById(R.id.switch_btn);
 		RelativeLayout searchLayout = (RelativeLayout) findViewById(R.id.rl_search);
 
+		RelativeLayout blockOfflineLayout = (RelativeLayout) findViewById(R.id.rl_switch_block_offline_message);
+		offlinePushSwitch = (EaseSwitchButton) findViewById(R.id.switch_block_offline_message);
 
 		idText.setText(groupId);
 		if (group.getOwner() == null || "".equals(group.getOwner())
@@ -119,6 +125,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.VISIBLE);
 		}
+
+		//get push configs
+		pushConfigs = EMClient.getInstance().pushManager().getPushConfigs();
 
 		GroupChangeListener groupChangeListener = new GroupChangeListener();
 		EMClient.getInstance().groupManager().addGroupChangeListener(groupChangeListener);
@@ -162,6 +171,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		changeGroupNameLayout.setOnClickListener(this);
 		rl_switch_block_groupmsg.setOnClickListener(this);
         searchLayout.setOnClickListener(this);
+		blockOfflineLayout.setOnClickListener(this);
 	}
 
 	@Override
@@ -310,7 +320,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	/**
 	 * 退出群组
 	 * 
-	 * @param groupId
 	 */
 	private void exitGrop() {
 		String st1 = getResources().getString(R.string.Exit_the_group_chat_failure);
@@ -342,7 +351,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	/**
 	 * 解散群组
 	 * 
-	 * @param groupId
 	 */
 	private void deleteGrop() {
 		final String st5 = getResources().getString(R.string.Dissolve_group_chat_tofail);
@@ -412,39 +420,94 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.rl_switch_block_groupmsg: // 屏蔽或取消屏蔽群组
-			toggleBlockGroup();
-			break;
+			case R.id.rl_switch_block_groupmsg: // 屏蔽或取消屏蔽群组
+				toggleBlockGroup();
+				break;
 
-		case R.id.clear_all_history: // 清空聊天记录
-			String st9 = getResources().getString(R.string.sure_to_empty_this);
-			new EaseAlertDialog(GroupDetailsActivity.this, null, st9, null, new AlertDialogUser() {
-                
-                @Override
-                public void onResult(boolean confirmed, Bundle bundle) {
-                    if(confirmed){
-                        clearGroupHistory();
-                    }
-                }
-            }, true).show();
-			
-			break;
+			case R.id.clear_all_history: // 清空聊天记录
+				String st9 = getResources().getString(R.string.sure_to_empty_this);
+				new EaseAlertDialog(GroupDetailsActivity.this, null, st9, null, new AlertDialogUser() {
 
-		case R.id.rl_blacklist: // 黑名单列表
-			startActivity(new Intent(GroupDetailsActivity.this, GroupBlacklistActivity.class).putExtra("groupId", groupId));
-			break;
+					@Override
+					public void onResult(boolean confirmed, Bundle bundle) {
+						if(confirmed){
+							clearGroupHistory();
+						}
+					}
+				}, true).show();
 
-		case R.id.rl_change_group_name:
-			startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", group.getGroupName()), REQUEST_CODE_EDIT_GROUPNAME);
-			break;
-		case R.id.rl_search:
-            startActivity(new Intent(this, GroupSearchMessageActivity.class).putExtra("groupId", groupId));
-            
-            break;
-		default:
-			break;
+				break;
+
+			case R.id.rl_blacklist: // 黑名单列表
+				startActivity(new Intent(GroupDetailsActivity.this, GroupBlacklistActivity.class).putExtra("groupId", groupId));
+				break;
+
+			case R.id.rl_change_group_name:
+				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", group.getGroupName()), REQUEST_CODE_EDIT_GROUPNAME);
+				break;
+			case R.id.rl_search:
+				startActivity(new Intent(this, GroupSearchMessageActivity.class).putExtra("groupId", groupId));
+
+				break;
+			case R.id.rl_switch_block_offline_message:
+				toggleBlockOfflineMsg();
+				break;
+			default:
+				break;
 		}
 
+	}
+
+	private void toggleBlockOfflineMsg() {
+		if(EMClient.getInstance().pushManager().getPushConfigs() == null){
+			return;
+		}
+		createProgressDialog();
+		progressDialog.setMessage("processing...");
+		progressDialog.show();
+//		final ArrayList list = (ArrayList) Arrays.asList(groupId);
+				final List<String> list = new ArrayList<>();
+		list.add(groupId);
+		new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(offlinePushSwitch.isSwitchOpen()) {
+                        EMClient.getInstance().pushManager().updatePushServiceForGroup(list, false);
+                    }else{
+                        EMClient.getInstance().pushManager().updatePushServiceForGroup(list, true);
+                    }
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+							if(offlinePushSwitch.isSwitchOpen()){
+								offlinePushSwitch.closeSwitch();
+							}else{
+								offlinePushSwitch.openSwitch();
+							}
+						}
+					});
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+							Toast.makeText(GroupDetailsActivity.this, "progress failed", Toast.LENGTH_SHORT).show();
+						}
+					});
+                }
+            }
+        }).start();
+	}
+
+	private ProgressDialog createProgressDialog(){
+		if (progressDialog == null) {
+			progressDialog = new ProgressDialog(GroupDetailsActivity.this);
+			progressDialog.setCanceledOnTouchOutside(false);
+		}
+		return progressDialog;
 	}
 
 	private void toggleBlockGroup() {
@@ -513,6 +576,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		    }).start();
 		}
 	}
+
 
 	/**
 	 * 群组成员gridadapter
@@ -640,10 +704,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							deleteMembersFromGroup(username);
 						} else {
 							// 正常情况下点击user，可以进入用户详情或者聊天页面等等
-							// startActivity(new
-							// Intent(GroupDetailsActivity.this,
-							// ChatActivity.class).putExtra("userId",
-							// user.getUsername()));
 
 						}
 					}
@@ -725,6 +785,10 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		new Thread(new Runnable() {
 			public void run() {
 				try {
+					if(pushConfigs == null){
+						EMClient.getInstance().pushManager().getPushConfigsFromServer();
+					}
+
 				    EMClient.getInstance().groupManager().getGroupFromServer(groupId);
 					
 					runOnUiThread(new Runnable() {
@@ -750,6 +814,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							} else {
 							    switchButton.closeSwitch();
 							}
+							List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
+							if(disabledIds != null && disabledIds.contains(groupId)){
+								offlinePushSwitch.openSwitch();
+							}else{
+								offlinePushSwitch.closeSwitch();
+							}
+
 						}
 					});
 
@@ -762,6 +833,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		}).start();
+
 	}
 
 	public void back(View view) {

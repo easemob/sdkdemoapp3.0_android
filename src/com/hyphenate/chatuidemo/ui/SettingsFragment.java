@@ -43,6 +43,8 @@ import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.easeui.widget.EaseSwitchButton;
 import com.hyphenate.util.EMLog;
 
+import static com.android.volley.Request.Method.HEAD;
+
 /**
  * settings screen
  * 
@@ -90,6 +92,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private RelativeLayout rl_switch_adaptive_video_encode;
 	private RelativeLayout rl_custom_appkey;
     private RelativeLayout rl_custom_server;
+	private RelativeLayout rl_switch_offline_call_push;
+	RelativeLayout rl_push_settings;
 	private LinearLayout   ll_call_option;
 
 	/**
@@ -135,6 +139,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_adaptive_video_encode = (RelativeLayout) getView().findViewById(R.id.rl_switch_adaptive_video_encode);
 		rl_custom_appkey = (RelativeLayout) getView().findViewById(R.id.rl_custom_appkey);
 		rl_custom_server = (RelativeLayout) getView().findViewById(R.id.rl_custom_server);
+		rl_switch_offline_call_push =  (RelativeLayout) getView().findViewById(R.id.rl_switch_offline_call_push);
+		rl_push_settings = (RelativeLayout) getView().findViewById(R.id.rl_push_settings);
+
 		ll_call_option = (LinearLayout) getView().findViewById(R.id.ll_call_option);
 		
 		notifySwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
@@ -181,6 +188,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_delete_msg_when_exit_group.setOnClickListener(this);
 		rl_switch_auto_accept_group_invitation.setOnClickListener(this);
 		rl_switch_adaptive_video_encode.setOnClickListener(this);
+		rl_switch_offline_call_push.setOnClickListener(this);
+		rl_push_settings.setOnClickListener(this);
 		ll_call_option.setOnClickListener(this);
 		llChange.setOnClickListener(this);
 
@@ -404,6 +413,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				break;
 			case R.id.rl_custom_server:
 				startActivity(new Intent(getActivity(), SetServersActivity.class));
+				break;
+			case R.id.rl_push_settings:
+				startActivity(new Intent(getActivity(), OfflinePushSettingsActivity.class));
 				break;
 			default:
 				break;
