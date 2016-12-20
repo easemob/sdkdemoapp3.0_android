@@ -1,0 +1,107 @@
+obj/local/arm64-v8a/objs/hyphenate/protocol/generated/jid.pb.o: \
+ jni/../../emclient-linux/protocol/generated/jid.pb.cc \
+ jni/../../emclient-linux/protocol/generated/jid.pb.h \
+ E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/string \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/common.h \
+ E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/assert.h \
+ E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/stdlib.h \
+ E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/alloca.h \
+ E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/strings.h \
+ E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/memory.h \
+ E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstddef \
+ jni/../../emclient-linux/include/emdefines.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/generated_message_util.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/once.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/atomicops.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/platform_macros.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/atomicops_internals_arm64_gcc.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/message_lite.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/repeated_field.h \
+ E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/type_traits.h \
+ E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/utility \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/template_util.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/extension_set.h \
+ E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/vector \
+ E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/map \
+ E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/algorithm \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/io/coded_stream.h \
+ E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/sys/param.h \
+ E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/linux/param.h \
+ E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/asm/param.h \
+ E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/asm-generic/param.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/wire_format_lite_inl.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/wire_format_lite.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/io/zero_copy_stream_impl_lite.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/io/zero_copy_stream.h \
+ jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/stl_util.h
+
+jni/../../emclient-linux/protocol/generated/jid.pb.h:
+
+E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/string:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/common.h:
+
+E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/assert.h:
+
+E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/stdlib.h:
+
+E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/alloca.h:
+
+E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/strings.h:
+
+E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/memory.h:
+
+E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/cstddef:
+
+jni/../../emclient-linux/include/emdefines.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/generated_message_util.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/once.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/atomicops.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/platform_macros.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/atomicops_internals_arm64_gcc.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/message_lite.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/repeated_field.h:
+
+E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/iterator:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/type_traits.h:
+
+E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/utility:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/template_util.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/extension_set.h:
+
+E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/vector:
+
+E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/map:
+
+E:/work/NDK/android-ndk-r10e/sources/cxx-stl/gnu-libstdc++/4.9/include/algorithm:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/io/coded_stream.h:
+
+E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/sys/param.h:
+
+E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/linux/param.h:
+
+E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/asm/param.h:
+
+E:/work/NDK/android-ndk-r10e/platforms/android-21/arch-arm64/usr/include/asm-generic/param.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/wire_format_lite_inl.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/wire_format_lite.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/io/zero_copy_stream_impl_lite.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/io/zero_copy_stream.h:
+
+jni/../../emclient-linux/3rd_party/protobuf/google/protobuf/stubs/stl_util.h:

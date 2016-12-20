@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+// ============== fabric start
+//apply plugin: 'io.fabric'
+// ============== fabric end
+
+// ============== fabric start
+//repositories {
+//    maven { url 'https://maven.fabric.io/public' }
+//}
+// ============== fabric end
+
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
+
+    defaultConfig {
+        applicationId "com.hyphenate.chatuidemo"
+        minSdkVersion 11
+        targetSdkVersion 22
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile project(':redpacketlibrary')
+    compile project(':easeui')
+    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-multidex.jar')
+    //考虑到在eclipse中,直接使用源码
+//    compile ('com.anthonycr.grant:permissions:1.0'){
+//        exclude module: 'support-v4'
+//    }
+// ============== fabric start
+//    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
+//        transitive = true;
+//    }
+// ============== fabric end
+}
