@@ -41,10 +41,10 @@ import com.hyphenate.chatuidemo.ui.MainActivity;
 import com.hyphenate.chatuidemo.ui.VideoCallActivity;
 import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
-import com.hyphenate.easeui.EaseUI;
-import com.hyphenate.easeui.EaseUI.EaseEmojiconInfoProvider;
-import com.hyphenate.easeui.EaseUI.EaseSettingsProvider;
-import com.hyphenate.easeui.EaseUI.EaseUserProfileProvider;
+import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.controller.EaseUI.EaseSettingsProvider;
+import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
+import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -156,9 +156,6 @@ public class DemoHelper {
 		    EMClient.getInstance().setDebugMode(true);
 		    //get easeui instance
 		    easeUI = EaseUI.getInstance();
-//            EaseAvatarOptions avatarOptions = new EaseAvatarOptions();
-//            avatarOptions.setAvatarShape(1);
-//            easeUI.setAvatarOptions(avatarOptions);
 		    //to set user's profile and avatar
 		    setEaseUIProviders();
 			//initialize preference manager
