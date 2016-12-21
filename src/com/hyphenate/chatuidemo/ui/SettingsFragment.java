@@ -234,10 +234,10 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		
 		if (settingsModel.isAdaptiveVideoEncode()) {
             switch_adaptive_video_encode.openSwitch();
-            EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(true);
+			EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(false);
         } else {
             switch_adaptive_video_encode.closeSwitch();
-            EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(false);
+			EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(true);
         }
 
 		if(settingsModel.isCustomServerEnable()){
@@ -357,11 +357,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				if (switch_adaptive_video_encode.isSwitchOpen()){
 					switch_adaptive_video_encode.closeSwitch();
 					settingsModel.setAdaptiveVideoEncode(false);
-					EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(false);
+					EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(true);
+
 				}else{
 					switch_adaptive_video_encode.openSwitch();
 					settingsModel.setAdaptiveVideoEncode(true);
-					EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(true);
+					EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(false);
 				}
 				break;
 			case R.id.btn_logout:
