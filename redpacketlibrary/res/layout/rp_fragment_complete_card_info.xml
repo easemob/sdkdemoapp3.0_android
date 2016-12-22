@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/money_bg_color"
+                android:background="@color/rp_money_bg_color"
                 android:orientation="vertical"
     >
 
@@ -31,8 +31,8 @@
             android:layout_marginLeft="@dimen/size45px"
             android:layout_toRightOf="@id/tv_add_bankcard_number"
             android:gravity="center_vertical"
-            android:text="1234455"
-            android:textColor="@color/text_light_grey"
+            android:text=""
+            android:textColor="@color/rp_text_light_grey"
             android:textSize="@dimen/font45px"
             />
 
@@ -43,8 +43,8 @@
         android:id="@+id/tv_add_bankcard_name"
         style="@style/BindBankCardTextViewStyle"
         android:layout_below="@id/layout_withdraw_card_no"
-        android:text="中国工商银行"
-        android:textColor="@color/text_light_grey"
+        android:text=""
+        android:textColor="@color/rp_text_light_grey"
         android:textSize="@dimen/font36px"
         />
 

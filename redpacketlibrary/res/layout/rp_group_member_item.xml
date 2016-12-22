@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/size132px"
-                android:background="@color/background_white"
+                android:background="@color/rp_background_white"
                 android:paddingLeft="@dimen/size45px"
     >
 
@@ -13,7 +13,6 @@
         android:layout_width="@dimen/size96px"
         android:layout_height="@dimen/size96px"
         android:layout_centerVertical="true"
-        android:background="@drawable/rp_bg_circular"
         />
 
     <TextView
@@ -26,7 +25,7 @@
         android:ellipsize="end"
         android:maxEms="11"
         android:maxLines="1"
-        android:textColor="@color/text_black"
+        android:textColor="@color/rp_text_black"
         android:textSize="@dimen/font48px"
         />
 
@@ -35,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_alignParentBottom="true"
-        android:background="@color/divider_color"
+        android:background="@color/rp_divider_color"
         android:visibility="gone"
         />
 

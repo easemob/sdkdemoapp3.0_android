@@ -44,9 +44,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:singleLine="true"
+                android:maxLines="1"
                 android:text="@string/choose_pay_no_limit"
-                android:textColor="@color/text_unselected"
+                android:textColor="@color/rp_text_unselected"
                 android:textSize="@dimen/font33px"
                 />
         </LinearLayout>
