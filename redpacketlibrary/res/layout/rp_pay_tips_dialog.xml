@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size114px"
         android:gravity="center"
-        android:textColor="@color/text_black"
+        android:textColor="@color/rp_text_black"
         android:textSize="@dimen/font48px" />
 
     <LinearLayout
@@ -28,7 +28,7 @@
             android:layout_marginLeft="@dimen/size99px"
             android:layout_marginRight="@dimen/size99px"
             android:layout_marginTop="@dimen/size57px"
-            android:textColor="@color/text_grey"
+            android:textColor="@color/rp_text_grey"
             android:textSize="@dimen/font39px" />
 
     </LinearLayout>
@@ -48,14 +48,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/btn_cancel"
-            android:textColor="@color/button_blue"
+            android:textColor="@color/rp_button_blue"
             android:textSize="@dimen/font48px" />
 
         <View
             android:id="@+id/dialog_hint_divider"
             android:layout_width="1px"
             android:layout_height="match_parent"
-            android:background="@color/divider_color" />
+            android:background="@color/rp_divider_color" />
 
         <TextView
             android:id="@+id/btn_ok"
@@ -64,7 +64,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/btn_ok"
-            android:textColor="@color/button_blue"
+            android:textColor="@color/rp_button_blue"
             android:textSize="@dimen/font48px" />
     </LinearLayout>
 

@@ -45,9 +45,11 @@ RecyclerView's bounds.-->
     <dimen name="size21px">7dp</dimen>
     <dimen name="font90px">30sp</dimen>
     <dimen name="size51px">17dp</dimen>
+    <dimen name="size54px">18dp</dimen>
     <dimen name="font33px">11sp</dimen>
-    <dimen name="size66px">23dp</dimen>
+    <dimen name="size66px">22dp</dimen>
     <dimen name="size63px">21dp</dimen>
+    <dimen name="size117px">39dp</dimen>
     <dimen name="size120px">40dp</dimen>
     <dimen name="size141px">47dp</dimen>
     <dimen name="size144px">48dp</dimen>
@@ -74,5 +76,6 @@ RecyclerView's bounds.-->
     <dimen name="size198px">66dp</dimen>
     <dimen name="size201px">67dp</dimen>
     <dimen name="size204px">68dp</dimen>
+    <dimen name="size210px">70dp</dimen>
     <dimen name="size225px">75dp</dimen>
 </resources>

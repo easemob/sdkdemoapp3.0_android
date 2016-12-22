@@ -3,7 +3,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/money_bg_color"
+                android:background="@color/rp_money_bg_color"
     >
 
     <com.easemob.redpacketui.widget.RPTitleBar
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:RPleftImage="@drawable/rp_back_arrow_yellow"
-        app:RPmytitle="@string/money_record_title"
+        app:RPmytitle="@string/money_received_text"
         app:RPrightText="@string/my_money"
         />
 
