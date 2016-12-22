@@ -13,6 +13,7 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,6 +57,7 @@ public class RobotsActivity extends BaseActivity {
 	private SwipeRefreshLayout swipeRefreshLayout;
 
 	@Override
+    @TargetApi(14)
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		setContentView(R.layout.em_fragment_robots);

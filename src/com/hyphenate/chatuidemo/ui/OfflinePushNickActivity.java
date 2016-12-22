@@ -44,7 +44,7 @@ public class OfflinePushNickActivity extends BaseActivity {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						boolean updatenick = EMClient.getInstance().updateCurrentUserNick(
+						boolean updatenick = EMClient.getInstance().pushManager().updateCurrentUserNick(
 								inputNickName.getText().toString());
 						if (!updatenick) {
 							runOnUiThread(new Runnable() {

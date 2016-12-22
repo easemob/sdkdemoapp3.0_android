@@ -58,7 +58,7 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private String getVersionName() throws Exception {
-		return EMClient.getInstance().getChatConfig().getVersion();
+		return EMClient.getInstance().VERSION;
 	}
 
 	@Override

@@ -19,6 +19,7 @@ import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
@@ -99,7 +100,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         // the first width*height is Y, second part is UV
         // the storage layout detailed please refer 2.x demo CameraHelper.onPreviewFrame
         @Override
-        public synchronized void onProcessData(byte[] data, Camera camera, int width, int height) {
+        public synchronized void onProcessData(byte[] data, Camera camera, final int width, final int height, final int rotateAngel) {
             int wh = width * height;
             for (int i = 0; i < wh; i++) {
                 int d = (data[i] & 0xFF) + yDelta;
@@ -189,6 +190,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             callStateTextView.setText(st);
             EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
             handler.sendEmptyMessage(MSG_CALL_MAKE_VIDEO);
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    streamID = playMakeCallSounds();
+                }
+            }, 300);
         } else { // incoming call
 
             if(EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.IDLE
@@ -565,7 +571,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         case R.id.btn_capture_image:
             DateFormat df = DateFormat.getDateTimeInstance();
             Date d = new Date();
-            final String filename = "/sdcard/" + df.format(d) + ".jpg";
+            final String filename = Environment.getExternalStorageDirectory() + df.format(d) + ".jpg";
             EMClient.getInstance().callManager().getVideoCallHelper().takePicture(filename);
             runOnUiThread(new Runnable() {
                 @Override

@@ -47,7 +47,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 EMConversation conversation = conversationListView.getItem(position);
-                String username = conversation.getUserName();
+                String username = conversation.conversationId();
                 if (username.equals(EMClient.getInstance().getCurrentUser()))
                     Toast.makeText(getActivity(), R.string.Cant_chat_with_yourself, Toast.LENGTH_SHORT).show();
                 else {
@@ -132,13 +132,13 @@ public class ConversationListFragment extends EaseConversationListFragment{
     	    return true;
     	}
         if(tobeDeleteCons.getType() == EMConversationType.GroupChat){
-            EaseAtMessageHelper.get().removeAtMeGroup(tobeDeleteCons.getUserName());
+            EaseAtMessageHelper.get().removeAtMeGroup(tobeDeleteCons.conversationId());
         }
         try {
             // delete conversation
-            EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.getUserName(), deleteMessage);
+            EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.conversationId(), deleteMessage);
             InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
-            inviteMessgeDao.deleteMessage(tobeDeleteCons.getUserName());
+            inviteMessgeDao.deleteMessage(tobeDeleteCons.conversationId());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -467,7 +467,7 @@ public class RedPacketUtil {
         cmdMsg.setChatType(EMMessage.ChatType.Chat);
         EMCmdMessageBody cmdBody = new EMCmdMessageBody(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         cmdMsg.addBody(cmdBody);
-        cmdMsg.setReceipt(senderId);
+        cmdMsg.setTo(senderId);
         //设置扩展属性
         cmdMsg.setAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);
         cmdMsg.setAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickname);

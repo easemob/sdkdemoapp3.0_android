@@ -64,8 +64,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	private LinearLayout voiceContronlLayout;
     private TextView netwrokStatusVeiw;
     private boolean monitor = false;
-	
-	@Override
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if(savedInstanceState != null){
@@ -77,7 +77,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 		DemoHelper.getInstance().isVoiceCalling = true;
 		callType = 0;
 
-		comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
+        comingBtnContainer = (LinearLayout) findViewById(R.id.ll_coming_call);
 		refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
 		answerBtn = (Button) findViewById(R.id.btn_answer_call);
 		hangupBtn = (Button) findViewById(R.id.btn_hangup_call);
@@ -115,7 +115,12 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			st1 = getResources().getString(R.string.Are_connected_to_each_other);
 			callStateTextView.setText(st1);
 			handler.sendEmptyMessage(MSG_CALL_MAKE_VOICE);
-		} else { // incoming call
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    streamID = playMakeCallSounds();
+                }
+            }, 300);
+        } else { // incoming call
 			voiceContronlLayout.setVisibility(View.INVISIBLE);
 			Uri ringUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 			audioManager.setMode(AudioManager.MODE_RINGTONE);

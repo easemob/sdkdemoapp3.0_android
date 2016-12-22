@@ -42,8 +42,8 @@ public class SplashActivity extends BaseActivity {
 				if (DemoHelper.getInstance().isLoggedIn()) {
 					// auto login mode, make sure all group and conversation is loaed before enter the main screen
 					long start = System.currentTimeMillis();
-					EMClient.getInstance().groupManager().loadAllGroups();
 					EMClient.getInstance().chatManager().loadAllConversations();
+					EMClient.getInstance().groupManager().loadAllGroups();
 					long costTime = System.currentTimeMillis() - start;
 					//wait
 					if (sleepTime - costTime > 0) {
@@ -79,6 +79,6 @@ public class SplashActivity extends BaseActivity {
 	 * get sdk version
 	 */
 	private String getVersion() {
-	    return EMClient.getInstance().getChatConfig().getVersion();
+	    return EMClient.getInstance().VERSION;
 	}
 }

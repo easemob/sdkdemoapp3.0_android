@@ -78,6 +78,7 @@
     <string name="shake">Vibrate</string>
     <string name="chatset">Chat settings</string>
     <string name="yangshengqi">Use speaker</string>
+    <string name="push_settings">Message push settings</string>
     <string name="book_black">Black list</string>
     <string name="set_custom_appkey">Set custom App key</string>
     <string name="set_custom_server">Set custom servers</string>
@@ -95,6 +96,7 @@
     <string name="black_item">Black list</string>
     <string name="diagnose">Debug</string>
     <string name="push_nick">nickname for Notification</string>
+    <string name="call_option">Call Option</string>
     <string name="Current_version">SDK version</string>
     <string name="Not_Set">Not set</string>
     <string name="Upload_the_log">Uploading the log</string>
@@ -112,6 +114,7 @@
     <string name="serach_group_message">Search messages</string>
     <string name="Empty_the_chat_record">Clear conversation</string>
     <string name="Shielding_of_the_message">Block message</string>
+    <string name="block_offline_group_push">Block offline push</string>
     <string name="dismiss_group">Dismiss group</string>
     <string name="Select_the_contact">Select the contact</string>
     <string name="Group_chat_information">The group description</string>
@@ -324,7 +327,7 @@
     <string name="toast_nick_not_isnull">nickname cannot be empty!</string>
     <string name="dl_update_nick">update nickname</string>
     <string name="dl_update_photo">update photo</string>
-    <string name="dl_waiting">waiting...</string>
+    <string name="dl_waiting">waiting…</string>
     <string name="toast_updatenick_success">update nickname success!</string>
     <string name="toast_updatenick_fail">update nickname fail!</string>
     <string name="toast_updatephoto_success">update photo success!</string>
@@ -339,5 +342,11 @@
 
     <!-- lint -->
     <string name="delete_contact">Delete contact</string>
-    <string name="loading_more">loading more...</string>
+    <string name="push_no_disturb">Push no disturb</string>
+    <string name="push_no_disturb_on">On</string>
+    <string name="push_only_on">On only from 10pm to 7am</string>
+    <string name="push_no_disturb_off">Off</string>
+    <string name="push_saving_settings">Saving settings</string>
+    <string name="push_save_failed">Save settings failed</string>
+    <string name="loading_more">loading more…</string>
 </resources>
