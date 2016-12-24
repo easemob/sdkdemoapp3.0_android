@@ -229,11 +229,11 @@ public class MainActivity extends BaseActivity {
 		}
 		
 		@Override
-		public void onMessageReadAckReceived(List<EMMessage> messages) {
+		public void onMessageRead(List<EMMessage> messages) {
 		}
 		
 		@Override
-		public void onMessageDeliveryAckReceived(List<EMMessage> message) {
+		public void onMessageDelivered(List<EMMessage> message) {
 		}
 		
 		@Override
@@ -320,9 +320,9 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onContactInvited(String username, String reason) {}
         @Override
-        public void onContactAgreed(String username) {}
+        public void onFriendRequestAccepted(String username) {}
         @Override
-        public void onContactRefused(String username) {}
+        public void onFriendRequestDeclined(String username) {}
 	}
 	
 	private void unregisterBroadcastReceiver(){
@@ -396,7 +396,7 @@ public class MainActivity extends BaseActivity {
 	public int getUnreadMsgCountTotal() {
 		int unreadMsgCountTotal = 0;
 		int chatroomUnreadMsgCount = 0;
-		unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMsgsCount();
+		unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMessageCount();
 		for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
 			if(conversation.getType() == EMConversationType.ChatRoom)
 			chatroomUnreadMsgCount=chatroomUnreadMsgCount+conversation.getUnreadMsgCount();
