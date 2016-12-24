@@ -102,7 +102,7 @@ public class RedPacketUtil {
             });
             EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
             redPacketInfo.toGroupId = group.getGroupId();
-            redPacketInfo.groupMemberCount = group.getAffiliationsCount();
+            redPacketInfo.groupMemberCount = group.getMemberCount();
             redPacketInfo.chatType = RPConstant.CHATTYPE_GROUP;
         }
         Intent intent = new Intent(fragment.getContext(), RPRedPacketActivity.class);
