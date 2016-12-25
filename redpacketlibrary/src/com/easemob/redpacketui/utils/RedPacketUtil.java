@@ -153,7 +153,7 @@ public class RedPacketUtil {
         tokenData.imUserId = EMClient.getInstance().getCurrentUser();
         //此处使用环信id代替了appUserId 开发者可传入App的appUserId
         tokenData.appUserId = EMClient.getInstance().getCurrentUser();
-        tokenData.imToken = EMClient.getInstance().getChatConfig().getAccessToken();
+        tokenData.imToken = EMClient.getInstance().getOptions().getAccessToken();
         return tokenData;
     }
 
