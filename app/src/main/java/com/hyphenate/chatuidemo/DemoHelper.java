@@ -45,6 +45,7 @@ import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.EaseUI.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.EaseUI.EaseSettingsProvider;
 import com.hyphenate.easeui.EaseUI.EaseUserProfileProvider;
+import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -156,61 +157,14 @@ public class DemoHelper {
 		    EMClient.getInstance().setDebugMode(true);
 		    //get easeui instance
 		    easeUI = EaseUI.getInstance();
-//            EaseAvatarOptions avatarOptions = new EaseAvatarOptions();
-//            avatarOptions.setAvatarShape(1);
-//            easeUI.setAvatarOptions(avatarOptions);
 		    //to set user's profile and avatar
 		    setEaseUIProviders();
 			//initialize preference manager
 			PreferenceManager.init(context);
 			//initialize profile manager
 			getUserProfileManager().init(context);
+            setCallOptions();
 
-            // TODO: set Call options
-            // min video kbps
-            int minBitRate = PreferenceManager.getInstance().getCallMinVideoKbps();
-            if (minBitRate != -1) {
-                EMClient.getInstance().callManager().getCallOptions().setMinVideoKbps(minBitRate);
-            }
-
-            // max video kbps
-            int maxBitRate = PreferenceManager.getInstance().getCallMaxVideoKbps();
-            if (maxBitRate != -1) {
-                EMClient.getInstance().callManager().getCallOptions().setMaxVideoKbps(maxBitRate);
-            }
-
-            // max frame rate
-            int maxFrameRate = PreferenceManager.getInstance().getCallMaxFrameRate();
-            if (maxFrameRate != -1) {
-                EMClient.getInstance().callManager().getCallOptions().setMaxVideoFrameRate(maxFrameRate);
-            }
-
-            // audio sample rate
-            int audioSampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
-            if (audioSampleRate != -1) {
-                EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
-            }
-
-            // resolution
-            String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
-            if (resolution.equals("")) {
-                resolution = PreferenceManager.getInstance().getCallFrontCameraResolution();
-            }
-            String[] wh = resolution.split("x");
-            if (wh.length == 2) {
-                try {
-                    EMClient.getInstance().callManager().getCallOptions().setVideoResolution(new Integer(wh[0]).intValue(), new Integer(wh[1]).intValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            // enabled fixed sample rate
-            boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
-            EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
-
-            // Offline call push
-            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
 
             setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
@@ -218,8 +172,8 @@ public class DemoHelper {
 		}
 	}
 
-	
-	private EMOptions initChatOptions(){
+
+    private EMOptions initChatOptions(){
         Log.d(TAG, "init HuanXin Options");
         
         EMOptions options = new EMOptions();
@@ -258,7 +212,59 @@ public class DemoHelper {
         return options;
     }
 
+    private void setCallOptions() {
+        // min video kbps
+        int minBitRate = PreferenceManager.getInstance().getCallMinVideoKbps();
+        if (minBitRate != -1) {
+            EMClient.getInstance().callManager().getCallOptions().setMinVideoKbps(minBitRate);
+        }
+
+        // max video kbps
+        int maxBitRate = PreferenceManager.getInstance().getCallMaxVideoKbps();
+        if (maxBitRate != -1) {
+            EMClient.getInstance().callManager().getCallOptions().setMaxVideoKbps(maxBitRate);
+        }
+
+        // max frame rate
+        int maxFrameRate = PreferenceManager.getInstance().getCallMaxFrameRate();
+        if (maxFrameRate != -1) {
+            EMClient.getInstance().callManager().getCallOptions().setMaxVideoFrameRate(maxFrameRate);
+        }
+
+        // audio sample rate
+        int audioSampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
+        if (audioSampleRate != -1) {
+            EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
+        }
+
+        // resolution
+        String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
+        if (resolution.equals("")) {
+            resolution = PreferenceManager.getInstance().getCallFrontCameraResolution();
+        }
+        String[] wh = resolution.split("x");
+        if (wh.length == 2) {
+            try {
+                EMClient.getInstance().callManager().getCallOptions().setVideoResolution(new Integer(wh[0]).intValue(), new Integer(wh[1]).intValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // enabled fixed sample rate
+        boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
+        EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
+
+        // Offline call push
+        EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
+    }
+
     protected void setEaseUIProviders() {
+        //set user avatar to circle shape
+        EaseAvatarOptions avatarOptions = new EaseAvatarOptions();
+        avatarOptions.setAvatarShape(1);
+        easeUI.setAvatarOptions(avatarOptions);
+
     	// set profile provider if you want easeUI to handle avatar and nickname
         easeUI.setUserProfileProvider(new EaseUserProfileProvider() {
             

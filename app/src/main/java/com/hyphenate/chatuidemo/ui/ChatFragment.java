@@ -93,7 +93,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
     @Override
     protected void setUpView() {
-        setChatFragmentListener(this);
+        setChatFragmentHelper(this);
         if (chatType == Constant.CHATTYPE_SINGLE) { 
             Map<String,RobotUser> robotMap = DemoHelper.getInstance().getRobotList();
             if(robotMap!=null && robotMap.containsKey(toChatUsername)){
