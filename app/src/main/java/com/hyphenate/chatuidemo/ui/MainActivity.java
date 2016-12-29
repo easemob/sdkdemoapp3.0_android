@@ -41,8 +41,6 @@ import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -395,14 +393,7 @@ public class MainActivity extends BaseActivity {
 	 * @return
 	 */
 	public int getUnreadMsgCountTotal() {
-		int unreadMsgCountTotal = 0;
-		int chatroomUnreadMsgCount = 0;
-		unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMessageCount();
-		for(EMConversation conversation:EMClient.getInstance().chatManager().getAllConversations().values()){
-			if(conversation.getType() == EMConversationType.ChatRoom)
-			chatroomUnreadMsgCount=chatroomUnreadMsgCount+conversation.getUnreadMsgCount();
-		}
-		return unreadMsgCountTotal-chatroomUnreadMsgCount;
+		return EMClient.getInstance().chatManager().getUnreadMsgsCount();
 	}
 
 	private InviteMessgeDao inviteMessgeDao;
