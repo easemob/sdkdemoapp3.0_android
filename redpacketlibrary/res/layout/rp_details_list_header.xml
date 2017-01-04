@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/rp_money_white"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/rp_money_white"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,13 +12,13 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/size216px"
-            android:background="@drawable/rp_packet_group_detail_bg" />
+            android:background="@drawable/rp_packet_group_detail_bg"/>
 
         <ImageView
             android:id="@+id/iv_avatar"
             style="@style/AvatarIconStyle"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/rp_avatar" />
+            android:src="@drawable/rp_avatar"/>
     </RelativeLayout>
 
 
@@ -39,7 +39,7 @@
             android:maxEms="10"
             android:maxLines="1"
             android:textColor="@color/rp_text_black"
-            android:textSize="@dimen/font45px" />
+            android:textSize="@dimen/font45px"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
             android:gravity="center"
             android:text="@string/money_username_format"
             android:textColor="@color/rp_text_black"
-            android:textSize="@dimen/font45px" />
+            android:textSize="@dimen/font45px"/>
 
         <ImageView
             android:id="@+id/iv_group_random"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/size18px"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </LinearLayout>
 
 
@@ -66,13 +66,15 @@
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/size42px"
         android:layout_marginTop="@dimen/size18px"
+        android:ellipsize="end"
+        android:maxEms="22"
         android:maxLines="1"
         android:textColor="@color/rp_text_light_grey"
-        android:textSize="@dimen/font36px" />
+        android:textSize="@dimen/font36px"/>
 
     <TextView
         android:id="@+id/tv_money_amount"
-        style="@style/ReceivedMoneyStyle" />
+        style="@style/ReceivedMoneyStyle"/>
 
     <TextView
         android:id="@+id/tv_money_use"
@@ -83,7 +85,7 @@
         android:layout_marginTop="@dimen/size18px"
         android:text="@string/money_detail_use"
         android:textColor="@color/rp_text_light_grey"
-        android:textSize="@dimen/font36px" />
+        android:textSize="@dimen/font36px"/>
 
     <LinearLayout
         android:id="@+id/status_layout"
@@ -104,11 +106,11 @@
             android:layout_marginTop="@dimen/size45px"
             android:text="@string/money_status_no_taken"
             android:textColor="@color/rp_text_light_grey"
-            android:textSize="@dimen/font36px" />
+            android:textSize="@dimen/font36px"/>
 
         <View
             style="@style/DividerStyle"
-            android:layout_marginTop="@dimen/size24px" />
+            android:layout_marginTop="@dimen/size24px"/>
     </LinearLayout>
 
 </LinearLayout>

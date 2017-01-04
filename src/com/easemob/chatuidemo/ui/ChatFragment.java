@@ -37,6 +37,8 @@ import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.easeui.widget.chatrow.EaseChatRow;
 import com.easemob.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.easemob.easeui.widget.emojicon.EaseEmojiconMenu;
+import com.easemob.redpacketsdk.RPSendPacketCallback;
+import com.easemob.redpacketsdk.bean.RedPacketInfo;
 import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.utils.RPRedPacketUtil;
 import com.easemob.redpacketui.utils.RedPacketUtil;
@@ -78,9 +80,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int MESSAGE_TYPE_SEND_TRANSFER_PACKET = 10;
     private static final int MESSAGE_TYPE_RECV_RANDOM = 11;
     private static final int MESSAGE_TYPE_SEND_RANDOM = 12;
-    private static final int REQUEST_CODE_SEND_RED_PACKET = 15;
     private static final int ITEM_RED_PACKET = 16;
-    private static final int REQUEST_CODE_SEND_TRANSFER_PACKET = 16;
     private static final int ITEM_TRANSFER_PACKET = 17;
     //end of red packet code
 
@@ -220,18 +220,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                         }
                     }
                     break;
-                //red packet code : 发送红包消息到聊天界面
-                case REQUEST_CODE_SEND_RED_PACKET:
-                    if (data != null){
-                        sendMessage(RedPacketUtil.createRPMessage(getActivity(), data, toChatUsername));
-                    }
-                    break;
-                case REQUEST_CODE_SEND_TRANSFER_PACKET://发送转账消息
-                    if (data != null) {
-                        sendMessage(RedPacketUtil.createTRMessage(getActivity(), data, toChatUsername));
-                    }
-                    break;
-                //end of red packet code
                 default:
                     break;
             }
@@ -316,11 +304,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         //消息框点击事件，demo这里不做覆盖，如需覆盖，return true
         //red packet code : 拆红包页面
         if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
-            if (RedPacketUtil.isRandomRedPacket(message)){
-                RedPacketUtil.openRandomPacket(getActivity(),message);
-            } else {
-                RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
-            }
+            RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
             return true;
         } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
             RedPacketUtil.openTransferPacket(getActivity(), message);
@@ -359,25 +343,29 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 break;
             //red packet code : 进入发红包页面
             case ITEM_RED_PACKET:
-                if (chatType == Constant.CHATTYPE_SINGLE) {
-                     //单聊红包修改进入红包的方法，可以在小额随机红包和普通单聊红包之间切换
-                     RedPacketUtil.startRandomPacket(new RPRedPacketUtil.RPRandomCallback() {
-                         @Override
-                         public void onSendPacketSuccess(Intent data) {
-                             sendMessage(RedPacketUtil.createRPMessage(getActivity(), data, toChatUsername));
-                         }
-
-                         @Override
-                         public void switchToNormalPacket() {
-                             RedPacketUtil.startRedPacketActivityForResult(ChatFragment.this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
-                         }
-                     },getActivity(),toChatUsername);
+                //注意：不再支持原有的startActivityForResult进入红包相关页面
+                int itemType;
+                if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+                    itemType = RPConstant.RP_ITEM_TYPE_SINGLE;
+                    //小额随机红包
+                    //itemType = RPConstant.RP_ITEM_TYPE_RANDOM;
                 } else {
-                     RedPacketUtil.startRedPacketActivityForResult(this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
+                    itemType = RPConstant.RP_ITEM_TYPE_GROUP;
                 }
+                RedPacketUtil.startRedPacket(getActivity(), itemType, toChatUsername, new RPSendPacketCallback() {
+                    @Override
+                    public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
+                        sendMessage(RedPacketUtil.createRPMessage(getActivity(), redPacketInfo, toChatUsername));
+                    }
+                });
                 break;
             case ITEM_TRANSFER_PACKET://进入转账页面
-                RedPacketUtil.startTransferActivityForResult(this, toChatUsername, REQUEST_CODE_SEND_TRANSFER_PACKET);
+                RedPacketUtil.startRedPacket(getActivity(), RPConstant.RP_ITEM_TYPE_TRANSFER, toChatUsername, new RPSendPacketCallback() {
+                    @Override
+                    public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
+                        sendMessage(RedPacketUtil.createTRMessage(getActivity(), redPacketInfo, toChatUsername));
+                    }
+                });
                 break;
             //end of red packet code
             default:

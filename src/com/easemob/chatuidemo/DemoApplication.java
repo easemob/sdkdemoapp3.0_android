@@ -16,10 +16,20 @@ package com.easemob.chatuidemo;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.text.TextUtils;
 
+import com.easemob.chat.EMChatManager;
+import com.easemob.easeui.domain.EaseUser;
+import com.easemob.easeui.utils.EaseUserUtils;
+import com.easemob.redpacketsdk.RPInitRedPacketCallback;
+import com.easemob.redpacketsdk.RPValueCallback;
 import com.easemob.redpacketsdk.RedPacket;
 // ================== fabric start
 import com.crashlytics.android.Crashlytics;
+import com.easemob.redpacketsdk.bean.RedPacketInfo;
+import com.easemob.redpacketsdk.bean.TokenData;
+import com.easemob.redpacketsdk.constant.RPConstant;
+
 import io.fabric.sdk.android.Fabric;
 // ================== fabric end
 
@@ -51,8 +61,36 @@ public class DemoApplication extends Application {
 
         //init demo helper
         DemoHelper.getInstance().init(applicationContext);
-		//red packet code : 初始化红包上下文，开启日志输出开关
-		RedPacket.getInstance().initContext(applicationContext);
+		//red packet code : 初始化红包SDK，开启日志输出开关
+		RedPacket.getInstance().initRedPacket(applicationContext, RPConstant.AUTH_METHOD_EASEMOB, new RPInitRedPacketCallback() {
+			@Override
+			public void initTokenData(RPValueCallback<TokenData> callback) {
+				TokenData tokenData = new TokenData();
+				tokenData.imUserId = EMChatManager.getInstance().getCurrentUser();
+				//此处使用环信id代替了appUserId 开发者可传入App的appUserId
+				tokenData.appUserId = EMChatManager.getInstance().getCurrentUser();
+				tokenData.imToken = EMChatManager.getInstance().getAccessToken();
+				//同步或异步获取TokenData 获取成功后回调onSuccess()方法
+				callback.onSuccess(tokenData);
+			}
+
+			@Override
+			public RedPacketInfo initCurrentUserSync() {
+				//这里需要同步设置当前用户id、昵称和头像url
+				String fromAvatarUrl = "";
+				String fromNickname = EMChatManager.getInstance().getCurrentUser();
+				EaseUser easeUser = EaseUserUtils.getUserInfo(fromNickname);
+				if (easeUser != null) {
+					fromAvatarUrl = TextUtils.isEmpty(easeUser.getAvatar()) ? "none" : easeUser.getAvatar();
+					fromNickname = TextUtils.isEmpty(easeUser.getNick()) ? easeUser.getUsername() : easeUser.getNick();
+				}
+				RedPacketInfo redPacketInfo = new RedPacketInfo();
+				redPacketInfo.fromUserId = EMChatManager.getInstance().getCurrentUser();
+				redPacketInfo.fromAvatarUrl = fromAvatarUrl;
+				redPacketInfo.fromNickName = fromNickname;
+				return redPacketInfo;
+			}
+		});
 		RedPacket.getInstance().setDebugMode(true);
 		//end of red packet code
 	}

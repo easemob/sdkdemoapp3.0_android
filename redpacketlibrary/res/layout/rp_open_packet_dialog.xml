@@ -90,7 +90,8 @@
         android:layout_marginTop="@dimen/size60px"
         android:gravity="center"
         android:lines="2"
-        android:maxLength="22"
+        android:maxEms="22"
+        android:ellipsize="end"
         android:textColor="@color/rp_title_color"
         android:textSize="@dimen/font69px"
         />

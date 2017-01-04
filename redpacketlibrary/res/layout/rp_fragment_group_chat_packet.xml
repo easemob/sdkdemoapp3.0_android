@@ -171,8 +171,7 @@
                 android:id="@+id/et_greetings"
                 style="@style/SendMoneyGreetingsStyle"
                 android:layout_toLeftOf="@id/view_line_group"
-                android:hint="@string/default_money_greeting"
-                android:maxLength="22" />
+                android:hint="@string/default_money_greeting" />
         </RelativeLayout>
 
         <TextView

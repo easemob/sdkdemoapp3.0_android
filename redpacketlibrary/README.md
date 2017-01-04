@@ -26,7 +26,6 @@
     compile project(':EaseUI')
     compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-multidex.jar')
 }
-
 ```
 
 * ChatDemo的setting.gradle中
@@ -127,7 +126,35 @@ include ':EaseUI', ':redpacketlibrary'
     @Override
     public void onCreate() {
         super.onCreate();
-        RedPacket.getInstance().initContext(applicationContext);
+        RedPacket.getInstance().initRedPacket(applicationContext, RPConstant.AUTH_METHOD_EASEMOB, new RPInitRedPacketCallback() {
+			@Override
+			public void initTokenData(RPValueCallback<TokenData> callback) {
+				TokenData tokenData = new TokenData();
+				tokenData.imUserId = EMChatManager.getInstance().getCurrentUser();
+				//此处使用环信id代替了appUserId 开发者可传入App的appUserId
+				tokenData.appUserId = EMChatManager.getInstance().getCurrentUser();
+				tokenData.imToken = EMChatManager.getInstance().getAccessToken();
+				//同步或异步获取TokenData 获取成功后回调onSuccess()方法
+				callback.onSuccess(tokenData);
+			}
+
+			@Override
+			public RedPacketInfo initCurrentUserSync() {
+				//这里需要同步设置当前用户id、昵称和头像url
+				String fromAvatarUrl = "";
+				String fromNickname = EMChatManager.getInstance().getCurrentUser();
+				EaseUser easeUser = EaseUserUtils.getUserInfo(fromNickname);
+				if (easeUser != null) {
+					fromAvatarUrl = TextUtils.isEmpty(easeUser.getAvatar()) ? "none" : easeUser.getAvatar();
+					fromNickname = TextUtils.isEmpty(easeUser.getNick()) ? easeUser.getUsername() : easeUser.getNick();
+				}
+				RedPacketInfo redPacketInfo = new RedPacketInfo();
+				redPacketInfo.fromUserId = EMChatManager.getInstance().getCurrentUser();
+				redPacketInfo.fromAvatarUrl = fromAvatarUrl;
+				redPacketInfo.fromNickName = fromNickname;
+				return redPacketInfo;
+			}
+		});
         //打开Log开关 正式发布时请关闭
         RedPacket.getInstance().setDebugMode(true);
     }
@@ -163,12 +190,7 @@ include ':EaseUI', ':redpacketlibrary'
     
     private static final int ITEM_RED_PACKET = 16;
     
-    private static final int REQUEST_CODE_SEND_RED_PACKET = 15;
-    
-    private static final int REQUEST_CODE_SEND_TRANSFER_PACKET = 16;
-    
     private static final int ITEM_TRANSFER_PACKET = 17;
-
 ```
 * 添加红包、转账入口
 
@@ -228,59 +250,39 @@ include ':EaseUI', ':redpacketlibrary'
         switch (itemId) {
         ...
         case ITEM_RED_PACKET:
-            //单聊红包修改进入红包的方法，可以在小额随机红包和普通单聊红包之间切换
-            RedPacketUtil.startRandomPacket(new RPRedPacketUtil.RPRandomCallback() {
+            //red packet code : 进入发红包页面
+            case ITEM_RED_PACKET:
+                //注意：不再支持原有的startActivityForResult进入红包页面
+                int itemType;
+                if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+                    itemType = RPConstant.RP_ITEM_TYPE_SINGLE;
+                    //小额随机红包传入如下的常量值
+                    //itemType = RPConstant.RP_ITEM_TYPE_RANDOM;
+                } else {
+                    itemType = RPConstant.RP_ITEM_TYPE_GROUP;
+                }
+                RedPacketUtil.startRedPacket(getActivity(), itemType, toChatUsername, new RPSendPacketCallback() {
                     @Override
-                    public void onSendPacketSuccess(Intent data) {
-                        sendMessage(RedPacketUtil.createRPMessage(getActivity(), data, toChatUsername));
+                    public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
+                        //发送红包消息到聊天页面
+                        sendMessage(RedPacketUtil.createRPMessage(getActivity(), redPacketInfo, toChatUsername));
                     }
-
+                });
+                break;
+            case ITEM_TRANSFER_PACKET://进入转账页面
+                RedPacketUtil.startRedPacket(getActivity(), RPConstant.RP_ITEM_TYPE_TRANSFER, toChatUsername, new RPSendPacketCallback() {
                     @Override
-                    public void switchToNormalPacket() {
-                        RedPacketUtil.startRedPacketActivityForResult(ChatFragment.this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
+                    public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
+                        //发送转账消息到聊天页面
+                        sendMessage(RedPacketUtil.createTRMessage(getActivity(), redPacketInfo, toChatUsername));
                     }
-                },getActivity(),toChatUsername);
-            } else {
-                RedPacketUtil.startRedPacketActivityForResult(this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
-            }
-            break;
-        case ITEM_TRANSFER_PACKET://进入转账页面
-            RedPacketUtil.startTransferActivityForResult(this, toChatUsername, REQUEST_CODE_SEND_TRANSFER_PACKET);
-            break;
-        default:
-            break;
+                });
+                break;
+            //end of red packet code
         }
         //不覆盖已有的点击事件
         return false;
     }
-```
-
-* 发送红包、转账消息到聊天窗口
-
-```
-   @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        ...
-        if(resultCode == Activity.RESULT_OK){
-            switch (requestCode) {
-            ...
-            case REQUEST_CODE_SEND_RED_PACKET:
-                if (data != null){
-                    sendMessage(RedPacketUtils.createRPMessage(getActivity(), data, toChatUsername));
-                }
-                break;
-            case REQUEST_CODE_SEND_TRANSFER_PACKET://发送转账消息
-                if (data != null) {
-                    sendMessage(RedPacketUtil.createTRMessage(getActivity(), data, toChatUsername));
-                }
-                break;
-            default:
-                break;
-            }
-        }     
-    }
-    
 ```
 
 * 领取红包并发送回执消息到聊天窗口
@@ -290,11 +292,7 @@ include ':EaseUI', ':redpacketlibrary'
     public boolean onMessageBubbleClick(EMMessage message) {
         //消息框点击事件，demo这里不做覆盖，如需覆盖，return true
         if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
-            if (RedPacketUtil.isRandomRedPacket(message)){
-                RedPacketUtil.openRandomPacket(getActivity(),message);
-            } else {
-                RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
-            }
+            RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
             return true;
         } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
             RedPacketUtil.openTransferPacket(getActivity(), message);
@@ -464,7 +462,6 @@ include ':EaseUI', ':redpacketlibrary'
     import com.easemob.redpacketui.utils.RedPacketUtils;
 
     RedPacketUtils.startChangeActivity(getActivity());
-
 ```
 
 ### 4.拆红包音效
