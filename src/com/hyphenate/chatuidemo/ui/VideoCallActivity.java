@@ -220,15 +220,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         // get instance of call helper, should be called after setSurfaceView was called
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
 
-        /**
-         * This function is only meaningful when your app need recording
-         * If not, remove it.
-         * This function need be called before the video stream started, so we set it in onCreate function.
-         * This method will set the preferred video record encoding codec.
-         * Using default encoding format, recorded file may not be played by mobile player.
-         */
-//        callHelper.setPreferMovFormatEnable(true);
-
         EMClient.getInstance().callManager().setCameraDataProcessor(dataProcessor);
     }
     

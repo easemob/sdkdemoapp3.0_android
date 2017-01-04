@@ -188,6 +188,15 @@ public class DemoHelper {
                 EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
             }
 
+            /**
+             * This function is only meaningful when your app need recording
+             * If not, remove it.
+             * This function need be called before the video stream started, so we set it in onCreate function.
+             * This method will set the preferred video record encoding codec.
+             * Using default encoding format, recorded file may not be played by mobile player.
+             */
+            //EMClient.getInstance().callManager().getVideoCallHelper().setPreferMovFormatEnable(true);
+
             // resolution
             String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
             if (resolution.equals("")) {
