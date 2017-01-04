@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/dialogWidth"
-    android:layout_height="@dimen/dialogHeight"
-    android:layout_gravity="center"
-    android:background="@drawable/rp_small_random_bg">
+                android:layout_width="@dimen/dialogWidth"
+                android:layout_height="@dimen/dialogHeight"
+                android:layout_gravity="center"
+                android:background="@drawable/rp_small_random_bg">
 
 
     <RelativeLayout
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@drawable/rp_closed_yellow_icon"
-            android:scaleType="centerInside" />
+            android:scaleType="centerInside"/>
     </RelativeLayout>
 
     <FrameLayout
@@ -34,7 +34,7 @@
             android:layout_width="@dimen/size198px"
             android:layout_height="@dimen/size198px"
             android:layout_gravity="center"
-            android:src="@drawable/rp_avatar" />
+            android:src="@drawable/rp_avatar"/>
     </FrameLayout>
 
     <TextView
@@ -46,10 +46,9 @@
         android:layout_marginTop="@dimen/size30px"
         android:ellipsize="end"
         android:gravity="center"
-        android:maxEms="10"
         android:maxLines="1"
         android:textColor="@color/rp_money_white"
-        android:textSize="@dimen/font45px" />
+        android:textSize="@dimen/font45px"/>
 
     <TextView
         android:id="@+id/tv_random_detail_greeting"
@@ -59,10 +58,11 @@
         android:layout_marginLeft="@dimen/size60px"
         android:layout_marginRight="@dimen/size60px"
         android:layout_marginTop="@dimen/size60px"
+        android:ellipsize="end"
         android:gravity="center"
-        android:maxLength="22"
+        android:maxEms="22"
         android:textColor="@color/rp_title_color"
-        android:textSize="@dimen/font69px" />
+        android:textSize="@dimen/font69px"/>
 
     <TextView
         android:id="@+id/tv_random_detail_amount"
@@ -73,7 +73,7 @@
         android:layout_marginTop="@dimen/size15px"
         android:gravity="center"
         android:textColor="@color/rp_title_color"
-        android:textSize="@dimen/font108px" />
+        android:textSize="@dimen/font108px"/>
 
     <TextView
         android:id="@+id/tv_random_detail_state"
@@ -84,7 +84,7 @@
         android:layout_marginTop="@dimen/size15px"
         android:gravity="center"
         android:textColor="@color/rp_title_color"
-        android:textSize="@dimen/font39px" />
+        android:textSize="@dimen/font39px"/>
 
     <LinearLayout
         android:id="@+id/ll_random_detail_switch"
@@ -100,7 +100,7 @@
             android:layout_width="@dimen/size66px"
             android:layout_height="@dimen/size66px"
             android:background="@drawable/rp_avatar"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"/>
 
         <TextView
             android:id="@+id/tv_random_detail_from_name"
@@ -109,7 +109,7 @@
             android:layout_marginLeft="@dimen/size15px"
             android:gravity="center"
             android:textColor="@color/rp_title_color"
-            android:textSize="@dimen/font36px" />
+            android:textSize="@dimen/font36px"/>
 
     </LinearLayout>
 
@@ -118,6 +118,6 @@
         android:layout_width="@dimen/size180px"
         android:layout_height="@dimen/size180px"
         android:layout_centerInParent="true"
-        android:orientation="vertical" />
+        android:orientation="vertical"/>
 
 </RelativeLayout>
