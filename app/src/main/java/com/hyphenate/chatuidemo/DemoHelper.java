@@ -41,11 +41,18 @@ import com.hyphenate.chatuidemo.ui.MainActivity;
 import com.hyphenate.chatuidemo.ui.VideoCallActivity;
 import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
+<<<<<<< HEAD:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.EaseUI.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.EaseUI.EaseSettingsProvider;
 import com.hyphenate.easeui.EaseUI.EaseUserProfileProvider;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
+=======
+import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.controller.EaseUI.EaseSettingsProvider;
+import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
+import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
+>>>>>>> sdk3.0:src/com/hyphenate/chatuidemo/DemoHelper.java
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -163,9 +170,8 @@ public class DemoHelper {
 			PreferenceManager.init(context);
 			//initialize profile manager
 			getUserProfileManager().init(context);
+            //set Call options
             setCallOptions();
-
-
             setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
 	        initDbDao();
@@ -236,6 +242,15 @@ public class DemoHelper {
         if (audioSampleRate != -1) {
             EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
         }
+
+        /**
+         * This function is only meaningful when your app need recording
+         * If not, remove it.
+         * This function need be called before the video stream started, so we set it in onCreate function.
+         * This method will set the preferred video record encoding codec.
+         * Using default encoding format, recorded file may not be played by mobile player.
+         */
+        //EMClient.getInstance().callManager().getVideoCallHelper().setPreferMovFormatEnable(true);
 
         // resolution
         String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
@@ -590,7 +605,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
+        public void onRequestToJoinReceived(String groupId, String groupName, String applyer, String reason) {
             
             // user apply to join group
             InviteMessage msg = new InviteMessage();
@@ -606,7 +621,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onApplicationAccept(String groupId, String groupName, String accepter) {
+        public void onRequestToJoinAccepted(String groupId, String groupName, String accepter) {
 
             String st4 = appContext.getString(R.string.Agreed_to_your_group_chat_application);
             // your application was accepted
@@ -626,7 +641,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
+        public void onRequestToJoinDeclined(String groupId, String groupName, String decliner, String reason) {
             // your application was declined, we do nothing here in demo
         }
 
@@ -704,7 +719,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onContactAgreed(String username) {
+        public void onFriendRequestAccepted(String username) {
             List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
             for (InviteMessage inviteMessage : msgs) {
                 if (inviteMessage.getFrom().equals(username)) {
@@ -722,7 +737,7 @@ public class DemoHelper {
         }
 
         @Override
-        public void onContactRefused(String username) {
+        public void onFriendRequestDeclined(String username) {
             // your request was refused
             Log.d(username, username + " refused to your request");
         }
@@ -821,11 +836,11 @@ public class DemoHelper {
 			}
 
 			@Override
-			public void onMessageReadAckReceived(List<EMMessage> messages) {
+			public void onMessageRead(List<EMMessage> messages) {
 			}
 			
 			@Override
-			public void onMessageDeliveryAckReceived(List<EMMessage> message) {
+			public void onMessageDelivered(List<EMMessage> message) {
 			}
 			
 			@Override

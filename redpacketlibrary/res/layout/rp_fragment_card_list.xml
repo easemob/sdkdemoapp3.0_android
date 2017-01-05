@@ -3,7 +3,7 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/money_bg_color"
+                android:background="@color/rp_money_bg_color"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/size48px"
     >
@@ -20,7 +20,7 @@
         android:id="@+id/layout_empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/money_bg_color"
+        android:background="@color/rp_money_bg_color"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:visibility="gone"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size36px"
             android:text="@string/your_no_bankcard"
-            android:textColor="@color/text_light_grey"
+            android:textColor="@color/rp_text_light_grey"
             android:textSize="@dimen/font48px"
             />
 
@@ -50,8 +50,8 @@
             android:layout_marginRight="@dimen/size45px"
             android:layout_marginTop="@dimen/size141px"
             android:background="@drawable/rp_btn_white_selector"
-            android:text="添加一张银行卡"
-            android:textColor="@color/text_black"
+            android:text="@string/rp_str_add_card"
+            android:textColor="@color/rp_text_black"
             />
     </LinearLayout>
 

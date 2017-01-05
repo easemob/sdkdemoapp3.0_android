@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dialogWidth"
+    android:layout_height="@dimen/dialogHeight"
+    android:layout_gravity="center"
+    android:background="@drawable/rp_small_random_bg">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_random_detail_closed"
+        android:layout_width="@dimen/size114px"
+        android:layout_height="@dimen/size114px"
+        android:clickable="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/rp_closed_yellow_icon"
+            android:scaleType="centerInside" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_random_detail_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_random_detail_closed"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/size54px"
+        android:background="@drawable/rp_bg_circular_yellow">
+
+        <ImageView
+            android:id="@+id/iv_random_detail_avatar"
+            android:layout_width="@dimen/size198px"
+            android:layout_height="@dimen/size198px"
+            android:layout_gravity="center"
+            android:src="@drawable/rp_avatar" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_random_detail_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_random_detail_avatar"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/size30px"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxEms="10"
+        android:maxLines="1"
+        android:textColor="@color/rp_money_white"
+        android:textSize="@dimen/font45px" />
+
+    <TextView
+        android:id="@+id/tv_random_detail_greeting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_random_detail_username"
+        android:layout_marginLeft="@dimen/size60px"
+        android:layout_marginRight="@dimen/size60px"
+        android:layout_marginTop="@dimen/size60px"
+        android:gravity="center"
+        android:maxLength="22"
+        android:textColor="@color/rp_title_color"
+        android:textSize="@dimen/font69px" />
+
+    <TextView
+        android:id="@+id/tv_random_detail_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_random_detail_greeting"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/size15px"
+        android:gravity="center"
+        android:textColor="@color/rp_title_color"
+        android:textSize="@dimen/font108px" />
+
+    <TextView
+        android:id="@+id/tv_random_detail_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_random_detail_amount"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/size15px"
+        android:gravity="center"
+        android:textColor="@color/rp_title_color"
+        android:textSize="@dimen/font39px" />
+
+    <LinearLayout
+        android:id="@+id/ll_random_detail_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/size81px"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_random_detail_from_icon"
+            android:layout_width="@dimen/size66px"
+            android:layout_height="@dimen/size66px"
+            android:background="@drawable/rp_avatar"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/tv_random_detail_from_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size15px"
+            android:gravity="center"
+            android:textColor="@color/rp_title_color"
+            android:textSize="@dimen/font36px" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_random_detail"
+        android:layout_width="@dimen/size180px"
+        android:layout_height="@dimen/size180px"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" />
+
+</RelativeLayout>

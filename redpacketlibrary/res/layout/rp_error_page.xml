@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/money_bg_color"
+                android:background="@color/rp_money_bg_color"
     >
 
     <ImageView
@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/size144px"
         android:text="@string/msg_error_page_hint"
-        android:textColor="@color/text_dark_grey"
+        android:textColor="@color/rp_text_dark_grey"
         android:textSize="@dimen/font45px"
         />
 
@@ -46,7 +46,7 @@
             android:paddingRight="@dimen/size66px"
             android:paddingTop="@dimen/size18px"
             android:text="@string/msg_error_retry"
-            android:textColor="@color/button_blue"
+            android:textColor="@color/rp_button_blue"
             android:textSize="@dimen/font51px"
             />
     </LinearLayout>

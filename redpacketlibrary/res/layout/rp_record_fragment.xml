@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/money_bg_color"
+                android:background="@color/rp_money_bg_color"
     >
 
     <com.easemob.redpacketui.recyclerview.widget.RecyclerView
@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/title_bar"
-        android:background="@color/money_bg_color"
+        android:background="@color/rp_money_bg_color"
         android:scrollbars="vertical"
         />
 

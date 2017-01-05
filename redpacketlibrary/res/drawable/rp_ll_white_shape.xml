@@ -9,6 +9,6 @@
     <stroke
         android:dashWidth="0.1dp"
         android:width="0.1dp"
-        android:color="@color/text_light_grey" />
+        android:color="@color/rp_text_light_grey" />
 
 </shape>

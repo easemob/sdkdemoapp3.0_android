@@ -41,6 +41,7 @@ import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -227,11 +228,11 @@ public class MainActivity extends BaseActivity {
 		}
 		
 		@Override
-		public void onMessageReadAckReceived(List<EMMessage> messages) {
+		public void onMessageRead(List<EMMessage> messages) {
 		}
 		
 		@Override
-		public void onMessageDeliveryAckReceived(List<EMMessage> message) {
+		public void onMessageDelivered(List<EMMessage> message) {
 		}
 		
 		@Override
@@ -318,9 +319,9 @@ public class MainActivity extends BaseActivity {
         @Override
         public void onContactInvited(String username, String reason) {}
         @Override
-        public void onContactAgreed(String username) {}
+        public void onFriendRequestAccepted(String username) {}
         @Override
-        public void onContactRefused(String username) {}
+        public void onFriendRequestDeclined(String username) {}
 	}
 	
 	private void unregisterBroadcastReceiver(){

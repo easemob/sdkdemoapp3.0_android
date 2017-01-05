@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_advert_bg"
+        android:layout_width="match_parent"
+        android:layout_height="279dp"
+        android:scaleType="fitXY"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_ad_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/iv_advert_bg">
+
+        <TextView
+            android:id="@+id/tv_ad_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/size36px"
+            android:text="@string/ad_receive_change"
+            android:textColor="@color/rp_text_light_grey"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/target_layout"
+        android:layout_width="@dimen/size180px"
+        android:layout_height="@dimen/size180px"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_advert_bg"
+        android:layout_marginTop="-50dp"
+        >
+
+        <com.easemob.redpacketui.widget.RPRoundCard
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size45px"
+            android:layout_marginRight="@dimen/size45px"
+            android:layout_marginTop="@dimen/size105px"
+            app:RPCardBgColor="@color/rp_background_white">
+
+            <TextView
+                android:id="@+id/tv_ad_sponsor_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/size114px"
+                android:layout_marginRight="@dimen/size114px"
+                android:layout_marginTop="@dimen/size141px"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/rp_text_black"
+                android:textSize="@dimen/font45px"/>
+
+            <TextView
+                android:id="@+id/tv_ad_receive_greeting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_ad_sponsor_name"
+                android:layout_marginLeft="@dimen/size93px"
+                android:layout_marginRight="@dimen/size93px"
+                android:layout_marginTop="@dimen/size30px"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/rp_text_black"
+                android:textSize="@dimen/font36px"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_ad_greeting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_ad_receive_greeting"
+                android:layout_marginLeft="@dimen/size90px"
+                android:layout_marginRight="@dimen/size90px"
+                android:layout_marginTop="@dimen/size48px"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:lines="2"
+                android:maxLength="22"
+                android:textColor="@color/rp_top_red_color"
+                android:textSize="@dimen/font69px"/>
+
+            <Button
+                android:id="@+id/btn_click_received"
+                style="@style/SendMoneyButtonStyle"
+                android:layout_below="@id/tv_ad_greeting"
+                android:layout_marginBottom="@dimen/size66px"
+                android:layout_marginTop="@dimen/size48px"
+                android:background="@drawable/rp_btn_red_selector"
+                android:text="@string/btn_immediately_received"
+                android:visibility="visible"/>
+
+            <LinearLayout
+                android:id="@+id/ad_ll_extra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_ad_greeting"
+                android:layout_marginBottom="@dimen/size66px"
+                android:layout_marginTop="@dimen/size48px"
+                android:visibility="gone">
+
+                <com.easemob.redpacketui.widget.RPTextView
+                    android:id="@+id/tv_check_land"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/size132px"
+                    android:layout_marginLeft="@dimen/size66px"
+                    android:layout_marginRight="@dimen/size24px"
+                    android:layout_weight="1"
+                    android:background="@drawable/rp_btn_red_selector"
+                    android:drawableLeft="@drawable/rp_ad_success"
+                    android:drawablePadding="@dimen/size15px"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/rp_money_white"
+                    android:textSize="@dimen/font51px"
+                    />
+
+                <com.easemob.redpacketui.widget.RPTextView
+                    android:id="@+id/tv_check_share"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/size132px"
+                    android:layout_marginRight="@dimen/size66px"
+                    android:layout_weight="1"
+                    android:background="@drawable/rp_btn_red_selector"
+                    android:drawableLeft="@drawable/rp_ad_share"
+                    android:drawablePadding="@dimen/size15px"
+                    android:gravity="center_vertical"
+                    android:text="@string/ad_packet_share"
+                    android:textColor="@color/rp_money_white"
+                    android:textSize="@dimen/font51px"/>
+
+            </LinearLayout>
+
+        </com.easemob.redpacketui.widget.RPRoundCard>
+
+        <ImageView
+            android:id="@+id/iv_advert_icon"
+            android:layout_width="@dimen/size210px"
+            android:layout_height="@dimen/size210px"
+            android:layout_centerHorizontal="true"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

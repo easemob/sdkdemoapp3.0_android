@@ -328,7 +328,7 @@ public class CallActivity extends BaseActivity {
         @SuppressWarnings("UnusedAssignment") EMTextMessageBody txtBody = null;
         if (!isInComingCall) { // outgoing call
             message = EMMessage.createSendMessage(EMMessage.Type.TXT);
-            message.setReceipt(username);
+            message.setTo(username);
         } else {
             message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
             message.setFrom(username);
