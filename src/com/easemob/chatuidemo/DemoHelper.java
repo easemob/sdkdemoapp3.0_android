@@ -80,9 +80,9 @@ public class DemoHelper {
     }
 
     protected static final String TAG = "DemoHelper";
-    
+
 	private EaseUI easeUI;
-	
+
     /**
      * EMEventListener
      */
@@ -95,9 +95,9 @@ public class DemoHelper {
 	private UserProfileManager userProManager;
 
 	private static DemoHelper instance = null;
-	
+
 	private DemoModel demoModel = null;
-	
+
 	/**
      * HuanXin sync groups status listener
      */
@@ -117,9 +117,9 @@ public class DemoHelper {
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
-    
+
     private boolean alreadyNotified = false;
-	
+
 	public boolean isVoiceCalling;
     public boolean isVideoCalling;
 
@@ -150,7 +150,7 @@ public class DemoHelper {
 
 	/**
 	 * init helper
-	 * 
+	 *
 	 * @param context
 	 *            application context
 	 */
@@ -166,7 +166,7 @@ public class DemoHelper {
             EMChatManager.getInstance().setMipushConfig("2882303761517370134", "5131737040134");
             //设置华为push appid
             EMChatManager.getInstance().setHuaweiPushAppId("10601994");
-		    
+
 		    //设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
 		    EMChat.getInstance().setDebugMode(true);
 		    //get easeui instance
@@ -180,49 +180,50 @@ public class DemoHelper {
 			PreferenceManager.init(context);
 			//初始化用户管理类
 			getUserProfileManager().init(context);
-			
+
+
 			//设置全局监听
 			setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
 	        initDbDao();
-	        
+
 		}
 	}
 
 	private void setChatoptions(){
 	    //easeui库默认设置了一些options，可以覆盖
 	    EMChatOptions options = EMChatManager.getInstance().getChatOptions();
-	    options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());  
+	    options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
 	}
 
     protected void setEaseUIProviders() {
         //需要easeui库显示用户头像和昵称设置此provider
         easeUI.setUserProfileProvider(new EaseUserProfileProvider() {
-            
+
             @Override
             public EaseUser getUser(String username) {
                 return getUserInfo(username);
             }
         });
-        
+
         //不设置，则使用easeui默认的
         easeUI.setSettingsProvider(new EaseSettingsProvider() {
-            
+
             @Override
             public boolean isSpeakerOpened() {
                 return demoModel.getSettingMsgSpeaker();
             }
-            
+
             @Override
             public boolean isMsgVibrateAllowed(EMMessage message) {
                 return demoModel.getSettingMsgVibrate();
             }
-            
+
             @Override
             public boolean isMsgSoundAllowed(EMMessage message) {
                 return demoModel.getSettingMsgSound();
             }
-            
+
             @Override
             public boolean isMsgNotifyAllowed(EMMessage message) {
                 if(message == null){
@@ -254,7 +255,7 @@ public class DemoHelper {
         });
         //设置表情provider
         easeUI.setEmojiconInfoProvider(new EaseEmojiconInfoProvider() {
-            
+
             @Override
             public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
                 EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
@@ -272,22 +273,22 @@ public class DemoHelper {
                 return null;
             }
         });
-        
+
         //不设置，则使用easeui默认的
         easeUI.getNotifier().setNotificationInfoProvider(new EaseNotificationInfoProvider() {
-            
+
             @Override
             public String getTitle(EMMessage message) {
               //修改标题,这里使用默认
                 return null;
             }
-            
+
             @Override
             public int getSmallIcon(EMMessage message) {
               //设置小图标，这里为默认
                 return 0;
             }
-            
+
             @Override
             public String getDisplayedText(EMMessage message) {
                 // 设置状态栏的消息提示，可以根据message的类型做相应提示
@@ -302,13 +303,13 @@ public class DemoHelper {
                     return message.getFrom() + ": " + ticker;
                 }
             }
-            
+
             @Override
             public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
                 return null;
                 // return fromUsersNum + "个基友，发来了" + messageNum + "条消息";
             }
-            
+
             @Override
             public Intent getLaunchIntent(EMMessage message) {
                 //设置点击通知栏跳转事件
@@ -331,14 +332,14 @@ public class DemoHelper {
                         }else{
                             intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
                         }
-                        
+
                     }
                 }
                 return intent;
             }
         });
     }
-    
+
     /**
      * 设置全局事件监听
      */
@@ -346,11 +347,11 @@ public class DemoHelper {
         syncGroupsListeners = new ArrayList<DataSyncListener>();
         syncContactsListeners = new ArrayList<DataSyncListener>();
         syncBlackListListeners = new ArrayList<DataSyncListener>();
-        
+
         isGroupsSyncedWithServer = demoModel.isGroupsSynced();
         isContactsSyncedWithServer = demoModel.isContactSynced();
         isBlackListSyncedWithServer = demoModel.isBacklistSynced();
-        
+
         // create the global connection listener
         connectionListener = new EMConnectionListener() {
             @Override
@@ -366,7 +367,7 @@ public class DemoHelper {
 
             @Override
             public void onConnected() {
-                
+
                 // in case group and contact were already synced, we supposed to notify sdk we are ready to receive the events
                 if(isGroupsSyncedWithServer && isContactsSyncedWithServer){
                     new Thread(){
@@ -379,43 +380,43 @@ public class DemoHelper {
                     if(!isGroupsSyncedWithServer){
                         asyncFetchGroupsFromServer(null);
                     }
-                    
+
                     if(!isContactsSyncedWithServer){
                         asyncFetchContactsFromServer(null);
                     }
-                    
+
                     if(!isBlackListSyncedWithServer){
                         asyncFetchBlackListFromServer(null);
                     }
                 }
                 // 当连接到服务器之后，这里开始检查是否有没有发送的ack回执消息，
                 EaseACKUtil.getInstance(appContext).checkACKData();
-                
+
             }
         };
-        
-        
+
+
         IntentFilter callFilter = new IntentFilter(EMChatManager.getInstance().getIncomingCallBroadcastAction());
         if(callReceiver == null){
             callReceiver = new CallReceiver();
         }
 
         //注册通话广播接收者
-        appContext.registerReceiver(callReceiver, callFilter);    
+        appContext.registerReceiver(callReceiver, callFilter);
         //注册连接监听
-        EMChatManager.getInstance().addConnectionListener(connectionListener);       
+        EMChatManager.getInstance().addConnectionListener(connectionListener);
         //注册群组和联系人监听
         registerGroupAndContactListener();
         //注册消息事件监听
         registerEventListener();
-        
+
     }
-    
+
     private void initDbDao() {
         inviteMessgeDao = new InviteMessgeDao(appContext);
         userDao = new UserDao(appContext);
     }
-    
+
     /**
      * 注册群组和联系人监听，由于logout的时候会被sdk清除掉，再次登录的时候需要再注册一下
      */
@@ -424,12 +425,12 @@ public class DemoHelper {
             //注册群组变动监听
             EMGroupManager.getInstance().addGroupChangeListener(new MyGroupChangeListener());
             //注册联系人变动监听
-            EMContactManager.getInstance().setContactListener(new MyContactListener());
+            EMContactManager.getInstance().addContactListener(new MyContactListener());
             isGroupAndContactListenerRegisted = true;
         }
-        
+
     }
-    
+
     /**
      * 群组变动监听
      */
@@ -437,7 +438,7 @@ public class DemoHelper {
 
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
-            
+
             boolean hasGroup = false;
             for (EMGroup group : EMGroupManager.getInstance().getAllGroups()) {
                 if (group.getGroupId().equals(groupId)) {
@@ -486,7 +487,7 @@ public class DemoHelper {
 
         @Override
         public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
-            
+
             // 用户申请加入群聊
             InviteMessage msg = new InviteMessage();
             msg.setFrom(applyer);
@@ -523,15 +524,15 @@ public class DemoHelper {
             // 加群申请被拒绝，demo未实现
         }
     }
-    
+
     /***
      * 好友变化listener
-     * 
+     *
      */
     public class MyContactListener implements EMContactListener {
 
         @Override
-        public void onContactAdded(List<String> usernameList) {         
+        public void onContactAdded(List<String> usernameList) {
             // 保存增加的联系人
             Map<String, EaseUser> localUsers = getContactList();
             synchronized (localUsers) {
@@ -608,7 +609,7 @@ public class DemoHelper {
         }
 
     }
-    
+
     /**
      * 保存并提示消息的邀请消息
      * @param msg
@@ -623,7 +624,7 @@ public class DemoHelper {
         // 提示有新消息
         getNotifier().viberateAndPlayTone(null);
     }
-    
+
     /**
      * 账号在别的设备登录
      */
@@ -650,7 +651,7 @@ public class DemoHelper {
         intent.putExtra(Constant.ACCOUNT_REMOVED, true);
         appContext.startActivity(intent);
     }
-	
+
 	private EaseUser getUserInfo(String username){
 	    //获取user信息，demo是从内存的好友列表里获取，
         //实际开发中，可能还需要从服务器获取用户信息,
@@ -670,7 +671,7 @@ public class DemoHelper {
         }
         return user;
 	}
-	
+
 	 /**
      * 全局事件监听
      * 因为可能会有UI页面先处理到这个消息，所以一般如果UI页面已经处理，这里就不需要再次处理
@@ -679,7 +680,7 @@ public class DemoHelper {
     protected void registerEventListener() {
         eventListener = new EMEventListener() {
             private BroadcastReceiver broadCastReceiver = null;
-            
+
             @Override
             public void onEvent(EMNotifierEvent event) {
                 EMMessage message = null;
@@ -687,7 +688,7 @@ public class DemoHelper {
                     message = (EMMessage)event.getData();
                     EMLog.d(TAG, "receive the event : " + event.getEvent() + ",id : " + message.getMsgId());
                 }
-                
+
                 switch (event.getEvent()) {
                 case EventNewMessage:
                     //应用在后台，不需要刷新UI,通知栏提示新消息
@@ -722,10 +723,10 @@ public class DemoHelper {
                     //获取扩展属性 此处省略
                     //message.getStringAttribute("");
                     final String str = appContext.getString(R.string.receive_the_passthrough);
-                    
+
                     final String CMD_TOAST_BROADCAST = "easemob.demo.cmd.toast";
                     IntentFilter cmdFilter = new IntentFilter(CMD_TOAST_BROADCAST);
-                    
+
                     if(broadCastReceiver == null){
                         broadCastReceiver = new BroadcastReceiver(){
 
@@ -740,7 +741,7 @@ public class DemoHelper {
                                 Toast.makeText(appContext, intent.getStringExtra("cmd_value"), Toast.LENGTH_SHORT).show();
                             }
                         };
-                        
+
                       //注册广播接收者
                         appContext.registerReceiver(broadCastReceiver,cmdFilter);
                     }
@@ -748,7 +749,7 @@ public class DemoHelper {
                     Intent broadcastIntent = new Intent(CMD_TOAST_BROADCAST);
                     broadcastIntent.putExtra("cmd_value", str+action);
                     appContext.sendBroadcast(broadcastIntent, null);
-                    
+
                     break;
                 case EventDeliveryAck:
                     message.setDelivered(true);
@@ -759,9 +760,9 @@ public class DemoHelper {
                     EMMessage ackMessage = (EMMessage) event.getData();
                     EMConversation conversation = EMChatManager.getInstance().getConversation(ackMessage.getTo());
                     // 判断接收到ack的这条消息是不是阅后即焚的消息，如果是，则说明对方看过消息了，对方会销毁，这边也删除(现在只有txt iamge file三种消息支持 )
-                    if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false) 
-                            && (ackMessage.getType() == Type.TXT 
-                            || ackMessage.getType() == Type.VOICE 
+                    if(ackMessage.getBooleanAttribute(EaseConstant.EASE_ATTR_READFIRE, false)
+                            && (ackMessage.getType() == Type.TXT
+                            || ackMessage.getType() == Type.VOICE
                             || ackMessage.getType() == Type.IMAGE)){
                         // 判断当前会话是不是只有一条消息，如果只有一条消息，并且这条消息也是阅后即焚类型，当对方阅读后，这边要删除，会话会被过滤掉，因此要加载上一条消息
                         if(conversation.getAllMessages().size() == 1 && conversation.getLastMessage().getMsgId().equals(ackMessage.getMsgId())){
@@ -778,16 +779,16 @@ public class DemoHelper {
                 default:
                     break;
                 }
-                
+
             }
         };
-        
+
         EMChatManager.getInstance().registerEventListener(eventListener);
     }
-    
+
 	/**
 	 * 是否登录成功过
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isLoggedIn() {
@@ -796,7 +797,7 @@ public class DemoHelper {
 
 	/**
 	 * 退出登录
-	 * 
+	 *
 	 * @param unbindDeviceToken
 	 *            是否解绑设备token(使用GCM才有)
 	 * @param callback
@@ -829,7 +830,7 @@ public class DemoHelper {
 			}
 		});
 	}
-	
+
 	/**
 	 * 获取消息通知类
 	 * @return
@@ -837,28 +838,28 @@ public class DemoHelper {
 	public EaseNotifier getNotifier(){
 	    return easeUI.getNotifier();
 	}
-	
+
 	public DemoModel getModel(){
         return (DemoModel) demoModel;
     }
-	
+
 	/**
 	 * 设置好友user list到内存中
-	 * 
+	 *
 	 * @param contactList
 	 */
 	public void setContactList(Map<String, EaseUser> contactList) {
 		this.contactList = contactList;
 	}
-	
+
 	/**
-     * 保存单个user 
+     * 保存单个user
      */
     public void saveContact(EaseUser user){
     	contactList.put(user.getUsername(), user);
     	demoModel.saveContact(user);
     }
-    
+
     /**
      * 获取好友list
      *
@@ -868,10 +869,10 @@ public class DemoHelper {
         if (isLoggedIn() && contactList == null) {
             contactList = demoModel.getContactList();
         }
-        
+
         return contactList;
     }
-    
+
     /**
      * 设置当前用户的环信id
      * @param username
@@ -880,7 +881,7 @@ public class DemoHelper {
     	this.username = username;
     	demoModel.setCurrentUserName(username);
     }
-    
+
     /**
      * 获取当前用户的环信id
      */
@@ -928,7 +929,7 @@ public class DemoHelper {
 		} catch (Exception e) {
 		}
 	}
-	
+
 	  public void addSyncGroupListener(DataSyncListener listener) {
 	        if (listener == null) {
 	            return;
@@ -982,7 +983,7 @@ public class DemoHelper {
 	            syncBlackListListeners.remove(listener);
 	        }
 	    }
-	
+
 	/**
     * 同步操作，从服务器获取群组列表
     * 该方法会记录更新状态，可以通过isSyncingGroupsFromServer获取是否正在更新
@@ -993,25 +994,25 @@ public class DemoHelper {
        if(isSyncingGroupsWithServer){
            return;
        }
-       
+
        isSyncingGroupsWithServer = true;
-       
+
        new Thread(){
            @Override
            public void run(){
                try {
                    EMGroupManager.getInstance().getGroupsFromServer();
-                   
+
                    // in case that logout already before server returns, we should return immediately
                    if(!EMChat.getInstance().isLoggedIn()){
                        return;
                    }
-                   
+
                    demoModel.setGroupsSynced(true);
-                   
+
                    isGroupsSyncedWithServer = true;
                    isSyncingGroupsWithServer = false;
-                   
+
                    //通知listener同步群组完毕
                    noitifyGroupSyncListeners(true);
                    if(isContactsSyncedWithServer()){
@@ -1029,7 +1030,7 @@ public class DemoHelper {
                        callback.onError(e.getErrorCode(), e.toString());
                    }
                }
-           
+
            }
        }.start();
    }
@@ -1039,14 +1040,14 @@ public class DemoHelper {
            listener.onSyncComplete(success);
        }
    }
-   
+
    public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback){
        if(isSyncingContactsWithServer){
            return;
        }
-       
+
        isSyncingContactsWithServer = true;
-       
+
        new Thread(){
            @Override
            public void run(){
@@ -1057,7 +1058,7 @@ public class DemoHelper {
                    if(!EMChat.getInstance().isLoggedIn()){
                        return;
                    }
-                  
+
                    Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
                    for (String username : usernames) {
                        EaseUser user = new EaseUser(username);
@@ -1074,17 +1075,17 @@ public class DemoHelper {
 
                    demoModel.setContactSynced(true);
                    EMLog.d(TAG, "set contact syn status to true");
-                   
+
                    isContactsSyncedWithServer = true;
                    isSyncingContactsWithServer = false;
-                   
+
                    //通知listeners联系人同步完毕
                    notifyContactsSyncListener(true);
                    if(isGroupsSyncedWithServer()){
                        notifyForRecevingEvents();
                    }
-                   
-                   
+
+
                    getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
 
                        @Override
@@ -1110,7 +1111,7 @@ public class DemoHelper {
                        callback.onError(e.getErrorCode(), e.toString());
                    }
                }
-               
+
            }
        }.start();
    }
@@ -1120,31 +1121,31 @@ public class DemoHelper {
            listener.onSyncComplete(success);
        }
    }
-   
+
    public void asyncFetchBlackListFromServer(final EMValueCallBack<List<String>> callback){
-       
+
        if(isSyncingBlackListWithServer){
            return;
        }
-       
+
        isSyncingBlackListWithServer = true;
-       
+
        new Thread(){
            @Override
            public void run(){
                try {
                    List<String> usernames = EMContactManager.getInstance().getBlackListUsernamesFromServer();
-                   
+
                    // in case that logout already before server returns, we should return immediately
                    if(!EMChat.getInstance().isLoggedIn()){
                        return;
                    }
-                   
+
                    demoModel.setBlacklistSynced(true);
-                   
+
                    isBlackListSyncedWithServer = true;
                    isSyncingBlackListWithServer = false;
-                   
+
                    EMContactManager.getInstance().saveBlackList(usernames);
                    notifyBlackListSyncListener(true);
                    if(callback != null){
@@ -1152,26 +1153,26 @@ public class DemoHelper {
                    }
                } catch (EaseMobException e) {
                    demoModel.setBlacklistSynced(false);
-                   
+
                    isBlackListSyncedWithServer = false;
                    isSyncingBlackListWithServer = true;
                    e.printStackTrace();
-                   
+
                    if(callback != null){
                        callback.onError(e.getErrorCode(), e.toString());
                    }
                }
-               
+
            }
        }.start();
    }
-	
+
 	public void notifyBlackListSyncListener(boolean success){
         for (DataSyncListener listener : syncBlackListListeners) {
             listener.onSyncComplete(success);
         }
     }
-    
+
     public boolean isSyncingGroupsWithServer() {
         return isSyncingGroupsWithServer;
     }
@@ -1183,7 +1184,7 @@ public class DemoHelper {
     public boolean isSyncingBlackListWithServer() {
         return isSyncingBlackListWithServer;
     }
-    
+
     public boolean isGroupsSyncedWithServer() {
         return isGroupsSyncedWithServer;
     }
@@ -1195,33 +1196,33 @@ public class DemoHelper {
     public boolean isBlackListSyncedWithServer() {
         return isBlackListSyncedWithServer;
     }
-	
+
 	public synchronized void notifyForRecevingEvents(){
         if(alreadyNotified){
             return;
         }
-        
+
         // 通知sdk，UI 已经初始化完毕，注册了相应的receiver和listener, 可以接受broadcast了
         EMChat.getInstance().setAppInited();
         alreadyNotified = true;
     }
-	
+
     synchronized void reset(){
         isSyncingGroupsWithServer = false;
         isSyncingContactsWithServer = false;
         isSyncingBlackListWithServer = false;
-        
+
         demoModel.setGroupsSynced(false);
         demoModel.setContactSynced(false);
         demoModel.setBlacklistSynced(false);
-        
+
         isGroupsSyncedWithServer = false;
         isContactsSyncedWithServer = false;
         isBlackListSyncedWithServer = false;
-        
+
         alreadyNotified = false;
         isGroupAndContactListenerRegisted = false;
-        
+
         setContactList(null);
         setRobotList(null);
         getUserProfileManager().reset();
