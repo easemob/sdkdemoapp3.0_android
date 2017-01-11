@@ -35,7 +35,7 @@ public class CallActivity extends BaseActivity {
     protected final int MSG_CALL_ANSWER = 2;
     protected final int MSG_CALL_REJECT = 3;
     protected final int MSG_CALL_END = 4;
-    protected final int MSG_CALL_RLEASE_HANDLER = 5;
+    protected final int MSG_CALL_RELEASE_HANDLER = 5;
     protected final int MSG_CALL_SWITCH_CAMERA = 6;
 
     protected boolean isInComingCall;
@@ -134,6 +134,7 @@ public class CallActivity extends BaseActivity {
     
     @Override
     public void onBackPressed() {
+        EMLog.d(TAG, "onBackPressed");
         handler.sendEmptyMessage(MSG_CALL_END);
         saveCallRecord();
         finish();
@@ -234,6 +235,7 @@ public class CallActivity extends BaseActivity {
             case MSG_CALL_END:
                 if (soundPool != null)
                     soundPool.stop(streamID);
+                EMLog.d("EMCallManager", "soundPool stop MSG_CALL_END");
                 try {
                     EMClient.getInstance().callManager().endCall();
                 } catch (Exception e) {
@@ -242,7 +244,7 @@ public class CallActivity extends BaseActivity {
                 }
                 
                 break;
-            case MSG_CALL_RLEASE_HANDLER:
+            case MSG_CALL_RELEASE_HANDLER:
                 try {
                     EMClient.getInstance().callManager().endCall();
                 } catch (Exception e) {
@@ -266,7 +268,7 @@ public class CallActivity extends BaseActivity {
     };
     
     void releaseHandler() {
-        handler.sendEmptyMessage(MSG_CALL_RLEASE_HANDLER);
+        handler.sendEmptyMessage(MSG_CALL_RELEASE_HANDLER);
     }
     
     /**
@@ -276,7 +278,7 @@ public class CallActivity extends BaseActivity {
     protected int playMakeCallSounds() {
         try {
             audioManager.setMode(AudioManager.MODE_RINGTONE);
-            audioManager.setSpeakerphoneOn(false);
+            audioManager.setSpeakerphoneOn(true);
 
             // play
             int id = soundPool.play(outgoing, // sound resource
