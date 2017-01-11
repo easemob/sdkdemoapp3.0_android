@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@color/money_white"
+              android:background="@color/rp_money_white"
               android:orientation="vertical"
     >
 
@@ -32,7 +32,7 @@
             android:ellipsize="end"
             android:maxEms="10"
             android:maxLines="1"
-            android:textColor="@color/text_black"
+            android:textColor="@color/rp_text_black"
             android:textSize="@dimen/font45px"
             />
 
@@ -54,7 +54,7 @@
             android:layout_marginLeft="@dimen/size45px"
             android:layout_marginTop="@dimen/size9px"
             android:layout_toRightOf="@id/iv_record_avatar_icon"
-            android:textColor="@color/text_light_grey"
+            android:textColor="@color/rp_text_light_grey"
             android:textSize="@dimen/font36px"
             />
 
@@ -65,7 +65,7 @@
             android:layout_alignBaseline="@id/tv_money_to_user"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/size45px"
-            android:textColor="@color/text_black"
+            android:textColor="@color/rp_text_black"
             android:textSize="@dimen/font45px"
             />
 
@@ -78,7 +78,7 @@
             android:layout_marginLeft="@dimen/size45px"
             android:layout_marginRight="@dimen/size45px"
             android:layout_marginTop="@dimen/size9px"
-            android:textColor="@color/text_light_grey"
+            android:textColor="@color/rp_text_light_grey"
             android:textSize="@dimen/font36px"
             />
     </RelativeLayout>

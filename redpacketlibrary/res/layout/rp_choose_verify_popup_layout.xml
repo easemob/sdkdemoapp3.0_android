@@ -11,10 +11,10 @@
         style="@style/DialogTitleStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size132px"
-        android:background="@color/money_bg_color"
+        android:background="@color/rp_money_bg_color"
         android:gravity="center"
         android:text="@string/str_choose_camera"
-        android:textColor="@color/text_black"
+        android:textColor="@color/rp_text_black"
         android:textSize="@dimen/font45px"
         />
 
@@ -25,10 +25,10 @@
         style="@style/DialogTitleStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size132px"
-        android:background="@color/money_bg_color"
+        android:background="@color/rp_money_bg_color"
         android:gravity="center"
         android:text="@string/str_choose_album"
-        android:textColor="@color/text_black"
+        android:textColor="@color/rp_text_black"
         android:textSize="@dimen/font45px"
         />
 
@@ -39,10 +39,10 @@
         style="@style/DialogTitleStyle"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size132px"
-        android:background="@color/money_bg_color"
+        android:background="@color/rp_money_bg_color"
         android:gravity="center"
         android:text="@string/btn_cancel"
-        android:textColor="@color/text_black"
+        android:textColor="@color/rp_text_black"
         android:textSize="@dimen/font45px"
         android:textStyle="bold"
         />

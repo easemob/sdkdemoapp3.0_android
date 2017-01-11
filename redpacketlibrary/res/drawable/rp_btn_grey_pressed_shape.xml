@@ -7,6 +7,6 @@
     <corners android:radius="3dp" />
     <stroke
         android:width="1px"
-        android:color="@color/divider_color"></stroke>
+        android:color="@color/rp_divider_color"/>
 
 </shape>

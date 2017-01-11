@@ -47,5 +47,4 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':EaseUI')
-    compile files('libs/redpacket-3.2.0.jar')
 }

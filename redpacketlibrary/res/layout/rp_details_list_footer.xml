@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="@color/money_white"
+                android:background="@color/rp_money_white"
                 android:orientation="vertical"
     >
 
@@ -13,7 +13,7 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:text="@string/check_money_records"
-        android:textColor="@color/check_blue"
+        android:textColor="@color/rp_check_blue"
         android:textSize="@dimen/font45px"
         />
 </RelativeLayout>

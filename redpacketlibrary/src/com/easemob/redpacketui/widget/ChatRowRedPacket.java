@@ -53,7 +53,7 @@ public class ChatRowRedPacket extends EaseChatRow {
         handleTextMessage();
     }
 
-    protected void handleTextMessage() {
+    private void handleTextMessage() {
         if (message.direct == EMMessage.Direct.SEND) {
             if (message.status != Status.SUCCESS && message.status != Status.FAIL)
                 setMessageSendCallback();

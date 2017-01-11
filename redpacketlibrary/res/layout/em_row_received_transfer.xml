@@ -34,7 +34,6 @@
             android:id="@+id/bubble"
             android:layout_width="210dp"
             android:layout_height="90dp"
-            android:layout_below="@+id/tv_userid"
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_toRightOf="@id/iv_userhead"
             android:background="@drawable/em_transfer_chatfrom_bg"

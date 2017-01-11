@@ -16,6 +16,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="@color/divider_color"
+        android:background="@color/rp_divider_color"
         />
 </LinearLayout>
