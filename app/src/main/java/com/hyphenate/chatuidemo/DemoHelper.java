@@ -41,18 +41,11 @@ import com.hyphenate.chatuidemo.ui.MainActivity;
 import com.hyphenate.chatuidemo.ui.VideoCallActivity;
 import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
-<<<<<<< HEAD:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.easeui.EaseUI.EaseEmojiconInfoProvider;
 import com.hyphenate.easeui.EaseUI.EaseSettingsProvider;
 import com.hyphenate.easeui.EaseUI.EaseUserProfileProvider;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
-=======
-import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.easeui.controller.EaseUI.EaseSettingsProvider;
-import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
-import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
->>>>>>> sdk3.0:src/com/hyphenate/chatuidemo/DemoHelper.java
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -800,12 +793,12 @@ public class DemoHelper {
 			@Override
 			public void onMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
-			        EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
-			        // in background, do not refresh UI, notify it in notification bar
-			        if(!easeUI.hasForegroundActivies()){
-			            getNotifier().onNewMsg(message);
-			        }
-			    }
+                    EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+                    // in background, do not refresh UI, notify it in notification bar
+                    if(!easeUI.hasForegroundActivies()){
+                        getNotifier().onNewMsg(message);
+                    }
+                }
 			}
 			
 			@Override

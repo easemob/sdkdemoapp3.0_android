@@ -10,6 +10,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
         // ============== fabric start
 //        classpath 'io.fabric.tools:gradle:1.+'
         // ============== fabric end
@@ -22,5 +24,28 @@ allprojects {
     }
 }
 
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}
+
+ext{
+    if(!project.hasProperty('isAarRelease')){
+        isAarRelease = false;
+    }
+    if(!project.hasProperty('isLite')){
+        isLite = false;
+    }
+    if(!project.hasProperty('sdkVersion')){
+        sdkVersion = '3.2.3'
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
 
 

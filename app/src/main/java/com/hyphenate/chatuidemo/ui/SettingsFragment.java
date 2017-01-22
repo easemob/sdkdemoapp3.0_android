@@ -90,10 +90,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private RelativeLayout rl_switch_adaptive_video_encode;
 	private RelativeLayout rl_custom_appkey;
     private RelativeLayout rl_custom_server;
-<<<<<<< HEAD:app/src/main/java/com/hyphenate/chatuidemo/ui/SettingsFragment.java
-//	private RelativeLayout rl_switch_offline_call_push;
-=======
->>>>>>> sdk3.0:src/com/hyphenate/chatuidemo/ui/SettingsFragment.java
 	RelativeLayout rl_push_settings;
 	private LinearLayout   ll_call_option;
 
@@ -140,10 +136,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_adaptive_video_encode = (RelativeLayout) getView().findViewById(R.id.rl_switch_adaptive_video_encode);
 		rl_custom_appkey = (RelativeLayout) getView().findViewById(R.id.rl_custom_appkey);
 		rl_custom_server = (RelativeLayout) getView().findViewById(R.id.rl_custom_server);
-<<<<<<< HEAD:app/src/main/java/com/hyphenate/chatuidemo/ui/SettingsFragment.java
-//		rl_switch_offline_call_push =  (RelativeLayout) getView().findViewById(rl_switch_offline_call_push);
-=======
->>>>>>> sdk3.0:src/com/hyphenate/chatuidemo/ui/SettingsFragment.java
 		rl_push_settings = (RelativeLayout) getView().findViewById(R.id.rl_push_settings);
 
 		ll_call_option = (LinearLayout) getView().findViewById(R.id.ll_call_option);
@@ -192,10 +184,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_delete_msg_when_exit_group.setOnClickListener(this);
 		rl_switch_auto_accept_group_invitation.setOnClickListener(this);
 		rl_switch_adaptive_video_encode.setOnClickListener(this);
-<<<<<<< HEAD:app/src/main/java/com/hyphenate/chatuidemo/ui/SettingsFragment.java
-//		rl_switch_offline_call_push.setOnClickListener(this);
-=======
->>>>>>> sdk3.0:src/com/hyphenate/chatuidemo/ui/SettingsFragment.java
 		rl_push_settings.setOnClickListener(this);
 		ll_call_option.setOnClickListener(this);
 		llChange.setOnClickListener(this);

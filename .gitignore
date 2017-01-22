@@ -28,5 +28,6 @@ local.properties
 .gradle
 .idea/
 *.iml
+gradle-app.setting
 
 #*.properties
