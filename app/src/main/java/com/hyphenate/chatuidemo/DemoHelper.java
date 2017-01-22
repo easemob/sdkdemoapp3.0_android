@@ -904,12 +904,12 @@ public class DemoHelper {
 			@Override
 			public void onMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
-			        EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
-			        // in background, do not refresh UI, notify it in notification bar
-			        if(!easeUI.hasForegroundActivies()){
-			            getNotifier().onNewMsg(message);
-			        }
-			    }
+                    EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+                    // in background, do not refresh UI, notify it in notification bar
+                    if(!easeUI.hasForegroundActivies()){
+                        getNotifier().onNewMsg(message);
+                    }
+                }
 			}
 			
 			@Override
