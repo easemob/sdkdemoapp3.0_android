@@ -280,6 +280,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             try {
                                 if (soundPool != null)
                                     soundPool.stop(streamID);
+                                EMLog.d("EMCallManager", "soundPool stop ACCEPTED");
                             } catch (Exception e) {
                             }
                             openSpeakerOn();
@@ -490,6 +491,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             if(isRecording){
                 callHelper.stopVideoRecord();
             }
+            EMLog.d(TAG, "btn_hangup_call");
             handler.sendEmptyMessage(MSG_CALL_END);
             break;
 

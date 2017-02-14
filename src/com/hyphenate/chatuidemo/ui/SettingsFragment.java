@@ -92,6 +92,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private RelativeLayout rl_custom_server;
 	RelativeLayout rl_push_settings;
 	private LinearLayout   ll_call_option;
+	private RelativeLayout rl_mail_log;
 
 	/**
 	 * Diagnose
@@ -139,6 +140,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_push_settings = (RelativeLayout) getView().findViewById(R.id.rl_push_settings);
 
 		ll_call_option = (LinearLayout) getView().findViewById(R.id.ll_call_option);
+
+		rl_mail_log = (RelativeLayout) getView().findViewById(R.id.rl_mail_log);
 		
 		notifySwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
 		soundSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_sound);
@@ -187,6 +190,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_push_settings.setOnClickListener(this);
 		ll_call_option.setOnClickListener(this);
 		llChange.setOnClickListener(this);
+		rl_mail_log.setOnClickListener(this);
 
 		// the vibrate and sound notification are allowed or not?
 		if (settingsModel.getSettingMsgNotification()) {
@@ -413,10 +417,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			case R.id.rl_push_settings:
 				startActivity(new Intent(getActivity(), OfflinePushSettingsActivity.class));
 				break;
+			case R.id.rl_mail_log:
+				startActivity(new Intent(getActivity(), MailLogActivity.class));
+				break;
 			default:
 				break;
 		}
-		
 	}
 
 	void logout() {
