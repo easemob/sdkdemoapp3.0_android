@@ -777,7 +777,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 									case R.id.menu_item_mute:
 										List<String> muteMembers = new ArrayList<>();
 										muteMembers.add(operationUserId);
-										EMClient.getInstance().groupManager().muteGroupMembers(groupId, muteMembers, -1);
+										EMClient.getInstance().groupManager().muteGroupMembers(groupId, muteMembers, 20 * 60 * 1000);
 										break;
 									case R.id.menu_item_unmute:
 										List<String> list = new ArrayList<>();
@@ -1118,7 +1118,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						memberList.removeAll(muteList);
 
 					} catch (Exception e) {
-						// e.printStackTrace();  // User has no permission for this operation
+						 //e.printStackTrace();  // User may have no permission for fetch mute, fetch black list operation
 					}
 
 					runOnUiThread(new Runnable() {
@@ -1157,6 +1157,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 								offlinePushSwitch.closeSwitch();
 							}
 
+							RelativeLayout changeGroupNameLayout = (RelativeLayout) findViewById(R.id.rl_change_group_name);
+							RelativeLayout changeGroupDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_group_description);
+							boolean isOwner = isCurrentOwner(group);
+							exitBtn.setVisibility(isOwner ? View.GONE : View.VISIBLE);
+							deleteBtn.setVisibility(isOwner ? View.VISIBLE : View.GONE);
+							changeGroupNameLayout.setVisibility(isOwner ? View.VISIBLE : View.GONE);
+							changeGroupDescriptionLayout.setVisibility(isOwner ? View.VISIBLE : View.GONE);
 						}
 					});
 

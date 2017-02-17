@@ -197,6 +197,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             }, 300);
         } else { // incoming call
 
+            callStateTextView.setText("Ringing");
             if(EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.IDLE
                     || EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.DISCONNECTED) {
                 // the call has ended
@@ -265,7 +266,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                         @Override
                         public void run() {
-                            callStateTextView.setText(R.string.have_connected_with);
+//                            callStateTextView.setText(R.string.have_connected_with);
                         }
 
                     });

@@ -683,7 +683,7 @@ public class DemoHelper {
 
         @Override
         public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
-            showToast("onOwnerChanged: " + newOwner + " oldOwner" + oldOwner);
+            showToast("onOwnerChanged new:" + newOwner + " old:" + oldOwner);
         }
         // ============================= group_reform new add api end
     }
