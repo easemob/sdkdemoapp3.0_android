@@ -620,7 +620,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		progressDialog.setMessage("processing...");
 		progressDialog.show();
 //		final ArrayList list = (ArrayList) Arrays.asList(groupId);
-				final List<String> list = new ArrayList<>();
+		final List<String> list = new ArrayList<String>();
 		list.add(groupId);
 		new Thread(new Runnable() {
             @Override
