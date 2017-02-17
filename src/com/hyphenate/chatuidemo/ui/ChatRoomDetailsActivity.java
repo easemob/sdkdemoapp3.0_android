@@ -81,8 +81,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		instance = this;
 		st = getResources().getString(R.string.people);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
-		RelativeLayout changeChatRoomNameLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_name);
-		RelativeLayout changeChatRoomDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_detail);
 
 		TextView chatRoomIdTextView = (TextView) findViewById(R.id.tv_chat_room_id_value);
 		TextView chatRoomNickTextView = (TextView) findViewById(R.id.tv_chat_room_nick_value);
@@ -100,15 +98,10 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		chatRoomIdTextView.setText(roomId);
 		chatRoomNickTextView.setText(room.getName());
 
-		if (isCurrentOwner(room) || isCurrentAdmin(room)) {
-			changeChatRoomNameLayout.setVisibility(View.VISIBLE);
-			changeChatRoomDescriptionLayout.setVisibility(View.VISIBLE);
-		} else {
-			changeChatRoomNameLayout.setVisibility(View.GONE);
-			changeChatRoomDescriptionLayout.setVisibility(View.GONE);
-		}
-
-		// owner & admin list
+        RelativeLayout changeChatRoomNameLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_name);
+        RelativeLayout changeChatRoomDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_detail);
+        changeChatRoomNameLayout.setVisibility(isCurrentOwner(room) ? View.VISIBLE : View.GONE);
+        changeChatRoomDescriptionLayout.setVisibility(isCurrentAdmin(room) ? View.VISIBLE : View.GONE);
 
 		// adapter data list
 		List<String> ownerAdminList = new ArrayList<>();
@@ -342,7 +335,12 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 							Button destroyButton = (Button)ChatRoomDetailsActivity.this.findViewById(R.id.btn_destroy_chatroom);
 							destroyButton.setVisibility(EMClient.getInstance().getCurrentUser().equals(room.getOwner()) ?
 									View.VISIBLE : View.GONE);
-						}
+
+                            RelativeLayout changeChatRoomNameLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_name);
+                            RelativeLayout changeChatRoomDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_detail);
+                            changeChatRoomNameLayout.setVisibility(isCurrentOwner(room) ? View.VISIBLE : View.GONE);
+                            changeChatRoomDescriptionLayout.setVisibility(isCurrentAdmin(room) ? View.VISIBLE : View.GONE);
+                        }
 					});
 				}
 			}
@@ -588,7 +586,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 									case R.id.menu_item_mute:
 										List<String> muteMembers = new ArrayList<>();
 										muteMembers.add(operationUserId);
-										EMClient.getInstance().chatroomManager().muteChatRoomMembers(roomId, muteMembers, -1);
+										EMClient.getInstance().chatroomManager().muteChatRoomMembers(roomId, muteMembers, 20 * 60 * 1000);
 										break;
 									case R.id.menu_item_unmute:
 										List<String> list = new ArrayList<>();
