@@ -324,14 +324,15 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 				} finally {
 					runOnUiThread(new Runnable() {
 						public void run() {
+                            refreshOwnerAdminAdapter();
+                            refreshMembersAdapter();
+
                             TextView chatRoomTitle = (TextView) findViewById(R.id.tv_chatroom_name);
                             chatRoomTitle.setText(room.getName());
 							TextView chatRoomNickTextView = (TextView) findViewById(R.id.tv_chat_room_nick_value);
 							chatRoomNickTextView.setText(room.getName());
 							loadingPB.setVisibility(View.INVISIBLE);
 
-							refreshOwnerAdminAdapter();
-							refreshMembersAdapter();
 
 							Button destroyButton = (Button)ChatRoomDetailsActivity.this.findViewById(R.id.btn_destroy_chatroom);
 							destroyButton.setVisibility(EMClient.getInstance().getCurrentUser().equals(room.getOwner()) ?
@@ -482,28 +483,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					operationUserId = username;
 					Dialog dialog = createMemberMenuDialog();
 					dialog.show();
-
-                    /*
-					LinearLayout itemAddAdmin = (LinearLayout)dialog.findViewById(R.id.menu_item_add_admin);
-					LinearLayout itemRemoveAdmin = (LinearLayout)dialog.findViewById(R.id.menu_item_rm_admin);
-					LinearLayout itemTransferOwner = (LinearLayout)dialog.findViewById(R.id.menu_item_transfer_owner);
-                    LinearLayout itemRemoveMember =  (LinearLayout)dialog.findViewById(R.id.menu_item_remove_member);
-					LinearLayout itemAddToBlackList = (LinearLayout) dialog.findViewById(R.id.menu_item_add_to_blacklist);
-					LinearLayout itemRemoveFromBlackList = (LinearLayout) dialog.findViewById(R.id.menu_item_remove_from_blacklist);
-					LinearLayout itemMute = (LinearLayout) dialog.findViewById(R.id.menu_item_mute);
-					LinearLayout itemUnMute = (LinearLayout) dialog.findViewById(R.id.menu_item_unmute);
-
-                    itemRemoveMember.setVisibility(View.GONE);
-					if (isAdmin(username)) {
-						itemAddAdmin.setVisibility(View.GONE);
-						itemRemoveAdmin.setVisibility(View.VISIBLE);
-						itemTransferOwner.setVisibility(View.VISIBLE);
-						itemAddToBlackList.setVisibility(View.GONE);
-						itemRemoveFromBlackList.setVisibility(View.GONE);
-						itemMute.setVisibility(View.GONE);
-						itemUnMute.setVisibility(View.GONE);
-					}
-					*/
 
                     boolean[] adminVisibilities = {
                             true,       //R.id.menu_item_transfer_owner,
@@ -670,8 +649,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 				id_background.setBackgroundColor(convertView.getResources().getColor(R.color.holo_blue_bright));
 			}
 
-
-
 			button.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -684,38 +661,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					operationUserId = username;
 					Dialog dialog = createMemberMenuDialog();
 					dialog.show();
-
-                    /*
-					LinearLayout itemTransferOwner = (LinearLayout)dialog.findViewById(R.id.menu_item_transfer_owner);
-					LinearLayout itemAddAdmin = (LinearLayout)dialog.findViewById(R.id.menu_item_add_admin);
-					LinearLayout itemRemoveAdmin = (LinearLayout)dialog.findViewById(R.id.menu_item_rm_admin);
-                    LinearLayout itemRemoveMember = (LinearLayout) dialog.findViewById(R.id.menu_item_remove_member);
-					LinearLayout itemAddToBlackList = (LinearLayout) dialog.findViewById(R.id.menu_item_add_to_blacklist);
-					LinearLayout itemRemoveFromBlackList = (LinearLayout) dialog.findViewById(R.id.menu_item_remove_from_blacklist);
-					LinearLayout itemMute = (LinearLayout) dialog.findViewById(R.id.menu_item_mute);
-					LinearLayout itemUnMute = (LinearLayout) dialog.findViewById(R.id.menu_item_unmute);
-
-                    itemRemoveMember.setVisibility(View.VISIBLE);
-					itemTransferOwner.setVisibility(View.GONE);
-					itemRemoveAdmin.setVisibility(View.GONE);
-                    itemAddAdmin.setVisibility(isCurrentOwner(room) ? View.VISIBLE : View.GONE);
-
-                    boolean inBlackList = isInBlackList(username);
-                    itemAddToBlackList.setVisibility(!inBlackList ? View.VISIBLE : View.GONE);
-                    itemRemoveFromBlackList.setVisibility(inBlackList ? View.VISIBLE : View.GONE);
-
-                    if (inBlackList) {
-                        itemAddAdmin.setVisibility(View.GONE);
-                        itemRemoveAdmin.setVisibility(View.GONE);
-                        itemRemoveMember.setVisibility(View.GONE);
-                        itemMute.setVisibility(View.GONE);
-                        itemUnMute.setVisibility(View.GONE);
-                    }
-
-                    boolean inMuteList = isInMuteList(username);
-                    itemMute.setVisibility(!inMuteList ? View.VISIBLE : View.GONE);
-                    itemUnMute.setVisibility(inMuteList ? View.VISIBLE : View.GONE);
-                    */
 
                     boolean[] normalVisibilities = {
                             false,      //R.id.menu_item_transfer_owner,
@@ -815,40 +760,20 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		@Override
 		public void onMemberJoined(final String roomId, final String participant) {
 			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(ChatRoomDetailsActivity.this, "onMemberJoined: " + participant, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
 				updateRoom();
-				refreshMembersAdapter();
 			}
 		}
 
 		@Override
 		public void onMemberExited(final String roomId, final String roomName, final String participant) {
 			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(ChatRoomDetailsActivity.this, "onMemberExited: " + participant, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
 				updateRoom();
-				refreshMembersAdapter();
 			}
 		}
 
 		@Override
 		public void onRemovedFromChatRoom(final String roomId, final String roomName, final String participant) {
 			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(ChatRoomDetailsActivity.this, "onRemovedFromChatRoom: " + participant, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
 				if (participant.equals(EMClient.getInstance().getCurrentUser())) {
 					finish();
 				}
@@ -869,7 +794,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
                     }
                 });
 				updateRoom();
-				refreshMembersAdapter();
 			}
 		}
 
@@ -900,8 +824,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
                     }
                 });
 				updateRoom();
-				refreshOwnerAdminAdapter();
-				refreshMembersAdapter();
 			}
 		}
 
@@ -915,8 +837,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
                     }
                 });
 				updateRoom();
-				refreshOwnerAdminAdapter();
-				refreshMembersAdapter();
 			}
 		}
 
@@ -930,8 +850,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
                     }
                 });
 				updateRoom();
-				refreshOwnerAdminAdapter();
-				refreshMembersAdapter();
 			}
 		}
 	}

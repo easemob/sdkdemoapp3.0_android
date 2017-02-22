@@ -337,34 +337,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 	}
 
-    protected void addUserToBlackList(final String username) {
-        final ProgressDialog pd = new ProgressDialog(this);
-        pd.setCanceledOnTouchOutside(false);
-        pd.setMessage(getString(R.string.Are_moving_to_blacklist));
-        pd.show();
-        new Thread(new Runnable() {
-        	public void run() {
-        		try {
-        			EMClient.getInstance().groupManager().blockUser(groupId, username);
-        			runOnUiThread(new Runnable() {
-        				public void run() {
-        				    refreshMembersAdapter();
-        				    pd.dismiss();
-        					Toast.makeText(getApplicationContext(), R.string.Move_into_blacklist_success, Toast.LENGTH_SHORT).show();
-        				}
-        			});
-        		} catch (HyphenateException e) {
-        			runOnUiThread(new Runnable() {
-        				public void run() {
-        				    pd.dismiss();
-        					Toast.makeText(getApplicationContext(), R.string.failed_to_move_into, Toast.LENGTH_SHORT).show();
-        				}
-        			});
-        		}
-        	}
-        }).start();
-    }
-
 	private void refreshOwnerAdminAdapter() {
 		runOnUiThread(new Runnable() {
 			@Override
@@ -413,28 +385,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				userGridview.setAdapter(membersAdapter);
 			}
 		});
-	}
-
-	private void refreshUIVisibility() {
-		((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getMemberCount() + st);
-
-		TextView idText = (TextView) findViewById(R.id.tv_group_id_value);
-		RelativeLayout changeGroupNameLayout = (RelativeLayout) findViewById(R.id.rl_change_group_name);
-		RelativeLayout changeGroupDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_group_description);
-
-		idText.setText(groupId);
-		if (group.getOwner() == null || "".equals(group.getOwner())
-				|| !group.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
-			exitBtn.setVisibility(View.GONE);
-			deleteBtn.setVisibility(View.GONE);
-			changeGroupNameLayout.setVisibility(View.GONE);
-			changeGroupDescriptionLayout.setVisibility(View.GONE);
-		}
-		// show dismiss button if you are owner of group
-		if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
-			exitBtn.setVisibility(View.GONE);
-			deleteBtn.setVisibility(View.VISIBLE);
-		}
 	}
 
 	/**
@@ -873,9 +823,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			final String username = getItem(position);
 			convertView.setVisibility(View.VISIBLE);
 			button.setVisibility(View.VISIBLE);
-//				Drawable avatar = getResources().getDrawable(R.drawable.default_avatar);
-//				avatar.setBounds(0, 0, referenceWidth, referenceHeight);
-//				button.setCompoundDrawables(null, avatar, null, null);
 			EaseUserUtils.setUserNick(username, holder.textView);
 			EaseUserUtils.setUserAvatar(getContext(), username, holder.imageView);
 
@@ -951,17 +898,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			}
 			final LinearLayout button = (LinearLayout) convertView.findViewById(R.id.button_avatar);
 
-//			convertView.setVisibility(View.VISIBLE);
-//			button.setVisibility(View.VISIBLE);
-//			Drawable avatar = getResources().getDrawable(R.drawable.default_avatar);
-//			avatar.setBounds(0, 0, referenceWidth, referenceHeight);
-//			button.setCompoundDrawables(null, avatar, null, null);
-
-//			final String st12 = getResources().getString(R.string.not_delete_myself);
-//			final String st13 = getResources().getString(R.string.Are_removed);
-//			final String st14 = getResources().getString(R.string.Delete_failed);
-//			final String st15 = getResources().getString(R.string.confirm_the_members);
-
 			// add button
 			if (position == getCount() - 1) {
 				holder.textView.setText("");
@@ -1007,37 +943,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						operationUserId = username;
 						Dialog dialog = createMemberMenuDialog();
 						dialog.show();
-
-						/*
-						LinearLayout itemTransferOwner = (LinearLayout) dialog.findViewById(R.id.menu_item_transfer_owner);
-						LinearLayout itemAddAdmin = (LinearLayout) dialog.findViewById(R.id.menu_item_add_admin);
-						LinearLayout itemRemoveAdmin = (LinearLayout) dialog.findViewById(R.id.menu_item_rm_admin);
-						LinearLayout itemRemoveMember = (LinearLayout) dialog.findViewById(R.id.menu_item_remove_member);
-						LinearLayout itemAddToBlackList = (LinearLayout) dialog.findViewById(R.id.menu_item_add_to_blacklist);
-						LinearLayout itemRemoveFromBlackList = (LinearLayout) dialog.findViewById(R.id.menu_item_remove_from_blacklist);
-						LinearLayout itemMute = (LinearLayout) dialog.findViewById(R.id.menu_item_mute);
-						LinearLayout itemUnMute = (LinearLayout) dialog.findViewById(R.id.menu_item_unmute);
-
-						itemTransferOwner.setVisibility(View.GONE);
-						itemRemoveAdmin.setVisibility(View.GONE);
-						itemAddAdmin.setVisibility(isCurrentOwner(group) ? View.VISIBLE : View.GONE);
-
-						boolean inBlackList = isInBlackList(username);
-						itemAddToBlackList.setVisibility(!inBlackList ? View.VISIBLE : View.GONE);
-						itemRemoveFromBlackList.setVisibility(inBlackList ? View.VISIBLE : View.GONE);
-
-						if (inBlackList) {
-							itemAddAdmin.setVisibility(View.GONE);
-							itemRemoveAdmin.setVisibility(View.GONE);
-							itemRemoveMember.setVisibility(View.GONE);
-							itemMute.setVisibility(View.GONE);
-							itemUnMute.setVisibility(View.GONE);
-						}
-
-						boolean inMuteList = isInMuteList(username);
-						itemMute.setVisibility(!inMuteList ? View.VISIBLE : View.GONE);
-						itemUnMute.setVisibility(inMuteList ? View.VISIBLE : View.GONE);
-						*/
 
 						boolean[] normalVisibilities = {
 								false,      //R.id.menu_item_transfer_owner,
@@ -1131,15 +1036,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 					runOnUiThread(new Runnable() {
 						public void run() {
-							refreshUIVisibility();
+							refreshOwnerAdminAdapter();
+							refreshMembersAdapter();
 
+//							refreshUIVisibility();
 							((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getMemberCount()
 									+ ")");
 							loadingPB.setVisibility(View.INVISIBLE);
-
-							refreshOwnerAdminAdapter();
-
-							refreshMembersAdapter();
 
 							if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
 								// 显示解散按钮
@@ -1220,9 +1123,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 				@Override
 				public void run() {
+					memberList = group.getMembers();
+					memberList.remove(group.getOwner());
+					memberList.removeAll(adminList);
+					memberList.removeAll(muteList);
 					refreshMembersAdapter();
 				}
-		         	});
+            });
 		}
 
 		@Override
@@ -1238,29 +1145,21 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	    @Override
 	    public void onMuteListAdded(String groupId, final List<String> mutes, final long muteExpire) {
 		    updateGroup();
-		    refreshMembersAdapter();
-		    refreshOwnerAdminAdapter();
 	    }
 
 	    @Override
 	    public void onMuteListRemoved(String groupId, final List<String> mutes) {
 		    updateGroup();
-		    refreshMembersAdapter();
-		    refreshOwnerAdminAdapter();
 	    }
 
 	    @Override
 	    public void onAdminAdded(String groupId, String administrator) {
 		    updateGroup();
-		    refreshMembersAdapter();
-		    refreshOwnerAdminAdapter();
 	    }
 
 	    @Override
 	    public void onAdminRemoved(String groupId, String administrator) {
 		    updateGroup();
-		    refreshMembersAdapter();
-		    refreshOwnerAdminAdapter();
 	    }
 
 	    @Override
@@ -1272,10 +1171,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				    Toast.makeText(GroupDetailsActivity.this, "onOwnerChanged", Toast.LENGTH_LONG).show();
 			    }
 		    });
-
 		    updateGroup();
-		    refreshMembersAdapter();
-		    refreshOwnerAdminAdapter();
 	    }
     }
 
