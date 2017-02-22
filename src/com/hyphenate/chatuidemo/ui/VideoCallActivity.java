@@ -248,7 +248,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         callStateListener = new EMCallStateChangeListener() {
 
             @Override
-            public void onCallStateChanged(CallState callState, final CallError error) {
+            public void onCallStateChanged(final CallState callState, final CallError error) {
                 switch (callState) {
 
                 case CONNECTING: // is connecting
@@ -437,6 +437,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     }
                                 }
                             }
+                            Toast.makeText(VideoCallActivity.this, callStateTextView.getText(), Toast.LENGTH_SHORT).show();
                             postDelayedCloseMsg();
                         }
 
