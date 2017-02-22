@@ -731,7 +731,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 	}
 
-	Dialog createChatRoomMemberMenuDialog() {
+	Dialog createMemberMenuDialog() {
 		final Dialog dialog = new Dialog(GroupDetailsActivity.this);
 		dialog.setTitle("group");
 		dialog.setContentView(R.layout.em_chatroom_member_menu);
@@ -791,8 +791,16 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 										break;
 								}
 								updateGroup();
-							} catch (Exception e) {
+							} catch (final HyphenateException e) {
+								runOnUiThread(new Runnable() {
+									              @Override
+									              public void run() {
+										              Toast.makeText(GroupDetailsActivity.this, e.getDescription(), Toast.LENGTH_SHORT).show();
+									              }
+								              }
+								);
 								e.printStackTrace();
+
 							} finally {
 								runOnUiThread(new Runnable() {
 									@Override
@@ -884,7 +892,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						return;
 					}
 					operationUserId = username;
-					Dialog dialog = createChatRoomMemberMenuDialog();
+					Dialog dialog = createMemberMenuDialog();
 					dialog.show();
 
 					boolean[] adminVisibilities = {
@@ -997,7 +1005,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							return;
 						}
 						operationUserId = username;
-						Dialog dialog = createChatRoomMemberMenuDialog();
+						Dialog dialog = createMemberMenuDialog();
 						dialog.show();
 
 						/*

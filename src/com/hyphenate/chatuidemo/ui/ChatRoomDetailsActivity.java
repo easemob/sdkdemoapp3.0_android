@@ -41,6 +41,7 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseExpandGridView;
+import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -479,7 +480,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					}
 					// do nothing here, you can show group member's profile here
 					operationUserId = username;
-					Dialog dialog = createChatRoomMemberMenuDialog();
+					Dialog dialog = createMemberMenuDialog();
 					dialog.show();
 
                     /*
@@ -531,7 +532,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		}
 	}
 
-	Dialog createChatRoomMemberMenuDialog() {
+	Dialog createMemberMenuDialog() {
 		final Dialog dialog = new Dialog(ChatRoomDetailsActivity.this);
 		dialog.setTitle("chat room");
 		dialog.setContentView(R.layout.em_chatroom_member_menu);
@@ -600,7 +601,14 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 										break;
 								}
 								updateRoom();
-							} catch (Exception e) {
+							} catch (final HyphenateException e) {
+                                runOnUiThread(new Runnable() {
+                                                  @Override
+                                                  public void run() {
+                                                      Toast.makeText(ChatRoomDetailsActivity.this, e.getDescription(), Toast.LENGTH_SHORT).show();
+                                                  }
+                                              }
+                                );
 								e.printStackTrace();
 							} finally {
 								runOnUiThread(new Runnable() {
@@ -674,7 +682,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 					// do nothing here, you can show group member's profile here
 					operationUserId = username;
-					Dialog dialog = createChatRoomMemberMenuDialog();
+					Dialog dialog = createMemberMenuDialog();
 					dialog.show();
 
                     /*
