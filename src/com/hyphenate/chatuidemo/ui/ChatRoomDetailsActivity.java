@@ -107,7 +107,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		// adapter data list
 		List<String> ownerAdminList = new ArrayList<>();
 		ownerAdminList.add(room.getOwner());
-		ownerAdminList.addAll(room.getAdministratorList());
+		ownerAdminList.addAll(room.getAdminList());
 		ownerAdminAdapter = new OwnerAdminAdapter(this, R.layout.em_grid_owner, ownerAdminList);
 		EaseExpandGridView ownerAdminGridView = (EaseExpandGridView) findViewById(R.id.owner_and_administrators);
 		ownerAdminGridView.setAdapter(ownerAdminAdapter);
@@ -129,7 +129,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			@Override
 			public void run() {
 				String owner = finalRoom.getOwner();
-				List<String> administratorList = finalRoom.getAdministratorList();
+				List<String> administratorList = finalRoom.getAdminList();
 				membersAdapter.notifyDataSetChanged();
 			}
 		}).start();
@@ -306,7 +306,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 					room = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId);
 					adminList.clear();
-					adminList.addAll(room.getAdministratorList());
+					adminList.addAll(room.getAdminList());
 					memberList.clear();
 					memberList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomMembers(roomId, 0, 500));
 					memberList.remove(room.getOwner());
@@ -316,7 +316,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					muteList.clear();
 					muteList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomMuteList(roomId, 0, 500).keySet());
 					blackList.clear();
-					blackList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomBlockList(roomId, 0, 500));
+					blackList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomBlackList(roomId, 0, 500));
 					memberList.removeAll(muteList);
 					memberList.removeAll(blackList);
 				} catch (Exception e) {

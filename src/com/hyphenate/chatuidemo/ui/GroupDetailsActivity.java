@@ -1015,7 +1015,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						group = EMClient.getInstance().groupManager().getGroupFromServer(groupId);
 
 						adminList.clear();
-						adminList.addAll(group.getAdminstratorList());
+						adminList.addAll(group.getAdminList());
 						memberList.clear();
 						EMCursorResult<String> result = EMClient.getInstance().groupManager().fetchGroupMembers(groupId, "", 200);
 						memberList.addAll(result.getData());

@@ -61,7 +61,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 			EMGroup group = EMClient.getInstance().groupManager().getGroup(groupId);
 			existMembers = group.getMembers();
 			existMembers.add(group.getOwner());
-			existMembers.addAll(group.getAdminstratorList());
+			existMembers.addAll(group.getAdminList());
 		}
 		if(existMembers == null)
 			existMembers = new ArrayList<String>();
