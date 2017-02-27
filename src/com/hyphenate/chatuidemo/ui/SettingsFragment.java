@@ -15,7 +15,9 @@ package com.hyphenate.chatuidemo.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -42,6 +44,8 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.easeui.widget.EaseSwitchButton;
 import com.hyphenate.util.EMLog;
+
+import java.io.File;
 
 /**
  * settings screen
@@ -418,7 +422,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				startActivity(new Intent(getActivity(), OfflinePushSettingsActivity.class));
 				break;
 			case R.id.rl_mail_log:
-				startActivity(new Intent(getActivity(), MailLogActivity.class));
+				sendLogThroughMail();
 				break;
 			default:
 				break;
@@ -476,4 +480,49 @@ public class SettingsFragment extends Fragment implements OnClickListener {
         	outState.putBoolean(Constant.ACCOUNT_REMOVED, true);
         }
     }
+
+	void sendLogThroughMail() {
+		String logPath = "";
+		try {
+			logPath = EMClient.getInstance().compressLogs();
+		} catch (Exception e) {
+			e.printStackTrace();
+			getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					Toast.makeText(getActivity(), "compress logs failed", Toast.LENGTH_LONG).show();
+				}
+			});
+			return;
+		}
+		File f = new File(logPath);
+		File storage = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+		if (f.exists() && f.canRead()) {
+			try {
+				storage.mkdirs();
+				File temp = File.createTempFile("hyphenate", ".log.gz", storage);
+				if (!temp.canWrite()) {
+					return;
+				}
+				boolean result = f.renameTo(temp);
+				if (result == false) {
+					return;
+				}
+				Intent intent = new Intent(Intent.ACTION_SENDTO);
+				intent.setData(Uri.parse("mailto:"));
+				intent.putExtra(Intent.EXTRA_SUBJECT, "log");
+				intent.putExtra(Intent.EXTRA_TEXT, "log in attachment");
+				intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + temp.getAbsolutePath()));
+				startActivity(intent);
+			} catch (final Exception e) {
+				e.printStackTrace();
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+		}
+	}
 }
