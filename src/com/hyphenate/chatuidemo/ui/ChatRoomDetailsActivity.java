@@ -307,8 +307,15 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					room = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId);
 					adminList.clear();
 					adminList.addAll(room.getAdminList());
+
+					// page size set to 20 is convenient for testing, should be applied to big value
+					List<String> result;
 					memberList.clear();
-					memberList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomMembers(roomId, 0, 500));
+					do {
+						result = EMClient.getInstance().chatroomManager().fetchChatRoomMembers(roomId, 0, 20);
+						memberList.addAll(result);
+					} while (result != null && result.size() == 20);
+
 					memberList.remove(room.getOwner());
 					memberList.removeAll(adminList);
 

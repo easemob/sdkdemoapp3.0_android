@@ -1017,9 +1017,15 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						adminList.clear();
 						adminList.addAll(group.getAdminList());
 						memberList.clear();
-						EMCursorResult<String> result = EMClient.getInstance().groupManager().fetchGroupMembers(groupId, "", 200);
-						memberList.addAll(result.getData());
-
+						EMCursorResult<String> result = null;
+						do {
+							// page size set to 20 is convenient for testing, should be applied to big value
+							result = EMClient.getInstance().groupManager().fetchGroupMembers(groupId,
+									result != null ? result.getCursor() : "",
+									20);
+							EMLog.d(TAG, "fetchGroupMembers result.size:" + result.getData().size());
+							memberList.addAll(result.getData());
+						} while (result.getData().size() == 20);
 
 						muteList.clear();
 						muteList.addAll(EMClient.getInstance().groupManager().fetchGroupMuteList(groupId, 0, 200).keySet());
