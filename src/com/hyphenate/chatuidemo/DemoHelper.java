@@ -730,6 +730,8 @@ public class DemoHelper {
             userDao.deleteContact(username);
             inviteMessgeDao.deleteMessage(username);
 
+            EMClient.getInstance().chatManager().deleteConversation(username, false);
+
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
