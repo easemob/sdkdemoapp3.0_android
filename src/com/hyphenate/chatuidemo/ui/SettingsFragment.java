@@ -46,6 +46,7 @@ import com.hyphenate.easeui.widget.EaseSwitchButton;
 import com.hyphenate.util.EMLog;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * settings screen
@@ -508,11 +509,15 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				if (result == false) {
 					return;
 				}
-				Intent intent = new Intent(Intent.ACTION_SENDTO);
+				Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
 				intent.setData(Uri.parse("mailto:"));
 				intent.putExtra(Intent.EXTRA_SUBJECT, "log");
-				intent.putExtra(Intent.EXTRA_TEXT, "log in attachment");
-				intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + temp.getAbsolutePath()));
+				intent.putExtra(Intent.EXTRA_TEXT, "log in attachment: " + temp.getAbsolutePath());
+
+				intent.setType("application/octet-stream");
+				ArrayList<Uri> uris = new ArrayList<>();
+				uris.add(Uri.fromFile(temp));
+				intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,uris);
 				startActivity(intent);
 			} catch (final Exception e) {
 				e.printStackTrace();
