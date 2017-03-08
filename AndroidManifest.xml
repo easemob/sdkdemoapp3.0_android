@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hyphenate.chatuidemo"
-    android:versionCode="36"
-    android:versionName="3.2.3">
+    android:versionCode="37"
+    android:versionName="3.3.0">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -113,6 +113,12 @@
             android:name=".ui.ChatRoomDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
+        <!-- 新建聊天室 -->
+        <activity
+            android:name=".ui.NewChatRoomActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 新建群组 -->
         <activity

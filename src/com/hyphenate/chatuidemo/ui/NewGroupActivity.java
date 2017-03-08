@@ -97,6 +97,7 @@ public class NewGroupActivity extends BaseActivity {
 					try {
 						EMGroupOptions option = new EMGroupOptions();
 					    option.maxUsers = 200;
+						option.inviteNeedConfirm = true;
 					    
 					    String reason = NewGroupActivity.this.getString(R.string.invite_join_group);
 					    reason  = EMClient.getInstance().getCurrentUser() + reason + groupName;

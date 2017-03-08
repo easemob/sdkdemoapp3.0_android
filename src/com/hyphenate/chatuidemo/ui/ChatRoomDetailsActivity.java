@@ -13,8 +13,7 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import java.util.List;
-
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -41,100 +41,163 @@ import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseExpandGridView;
+import com.hyphenate.exceptions.HyphenateException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ChatRoomDetailsActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "ChatRoomDetailsActivity";
 	private static final int REQUEST_CODE_EXIT = 1;
 	private static final int REQUEST_CODE_EXIT_DELETE = 2;
 	private static final int REQUEST_CODE_CLEAR_ALL_HISTORY = 3;
+	private static final int REQUEST_CODE_EDIT_CHAT_ROOM_NAME= 4;
+	private static final int REQUEST_CODE_EDIT_CHAT_ROOM_DESCRIPTION = 5;
 
-	String longClickUsername = null;
+	String operationUserId;
 
 	private String roomId;
 	private ProgressBar loadingPB;
-	private Button exitBtn;
-	private Button deleteBtn;
 	private EMChatRoom room;
-	private GridAdapter adapter;
+	private OwnerAdminAdapter ownerAdminAdapter;
+	private MemberAdapter membersAdapter;
 	private ProgressDialog progressDialog;
 
 	public static ChatRoomDetailsActivity instance;
-	
+
 	String st = "";
 
-	private List<String> memberList;
+	private List<String> adminList = Collections.synchronizedList(new ArrayList<String>());
+	private List<String> memberList = Collections.synchronizedList(new ArrayList<String>());
+	private List<String> muteList = Collections.synchronizedList(new ArrayList<String>());
+	private List<String> blackList = Collections.synchronizedList(new ArrayList<String>());
+
+	ChatRoomListener chatRoomListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.em_activity_group_details);
+		setContentView(R.layout.em_activity_chatroom_details);
 		instance = this;
 		st = getResources().getString(R.string.people);
-		RelativeLayout clearAllHistory = (RelativeLayout) findViewById(R.id.clear_all_history);
-		clearAllHistory.setVisibility(View.GONE);
-		EaseExpandGridView userGridview = (EaseExpandGridView) findViewById(R.id.gridview);
-		userGridview.setVisibility(View.VISIBLE);
 		loadingPB = (ProgressBar) findViewById(R.id.progressBar);
-		exitBtn = (Button) findViewById(R.id.btn_exit_grp);
-		deleteBtn = (Button) findViewById(R.id.btn_exitdel_grp);
-		RelativeLayout blacklistLayout = (RelativeLayout) findViewById(R.id.rl_blacklist);
-		RelativeLayout changeGroupNameLayout = (RelativeLayout) findViewById(R.id.rl_change_group_name);
 
-		RelativeLayout blockGroupMsgLayout = (RelativeLayout) findViewById(R.id.rl_switch_block_groupmsg);
-		RelativeLayout showChatRoomIdLayout = (RelativeLayout) findViewById(R.id.rl_group_id);
-		RelativeLayout showChatRoomNickLayout = (RelativeLayout) findViewById(R.id.rl_group_nick);
-		RelativeLayout showChatRoomOwnerLayout = (RelativeLayout) findViewById(R.id.rl_group_owner);
-		TextView chatRoomIdTextView = (TextView) findViewById(R.id.tv_group_id);
-		TextView chatRoomNickTextView = (TextView) findViewById(R.id.tv_group_nick_value);
-		TextView chatRoomOwnerTextView = (TextView) findViewById(R.id.tv_group_owner_value);
-		
-		findViewById(R.id.rl_search).setVisibility(View.GONE);
-		
-
+		TextView chatRoomIdTextView = (TextView) findViewById(R.id.tv_chat_room_id_value);
+		TextView chatRoomNickTextView = (TextView) findViewById(R.id.tv_chat_room_nick_value);
 
 		// get room id
 		roomId = getIntent().getStringExtra("roomId");
-		 
-		showChatRoomIdLayout.setVisibility(View.VISIBLE);
-		chatRoomIdTextView.setText(getResources().getString(R.string.chat_room) + " ID："+roomId);
-		showChatRoomNickLayout.setVisibility(View.VISIBLE);
-		showChatRoomOwnerLayout.setVisibility(View.VISIBLE);
-		 
 		room = EMClient.getInstance().chatroomManager().getChatRoom(roomId);
-		if(room == null){
-		    return;
+		if (room == null) {
+			return;
 		}
-		chatRoomNickTextView.setText(room.getName());
-		chatRoomOwnerTextView.setText(room.getOwner());
 
-		exitBtn.setVisibility(View.GONE);
-		deleteBtn.setVisibility(View.GONE);
-		blacklistLayout.setVisibility(View.GONE);
-		changeGroupNameLayout.setVisibility(View.GONE);
-		blockGroupMsgLayout.setVisibility(View.GONE);
-		
-		
-		((TextView) findViewById(R.id.group_name)).setText(room.getName());
-		memberList = new java.util.ArrayList<String>();
-		memberList.addAll(room.getMemberList());
-		adapter = new GridAdapter(this, R.layout.em_grid, memberList);
-		userGridview.setAdapter(adapter);
-		
+        chatRoomListener = new ChatRoomListener();
+		EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomListener);
+
+		chatRoomIdTextView.setText(roomId);
+		chatRoomNickTextView.setText(room.getName());
+
+        RelativeLayout changeChatRoomNameLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_name);
+        RelativeLayout changeChatRoomDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_detail);
+        changeChatRoomNameLayout.setVisibility(isCurrentOwner(room) ? View.VISIBLE : View.GONE);
+        changeChatRoomDescriptionLayout.setVisibility(isCurrentAdmin(room) ? View.VISIBLE : View.GONE);
+
+		// adapter data list
+		List<String> ownerAdminList = new ArrayList<>();
+		ownerAdminList.add(room.getOwner());
+		ownerAdminList.addAll(room.getAdminList());
+		ownerAdminAdapter = new OwnerAdminAdapter(this, R.layout.em_grid_owner, ownerAdminList);
+		EaseExpandGridView ownerAdminGridView = (EaseExpandGridView) findViewById(R.id.owner_and_administrators);
+		ownerAdminGridView.setAdapter(ownerAdminAdapter);
+
+		// normal member list & black list && mute list
+		// most show 500 members, most show 500 mute members, most show 500 black list
+		List<String> memberMuteBlockList = new ArrayList<>();
+		memberMuteBlockList.addAll(room.getMemberList());
+		membersAdapter = new MemberAdapter(this, R.layout.em_grid_owner, memberMuteBlockList);
+		EaseExpandGridView userGridView = (EaseExpandGridView) findViewById(R.id.gridview);
+		userGridView.setAdapter(membersAdapter);
+
 		updateRoom();
 
+		changeChatRoomNameLayout.setOnClickListener(this);
 
-		clearAllHistory.setOnClickListener(this);
-		blacklistLayout.setOnClickListener(this);
-		changeGroupNameLayout.setOnClickListener(this);
+		final EMChatRoom finalRoom = room;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String owner = finalRoom.getOwner();
+				List<String> administratorList = finalRoom.getAdminList();
+				membersAdapter.notifyDataSetChanged();
+			}
+		}).start();
+	}
 
+	boolean isCurrentOwner(EMChatRoom room) {
+		String owner = room.getOwner();
+		if (owner == null || owner.isEmpty()) {
+			return false;
+		}
+		return owner.equals(EMClient.getInstance().getCurrentUser());
+	}
+
+	boolean isCurrentAdmin(EMChatRoom room) {
+		synchronized (adminList) {
+			String currentUser = EMClient.getInstance().getCurrentUser();
+			for (String admin : adminList) {
+				if (currentUser.equals(admin)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	boolean isAdmin(String id) {
+		synchronized (adminList) {
+			for (String admin : adminList) {
+				if (id.equals(admin)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	boolean isInBlackList(String id) {
+		synchronized (blackList) {
+			if (id != null && !id.isEmpty()) {
+				for (String item : blackList) {
+					if (id.equals(item)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	boolean isInMuteList(String id) {
+		synchronized (muteList) {
+			if (id != null && !id.isEmpty()) {
+				for (String item : muteList) {
+					if (id.equals(item)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@SuppressWarnings("UnusedAssignment")
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		String st1 = getResources().getString(R.string.being_added);
-		String st2 = getResources().getString(R.string.is_quit_the_group_chat);
+		String st2 = getResources().getString(R.string.is_quit_the_chat_room);
 		String st3 = getResources().getString(R.string.chatting_is_dissolution);
 		String st4 = getResources().getString(R.string.are_empty_group_of_news);
 		String st5 = getResources().getString(R.string.is_modify_the_group_name);
@@ -142,7 +205,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		final String st7 = getResources().getString(R.string.change_the_group_name_failed_please);
 		String st8 = getResources().getString(R.string.Are_moving_to_blacklist);
 		final String st9 = getResources().getString(R.string.failed_to_move_into);
-		
+
 		final String stsuccess = getResources().getString(R.string.Move_into_blacklist_success);
 		if (resultCode == RESULT_OK) {
 			if (progressDialog == null) {
@@ -151,29 +214,46 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 				progressDialog.setCanceledOnTouchOutside(false);
 			}
 			switch (requestCode) {
-			case REQUEST_CODE_EXIT: // quit the group
-				progressDialog.setMessage(st2);
-				progressDialog.show();
-				exitGroup();
-				break;
-
-			default:
-				break;
+				case REQUEST_CODE_EXIT_DELETE:
+					progressDialog.setMessage(st2);
+					progressDialog.show();
+					destroyChatRoom();
+					break;
+				case REQUEST_CODE_EDIT_CHAT_ROOM_NAME:
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								EMClient.getInstance().chatroomManager().changeChatRoomSubject(roomId, data.getStringExtra("data"));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							runOnUiThread(new Runnable() {
+								@Override
+								public void run() {
+									TextView tv = (TextView) findViewById(R.id.tv_chat_room_nick_value);
+									tv.setText(data.getStringExtra("data"));
+								}
+							});
+						}
+					}).start();
+					break;
+				case REQUEST_CODE_EDIT_CHAT_ROOM_DESCRIPTION:
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								EMClient.getInstance().chatroomManager().changeChatroomDescription(roomId, data.getStringExtra("data"));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}).start();
+					break;
+				default:
+					break;
 			}
 		}
-	}
-
-
-	public void exitGroup(View view) {
-		startActivityForResult(new Intent(this, ExitGroupDialog.class), REQUEST_CODE_EXIT);
-
-	}
-
-
-	public void exitDeleteGroup(View view) {
-		startActivityForResult(new Intent(this, ExitGroupDialog.class).putExtra("deleteToast", getString(R.string.dissolution_group_hint)),
-				REQUEST_CODE_EXIT_DELETE);
-
 	}
 
 	/**
@@ -189,21 +269,21 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 	/**
 	 * exit group
-	 * 
-	 * @param groupId
+	 *
+	 * @param
 	 */
-	private void exitGroup() {
+	private void destroyChatRoom() {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					EMClient.getInstance().chatroomManager().leaveChatRoom(roomId);
+                    EMClient.getInstance().chatroomManager().destroyChatRoom(roomId);
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
 							setResult(RESULT_OK);
 							finish();
-							if(ChatActivity.activityInstance != null)
-							    ChatActivity.activityInstance.finish();
+							if (ChatActivity.activityInstance != null)
+								ChatActivity.activityInstance.finish();
 						}
 					});
 				} catch (final Exception e) {
@@ -217,108 +297,424 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 			}
 		}).start();
 	}
-	
+
 	protected void updateRoom() {
 		new Thread(new Runnable() {
 			public void run() {
 				try {
 					room = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId, true);
 
-					runOnUiThread(new Runnable() {
-						public void run() {
-							((TextView) findViewById(R.id.group_name)).setText(room.getName());
-							loadingPB.setVisibility(View.INVISIBLE);
-							refreshMembers();
-							if (EMClient.getInstance().getCurrentUser().equals(room.getOwner())) {
-								// show dismiss button
-								exitBtn.setVisibility(View.GONE);
-								deleteBtn.setVisibility(View.GONE);
-							} else {
-								// show exit button
-								exitBtn.setVisibility(View.GONE);
-								deleteBtn.setVisibility(View.GONE);
+					room = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId);
+					adminList.clear();
+					adminList.addAll(room.getAdminList());
 
-							}
-						}
-					});
+					// page size set to 20 is convenient for testing, should be applied to big value
+					List<String> result;
+					memberList.clear();
+					do {
+						result = EMClient.getInstance().chatroomManager().fetchChatRoomMembers(roomId, 0, 20);
+						memberList.addAll(result);
+					} while (result != null && result.size() == 20);
 
+					memberList.remove(room.getOwner());
+					memberList.removeAll(adminList);
+
+					// those two operation need authentication, may failed
+					muteList.clear();
+					muteList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomMuteList(roomId, 0, 500).keySet());
+					blackList.clear();
+					blackList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomBlackList(roomId, 0, 500));
+					memberList.removeAll(muteList);
+					memberList.removeAll(blackList);
 				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
 					runOnUiThread(new Runnable() {
 						public void run() {
+                            refreshOwnerAdminAdapter();
+                            refreshMembersAdapter();
+
+                            TextView chatRoomTitle = (TextView) findViewById(R.id.tv_chatroom_name);
+                            chatRoomTitle.setText(room.getName());
+							TextView chatRoomNickTextView = (TextView) findViewById(R.id.tv_chat_room_nick_value);
+							chatRoomNickTextView.setText(room.getName());
 							loadingPB.setVisibility(View.INVISIBLE);
-						}
+
+
+							Button destroyButton = (Button)ChatRoomDetailsActivity.this.findViewById(R.id.btn_destroy_chatroom);
+							destroyButton.setVisibility(EMClient.getInstance().getCurrentUser().equals(room.getOwner()) ?
+									View.VISIBLE : View.GONE);
+
+                            RelativeLayout changeChatRoomNameLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_name);
+                            RelativeLayout changeChatRoomDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_detail);
+                            changeChatRoomNameLayout.setVisibility(isCurrentOwner(room) ? View.VISIBLE : View.GONE);
+                            changeChatRoomDescriptionLayout.setVisibility(isCurrentAdmin(room) ? View.VISIBLE : View.GONE);
+                        }
 					});
 				}
 			}
 		}).start();
 	}
 
-	private void refreshMembers(){
-        memberList.clear();
-        memberList.addAll(room.getMemberList());
-        
-        adapter.notifyDataSetChanged();
-    }
-    
+	private void refreshOwnerAdminAdapter() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				ownerAdminAdapter.clear();
+				ownerAdminAdapter.add(room.getOwner());
+				synchronized (adminList) {
+					ownerAdminAdapter.addAll(adminList);
+				}
+				ownerAdminAdapter.notifyDataSetChanged();
+			}
+		});
+	}
+
+	private void refreshMembersAdapter() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				membersAdapter.clear();
+				synchronized (memberList) {
+					membersAdapter.addAll(memberList);
+				}
+				synchronized (muteList) {
+					membersAdapter.addAll(muteList);
+				}
+				synchronized (blackList) {
+					membersAdapter.addAll(blackList);
+				}
+				membersAdapter.notifyDataSetChanged();
+            }
+		});
+	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.clear_all_history: // clear conversation history
-			String st9 = getResources().getString(R.string.sure_to_empty_this);
-			new EaseAlertDialog(ChatRoomDetailsActivity.this, null, st9, null, new AlertDialogUser() {
-                
-                @Override
-                public void onResult(boolean confirmed, Bundle bundle) {
-                    if(confirmed){
-                        clearGroupHistory();
-                    }
-                }
-            }, true).show();
-			break;
+			case R.id.clear_all_history: // clear conversation history
+				String st9 = getResources().getString(R.string.sure_to_empty_this);
+				new EaseAlertDialog(ChatRoomDetailsActivity.this, null, st9, null, new AlertDialogUser() {
 
-		default:
-			break;
+					@Override
+					public void onResult(boolean confirmed, Bundle bundle) {
+						if (confirmed) {
+							clearGroupHistory();
+						}
+					}
+				}, true).show();
+				break;
+			case R.id.rl_change_chatroom_name:
+				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getName()).putExtra("title", "edit chat room name"),
+						REQUEST_CODE_EDIT_CHAT_ROOM_NAME);
+				break;
+			case R.id.rl_change_chatroom_detail:
+				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getDescription()).putExtra("title", "edit chat room detail"),
+						REQUEST_CODE_EDIT_CHAT_ROOM_DESCRIPTION);
+				break;
+			default:
+				break;
 		}
-
 	}
 
+    private final int[] ids = {
+            R.id.menu_item_transfer_owner,
+            R.id.menu_item_add_admin,
+            R.id.menu_item_rm_admin,
+            R.id.menu_item_remove_member,
+            R.id.menu_item_add_to_blacklist,
+            R.id.menu_item_remove_from_blacklist,
+            R.id.menu_item_mute,
+            R.id.menu_item_unmute
+    };
+
+    void setVisibility(Dialog viewGroups, int[] ids, boolean[] visivilities) throws Exception {
+        if (ids.length != visivilities.length) {
+            throw new Exception("");
+        }
+
+        for (int i = 0; i < ids.length; i++) {
+            View view = viewGroups.findViewById(ids[i]);
+            view.setVisibility(visivilities[i] ? View.VISIBLE : View.GONE);
+        }
+    }
+
+
+    private class OwnerAdminAdapter extends ArrayAdapter<String> {
+		private int res;
+
+		/**
+		 * Owner and Administrator list
+		 *
+		 * @param context
+		 * @param textViewResourceId
+		 * @param ownerAndAdministratorList the first element should be owner
+		 */
+		public OwnerAdminAdapter(Context context, int textViewResourceId, List<String> ownerAndAdministratorList) {
+			super(context, textViewResourceId, ownerAndAdministratorList);
+			res = textViewResourceId;
+		}
+
+		@Override
+		public View getView(final int position, View convertView, final ViewGroup parent) {
+			@SuppressWarnings("UnusedAssignment") ViewHolder holder = null;
+			if (convertView == null) {
+				holder = new ViewHolder();
+				convertView = LayoutInflater.from(getContext()).inflate(res, null);
+				holder.imageView = (ImageView) convertView.findViewById(R.id.iv_avatar);
+				holder.textView = (TextView) convertView.findViewById(R.id.tv_name);
+				holder.badgeDeleteView = (ImageView) convertView.findViewById(R.id.badge_delete);
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+			final LinearLayout button = (LinearLayout) convertView.findViewById(R.id.button_avatar);
+			// group member item
+			final String username = getItem(position);
+			holder.textView.setText(username);
+			EaseUserUtils.setUserNick(username, holder.textView);
+			EaseUserUtils.setUserAvatar(getContext(), username, holder.imageView);
+			LinearLayout id_background = (LinearLayout) convertView.findViewById(R.id.l_bg_id);
+			id_background.setBackgroundColor(convertView.getResources().getColor(
+					position == 0 ? R.color.holo_red_light: R.color.holo_orange_light));
+			button.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (!isCurrentOwner(room)) {
+						return;
+					}
+					if (username.equals(room.getOwner())) {
+						return;
+					}
+					// do nothing here, you can show group member's profile here
+					operationUserId = username;
+					Dialog dialog = createMemberMenuDialog();
+					dialog.show();
+
+                    boolean[] adminVisibilities = {
+                            true,       //R.id.menu_item_transfer_owner,
+                            false,      //R.id.menu_item_add_admin,
+                            true,       //R.id.menu_item_rm_admin,
+                            false,      //R.id.menu_item_remove_member,
+                            false,      //R.id.menu_item_add_to_blacklist,
+                            false,      //R.id.menu_item_remove_from_blacklist,
+                            false,      //R.id.menu_item_mute,
+                            false,      //R.id.menu_item_unmute
+                    };
+
+                    try {
+                        setVisibility(dialog, ids, adminVisibilities);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+				}
+			});
+			return convertView;
+		}
+
+		@Override
+		public int getCount() {
+			return super.getCount();
+		}
+	}
+
+	Dialog createMemberMenuDialog() {
+		final Dialog dialog = new Dialog(ChatRoomDetailsActivity.this);
+		dialog.setTitle("chat room");
+		dialog.setContentView(R.layout.em_chatroom_member_menu);
+
+		int ids[] = { R.id.menu_item_add_admin,
+				R.id.menu_item_rm_admin,
+                R.id.menu_item_remove_member,
+				R.id.menu_item_add_to_blacklist,
+				R.id.menu_item_remove_from_blacklist,
+				R.id.menu_item_transfer_owner,
+				R.id.menu_item_mute,
+				R.id.menu_item_unmute};
+
+		for (int id : ids) {
+			LinearLayout linearLayout = (LinearLayout)dialog.findViewById(id);
+			linearLayout.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(final View v) {
+					dialog.dismiss();
+					loadingPB.setVisibility(View.VISIBLE);
+
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								switch (v.getId()) {
+									case R.id.menu_item_add_admin:
+										EMClient.getInstance().chatroomManager().addChatRoomAdmin(roomId, operationUserId);
+										break;
+									case R.id.menu_item_rm_admin:
+										EMClient.getInstance().chatroomManager().removeChatRoomAdmin(roomId, operationUserId);
+										break;
+                                    case R.id.menu_item_remove_member: {
+                                            List<String> list = new ArrayList<>();
+                                            list.add(operationUserId);
+                                            EMClient.getInstance().chatroomManager().removeChatRoomMembers(roomId, list);
+                                        }
+                                        break;
+									case R.id.menu_item_add_to_blacklist: {
+											List<String> list = new ArrayList<>();
+											list.add(operationUserId);
+											EMClient.getInstance().chatroomManager().blockChatroomMembers(roomId, list);
+										}
+										break;
+									case R.id.menu_item_remove_from_blacklist: {
+											List<String> list1 = new ArrayList<>();
+											list1.add(operationUserId);
+											EMClient.getInstance().chatroomManager().unblockChatRoomMembers(roomId, list1);
+										}
+										break;
+									case R.id.menu_item_mute:
+										List<String> muteMembers = new ArrayList<>();
+										muteMembers.add(operationUserId);
+										EMClient.getInstance().chatroomManager().muteChatRoomMembers(roomId, muteMembers, 20 * 60 * 1000);
+										break;
+									case R.id.menu_item_unmute:
+										List<String> list = new ArrayList<>();
+										list.add(operationUserId);
+										EMClient.getInstance().chatroomManager().unMuteChatRoomMembers(roomId, list);
+										break;
+									case R.id.menu_item_transfer_owner:
+										EMClient.getInstance().chatroomManager().changeOwner(roomId, operationUserId);
+										break;
+									default:
+										break;
+								}
+								updateRoom();
+							} catch (final HyphenateException e) {
+                                runOnUiThread(new Runnable() {
+                                                  @Override
+                                                  public void run() {
+                                                      Toast.makeText(ChatRoomDetailsActivity.this, e.getDescription(), Toast.LENGTH_SHORT).show();
+                                                  }
+                                              }
+                                );
+								e.printStackTrace();
+							} finally {
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										loadingPB.setVisibility(View.INVISIBLE);
+									}
+								});
+							}
+						}
+					}).start();
+				}
+			});
+		}
+		return dialog;
+	}
+
+
 	/**
-	 * group member gridadapter
-	 * 
+	 * group member grid adapter
+	 *
 	 * @author admin_new
-	 * 
 	 */
-	private class GridAdapter extends ArrayAdapter<String> {
+	private class MemberAdapter extends ArrayAdapter<String> {
 
 		private int res;
 
-		public GridAdapter(Context context, int textViewResourceId, List<String> objects) {
+		public MemberAdapter(Context context, int textViewResourceId, List<String> objects) {
 			super(context, textViewResourceId, objects);
 			res = textViewResourceId;
 		}
 
 		@Override
 		public View getView(final int position, View convertView, final ViewGroup parent) {
-		    @SuppressWarnings("UnusedAssignment") ViewHolder holder = null;
+			@SuppressWarnings("UnusedAssignment") ViewHolder holder = null;
 			if (convertView == null) {
-			    holder = new ViewHolder();
+				holder = new ViewHolder();
 				convertView = LayoutInflater.from(getContext()).inflate(res, null);
 				holder.imageView = (ImageView) convertView.findViewById(R.id.iv_avatar);
 				holder.textView = (TextView) convertView.findViewById(R.id.tv_name);
 				holder.badgeDeleteView = (ImageView) convertView.findViewById(R.id.badge_delete);
 				convertView.setTag(holder);
-			}else{
-			    holder = (ViewHolder) convertView.getTag();
+			} else {
+				holder = (ViewHolder) convertView.getTag();
 			}
 			final LinearLayout button = (LinearLayout) convertView.findViewById(R.id.button_avatar);
 			// group member item
 			final String username = getItem(position);
 			holder.textView.setText(username);
+			EaseUserUtils.setUserNick(username, holder.textView);
 			EaseUserUtils.setUserAvatar(getContext(), username, holder.imageView);
+
+			LinearLayout id_background = (LinearLayout) convertView.findViewById(R.id.l_bg_id);
+			if (isInMuteList(username)) {
+				id_background.setBackgroundColor(convertView.getResources().getColor(R.color.gray_normal));
+			} else if (isInBlackList(username)) {
+				id_background.setBackgroundColor(convertView.getResources().getColor(R.color.holo_black));
+			} else {
+				id_background.setBackgroundColor(convertView.getResources().getColor(R.color.holo_blue_bright));
+			}
+
 			button.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-                    // do nothing here, you can show group member's profile here
+					if (!isCurrentOwner(room) && !isCurrentAdmin(room)) {
+						return;
+					}
+
+
+					// do nothing here, you can show group member's profile here
+					operationUserId = username;
+					Dialog dialog = createMemberMenuDialog();
+					dialog.show();
+
+                    boolean[] normalVisibilities = {
+                            false,      //R.id.menu_item_transfer_owner,
+                            isCurrentOwner(room) ? true : false,       //R.id.menu_item_add_admin,
+                            false,      //R.id.menu_item_rm_admin,
+                            true,       //R.id.menu_item_remove_member,
+                            true,       //R.id.menu_item_add_to_blacklist,
+                            false,      //R.id.menu_item_remove_from_blacklist,
+                            true,       //R.id.menu_item_mute,
+                            false,      //R.id.menu_item_unmute
+                    };
+
+                    boolean[] blackListVisibilities = {
+                            false,      //R.id.menu_item_transfer_owner,
+                            false,      //R.id.menu_item_add_admin,
+                            false,      //R.id.menu_item_rm_admin,
+                            false,      //R.id.menu_item_remove_member,
+                            false,      //R.id.menu_item_add_to_blacklist,
+                            true,       //R.id.menu_item_remove_from_blacklist,
+                            false,      //R.id.menu_item_mute,
+                            false,      //R.id.menu_item_unmute
+                    };
+
+                    boolean[] muteListVisibilities = {
+                            false,      //R.id.menu_item_transfer_owner,
+                            isCurrentOwner(room) ? true : false,       //R.id.menu_item_add_admin,
+                            false,      //R.id.menu_item_rm_admin,
+                            true,       //R.id.menu_item_remove_member,
+                            true,       //R.id.menu_item_add_to_blacklist,
+                            false,      //R.id.menu_item_remove_from_blacklist,
+                            false,      //R.id.menu_item_mute,
+                            true,       //R.id.menu_item_unmute
+                    };
+
+                    boolean inBlackList = isInBlackList(username);
+                    boolean inMuteList = isInMuteList(username);
+                    try {
+                        if (inBlackList) {
+                            setVisibility(dialog, ids, blackListVisibilities);
+                        } else if (inMuteList) {
+                            setVisibility(dialog, ids, muteListVisibilities);
+                        } else {
+                            setVisibility(dialog, ids, normalVisibilities);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 				}
 			});
 
@@ -345,14 +741,123 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 	@Override
 	protected void onDestroy() {
+		EMClient.getInstance().chatroomManager().removeChatRoomListener(chatRoomListener);
 		super.onDestroy();
 		instance = null;
 	}
-	
-	private static class ViewHolder{
-	    ImageView imageView;
-	    TextView textView;
-	    ImageView badgeDeleteView;
+
+	private static class ViewHolder {
+		ImageView imageView;
+		TextView textView;
+		ImageView badgeDeleteView;
 	}
 
+	public void onDestroyChatRoomClick(View v) {
+        startActivityForResult(new Intent(this, ExitGroupDialog.class).putExtra("deleteToast", getString(R.string.dissolution_group_hint)),
+                REQUEST_CODE_EXIT_DELETE);
+	}
+
+	private class ChatRoomListener implements EMChatRoomChangeListener {
+
+		@Override
+		public void onChatRoomDestroyed(String roomId, String roomName) {
+			finish();
+		}
+
+		@Override
+		public void onMemberJoined(final String roomId, final String participant) {
+			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+				updateRoom();
+			}
+		}
+
+		@Override
+		public void onMemberExited(final String roomId, final String roomName, final String participant) {
+			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+				updateRoom();
+			}
+		}
+
+		@Override
+		public void onRemovedFromChatRoom(final String roomId, final String roomName, final String participant) {
+			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+				if (participant.equals(EMClient.getInstance().getCurrentUser())) {
+					finish();
+				}
+			}
+		}
+
+		@Override
+		public void onMuteListAdded(final String chatRoomId, final List<String> mutes, final long expireTime) {
+			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final StringBuilder sb = new StringBuilder();
+                        for (String mute : mutes) {
+                            sb.append(mute + " ");
+                        }
+                        Toast.makeText(ChatRoomDetailsActivity.this, "onMuteListAdded: " + sb.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+				updateRoom();
+			}
+		}
+
+		@Override
+		public void onMuteListRemoved(final String chatRoomId, final List<String> mutes) {
+			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+				final StringBuilder sb = new StringBuilder();
+				for (String mute : mutes) {
+					sb.append(mute + " ");
+				}
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatRoomDetailsActivity.this, "onMuteListRemoved: " + sb.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+				refreshMembersAdapter();
+			}
+		}
+
+		@Override
+		public void onAdminAdded(final String chatRoomId, final String admin) {
+			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatRoomDetailsActivity.this, "onAdminAdded: " + admin, Toast.LENGTH_SHORT).show();
+                    }
+                });
+				updateRoom();
+			}
+		}
+
+		@Override
+		public void onAdminRemoved(final String chatRoomId, final String admin) {
+			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatRoomDetailsActivity.this, "onAdminRemoved: " + admin, Toast.LENGTH_SHORT).show();
+                    }
+                });
+				updateRoom();
+			}
+		}
+
+		@Override
+		public void onOwnerChanged(final String chatRoomId, final String newOwner, final String oldOwner) {
+			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ChatRoomDetailsActivity.this, "onOwnerChanged newOwner:" + newOwner + "  oldOwner" + oldOwner, Toast.LENGTH_SHORT).show();
+                    }
+                });
+				updateRoom();
+			}
+		}
+	}
 }

@@ -316,6 +316,7 @@ public class MainActivity extends BaseActivity {
 					}
                 }
             });
+	        updateUnreadAddressLable();
         }
         @Override
         public void onContactInvited(String username, String reason) {}

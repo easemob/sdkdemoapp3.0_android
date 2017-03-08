@@ -198,8 +198,11 @@
     <string name="are_empty_group_of_news">正在清空群消息……</string>
     <string name="messages_are_empty">聊天记录已被清空</string>
     <string name="is_modify_the_group_name">正在修改群名称……</string>
+    <string name="is_modify_the_group_description">正在修改群详情..</string>
     <string name="Modify_the_group_name_successful">修改群名称成功</string>
+    <string name="Modify_the_group_description_successful">修改群详情成功</string>
     <string name="change_the_group_name_failed_please">改变群名称失败，请检查网络或稍后重试</string>
+    <string name="change_the_group_description_failed_please">修改群详情失败，请检查网络或稍后重试</string>
     <string name="Are_moving_to_blacklist">正在移入至黑名单</string>
     <string name="failed_to_move_into">移入黑名单失败,请检查网络或稍后重试</string>
     <string name="Exit_the_group_chat_failure">退出群聊失败:</string>
@@ -259,7 +262,7 @@
     <string name="Version_number_is_wrong">版本号错误</string>
     <string name="Are_connected_to_each_other">正在连接对方……</string>
     <string name="Is_not_yet_connected_to_the_server">尚未连接至服务器</string>
-    <string name="have_connected_with">已经和对方建立连接，等待对方接受……</string>
+    <string name="have_connected_with">已经和对方建立连接</string>
     <string name="In_the_call">通话中……</string>
     <string name="The_other_party_refused_to_accept">对方拒绝接受！</string>
     <string name="Connection_failure">连接建立失败！</string>
@@ -290,6 +293,7 @@
     <string name="Delete_the_contact">删除联系人</string>
     <string name="Move_into_the_blacklist_new">移入到黑名单</string>
     <string name="Change_the_group_name">改变群名称</string>
+    <string name="change_the_group_description">改变群描述</string>
     <string name="Sync_Groups_From_Server">从服务器下载群聊信息</string>
     
     <string name="update_contact_list">更新联系人列表</string>
@@ -356,4 +360,18 @@
     <string name="push_saving_settings">正在保存...</string>
     <string name="push_save_failed">保存失败</string>
     <string name="loading_more">正在加载更多……</string>
+
+    <string name="destroy_chatroom">销毁聊天室</string>
+    <string name="chatroom_subject">Chat room subject</string>
+    <string name="change_chatroom_subject">修改聊天室标题</string>
+    <string name="change_chatroom_description">修改聊天室描述</string>
+    <string name="chat_room_nick">名称：</string>
+    <string name="is_quit_the_chat_room">是否退出聊天室</string>
+    <string name="chat_room_id">聊天室ID</string>
+    <string name="The_new_chat_room">创建聊天室</string>
+    <string name="chat_room_name">聊天室名称</string>
+    <string name="chat_room_description">聊天室描述</string>
+    <string name="Failed_to_create_chat_room">创建聊天室失败</string>
+
+    <string name="mail_log_title">发送邮件附件中包含log</string>
 </resources>

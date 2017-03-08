@@ -54,6 +54,13 @@
     <string name="video">[Video]</string>
     <string name="file">[file]</string>
     <string name="voice_call">[Voice call]</string>
+    <string name="video_call">[Video call]</string>
+    <string name="voice_prefix">[语音]</string>
+    <string name="dynamic_expression">[dynamic expression]</string>
+    <string name="Group_chat">group chat</string>
+    <string name="all_members">All members</string>
+    <string name="were_mentioned">[someone @me]</string>
+    <string name="gorup_not_found">can not find group</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_save">Save</string>
     <string name="button_search">Find</string>
@@ -193,8 +200,11 @@
     <string name="are_empty_group_of_news">Clearing messages</string>
     <string name="messages_are_empty">Messages has been cleared</string>
     <string name="is_modify_the_group_name">Modifying the group name..</string>
+    <string name="is_modify_the_group_description">Modifying the group description..</string>
     <string name="Modify_the_group_name_successful">Modify the group name successful</string>
+    <string name="Modify_the_group_description_successful">Modify the group description successful</string>
     <string name="change_the_group_name_failed_please">Failed to change the group name, please check the network or try again later</string>
+    <string name="change_the_group_description_failed_please">Failed to change the group name, please check the network or try again later</string>
     <string name="Are_moving_to_blacklist">Moving to blacklist</string>
     <string name="failed_to_move_into">Failed to move to the blacklist, please check the network or try again later</string>
     <string name="Exit_the_group_chat_failure">Failed to exit the group:</string>
@@ -254,7 +264,7 @@
     <string name="Version_number_is_wrong">Version number is wrong</string>
     <string name="Are_connected_to_each_other">Connecting to peer..</string>
     <string name="Is_not_yet_connected_to_the_server">Not connect to server</string>
-    <string name="have_connected_with">Connected to the peer and waiting for the peer to accept</string>
+    <string name="have_connected_with">Connected to the peer</string>
     <string name="In_the_call">In the call..</string>
     <string name="The_other_party_refused_to_accept">The call was refused</string>
     <string name="Connection_failure">Connection failed!</string>
@@ -284,6 +294,7 @@
     <string name="Delete_the_contact">Delete the contact</string>
     <string name="Move_into_the_blacklist_new">Move into the blacklist</string>
     <string name="Change_the_group_name">Change group name</string>
+    <string name="change_the_group_description">Change group description</string>
     <string name="Sync_Groups_From_Server">Sync groups with server</string>
     
     <string name="update_contact_list">Update contact list</string>
@@ -349,4 +360,18 @@
     <string name="push_saving_settings">Saving settings</string>
     <string name="push_save_failed">Save settings failed</string>
     <string name="loading_more">loading more…</string>
+
+    <string name="destroy_chatroom">Destroy the chatroom</string>
+    <string name="chatroom_subject">Chat room subject</string>
+    <string name="change_chatroom_subject">change chat room subject</string>
+    <string name="change_chatroom_description">change chat room description</string>
+    <string name="chat_room_nick">name: </string>
+    <string name="is_quit_the_chat_room">is quit chat room?</string>
+    <string name="chat_room_id">chat room ID</string>
+    <string name="The_new_chat_room">Create new chat room</string>
+    <string name="chat_room_name">Chat room name</string>
+    <string name="chat_room_description">Chat room description</string>
+    <string name="Failed_to_create_chat_room">Failed to create chat room</string>
+
+    <string name="mail_log_title">Send mail, contain logs</string>
 </resources>

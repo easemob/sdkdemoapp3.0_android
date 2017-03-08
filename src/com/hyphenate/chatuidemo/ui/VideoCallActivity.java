@@ -197,6 +197,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             }, 300);
         } else { // incoming call
 
+            callStateTextView.setText("Ringing");
             if(EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.IDLE
                     || EMClient.getInstance().callManager().getCallState() == EMCallStateChangeListener.CallState.DISCONNECTED) {
                 // the call has ended
@@ -247,7 +248,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         callStateListener = new EMCallStateChangeListener() {
 
             @Override
-            public void onCallStateChanged(CallState callState, final CallError error) {
+            public void onCallStateChanged(final CallState callState, final CallError error) {
                 switch (callState) {
 
                 case CONNECTING: // is connecting
@@ -265,7 +266,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                         @Override
                         public void run() {
-                            callStateTextView.setText(R.string.have_connected_with);
+//                            callStateTextView.setText(R.string.have_connected_with);
                         }
 
                     });
@@ -280,6 +281,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             try {
                                 if (soundPool != null)
                                     soundPool.stop(streamID);
+                                EMLog.d("EMCallManager", "soundPool stop ACCEPTED");
                             } catch (Exception e) {
                             }
                             openSpeakerOn();
@@ -435,6 +437,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     }
                                 }
                             }
+                            Toast.makeText(VideoCallActivity.this, callStateTextView.getText(), Toast.LENGTH_SHORT).show();
                             postDelayedCloseMsg();
                         }
 
@@ -490,6 +493,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             if(isRecording){
                 callHelper.stopVideoRecord();
             }
+            EMLog.d(TAG, "btn_hangup_call");
             handler.sendEmptyMessage(MSG_CALL_END);
             break;
 
