@@ -10,7 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.easemob.redpacketsdk.constant.RPConstant;
-import com.easemob.redpacketui.utils.RedPacketUtil;
+import com.easemob.redpacket.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;

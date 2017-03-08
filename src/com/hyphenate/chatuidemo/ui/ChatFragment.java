@@ -21,11 +21,10 @@ import android.widget.Toast;
 import com.easemob.redpacketsdk.RPSendPacketCallback;
 import com.easemob.redpacketsdk.bean.RedPacketInfo;
 import com.easemob.redpacketsdk.constant.RPConstant;
-import com.easemob.redpacketui.utils.RedPacketUtil;
-import com.easemob.redpacketui.widget.ChatRowRandomPacket;
-import com.easemob.redpacketui.widget.ChatRowRedPacket;
-import com.easemob.redpacketui.widget.ChatRowRedPacketAck;
-import com.easemob.redpacketui.widget.ChatRowTransfer;
+import com.easemob.redpacket.utils.RedPacketUtil;
+import com.easemob.redpacket.widget.ChatRowRandomPacket;
+import com.easemob.redpacket.widget.ChatRowRedPacket;
+import com.easemob.redpacket.widget.ChatRowRedPacketAck;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMGroup;
@@ -76,12 +75,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int MESSAGE_TYPE_SEND_RED_PACKET = 6;
     private static final int MESSAGE_TYPE_SEND_RED_PACKET_ACK = 7;
     private static final int MESSAGE_TYPE_RECV_RED_PACKET_ACK = 8;
-    private static final int MESSAGE_TYPE_RECV_TRANSFER_PACKET = 9;
-    private static final int MESSAGE_TYPE_SEND_TRANSFER_PACKET = 10;
     private static final int MESSAGE_TYPE_RECV_RANDOM = 11;
     private static final int MESSAGE_TYPE_SEND_RANDOM = 12;
     private static final int ITEM_RED_PACKET = 16;
-    private static final int ITEM_TRANSFER_PACKET = 17;
     //end of red packet code
 
     /**
@@ -154,10 +150,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         //red packet code : 注册红包菜单选项
         if (chatType != Constant.CHATTYPE_CHATROOM) {
             inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_red_packet_selector, ITEM_RED_PACKET, extendMenuItemClickListener);
-        }
-        //red packet code : 注册转账菜单选项
-        if (chatType == Constant.CHATTYPE_SINGLE) {
-            inputMenu.registerExtendMenuItem(R.string.attach_transfer_money, R.drawable.em_chat_transfer_selector, ITEM_TRANSFER_PACKET, extendMenuItemClickListener);
         }
         //end of red packet code
     }
@@ -277,9 +269,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
             RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
             return true;
-        } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
-            RedPacketUtil.openTransferPacket(getActivity(), message);
-            return true;
         }
         //end of red packet code
         return false;
@@ -336,19 +325,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             }
             RedPacketUtil.startRedPacket(getActivity(), itemType, toChatUsername, new RPSendPacketCallback() {
                 @Override
+                public void onGenerateRedPacketId(String redPacketId) {
+
+                }
+
+                @Override
                 public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
                     sendMessage(RedPacketUtil.createRPMessage(getActivity(), redPacketInfo, toChatUsername));
                 }
             });
             break;
-            case ITEM_TRANSFER_PACKET://进入转账页面
-                RedPacketUtil.startRedPacket(getActivity(), RPConstant.RP_ITEM_TYPE_TRANSFER, toChatUsername, new RPSendPacketCallback() {
-                    @Override
-                    public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
-                        sendMessage(RedPacketUtil.createTRMessage(getActivity(), redPacketInfo, toChatUsername));
-                    }
-                });
-                break;
             //end of red packet code
         default:
             break;
@@ -410,7 +396,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         public int getCustomChatRowTypeCount() {
             //here the number is the message type in EMMessage::Type
         	//which is used to count the number of different chat row
-            return 12;
+            return 10;
         }
 
         @Override
@@ -433,9 +419,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
                     //领取红包消息
                     return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_RED_PACKET_ACK : MESSAGE_TYPE_SEND_RED_PACKET_ACK;
-                } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
-                    //转账消息
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_TRANSFER_PACKET : MESSAGE_TYPE_SEND_TRANSFER_PACKET;
                 }
                 //end of red packet code
             }
@@ -457,8 +440,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     return new ChatRowRedPacket(getActivity(), message, position, adapter);
                 } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {//红包回执消息
                     return new ChatRowRedPacketAck(getActivity(), message, position, adapter);
-                } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {//转账消息
-                    return new ChatRowTransfer(getActivity(), message, position, adapter);
                 }
                 //end of red packet code
             }

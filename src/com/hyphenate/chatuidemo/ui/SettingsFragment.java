@@ -31,7 +31,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.redpacketui.utils.RedPacketUtil;
+import com.easemob.redpacket.utils.RedPacketUtil;
+import com.easemob.redpacketui.utils.RPRedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
@@ -276,7 +277,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		switch (v.getId()) {
 			//red packet code : 进入零钱页面
 			case R.id.ll_change:
-				RedPacketUtil.startChangeActivity(getActivity());
+				RPRedPacketUtil.getInstance().startRecordActivity(getActivity());
 				break;
 			//end of red packet code
 			case R.id.rl_switch_notification:
