@@ -9,9 +9,9 @@
 ## 2. redpacketlibrary目录说明
 
 * libs ：包含了集成红包功能所依赖的jar包。(红包使用了glide库做图片加载，由于已经依赖了easeui这里不重复添加)
-* res ：包含了红包SDK和聊天页面中的资源文件。（红包SDK相关以rp开头，聊天页面相关以em开头）
+* res ：包含了聊天页面中的资源文件。
 * utils ： 封装了收、发红包以及转账的相关方法。
-* widget ：聊天界面中的红包、红包回执以及转账的chatrow(如不使用easeui可继承自己的ChatRow基类)。
+* widget ：聊天界面中的红包、红包回执的chatrow(如不使用easeui可继承自己的ChatRow基类)。
 * **注意: 由于RedPacketUtil类中使用了环信SDK中相关方法，redpacketlibrary依赖了easeui，如不使用easeui可替换掉相关的方法**。
 
 ## 3. 集成步骤
@@ -98,9 +98,9 @@
       <!--红包相关界面end-->
 ```
 
-### 3.3 初始化红包上下文和token
+### 3.3 初始化红包SDK
 
-* DemoApplication中初始化红包上下文。
+* DemoApplication中初始化红包SDK。
 
 ```java
     import com.easemob.redpacketsdk.RedPacket;
@@ -152,12 +152,11 @@
 
    import com.easemob.redpacketsdk.constant.RPConstant;
    import com.easemob.redpacketui.utils.RedPacketUtil;
-   import com.easemob.redpacketui.widget.ChatRowRedPacket;
-   import com.easemob.redpacketui.widget.ChatRowRedPacketAck;
-   import com.easemob.redpacketui.widget.ChatRowTransfer;
+   import com.easemob.redpacket.widget.ChatRowRedPacket;
+   import com.easemob.redpacket.widget.ChatRowRedPacketAck;
 ```
 
-* 添加红包、转账相关常量
+* 添加红包相关常量
 
 
 ```java
@@ -215,7 +214,7 @@
         }
 ```
 
-* 进入发红包、转账页面
+* 进入发红包页面
 
 
 ```java

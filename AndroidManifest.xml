@@ -8,7 +8,7 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="22"
-        tools:overrideLibrary="com.easemob.redpacketui" />
+        tools:overrideLibrary="com.easemob.redpacket" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -323,7 +323,9 @@
             android:exported="false"
             android:screenOrientation="behind"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <!--银行卡版红包SDK需增加下面三个Activity的声明-->
+
+        <!--钱包版红包SDK需额外几个Activity的声明-->
+
         <!--&lt;!&ndash; WebView相关 &ndash;&gt;-->
         <!--<activity-->
         <!--android:name="com.easemob.redpacketui.ui.activity.RPWebViewActivity"-->
@@ -342,7 +344,18 @@
         <!--android:screenOrientation="portrait"-->
         <!--android:theme="@style/horizontal_slide"-->
         <!--android:windowSoftInputMode="adjustPan|stateHidden" />-->
-        <!-- 红包相关Activity end -->
+        <!--&lt;!&ndash;转账页面&ndash;&gt;-->
+        <!--<activity-->
+            <!--android:name="com.easemob.redpacketui.ui.activity.RPTransferActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:windowSoftInputMode="adjustPan|stateVisible"/>-->
+        <!--&lt;!&ndash;转账详情页面&ndash;&gt;-->
+        <!--<activity-->
+            <!--android:name="com.easemob.redpacketui.ui.activity.RPTransferDetailActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:windowSoftInputMode="adjustPan|stateHidden"/>-->
+        <!---->
+         <!--红包相关Activity end-->
 
 
         <!-- 开机自启动服务 -->

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.easemob.redpacket.R;
 import com.easemob.redpacketsdk.RPGroupMemberListener;
 import com.easemob.redpacketsdk.RPSendPacketCallback;
 import com.easemob.redpacketsdk.RPValueCallback;
@@ -13,7 +14,6 @@ import com.easemob.redpacketsdk.RedPacket;
 import com.easemob.redpacketsdk.bean.RPUserBean;
 import com.easemob.redpacketsdk.bean.RedPacketInfo;
 import com.easemob.redpacketsdk.constant.RPConstant;
-import com.easemob.redpacket.R;
 import com.easemob.redpacketui.utils.RPRedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -48,7 +48,8 @@ public class RedPacketUtil {
                 @Override
                 public void run() {
                     try {
-                        EMClient.getInstance().groupManager().getGroupFromServer(toChatUsername);
+                        EMGroup group = EMClient.getInstance().groupManager().getGroupFromServer(toChatUsername);
+                        EMClient.getInstance().groupManager().fetchGroupMembers(toChatUsername, "", group.getMemberCount());
                     } catch (HyphenateException e) {
                         e.printStackTrace();
                     }
@@ -82,7 +83,7 @@ public class RedPacketUtil {
             });
             EMGroup group = EMClient.getInstance().groupManager().getGroup(toChatUsername);
             redPacketInfo.toGroupId = group.getGroupId();
-            redPacketInfo.groupMemberCount = group.getAffiliationsCount();
+            redPacketInfo.groupMemberCount = group.getMemberCount();
         } else {
             EaseUser easeToUser = EaseUserUtils.getUserInfo(toChatUsername);
             String toAvatarUrl = "none";
@@ -215,7 +216,6 @@ public class RedPacketUtil {
     }
 
 
-
     /**
      * 使用cmd消息发送领到红包之后的回执消息
      */
@@ -310,14 +310,4 @@ public class RedPacketUtil {
         return !TextUtils.isEmpty(redPacketType) && redPacketType.equals(RPConstant.RED_PACKET_TYPE_RANDOM);
     }
 
-    /**
-     * 判断红包类型是否为广告红包
-     *
-     * @param message EMMessage
-     * @return true or false
-     */
-    public static boolean isADRedPacket(EMMessage message) {
-        String redPacketType = message.getStringAttribute(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE, "");
-        return !TextUtils.isEmpty(redPacketType) && redPacketType.equals(RPConstant.AD_RED_PACKET_TYPE);
-    }
 }

@@ -17,7 +17,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        maven { url "https://raw.githubusercontent.com/YunzhanghuOpen/redpacket-maven-repo/dev/snapshots" }
+        maven {  url "https://raw.githubusercontent.com/HyphenateInc/Hyphenate-SDK-Android/master/repository" }
     }
 }
 

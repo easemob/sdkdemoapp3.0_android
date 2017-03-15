@@ -25,6 +25,7 @@ import com.easemob.redpacket.utils.RedPacketUtil;
 import com.easemob.redpacket.widget.ChatRowRandomPacket;
 import com.easemob.redpacket.widget.ChatRowRedPacket;
 import com.easemob.redpacket.widget.ChatRowRedPacketAck;
+import com.easemob.redpacketui.utils.RPRedPacketUtil;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMGroup;
@@ -448,4 +449,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //调用该方法可防止红包SDK引起的内存泄漏
+        RPRedPacketUtil.getInstance().detachView();
+    }
 }
