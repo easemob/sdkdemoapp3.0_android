@@ -15,6 +15,7 @@ package com.hyphenate.chatuidemo.ui;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -52,6 +54,7 @@ import com.hyphenate.chatuidemo.db.UserDao;
 import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
 import com.hyphenate.chatuidemo.runtimepermissions.PermissionsResultAction;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
@@ -209,7 +212,16 @@ public class MainActivity extends BaseActivity {
 		public void onMessageReceived(List<EMMessage> messages) {
 			// notify new message
 		    for (EMMessage message : messages) {
-		        DemoHelper.getInstance().getNotifier().onNewMsg(message);
+				if (message.getChatType() == EMMessage.ChatType.GroupChat){
+					List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
+					if (disabledIds==null || !disabledIds.contains(message.getTo())){
+
+						DemoHelper.getInstance().getNotifier().onNewMsg(message);
+					}
+
+				}else {
+					DemoHelper.getInstance().getNotifier().onNewMsg(message);
+				}
 		    }
 			refreshUIWithMessage();
 		}
@@ -420,6 +432,25 @@ public class MainActivity extends BaseActivity {
 		// background
 		DemoHelper sdkHelper = DemoHelper.getInstance();
 		sdkHelper.pushActivity(this);
+
+		if(DemoHelper.getInstance().pushConfigs == null){
+			final ProgressDialog dialog = ProgressDialog.show(this,"loading...","waiting...",false);
+			new Thread(new Runnable() {
+				@Override public void run() {
+					try {
+						EMClient.getInstance().pushManager().getPushConfigsFromServer();
+						runOnUiThread(new Runnable() {
+							@Override public void run() {
+								dialog.dismiss();
+							}
+						});
+					} catch (HyphenateException e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
+		}
+
 
 		EMClient.getInstance().chatManager().addMessageListener(messageListener);
 	}

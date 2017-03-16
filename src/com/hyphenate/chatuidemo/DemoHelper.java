@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.easemob.redpacketsdk.constant.RPConstant;
+import com.easemob.redpacketui.ui.a.r;
 import com.easemob.redpacketui.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
@@ -27,6 +28,7 @@ import com.hyphenate.chat.EMMessage.ChatType;
 import com.hyphenate.chat.EMMessage.Status;
 import com.hyphenate.chat.EMMessage.Type;
 import com.hyphenate.chat.EMOptions;
+import com.hyphenate.chat.EMPushConfigs;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
@@ -78,7 +80,9 @@ public class DemoHelper {
     protected static final String TAG = "DemoHelper";
     
 	private EaseUI easeUI;
-	
+
+    public EMPushConfigs pushConfigs;
+
     /**
      * EMEventListener
      */
@@ -825,7 +829,7 @@ public class DemoHelper {
         }
         return user;
 	}
-	
+
 	 /**
      * Global listener
      * If this event already handled by an activity, you don't need handle it again
@@ -837,11 +841,41 @@ public class DemoHelper {
 
 			@Override
 			public void onMessageReceived(List<EMMessage> messages) {
-			    for (EMMessage message : messages) {
+			    for (final EMMessage message : messages) {
 			        EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
 			        // in background, do not refresh UI, notify it in notification bar
 			        if(!easeUI.hasForegroundActivies()){
-			            getNotifier().onNewMsg(message);
+                        if (message.getChatType() == EMMessage.ChatType.GroupChat){
+                            //if (pushConfigs == null){
+                                new Thread(new Runnable() {
+                                    @Override public void run() {
+                                        try {
+                                            pushConfigs = EMClient.getInstance().pushManager().getPushConfigsFromServer();
+                                            List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
+                                            Log.i("info","disabledidssss:"+disabledIds);
+                                            if (disabledIds==null || !disabledIds.contains(message.getTo())){
+
+                                                getNotifier().onNewMsg(message);
+                                            }
+                                        } catch (HyphenateException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }).start();
+
+                            //}else {
+                            //    pushConfigs = EMClient.getInstance().pushManager().getPushConfigs();
+                            //    List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
+                            //    Log.i("info","disabledidssss1:"+disabledIds+"-----pushconfig:"+pushConfigs);
+                            //    Log.i("info","disabled nopushgroups:"+EMClient.getInstance().pushManager().getNoPushGroups());
+                            //    if (disabledIds==null || !disabledIds.contains(message.getTo())){
+                            //
+                            //        getNotifier().onNewMsg(message);
+                            //    }
+                            //}
+                        }else {
+                            getNotifier().onNewMsg(message);
+                        }
 			        }
 			    }
 			}
