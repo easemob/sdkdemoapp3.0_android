@@ -277,6 +277,27 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
 
+        <!--分享界面-->
+        <activity
+            android:name=".ui.SharedActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType=" image/*"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType=" text/plain"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="*/*"/>
+            </intent-filter>
+        </activity>
 
 
         <activity
