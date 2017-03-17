@@ -79,18 +79,16 @@ android {
 dependencies {
     compile project(':redpacketlibrary')
     compile project(':EaseUI')
-    compile fileTree(dir: 'libs', include: '*.jar', exclude: 'android-support-multidex.jar')
-
+    compile fileTree(include: '*.jar', dir: 'libs')
     // 解决方法数超过65536问题扩展库
     compile 'com.android.support:multidex:1.0.1'
-
     //考虑到在eclipse中,直接使用源码
-//    compile ('com.anthonycr.grant:permissions:1.0'){
-//        exclude module: 'support-v4'
-//    }
-// ============== fabric start
-//    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
-//        transitive = true;
-//    }
-// ============== fabric end
+    //    compile ('com.anthonycr.grant:permissions:1.0'){
+    //        exclude module: 'support-v4'
+    //    }
+    // ============== fabric start
+    //    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
+    //        transitive = true;
+    //    }
+    // ============== fabric end
 }
