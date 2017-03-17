@@ -231,15 +231,15 @@ public class DemoHelper {
         
         EMOptions options = new EMOptions();
 
-        // 设置是否启用 dns 配置，默认为 true， 私有化部署设置为 false
-        options.enableDNSConfig(false);
-        // 设置私有化配置 IM 聊天地址
-        options.setIMServer("im1.ssy.zhtchina.cn");
-        // 设置私有化配置 IM 端口号
-        options.setImPort(6717);
-        // 设置私有化 rest 地址，这里如果有端口直接跟在地址后: xxxx.com:port
-        options.setRestServer("a1.ssy.zhtchina.cn:8080");
-        options.setAppKey("ssy#zhengtong");
+        //// 设置是否启用 dns 配置，默认为 true， 私有化部署设置为 false
+        //options.enableDNSConfig(false);
+        //// 设置私有化配置 IM 聊天地址
+        //options.setIMServer("im1.ssy.zhtchina.cn");
+        //// 设置私有化配置 IM 端口号
+        //options.setImPort(6717);
+        //// 设置私有化 rest 地址，这里如果有端口直接跟在地址后: xxxx.com:port
+        //options.setRestServer("a1.ssy.zhtchina.cn:8080");
+        //options.setAppKey("ssy#zhengtong");
 
         // set if accept the invitation automatically
         options.setAcceptInvitationAlways(false);
