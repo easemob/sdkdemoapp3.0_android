@@ -22,6 +22,7 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.utils.FileUtil;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import java.io.File;
@@ -111,8 +112,11 @@ public class SharedActivity extends BaseActivity {
      */
     private void handleShareText() {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        String sharedTitle = intent.getStringExtra(Intent.EXTRA_TITLE);
-
+        // 经测试分享文本文件时走的也是分享文本这里，但是却获取不到文本内容，只能转到文件分享那里去
+        if (TextUtils.isEmpty(sharedText)) {
+            handleShareFile();
+            return;
+        }
         message = EMMessage.createSendMessage(EMMessage.Type.TXT);
         EMTextMessageBody body = new EMTextMessageBody(sharedText);
         message.addBody(body);
@@ -123,7 +127,7 @@ public class SharedActivity extends BaseActivity {
      */
     private void handleShareImage() {
         Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-        String path = uri.getPath();
+        String path = FileUtil.getPath(this, uri);
 
         File file = new File(path);
         if (!file.exists()) {
@@ -141,7 +145,7 @@ public class SharedActivity extends BaseActivity {
      */
     private void handleShareFile() {
         Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-        String path = uri.getPath();
+        String path = FileUtil.getPath(this, uri);
         File file = new File(path);
         if (!file.exists()) {
             Toast.makeText(this, "读取文件原地址失败，无法分享", Toast.LENGTH_LONG).show();
