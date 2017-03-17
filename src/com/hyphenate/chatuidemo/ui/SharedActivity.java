@@ -51,7 +51,7 @@ public class SharedActivity extends BaseActivity {
 
     @Override protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
-        setContentView(R.layout.em_activity_shared);
+        setContentView(R.layout.ease_activity_simple_list);
 
         if (!EMClient.getInstance().isLoggedInBefore()) {
             startActivity(new Intent(this, LoginActivity.class));
@@ -73,7 +73,7 @@ public class SharedActivity extends BaseActivity {
         // 获取联系人数据源
         list.addAll(DemoHelper.getInstance().getContactList().values());
         // 设置adapter
-        contactsAdapter = new ContactsAdapter(this, R.layout.em_row_group, list);
+        contactsAdapter = new ContactsAdapter(this, R.layout.ease_row_contact, list);
         listView.setAdapter(contactsAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

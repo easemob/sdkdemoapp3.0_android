@@ -896,6 +896,10 @@ public class DemoHelper {
 			public void onCmdMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
                     EMLog.d(TAG, "receive command message");
+                    // 当前不在聊天界面时，全局进行处理 cmd 消息
+                    if(!easeUI.hasForegroundActivies()){
+                        EaseMessageUtils.receiveGroupReadMessage(message);
+                    }
                     //get message body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
