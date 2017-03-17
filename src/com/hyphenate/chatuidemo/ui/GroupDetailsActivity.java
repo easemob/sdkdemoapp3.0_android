@@ -725,12 +725,12 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 										EMClient.getInstance().groupManager().unblockUser(groupId, operationUserId);
 										break;
 									case R.id.menu_item_mute:
-										List<String> muteMembers = new ArrayList<>();
+										List<String> muteMembers = new ArrayList<String>();
 										muteMembers.add(operationUserId);
 										EMClient.getInstance().groupManager().muteGroupMembers(groupId, muteMembers, 20 * 60 * 1000);
 										break;
 									case R.id.menu_item_unmute:
-										List<String> list = new ArrayList<>();
+										List<String> list = new ArrayList<String>();
 										list.add(operationUserId);
 										EMClient.getInstance().groupManager().unMuteGroupMembers(groupId, list);
 										break;
