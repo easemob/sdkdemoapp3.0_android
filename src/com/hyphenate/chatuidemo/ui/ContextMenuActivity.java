@@ -26,11 +26,19 @@ public class ContextMenuActivity extends BaseActivity {
     public static final int RESULT_CODE_COPY = 1;
     public static final int RESULT_CODE_DELETE = 2;
     public static final int RESULT_CODE_FORWARD = 3;
-    
+    public static final int RESULT_CODE_SEND_LOCATION = 4;
+    public static final int RESULT_CODE_REAL_TIME_LOCATION = 5;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		EMMessage message = getIntent().getParcelableExtra("message");
+
+		if (message == null){
+			setContentView(R.layout.em_context_menu_for_real_time);
+			return;
+		}
+
 		boolean isChatroom = getIntent().getBooleanExtra("ischatroom", false); 
 		
 		int type = message.getType().ordinal();
@@ -58,6 +66,7 @@ public class ContextMenuActivity extends BaseActivity {
 		} else if (type == EMMessage.Type.FILE.ordinal()) {
 		    setContentView(R.layout.em_context_menu_for_location);
 		}
+
 		if (isChatroom
 				//red packet code : 屏蔽红包消息、转账消息的撤回功能
 				|| message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
@@ -86,6 +95,16 @@ public class ContextMenuActivity extends BaseActivity {
 	}
 	public void forward(View view){
 		setResult(RESULT_CODE_FORWARD);
+		finish();
+	}
+
+	public void sendLocation(View view){
+		setResult(RESULT_CODE_SEND_LOCATION);
+		finish();
+	}
+
+	public void realtimeLocation(View view){
+		setResult(RESULT_CODE_REAL_TIME_LOCATION);
 		finish();
 	}
 	
