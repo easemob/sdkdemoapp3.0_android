@@ -1179,6 +1179,18 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		    });
 		    updateGroup();
 	    }
+	    
+	    @Override
+	    public void onMemberJoined(String groupId, String member) {
+	        EMLog.d(TAG, "onMemberJoined");
+	        updateGroup();
+	    }
+	    
+	    @Override
+	    public void onMemberExited(String groupId, String member) {
+	        EMLog.d(TAG, "onMemberExited");
+            updateGroup();
+	    }
     }
 
 }
