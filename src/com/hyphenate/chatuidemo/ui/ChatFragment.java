@@ -1,6 +1,7 @@
 package com.hyphenate.chatuidemo.ui;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import com.easemob.redpacketui.widget.ChatRowRandomPacket;
 import com.easemob.redpacketui.widget.ChatRowRedPacket;
 import com.easemob.redpacketui.widget.ChatRowRedPacketAck;
 import com.easemob.redpacketui.widget.ChatRowTransfer;
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMGroup;
@@ -41,6 +43,7 @@ import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
+import com.hyphenate.easeui.utils.EaseMessageUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
@@ -92,6 +95,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
      * if it is chatBot
      */
     private boolean isRobot;
+
+    // 进度对话框
+    private ProgressDialog progressDialog;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -165,6 +171,53 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         //end of red packet code
     }
 
+    /**
+     * 撤回消息，将已经发送成功的消息进行撤回
+     *
+     * @param message 需要撤回的消息
+     */
+    private void recallMessage(final EMMessage message) {
+        // 显示撤回消息操作的 dialog
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("正在撤回 请稍候~~");
+        progressDialog.show();
+        EaseMessageUtils.sendRecallMessage(message, new EMCallBack() {
+            @Override public void onSuccess() {
+                // 关闭进度对话框
+                progressDialog.dismiss();
+                // 设置扩展为撤回消息类型，是为了区分消息的显示
+                message.setAttribute(EaseConstant.REVOKE_FLAG, true);
+                // 更新消息
+                EMClient.getInstance().chatManager().updateMessage(message);
+                // 撤回成功，刷新 UI
+                messageList.refresh();
+            }
+
+            /**
+             * 撤回消息失败
+             * @param i 失败的错误码
+             * @param s 失败的错误信息
+             */
+            @Override public void onError(final int i, final String s) {
+                progressDialog.dismiss();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        // 弹出错误提示
+                        if (s.equals(EaseConstant.ERROR_S_RECALL_TIME)) {
+                            Toast.makeText(getActivity(), getString(R.string.recall_failed_max_time), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), getString(R.string.recall_failed), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+            @Override public void onProgress(int i, String s) {
+
+            }
+        });
+    }
+
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CONTEXT_MENU) {
@@ -196,6 +249,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     startActivity(new Intent(getActivity(), EaseBaiduMapActivity.class).putExtra("realtimelocation", true)
                             .putExtra("direct", 0)
                             .putExtra("username", toChatUsername));
+                    break;
+
+                case ContextMenuActivity.RESULT_CODE_RECALL: // recall
+                    recallMessage(contextMenuMessage);
                     break;
 
                 default:
@@ -331,14 +388,20 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
                 RedPacketUtil.receiveRedPacketAckMessage(message);
                 messageList.refresh();
-            }
-
-            if (action.equals("shareLocation")) {
+            } else if (action.equals("shareLocation")) {
 
                 if (EaseBaiduMapActivity.instance != null) {
                     Message msg = EaseBaiduMapActivity.instance.handler.obtainMessage();
                     msg.obj = message;
                     msg.sendToTarget();
+                }
+            } else if (action.equals(EaseConstant.REVOKE_FLAG)) { // 判断是不是撤回消息的透传
+                // 收到透传的CMD消息后，调用撤回消息方法进行处理
+                boolean result = EaseMessageUtils.receiveRecallMessage(message);
+                // 撤回消息之后，判断是否当前聊天界面，用来刷新界面
+                if (toChatUsername.equals(message.getFrom()) && result) {
+                    String msgId = message.getStringAttribute(EaseConstant.MSG_ID, null);
+                    messageList.refresh();
                 }
             }
         }

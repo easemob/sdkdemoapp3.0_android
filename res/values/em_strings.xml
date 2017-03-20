@@ -36,6 +36,7 @@
     <string name="network_unavailable">The network connection is not available, please check the network</string>
     <string name="copy">Copy</string>
     <string name="forward">Forward</string>
+    <string name="recall">Recall</string>
     <string name="button_logout">Logout</string>
     <string name="button_uploadlog">Upload the log</string>
     <string name="ok">OK</string>
@@ -152,7 +153,10 @@
     <string name="refuse_join_group">refuse join group:</string>
     <string name="at_your_in_group">%s @ you in group chat</string>
     <string name="emojicon_test_name">Test</string>
-    
+    <string name="recall_failed_max_time">The message has been over five minutes and can not be withdrawn</string>
+    <string name="recall_failed">recall failed</string>
+
+
     <string name="not_add_myself">"Can't add yourself"</string>
     <string name="This_user_is_already_your_friend">This user is already your friend</string>
     <string name="Add_a_friend">Let me to be your friend!</string>
