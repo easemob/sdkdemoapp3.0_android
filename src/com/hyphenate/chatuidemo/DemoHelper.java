@@ -687,6 +687,41 @@ public class DemoHelper {
         public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
             showToast("onOwnerChanged new:" + newOwner + " old:" + oldOwner);
         }
+
+        @Override
+        public void onMemberJoined(String s, String s1) {
+            // 创建一条接收消息，用来保存申请信息/
+            EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+            // 保存消息内容，用于直接显示
+            EMTextMessageBody body = new EMTextMessageBody(s1+appContext.getString(R.string.joined_group));
+            message.addBody(body);
+            message.setChatType(ChatType.GroupChat);
+            message.setTo(s);
+            message.setFrom(s1);
+            message.setAttribute(EaseConstant.GROUP_CHANGE, true);
+            // 将消息保存到本地和内存
+            EMClient.getInstance().chatManager().saveMessage(message);
+             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_NOTIFY));
+
+        }
+
+        @Override
+        public void onMemberExited(String s, String s1) {
+            // 创建一条接收消息，用来保存申请信息/
+            EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+            // 保存消息内容，用于直接显示
+            EMTextMessageBody body = new EMTextMessageBody(s1+appContext.getString(R.string.exited_group));
+            message.addBody(body);
+            message.setChatType(ChatType.GroupChat);
+            message.setTo(s);
+            message.setFrom(s1);
+            message.setAttribute(EaseConstant.GROUP_CHANGE, true);
+
+            // 将消息保存到本地和内存
+            EMClient.getInstance().chatManager().saveMessage(message);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_NOTIFY));
+
+        }
         // ============================= group_reform new add api end
     }
 

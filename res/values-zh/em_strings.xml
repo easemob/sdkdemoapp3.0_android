@@ -302,7 +302,10 @@
     <string name="update_contact_list">更新联系人列表</string>
     <string name="update_black_list">更新黑名单</string>
     <string name="update_groups">更新群聊</string>
-    
+    <string name="joined_group">已加入群</string>
+    <string name="exited_group">已退出群</string>
+
+
     <string name="update_contact_list_failed">更新联系人列表失败</string>
     <string name="update_black_list_failed">更新黑名单失败</string>
     <string name="update_groups_failed">更新群聊失败</string>

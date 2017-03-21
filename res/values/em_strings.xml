@@ -153,6 +153,9 @@
     <string name="emojicon_test_name">Test</string>
     <string name="recall_failed_max_time">The message has been over five minutes and can not be withdrawn</string>
     <string name="recall_failed">recall failed</string>
+    <string name="joined_group">Joined group</string>
+    <string name="exited_group">exited group</string>
+
 
 
     <string name="not_add_myself">"Can't add yourself"</string>

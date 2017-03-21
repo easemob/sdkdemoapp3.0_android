@@ -51,6 +51,7 @@ import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
 import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
 import com.hyphenate.chatuidemo.runtimepermissions.PermissionsResultAction;
+import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
@@ -265,6 +266,7 @@ public class MainActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
+		intentFilter.addAction(Constant.ACTION_GROUP_NOTIFY);
 		intentFilter.addAction(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
             
@@ -290,6 +292,11 @@ public class MainActivity extends BaseActivity {
                 }
 				//red packet code : 处理红包回执透传消息
 				if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+					if (conversationListFragment != null){
+						conversationListFragment.refresh();
+					}
+				}
+				if(action.equals(Constant.ACTION_GROUP_NOTIFY)){
 					if (conversationListFragment != null){
 						conversationListFragment.refresh();
 					}
