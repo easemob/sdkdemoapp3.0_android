@@ -112,6 +112,7 @@ public class ContextMenuActivity extends BaseActivity {
 
     public void realtimeLocation(View view) {
         setResult(RESULT_CODE_REAL_TIME_LOCATION);
+        finish();
     }
 
     public void recall(View view) {
