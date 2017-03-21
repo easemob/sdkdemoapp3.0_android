@@ -79,7 +79,7 @@ public class DemoHelper {
     }
 
     protected static final String TAG = "DemoHelper";
-    
+
 	private EaseUI easeUI;
 
     public EMPushConfigs pushConfigs;
@@ -96,9 +96,9 @@ public class DemoHelper {
 	private UserProfileManager userProManager;
 
 	private static DemoHelper instance = null;
-	
+
 	private DemoModel demoModel = null;
-	
+
 	/**
      * sync groups status listener
      */
@@ -118,7 +118,7 @@ public class DemoHelper {
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
-	
+
 	public boolean isVoiceCalling;
     public boolean isVideoCalling;
 
@@ -147,7 +147,7 @@ public class DemoHelper {
 
 	/**
 	 * init helper
-	 * 
+	 *
 	 * @param context
 	 *            application context
 	 */
@@ -157,7 +157,7 @@ public class DemoHelper {
 	    //use default options if options is null
 		if (EaseUI.getInstance().init(context, options)) {
 		    appContext = context;
-		    
+
 		    //debug mode, you'd better set it to false, if you want release your App officially.
 		    EMClient.getInstance().setDebugMode(true);
 		    //get easeui instance
@@ -230,10 +230,10 @@ public class DemoHelper {
 		}
 	}
 
-	
+
 	private EMOptions initChatOptions(){
         Log.d(TAG, "init HuanXin Options");
-        
+
         EMOptions options = new EMOptions();
 
         //// 设置是否启用 dns 配置，默认为 true， 私有化部署设置为 false
@@ -273,7 +273,7 @@ public class DemoHelper {
         if (demoModel.isCustomAppkeyEnabled() && demoModel.getCutomAppkey() != null && !demoModel.getCutomAppkey().isEmpty()) {
             options.setAppKey(demoModel.getCutomAppkey());
         }
-        
+
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
@@ -284,7 +284,7 @@ public class DemoHelper {
     protected void setEaseUIProviders() {
     	// set profile provider if you want easeUI to handle avatar and nickname
         easeUI.setUserProfileProvider(new EaseUserProfileProvider() {
-            
+
             @Override
             public EaseUser getUser(String username) {
                 return getUserInfo(username);
@@ -293,22 +293,22 @@ public class DemoHelper {
 
         //set options 
         easeUI.setSettingsProvider(new EaseSettingsProvider() {
-            
+
             @Override
             public boolean isSpeakerOpened() {
                 return demoModel.getSettingMsgSpeaker();
             }
-            
+
             @Override
             public boolean isMsgVibrateAllowed(EMMessage message) {
                 return demoModel.getSettingMsgVibrate();
             }
-            
+
             @Override
             public boolean isMsgSoundAllowed(EMMessage message) {
                 return demoModel.getSettingMsgSound();
             }
-            
+
             @Override
             public boolean isMsgNotifyAllowed(EMMessage message) {
                 if(message == null){
@@ -338,7 +338,7 @@ public class DemoHelper {
         });
         //set emoji icon provider
         easeUI.setEmojiconInfoProvider(new EaseEmojiconInfoProvider() {
-            
+
             @Override
             public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
                 EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
@@ -355,22 +355,22 @@ public class DemoHelper {
                 return null;
             }
         });
-        
+
         //set notification options, will use default if you don't set it
         easeUI.getNotifier().setNotificationInfoProvider(new EaseNotificationInfoProvider() {
-            
+
             @Override
             public String getTitle(EMMessage message) {
               //you can update title here
                 return null;
             }
-            
+
             @Override
             public int getSmallIcon(EMMessage message) {
               //you can update icon here
                 return 0;
             }
-            
+
             @Override
             public String getDisplayedText(EMMessage message) {
             	// be used on notification bar, different text according the message type.
@@ -391,14 +391,14 @@ public class DemoHelper {
                     return message.getFrom() + ": " + ticker;
                 }
             }
-            
+
             @Override
             public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
                 // here you can customize the text.
                 // return fromUsersNum + "contacts send " + messageNum + "messages to you";
             	return null;
             }
-            
+
             @Override
             public Intent getLaunchIntent(EMMessage message) {
             	// you can set what activity you want display when user click the notification
@@ -421,7 +421,7 @@ public class DemoHelper {
                         }else{
                             intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
                         }
-                        
+
                     }
                 }
                 return intent;
@@ -437,11 +437,11 @@ public class DemoHelper {
         syncGroupsListeners = new ArrayList<DataSyncListener>();
         syncContactsListeners = new ArrayList<DataSyncListener>();
         syncBlackListListeners = new ArrayList<DataSyncListener>();
-        
+
         isGroupsSyncedWithServer = demoModel.isGroupsSynced();
         isContactsSyncedWithServer = demoModel.isContactSynced();
         isBlackListSyncedWithServer = demoModel.isBacklistSynced();
-        
+
         // create the global connection listener
         connectionListener = new EMConnectionListener() {
             @Override
@@ -483,21 +483,21 @@ public class DemoHelper {
         }
 
         //register incoming call receiver
-        appContext.registerReceiver(callReceiver, callFilter);    
+        appContext.registerReceiver(callReceiver, callFilter);
         //register connection listener
-        EMClient.getInstance().addConnectionListener(connectionListener);       
+        EMClient.getInstance().addConnectionListener(connectionListener);
         //register group and contact event listener
         registerGroupAndContactListener();
         //register message event listener
         registerMessageListener();
-        
+
     }
-    
+
     private void initDbDao() {
         inviteMessgeDao = new InviteMessgeDao(appContext);
         userDao = new UserDao(appContext);
     }
-    
+
     /**
      * register group and contact listener, you need register when login
      */
@@ -507,9 +507,9 @@ public class DemoHelper {
             EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
             isGroupAndContactListenerRegisted = true;
         }
-        
+
     }
-    
+
     /**
      * group change listener
      */
@@ -517,9 +517,9 @@ public class DemoHelper {
 
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
-            
+
             new InviteMessgeDao(appContext).deleteMessage(groupId);
-            
+
             // user invite you to join group
             InviteMessage msg = new InviteMessage();
             msg.setFrom(groupId);
@@ -536,9 +536,9 @@ public class DemoHelper {
 
         @Override
         public void onInvitationAccepted(String groupId, String invitee, String reason) {
-            
+
             new InviteMessgeDao(appContext).deleteMessage(groupId);
-            
+
             //user accept your invitation
             boolean hasGroup = false;
             EMGroup _group = null;
@@ -551,7 +551,7 @@ public class DemoHelper {
             }
             if (!hasGroup)
                 return;
-            
+
             InviteMessage msg = new InviteMessage();
             msg.setFrom(groupId);
             msg.setTime(System.currentTimeMillis());
@@ -564,12 +564,12 @@ public class DemoHelper {
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
-        
+
         @Override
         public void onInvitationDeclined(String groupId, String invitee, String reason) {
-            
+
             new InviteMessgeDao(appContext).deleteMessage(groupId);
-            
+
             //user declined your invitation
             EMGroup group = null;
             for (EMGroup _group : EMClient.getInstance().groupManager().getAllGroups()) {
@@ -580,7 +580,7 @@ public class DemoHelper {
             }
             if (group == null)
                 return;
-            
+
             InviteMessage msg = new InviteMessage();
             msg.setFrom(groupId);
             msg.setTime(System.currentTimeMillis());
@@ -602,13 +602,13 @@ public class DemoHelper {
 
         @Override
         public void onGroupDestroyed(String groupId, String groupName) {
-        	// group is dismissed, 
+        	// group is dismissed,
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
 
         @Override
         public void onRequestToJoinReceived(String groupId, String groupName, String applyer, String reason) {
-            
+
             // user apply to join group
             InviteMessage msg = new InviteMessage();
             msg.setFrom(applyer);
@@ -716,10 +716,10 @@ public class DemoHelper {
             Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
         }
     };
-    
+
     /***
      * 好友变化listener
-     * 
+     *
      */
     public class MyContactListener implements EMContactListener {
 
@@ -796,7 +796,7 @@ public class DemoHelper {
             Log.d(username, username + " refused to your request");
         }
     }
-    
+
     /**
      * save and notify invitation message
      * @param msg
@@ -822,7 +822,7 @@ public class DemoHelper {
         intent.putExtra(exception, true);
         appContext.startActivity(intent);
     }
- 
+
 	private EaseUser getUserInfo(String username){
 		// To get instance of EaseUser, here we get it from the user list in memory
 		// You'd better cache it if you get it from your server
@@ -891,18 +891,20 @@ public class DemoHelper {
 			        }
 			    }
 			}
-			
+
 			@Override
 			public void onCmdMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
                     EMLog.d(TAG, "receive command message");
-                    // 当前不在聊天界面时，全局进行处理 cmd 消息
-                    if(!easeUI.hasForegroundActivies()){
-                        EaseMessageUtils.receiveGroupReadMessage(message);
-                    }
                     //get message body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
+                    // 当前不在聊天界面时，全局进行处理 cmd 消息
+                    if(!easeUI.hasForegroundActivies()){
+                        if (action.equals(EaseConstant.GROUP_READ_ACTION)) {
+                            EaseMessageUtils.receiveGroupReadMessage(message);
+                        }
+                    }
                     //red packet code : 处理红包回执透传消息
                     if(!easeUI.hasForegroundActivies()){
                         if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
@@ -931,24 +933,24 @@ public class DemoHelper {
 			@Override
 			public void onMessageRead(List<EMMessage> messages) {
 			}
-			
+
 			@Override
 			public void onMessageDelivered(List<EMMessage> message) {
 			}
-			
+
 			@Override
 			public void onMessageChanged(EMMessage message, Object change) {
                 EMLog.d(TAG, "change:");
 				EMLog.d(TAG, "change:" + change);
 			}
 		};
-		
+
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
     }
 
 	/**
 	 * if ever logged in
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isLoggedIn() {
@@ -957,7 +959,7 @@ public class DemoHelper {
 
 	/**
 	 * logout
-	 * 
+	 *
 	 * @param unbindDeviceToken
 	 *            whether you need unbind your device token
 	 * @param callback
@@ -995,7 +997,7 @@ public class DemoHelper {
 			}
 		});
 	}
-	
+
 	/**
 	 * get instance of EaseNotifier
 	 * @return
@@ -1003,14 +1005,14 @@ public class DemoHelper {
 	public EaseNotifier getNotifier(){
 	    return easeUI.getNotifier();
 	}
-	
+
 	public DemoModel getModel(){
         return (DemoModel) demoModel;
     }
-	
+
 	/**
 	 * update contact list
-	 * 
+	 *
 	 * @param aContactList
 	 */
 	public void setContactList(Map<String, EaseUser> aContactList) {
@@ -1020,18 +1022,18 @@ public class DemoHelper {
 		    }
 			return;
 		}
-		
+
 		contactList = aContactList;
 	}
-	
+
 	/**
-     * save single contact 
+     * save single contact
      */
     public void saveContact(EaseUser user){
     	contactList.put(user.getUsername(), user);
     	demoModel.saveContact(user);
     }
-    
+
     /**
      * get contact list
      *
@@ -1041,15 +1043,15 @@ public class DemoHelper {
         if (isLoggedIn() && contactList == null) {
             contactList = demoModel.getContactList();
         }
-        
+
         // return a empty non-null object to avoid app crash
         if(contactList == null){
         	return new Hashtable<String, EaseUser>();
         }
-        
+
         return contactList;
     }
-    
+
     /**
      * set current username
      * @param username
@@ -1058,7 +1060,7 @@ public class DemoHelper {
     	this.username = username;
     	demoModel.setCurrentUserName(username);
     }
-    
+
     /**
      * get current user's id
      */
@@ -1108,7 +1110,7 @@ public class DemoHelper {
 			e.printStackTrace();
 		}
 	}
-	
+
   public void addSyncGroupListener(DataSyncListener listener) {
         if (listener == null) {
             return;
@@ -1162,7 +1164,7 @@ public class DemoHelper {
             syncBlackListListeners.remove(listener);
         }
     }
-	
+
 	/**
     * Get group list from server
     * This method will save the sync state
@@ -1172,15 +1174,15 @@ public class DemoHelper {
        if(isSyncingGroupsWithServer){
            return;
        }
-       
+
        isSyncingGroupsWithServer = true;
-       
+
        new Thread(){
            @Override
            public void run(){
                try {
                    EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
-                   
+
                    // in case that logout already before server returns, we should return immediately
                    if(!isLoggedIn()){
                        isGroupsSyncedWithServer = false;
@@ -1188,12 +1190,12 @@ public class DemoHelper {
                        noitifyGroupSyncListeners(false);
                        return;
                    }
-                   
+
                    demoModel.setGroupsSynced(true);
-                   
+
                    isGroupsSyncedWithServer = true;
                    isSyncingGroupsWithServer = false;
-                   
+
                    //notify sync group list success
                    noitifyGroupSyncListeners(true);
 
@@ -1209,7 +1211,7 @@ public class DemoHelper {
                        callback.onError(e.getErrorCode(), e.toString());
                    }
                }
-           
+
            }
        }.start();
    }
@@ -1219,14 +1221,14 @@ public class DemoHelper {
            listener.onSyncComplete(success);
        }
    }
-   
+
    public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback){
        if(isSyncingContactsWithServer){
            return;
        }
-       
+
        isSyncingContactsWithServer = true;
-       
+
        new Thread(){
            @Override
            public void run(){
@@ -1240,7 +1242,7 @@ public class DemoHelper {
                        notifyContactsSyncListener(false);
                        return;
                    }
-                  
+
                    Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
                    for (String username : usernames) {
                        EaseUser user = new EaseUser(username);
@@ -1257,13 +1259,13 @@ public class DemoHelper {
 
                    demoModel.setContactSynced(true);
                    EMLog.d(TAG, "set contact syn status to true");
-                   
+
                    isContactsSyncedWithServer = true;
                    isSyncingContactsWithServer = false;
-                   
+
                    //notify sync success
                    notifyContactsSyncListener(true);
-                   
+
                    getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
 
                        @Override
@@ -1289,7 +1291,7 @@ public class DemoHelper {
                        callback.onError(e.getErrorCode(), e.toString());
                    }
                }
-               
+
            }
        }.start();
    }
@@ -1299,21 +1301,21 @@ public class DemoHelper {
            listener.onSyncComplete(success);
        }
    }
-   
+
    public void asyncFetchBlackListFromServer(final EMValueCallBack<List<String>> callback){
-       
+
        if(isSyncingBlackListWithServer){
            return;
        }
-       
+
        isSyncingBlackListWithServer = true;
-       
+
        new Thread(){
            @Override
            public void run(){
                try {
                    List<String> usernames = EMClient.getInstance().contactManager().getBlackListFromServer();
-                   
+
                    // in case that logout already before server returns, we should return immediately
                    if(!isLoggedIn()){
                        isBlackListSyncedWithServer = false;
@@ -1321,38 +1323,38 @@ public class DemoHelper {
                        notifyBlackListSyncListener(false);
                        return;
                    }
-                   
+
                    demoModel.setBlacklistSynced(true);
-                   
+
                    isBlackListSyncedWithServer = true;
                    isSyncingBlackListWithServer = false;
-                   
+
                    notifyBlackListSyncListener(true);
                    if(callback != null){
                        callback.onSuccess(usernames);
                    }
                } catch (HyphenateException e) {
                    demoModel.setBlacklistSynced(false);
-                   
+
                    isBlackListSyncedWithServer = false;
                    isSyncingBlackListWithServer = true;
                    e.printStackTrace();
-                   
+
                    if(callback != null){
                        callback.onError(e.getErrorCode(), e.toString());
                    }
                }
-               
+
            }
        }.start();
    }
-	
+
 	public void notifyBlackListSyncListener(boolean success){
         for (DataSyncListener listener : syncBlackListListeners) {
             listener.onSyncComplete(success);
         }
     }
-    
+
     public boolean isSyncingGroupsWithServer() {
         return isSyncingGroupsWithServer;
     }
@@ -1364,7 +1366,7 @@ public class DemoHelper {
     public boolean isSyncingBlackListWithServer() {
         return isSyncingBlackListWithServer;
     }
-    
+
     public boolean isGroupsSyncedWithServer() {
         return isGroupsSyncedWithServer;
     }
@@ -1376,22 +1378,22 @@ public class DemoHelper {
     public boolean isBlackListSyncedWithServer() {
         return isBlackListSyncedWithServer;
     }
-	
+
     synchronized void reset(){
         isSyncingGroupsWithServer = false;
         isSyncingContactsWithServer = false;
         isSyncingBlackListWithServer = false;
-        
+
         demoModel.setGroupsSynced(false);
         demoModel.setContactSynced(false);
         demoModel.setBlacklistSynced(false);
-        
+
         isGroupsSyncedWithServer = false;
         isContactsSyncedWithServer = false;
         isBlackListSyncedWithServer = false;
 
         isGroupAndContactListenerRegisted = false;
-        
+
         setContactList(null);
         setRobotList(null);
         getUserProfileManager().reset();

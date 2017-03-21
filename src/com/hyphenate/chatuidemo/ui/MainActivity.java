@@ -53,7 +53,10 @@ import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
 import com.hyphenate.chatuidemo.runtimepermissions.PermissionsManager;
 import com.hyphenate.chatuidemo.runtimepermissions.PermissionsResultAction;
+import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.easeui.utils.EaseMessageUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.umeng.analytics.MobclickAgent;
@@ -232,6 +235,10 @@ public class MainActivity extends BaseActivity {
 			for (EMMessage message : messages) {
 				EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
 				final String action = cmdMsgBody.action();//获取自定义action
+				// 当前不在聊天界面时，全局进行处理 cmd 消息
+				if (action.equals(EaseConstant.GROUP_READ_ACTION)) {
+					EaseMessageUtils.receiveGroupReadMessage(message);
+				}
 				if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
 					RedPacketUtil.receiveRedPacketAckMessage(message);
 				}
