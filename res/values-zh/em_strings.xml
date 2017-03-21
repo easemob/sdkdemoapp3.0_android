@@ -32,6 +32,8 @@
     <string name="delete_video">删除视频</string>
     <string name="delete">删除</string>
     <string name="resend">重发</string>
+    <string name="send_location">发送位置</string>
+    <string name="share_real_time_location">共享实时位置</string>
     <string name="recall">撤回</string>
     <string name="confirm_resend">确认重发该信息？</string>
     <string name="connect_failuer_toast">请检查网络或稍候重试</string>

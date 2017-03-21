@@ -15,8 +15,8 @@ package com.hyphenate.chatuidemo;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
 
+import android.support.multidex.MultiDex;
 import com.easemob.redpacketsdk.RedPacket;
 // ============== fabric start
 //import com.crashlytics.android.Crashlytics;

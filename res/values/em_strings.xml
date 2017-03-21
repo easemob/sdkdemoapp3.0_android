@@ -31,6 +31,8 @@
     <string name="delete_video">Delete video</string>
     <string name="delete">Delete</string>
     <string name="resend">Resend</string>
+    <string name="send_location">send location</string>
+    <string name="share_real_time_location">share real-time location</string>
     <string name="confirm_resend">Confirm to resend？</string>
     <string name="connect_failuer_toast">Please check the network or try again later</string>
     <string name="network_unavailable">The network connection is not available, please check the network</string>
