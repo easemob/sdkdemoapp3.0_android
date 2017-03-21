@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.utils.EaseConversationExtUtils;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
+import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.util.NetUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,9 @@ public class ConversationListFragment extends EaseConversationListFragment {
     private AlertDialog.Builder alertDialogBuilder;
     private AlertDialog conversationMenuDialog;
 
+    private View afficheNotifyView;
+    private EMConversation afficheConversation;
+
     @Override protected void initView() {
         super.initView();
         View errorView =
@@ -39,6 +46,18 @@ public class ConversationListFragment extends EaseConversationListFragment {
         errorText = (TextView) errorView.findViewById(R.id.tv_connect_errormsg);
 
         activity = getActivity();
+
+        // 添加公告按钮
+        titleBar = (EaseTitleBar) getView().findViewById(R.id.title_bar);
+        View view = LayoutInflater.from(activity).inflate(R.layout.em_widget_affiche, null);
+        afficheNotifyView = view.findViewById(R.id.text_affiche_notify);
+        titleBar.addView(view);
+        view.findViewById(R.id.layout_affiche).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                Toast.makeText(activity, "公告", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(activity, AfficheActivity.class));
+            }
+        });
     }
 
     @Override protected void setUpView() {
@@ -207,8 +226,26 @@ public class ConversationListFragment extends EaseConversationListFragment {
         conversationMenuDialog.show();
     }
 
+    /**
+     * 刷新公告
+     */
+    public void refreshAffiche() {
+        afficheConversation = EMClient.getInstance()
+                .chatManager()
+                .getConversation(Constant.AFFICHE_CONVERSATION_ID);
+        if (afficheConversation == null) {
+            return;
+        }
+        if (afficheConversation.getUnreadMsgCount() > 0) {
+            afficheNotifyView.setVisibility(View.VISIBLE);
+        } else {
+            afficheNotifyView.setVisibility(View.GONE);
+        }
+    }
+
     @Override public void onResume() {
         refresh();
+        refreshAffiche();
         super.onResume();
     }
 }

@@ -68,12 +68,12 @@ public class SharedActivity extends BaseActivity {
             }
         });
 
-        listView = (ListView) findViewById(R.id.shared_list_view);
+        listView = (ListView) findViewById(R.id.list_view);
 
         // 获取联系人数据源
         list.addAll(DemoHelper.getInstance().getContactList().values());
         // 设置adapter
-        contactsAdapter = new ContactsAdapter(this, R.layout.ease_row_contact, list);
+        contactsAdapter = new ContactsAdapter(this, R.layout.ease_row_simple, list);
         listView.setAdapter(contactsAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -194,7 +194,7 @@ public class SharedActivity extends BaseActivity {
                 convertView = LayoutInflater.from(context).inflate(resource, null);
                 viewHolder = new ViewHolder();
                 viewHolder.imageView = (ImageView) convertView.findViewById(R.id.avatar);
-                viewHolder.textView = (TextView) convertView.findViewById(R.id.name);
+                viewHolder.textView = (TextView) convertView.findViewById(R.id.title);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();

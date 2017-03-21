@@ -305,6 +305,16 @@
             </intent-filter>
         </activity>
 
+        <!--系统公告-->
+        <activity android:name=".ui.AfficheActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            />
+        <activity android:name=".ui.AfficheDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            />
+
 
         <activity
             android:name=".ui.CallOptionActivity"

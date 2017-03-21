@@ -261,6 +261,7 @@ public class MainActivity extends BaseActivity {
 					// refresh conversation list
 					if (conversationListFragment != null) {
 						conversationListFragment.refresh();
+						conversationListFragment.refreshAffiche();
 					}
 				}
 			}
