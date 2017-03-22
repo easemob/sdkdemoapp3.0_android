@@ -22,6 +22,9 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.exceptions.HyphenateException;
+
+import org.json.JSONArray;
 
 public class ContextMenuActivity extends BaseActivity {
     public static final int RESULT_CODE_COPY = 1;
@@ -59,6 +62,7 @@ public class ContextMenuActivity extends BaseActivity {
             } else {
                 setContentView(R.layout.em_context_menu_for_text);
             }
+
         } else if (type == EMMessage.Type.LOCATION.ordinal()) {
             setContentView(R.layout.em_context_menu_for_location);
         } else if (type == EMMessage.Type.IMAGE.ordinal()) {
@@ -85,6 +89,14 @@ public class ContextMenuActivity extends BaseActivity {
             findViewById(R.id.recall).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.recall).setVisibility(View.GONE);
+        }
+        try {
+            JSONArray array = message.getJSONArrayAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG);
+            if(array.length()>0){
+                findViewById(R.id.recall).setVisibility(View.GONE);
+            }
+        } catch (HyphenateException e) {
+            e.printStackTrace();
         }
     }
 
