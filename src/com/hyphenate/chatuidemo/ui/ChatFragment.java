@@ -407,7 +407,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     boolean result = EaseMessageUtils.receiveRecallMessage(message);
                     // 撤回消息之后，判断是否当前聊天界面，用来刷新界面
                     if (toChatUsername.equals(message.getFrom()) && result) {
-                        String msgId = message.getStringAttribute(EaseConstant.MSG_ID, null);
                         messageList.refresh();
                     }
                 }
