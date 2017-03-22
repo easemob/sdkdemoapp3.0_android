@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
@@ -51,8 +52,12 @@ public class AfficheDetailsActivity extends BaseActivity {
      * 初始化公告详情
      */
     private void initView() {
+        EMConversation conversation = EMClient.getInstance()
+                .chatManager()
+                .getConversation(EaseConstant.AFFICHE_CONVERSATION_ID);
+
         String msgId = getIntent().getStringExtra(Constant.MSG_ID);
-        message = EMClient.getInstance().chatManager().getMessage(msgId);
+        message = conversation.getMessage(msgId, true);
         // 设置公告标题
         easeTitleBar.setTitle(((EMTextMessageBody) message.getBody()).getMessage());
         try {
