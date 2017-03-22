@@ -250,6 +250,13 @@ import java.util.List;
         }
 
         @Override public void onMessageRead(List<EMMessage> messages) {
+            for (EMMessage message : messages) {
+                // 阅后即焚的消息收到已读 ack 删除消息
+                if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_BURN, false)) {
+                    EaseMessageUtils.receiveBurnACKMessage(message);
+                    refreshUIWithMessage();
+                }
+            }
         }
 
         @Override public void onMessageDelivered(List<EMMessage> message) {
@@ -283,7 +290,8 @@ import java.util.List;
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
-        intentFilter.addAction(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
+		intentFilter.addAction(Constant.ACTION_GROUP_NOTIFY);
+		intentFilter.addAction(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
 
             @Override public void onReceive(Context context, Intent intent) {
@@ -305,14 +313,20 @@ import java.util.List;
                         GroupsActivity.instance.onResume();
                     }
                 }
-                //red packet code : 处理红包回执透传消息
-                if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
-                    if (conversationListFragment != null) {
-                        conversationListFragment.refresh();
-                    }
-                }
-                //end of red packet code
-            }
+				//red packet code : 处理红包回执透传消息
+				if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+					if (conversationListFragment != null){
+						conversationListFragment.refresh();
+					}
+				}
+				if(action.equals(Constant.ACTION_GROUP_NOTIFY)){
+					if (conversationListFragment != null){
+						conversationListFragment.refresh();
+					}
+				}
+				//end of red packet code
+			}
+
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -448,7 +462,7 @@ import java.util.List;
         sdkHelper.pushActivity(this);
 
         if (DemoHelper.getInstance().pushConfigs == null) {
-            final ProgressDialog dialog = ProgressDialog.show(this, "loading...", "waiting...", false,true);
+            final ProgressDialog dialog = ProgressDialog.show(this, "loading...", "waiting...",false,true);
             new Thread(new Runnable() {
                 @Override public void run() {
                     try {

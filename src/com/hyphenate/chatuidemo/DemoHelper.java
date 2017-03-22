@@ -21,6 +21,7 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
@@ -675,6 +676,41 @@ public class DemoHelper {
         @Override public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
             showToast("onOwnerChanged new:" + newOwner + " old:" + oldOwner);
         }
+
+        @Override
+        public void onMemberJoined(String s, String s1) {
+            // 创建一条接收消息，用来保存申请信息/
+            EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+            // 保存消息内容，用于直接显示
+            EMTextMessageBody body = new EMTextMessageBody(s1+appContext.getString(R.string.joined_group));
+            message.addBody(body);
+            message.setChatType(ChatType.GroupChat);
+            message.setTo(s);
+            message.setFrom(s1);
+            message.setAttribute(EaseConstant.GROUP_CHANGE, true);
+            // 将消息保存到本地和内存
+            EMClient.getInstance().chatManager().saveMessage(message);
+             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_NOTIFY));
+
+        }
+
+        @Override
+        public void onMemberExited(String s, String s1) {
+            // 创建一条接收消息，用来保存申请信息/
+            EMMessage message = EMMessage.createReceiveMessage(EMMessage.Type.TXT);
+            // 保存消息内容，用于直接显示
+            EMTextMessageBody body = new EMTextMessageBody(s1+appContext.getString(R.string.exited_group));
+            message.addBody(body);
+            message.setChatType(ChatType.GroupChat);
+            message.setTo(s);
+            message.setFrom(s1);
+            message.setAttribute(EaseConstant.GROUP_CHANGE, true);
+
+            // 将消息保存到本地和内存
+            EMClient.getInstance().chatManager().saveMessage(message);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_NOTIFY));
+
+        }
         // ============================= group_reform new add api end
     }
 
@@ -868,6 +904,8 @@ public class DemoHelper {
                     if(!easeUI.hasForegroundActivies()){
                         if (action.equals(EaseConstant.GROUP_READ_ACTION)) {
                             EaseMessageUtils.receiveGroupReadMessage(message);
+                        }else if(action.equals(EaseConstant.MESSAGE_ATTR_BURN_ACTION)){
+                            EaseMessageUtils.receiveBurnCMDMessage(message);
                         }
                     }
                     //red packet code : 处理红包回执透传消息
@@ -908,6 +946,14 @@ public class DemoHelper {
             }
 
             @Override public void onMessageRead(List<EMMessage> messages) {
+                for (EMMessage message : messages) {
+                    if (!easeUI.hasForegroundActivies()) {
+                        // 阅后即焚的消息收到已读 ack 删除消息
+                        if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_BURN, false)) {
+                            EaseMessageUtils.receiveBurnACKMessage(message);
+                        }
+                    }
+                }
             }
 
             @Override public void onMessageDelivered(List<EMMessage> message) {

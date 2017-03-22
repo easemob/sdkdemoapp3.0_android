@@ -2,14 +2,18 @@ package com.hyphenate.chatuidemo.ui;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -45,6 +49,7 @@ import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseMessageUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
@@ -105,6 +110,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
     // 进度对话框
     private ProgressDialog progressDialog;
+    private BroadcastReceiver broadcastReceiver;
+    private LocalBroadcastManager broadcastManager;
+
+
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -112,6 +121,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
 
     @Override protected void setUpView() {
         setChatFragmentListener(this);
+        registerBroadcastReceiver();
         if (chatType == Constant.CHATTYPE_SINGLE) {
             Map<String, RobotUser> robotMap = DemoHelper.getInstance().getRobotList();
             if (robotMap != null && robotMap.containsKey(toChatUsername)) {
@@ -178,6 +188,33 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     extendMenuItemClickListener);
         }
         //end of red packet code
+    }
+
+    private void registerBroadcastReceiver() {
+        broadcastManager = LocalBroadcastManager.getInstance(getActivity());
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_GROUP_NOTIFY);
+        broadcastReceiver = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if(action.equals(Constant.ACTION_GROUP_NOTIFY)){
+                    messageList.refresh();
+                }
+            }
+        };
+        broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    private void unregisterBroadcastReceiver(){
+        broadcastManager.unregisterReceiver(broadcastReceiver);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterBroadcastReceiver();
     }
 
     /**
@@ -421,13 +458,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     msg.sendToTarget();
                 }
             } else if (action.equals(EaseConstant.REVOKE_FLAG)) { // 判断是不是撤回消息的透传
-                // 收到透传的CMD消息后，调用撤回消息方法进行处理
-                boolean result = EaseMessageUtils.receiveRecallMessage(message);
-                // 撤回消息之后，判断是否当前聊天界面，用来刷新界面
-                if (toChatUsername.equals(message.getFrom()) && result) {
-                    String msgId = message.getStringAttribute(EaseConstant.MSG_ID, null);
-                    messageList.refresh();
-                }
+                    // 收到透传的CMD消息后，调用撤回消息方法进行处理
+                    boolean result = EaseMessageUtils.receiveRecallMessage(message);
+                    // 撤回消息之后，判断是否当前聊天界面，用来刷新界面
+                    if (toChatUsername.equals(message.getFrom()) && result) {
+                        messageList.refresh();
+                    }
+
             } else if (action.equals(EaseConstant.MESSAGE_ATTR_BURN_ACTION)) {
                 EaseMessageUtils.receiveBurnCMDMessage(message);
                 messageList.refresh();
