@@ -383,7 +383,7 @@ import java.util.List;
         if (disabledIds != null){
             int freeCount = 0;
             for (String groupid:disabledIds){
-                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(groupid,EMConversationType.GroupChat);
+                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(groupid,EMConversationType.GroupChat,true);
                 freeCount+=conversation.getUnreadMsgCount();
             }
             if (count-freeCount > 0) {
@@ -455,7 +455,7 @@ import java.util.List;
         sdkHelper.pushActivity(this);
 
         if (DemoHelper.getInstance().pushConfigs == null) {
-            final ProgressDialog dialog = ProgressDialog.show(this, "loading...", "waiting...", false);
+            final ProgressDialog dialog = ProgressDialog.show(this, "loading...", "waiting...",false,true);
             new Thread(new Runnable() {
                 @Override public void run() {
                     try {

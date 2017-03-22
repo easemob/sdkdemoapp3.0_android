@@ -292,9 +292,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     EMMessage message = EMMessage.createTxtSendMessage("发起了位置共享", toChatUsername);
                     message.setAttribute("shareLocation", true);
                     sendMessage(message);
-                    startActivity(new Intent(getActivity(), EaseBaiduMapActivity.class).putExtra("realtimelocation", true)
+                    startActivityForResult(new Intent(getActivity(), EaseBaiduMapActivity.class).putExtra("realtimelocation", true)
                             .putExtra("direct", 0)
-                            .putExtra("username", toChatUsername));
+                            .putExtra("username", toChatUsername),REQUEST_CODE_CLOSE_MAP);
                     break;
 
                 case ContextMenuActivity.RESULT_CODE_RECALL: // recall
