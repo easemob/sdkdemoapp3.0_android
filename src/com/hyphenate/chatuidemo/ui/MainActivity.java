@@ -217,8 +217,10 @@ import java.util.List;
                     if (disabledIds == null || !disabledIds.contains(message.getTo())) {
 
                         DemoHelper.getInstance().getNotifier().onNewMsg(message);
+                        DemoHelper.getInstance().isFree = false;
                     }
                 } else {
+                    DemoHelper.getInstance().isFree = false;
                     DemoHelper.getInstance().getNotifier().onNewMsg(message);
                 }
             }
@@ -366,13 +368,23 @@ import java.util.List;
     /**
      * update unread message count
      */
+
+    private List<String> disabledIds;
+
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
-        if (count > 0) {
-            unreadLabel.setText(String.valueOf(count));
-            unreadLabel.setVisibility(View.VISIBLE);
-        } else {
-            unreadLabel.setVisibility(View.INVISIBLE);
+        if (disabledIds != null){
+            int freeCount = 0;
+            for (String groupid:disabledIds){
+                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(groupid,EMConversationType.GroupChat);
+                freeCount+=conversation.getUnreadMsgCount();
+            }
+            if (count-freeCount > 0) {
+                unreadLabel.setText(String.valueOf(count-freeCount));
+                unreadLabel.setVisibility(View.VISIBLE);
+            } else {
+                unreadLabel.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -441,6 +453,7 @@ import java.util.List;
                 @Override public void run() {
                     try {
                         EMClient.getInstance().pushManager().getPushConfigsFromServer();
+                        disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
                         runOnUiThread(new Runnable() {
                             @Override public void run() {
                                 dialog.dismiss();

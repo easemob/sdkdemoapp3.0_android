@@ -5,10 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.util.Pair;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -139,6 +137,8 @@ public class DemoHelper {
     private LocalBroadcastManager broadcastManager;
 
     private boolean isGroupAndContactListenerRegisted;
+
+    public boolean isFree = false;//message free
 
     private DemoHelper() {
     }
@@ -833,6 +833,7 @@ public class DemoHelper {
                                         if (disabledIds == null || !disabledIds.contains(message.getTo())) {
 
                                             getNotifier().onNewMsg(message);
+                                            isFree = true;
                                         }
                                     } catch (HyphenateException e) {
                                         e.printStackTrace();
@@ -850,6 +851,7 @@ public class DemoHelper {
                             //    }
                             //}
                         } else {
+                            isFree = false;
                             getNotifier().onNewMsg(message);
                         }
                     }
