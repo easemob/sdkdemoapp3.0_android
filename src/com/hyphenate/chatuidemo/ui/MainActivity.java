@@ -283,7 +283,8 @@ import java.util.List;
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
-        intentFilter.addAction(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
+		intentFilter.addAction(Constant.ACTION_GROUP_NOTIFY);
+		intentFilter.addAction(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
 
             @Override public void onReceive(Context context, Intent intent) {
@@ -305,14 +306,20 @@ import java.util.List;
                         GroupsActivity.instance.onResume();
                     }
                 }
-                //red packet code : 处理红包回执透传消息
-                if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
-                    if (conversationListFragment != null) {
-                        conversationListFragment.refresh();
-                    }
-                }
-                //end of red packet code
-            }
+				//red packet code : 处理红包回执透传消息
+				if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
+					if (conversationListFragment != null){
+						conversationListFragment.refresh();
+					}
+				}
+				if(action.equals(Constant.ACTION_GROUP_NOTIFY)){
+					if (conversationListFragment != null){
+						conversationListFragment.refresh();
+					}
+				}
+				//end of red packet code
+			}
+
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
@@ -376,7 +383,7 @@ import java.util.List;
         if (disabledIds != null){
             int freeCount = 0;
             for (String groupid:disabledIds){
-                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(groupid,EMConversationType.GroupChat);
+                EMConversation conversation = EMClient.getInstance().chatManager().getConversation(groupid,EMConversationType.GroupChat,true);
                 freeCount+=conversation.getUnreadMsgCount();
             }
             if (count-freeCount > 0) {
@@ -448,7 +455,7 @@ import java.util.List;
         sdkHelper.pushActivity(this);
 
         if (DemoHelper.getInstance().pushConfigs == null) {
-            final ProgressDialog dialog = ProgressDialog.show(this, "loading...", "waiting...", false);
+            final ProgressDialog dialog = ProgressDialog.show(this, "loading...", "waiting...",false,true);
             new Thread(new Runnable() {
                 @Override public void run() {
                     try {
