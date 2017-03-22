@@ -877,6 +877,9 @@ public class DemoHelper {
                             broadcastManager.sendBroadcast(new Intent(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
                     }
+                    if (action.equals(EaseConstant.MESSAGE_ATTR_BURN_ACTION)) {
+                        EaseMessageUtils.receiveBurnCMDMessage(message);
+                    }
 
                     if (action.equals("__Call_ReqP2P_ConferencePattern")) {
                         String title = message.getStringAttribute("em_apns_ext", "conference call");

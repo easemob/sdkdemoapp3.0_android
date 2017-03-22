@@ -430,6 +430,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     String msgId = message.getStringAttribute(EaseConstant.MSG_ID, null);
                     messageList.refresh();
                 }
+            } else if (action.equals(EaseConstant.MESSAGE_ATTR_BURN_ACTION)) {
+                EaseMessageUtils.receiveBurnCMDMessage(message);
+                messageList.refresh();
             }
         }
         //end of red packet code
