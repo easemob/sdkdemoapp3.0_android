@@ -57,6 +57,7 @@ import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
+import com.hyphenate.easeui.utils.EaseACKUtil;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseMessageUtils;
 import com.hyphenate.exceptions.HyphenateException;
@@ -249,7 +250,7 @@ public class DemoHelper {
         //options.setImPort(6717);
         //// 设置私有化 rest 地址，这里如果有端口直接跟在地址后: xxxx.com:port
         //options.setRestServer("a1.ssy.zhtchina.cn:8080");
-        //options.setAppKey("ssy#zhengtong");
+        //options.setAppKey("tgjcare#tgjhealth");
 
         // set if accept the invitation automatically
         options.setAcceptInvitationAlways(false);
@@ -465,6 +466,8 @@ public class DemoHelper {
                         asyncFetchBlackListFromServer(null);
                     }
                 }
+                // 当连接到服务器之后，这里开始检查是否有没有发送的ack回执消息，
+                EaseACKUtil.getInstance(appContext).checkACKData();
             }
         };
 
