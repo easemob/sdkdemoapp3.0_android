@@ -1,6 +1,8 @@
 package com.hyphenate.chatuidemo.ui;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -28,7 +31,7 @@ import java.util.List;
  * 公告信息列表界面
  * Created by lzan13 on 2017/3/20.
  */
-public class AfficheActivity extends BaseActivity {
+public class AfficheActivity extends BaseActivity implements EMMessageListener {
 
     // 界面控件
     private EaseTitleBar easeTitleBar;
@@ -58,7 +61,6 @@ public class AfficheActivity extends BaseActivity {
                 .chatManager()
                 .getConversation(EaseConstant.AFFICHE_CONVERSATION_ID,
                         EMConversation.EMConversationType.Chat, true);
-        conversation.markAllMessagesAsRead();
         messages = conversation.getAllMessages();
         int msgCount = messages != null ? messages.size() : 0;
         if (msgCount < conversation.getAllMsgCount() && msgCount < pagesize) {
@@ -98,6 +100,44 @@ public class AfficheActivity extends BaseActivity {
     }
 
     /**
+     * 点击公告进入详情页
+     *
+     * @param position 当前点击公告位置
+     */
+    private void onListItemClick(int position) {
+        EMMessage message = messages.get(position);
+        startActivity(new Intent(this, AfficheDetailsActivity.class).putExtra(EaseConstant.MSG_ID,
+                message.getMsgId()));
+    }
+
+    private boolean onListItemLongClick(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("确定删除公告？");
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                conversation.removeMessage(messages.get(position).getMsgId());
+                refresh();
+            }
+        });
+        // 设置触摸对话框外围不触发事件，防止误触碰
+        builder.create().setCanceledOnTouchOutside(false);
+        builder.show();
+        return true;
+    }
+
+    private void refresh() {
+        loadMessageData();
+        if (afficheAdapter != null) {
+            afficheAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
      * 加载消息数据
      */
     private void loadMessageData() {
@@ -111,21 +151,8 @@ public class AfficheActivity extends BaseActivity {
     }
 
     /**
-     * 点击公告进入详情页
-     *
-     * @param position 当前点击公告位置
+     * 加载更多公告
      */
-    private void onListItemClick(int position) {
-        EMMessage message = messages.get(position);
-        startActivity(new Intent(this, AfficheDetailsActivity.class).putExtra(EaseConstant.MSG_ID,
-                message.getMsgId()));
-    }
-
-    private boolean onListItemLongClick(int position) {
-
-        return false;
-    }
-
     protected void loadMoreAffiche() {
         try {
             List<EMMessage> list =
@@ -142,6 +169,45 @@ public class AfficheActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override public void onMessageReceived(List<EMMessage> messages) {
+        for (EMMessage message : messages) {
+            if (message.getFrom().equals(EaseConstant.AFFICHE_CONVERSATION_ID)) {
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        refresh();
+                    }
+                });
+            }
+        }
+    }
+
+    @Override public void onCmdMessageReceived(List<EMMessage> messages) {
+
+    }
+
+    @Override public void onMessageRead(List<EMMessage> messages) {
+
+    }
+
+    @Override public void onMessageDelivered(List<EMMessage> messages) {
+
+    }
+
+    @Override public void onMessageChanged(EMMessage message, Object change) {
+
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        EMClient.getInstance().chatManager().addMessageListener(this);
+        refresh();
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+        EMClient.getInstance().chatManager().removeMessageListener(this);
     }
 
     /**
@@ -168,21 +234,29 @@ public class AfficheActivity extends BaseActivity {
                 convertView = LayoutInflater.from(context).inflate(resource, null);
                 viewHolder = new ViewHolder();
                 viewHolder.imageView = (ImageView) convertView.findViewById(R.id.avatar);
-                viewHolder.textView = (TextView) convertView.findViewById(R.id.title);
+                viewHolder.titleView = (TextView) convertView.findViewById(R.id.title);
+                viewHolder.stateView = (TextView) convertView.findViewById(R.id.state);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            String title = ((EMTextMessageBody) messageList.get(position).getBody()).getMessage();
-            viewHolder.textView.setText(title);
-
+            EMMessage message = messageList.get(position);
+            String title = ((EMTextMessageBody) message.getBody()).getMessage();
+            viewHolder.titleView.setText(title);
+            if (message.isUnread()) {
+                viewHolder.stateView.setVisibility(View.VISIBLE);
+                viewHolder.stateView.setText("未读");
+            } else {
+                viewHolder.stateView.setVisibility(View.GONE);
+            }
             return convertView;
         }
     }
 
     private static class ViewHolder {
         ImageView imageView;
-        TextView textView;
+        TextView titleView;
+        TextView stateView;
     }
 }

@@ -250,6 +250,13 @@ import java.util.List;
         }
 
         @Override public void onMessageRead(List<EMMessage> messages) {
+            for (EMMessage message : messages) {
+                // 阅后即焚的消息收到已读 ack 删除消息
+                if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_BURN, false)) {
+                    EaseMessageUtils.receiveBurnACKMessage(message);
+                    refreshUIWithMessage();
+                }
+            }
         }
 
         @Override public void onMessageDelivered(List<EMMessage> message) {

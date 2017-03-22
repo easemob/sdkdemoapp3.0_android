@@ -21,6 +21,7 @@ import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.EaseConstant;
 
 public class ContextMenuActivity extends BaseActivity {
     public static final int RESULT_CODE_COPY = 1;
@@ -43,7 +44,9 @@ public class ContextMenuActivity extends BaseActivity {
         boolean isChatroom = getIntent().getBooleanExtra("ischatroom", false);
 
         int type = message.getType().ordinal();
-        if (type == EMMessage.Type.TXT.ordinal()) {
+        if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_BURN, false)) {
+            setContentView(R.layout.em_context_menu_for_location);
+        }else if (type == EMMessage.Type.TXT.ordinal()) {
             if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false) || message.getBooleanAttribute(
                     Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
                     //red packet code : 屏蔽红包消息、转账消息的转发功能

@@ -21,6 +21,7 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
@@ -868,6 +869,8 @@ public class DemoHelper {
                     if(!easeUI.hasForegroundActivies()){
                         if (action.equals(EaseConstant.GROUP_READ_ACTION)) {
                             EaseMessageUtils.receiveGroupReadMessage(message);
+                        }else if(action.equals(EaseConstant.MESSAGE_ATTR_BURN_ACTION)){
+                            EaseMessageUtils.receiveBurnCMDMessage(message);
                         }
                     }
                     //red packet code : 处理红包回执透传消息
@@ -908,6 +911,14 @@ public class DemoHelper {
             }
 
             @Override public void onMessageRead(List<EMMessage> messages) {
+                for (EMMessage message : messages) {
+                    if (!easeUI.hasForegroundActivies()) {
+                        // 阅后即焚的消息收到已读 ack 删除消息
+                        if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_BURN, false)) {
+                            EaseMessageUtils.receiveBurnACKMessage(message);
+                        }
+                    }
+                }
             }
 
             @Override public void onMessageDelivered(List<EMMessage> message) {
