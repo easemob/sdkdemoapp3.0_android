@@ -55,6 +55,7 @@ import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.ui.EaseBaiduMapActivity;
+import com.hyphenate.easeui.utils.EaseACKUtil;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseMessageUtils;
 import com.hyphenate.exceptions.HyphenateException;
@@ -240,6 +241,17 @@ public class DemoHelper {
         Log.d(TAG, "init HuanXin Options");
 
         EMOptions options = new EMOptions();
+
+        //// 设置是否启用 dns 配置，默认为 true， 私有化部署设置为 false
+        //options.enableDNSConfig(false);
+        //// 设置私有化配置 IM 聊天地址
+        //options.setIMServer("im1.ssy.zhtchina.cn");
+        //// 设置私有化配置 IM 端口号
+        //options.setImPort(6717);
+        //// 设置私有化 rest 地址，这里如果有端口直接跟在地址后: xxxx.com:port
+        //options.setRestServer("a1.ssy.zhtchina.cn:8080");
+        //options.setAppKey("tgjcare#tgjhealth");
+
         // set if accept the invitation automatically
         options.setAcceptInvitationAlways(false);
         // set if you need read ack
@@ -454,6 +466,8 @@ public class DemoHelper {
                         asyncFetchBlackListFromServer(null);
                     }
                 }
+                // 当连接到服务器之后，这里开始检查是否有没有发送的ack回执消息，
+                EaseACKUtil.getInstance(appContext).checkACKData();
             }
         };
 
@@ -850,12 +864,21 @@ public class DemoHelper {
                     //get message body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
                     final String action = cmdMsgBody.action();//获取自定义action
+                    // 当前不在聊天界面时，全局进行处理 cmd 消息
+                    if(!easeUI.hasForegroundActivies()){
+                        if (action.equals(EaseConstant.GROUP_READ_ACTION)) {
+                            EaseMessageUtils.receiveGroupReadMessage(message);
+                        }
+                    }
                     //red packet code : 处理红包回执透传消息
                     if (!easeUI.hasForegroundActivies()) {
                         if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
                             RedPacketUtil.receiveRedPacketAckMessage(message);
                             broadcastManager.sendBroadcast(new Intent(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION));
                         }
+                    }
+                    if (action.equals(EaseConstant.MESSAGE_ATTR_BURN_ACTION)) {
+                        EaseMessageUtils.receiveBurnCMDMessage(message);
                     }
 
                     if (action.equals("__Call_ReqP2P_ConferencePattern")) {

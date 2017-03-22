@@ -79,7 +79,7 @@ android {
 dependencies {
     compile project(':redpacketlibrary')
     compile project(':EaseUI')
-    compile fileTree(include: '*.jar', exclude: 'android-support-multidex.jar', dir: 'libs')
+    compile fileTree(include: '*.jar', dir: 'libs')
     // 解决方法数超过65536问题扩展库
     compile 'com.android.support:multidex:1.0.1'
     //考虑到在eclipse中,直接使用源码

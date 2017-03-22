@@ -12,12 +12,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.easemob.redpacketsdk.constant.RPConstant;
@@ -63,6 +65,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int ITEM_FILE = 12;
     private static final int ITEM_VOICE_CALL = 13;
     private static final int ITEM_VIDEO_CALL = 14;
+    private static final int ITEM_BURN = 15;
+
 
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
@@ -96,6 +100,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
      */
     private boolean isRobot;
 
+    // 是否是阅后即焚
+    private boolean isBurn = false;
+
     // 进度对话框
     private ProgressDialog progressDialog;
 
@@ -112,6 +119,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             }
         }
         super.setUpView();
+
         // set click listener
         titleBar.setLeftLayoutClickListener(new OnClickListener() {
 
@@ -156,6 +164,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     extendMenuItemClickListener);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL,
                     extendMenuItemClickListener);
+            inputMenu.registerExtendMenuItem(R.string.attach_burn, R.drawable.ic_launcher, ITEM_BURN, extendMenuItemClickListener);
         }
         //聊天室暂时不支持红包功能
         //red packet code : 注册红包菜单选项
@@ -315,10 +324,28 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         }
     }
 
+    /**
+     * 启动阅后即焚模式
+     */
+    private void setupBurn(){
+        if (!isBurn) {
+            isBurn = true;
+            titleBar.setBackgroundColor(getResources().getColor(R.color.holo_red_light));
+            Toast.makeText(getActivity(), R.string.attach_burn, Toast.LENGTH_SHORT).show();
+        }else{
+            isBurn = false;
+            Toast.makeText(getActivity(), R.string.attach_burn_cancel, Toast.LENGTH_SHORT).show();
+            titleBar.setBackgroundColor(getResources().getColor(R.color.top_bar_normal_bg));
+        }
+    }
+
     @Override public void onSetMessageAttributes(EMMessage message) {
         if (isRobot) {
             //set message extension
             message.setAttribute("em_robot_message", isRobot);
+        }
+        if (isBurn) {
+            message.setAttribute(EaseConstant.MESSAGE_ATTR_BURN, isBurn);
         }
     }
 
@@ -403,6 +430,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     String msgId = message.getStringAttribute(EaseConstant.MSG_ID, null);
                     messageList.refresh();
                 }
+            } else if (action.equals(EaseConstant.MESSAGE_ATTR_BURN_ACTION)) {
+                EaseMessageUtils.receiveBurnCMDMessage(message);
+                messageList.refresh();
             }
         }
         //end of red packet code
@@ -421,10 +451,18 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 startActivityForResult(new Intent(getActivity(), ContextMenuActivity.class), REQUEST_CODE_CONTEXT_MENU);
                 break;
             case ITEM_VIDEO:
+                if (isBurn) {
+                    Toast.makeText(getActivity(), "阅后即焚模式，无法进行此操作", Toast.LENGTH_LONG).show();
+                    break;
+                }
                 Intent intent = new Intent(getActivity(), ImageGridActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_SELECT_VIDEO);
                 break;
             case ITEM_FILE: //file
+                if (isBurn) {
+                    Toast.makeText(getActivity(), "阅后即焚模式，无法进行此操作", Toast.LENGTH_LONG).show();
+                    break;
+                }
                 selectFileFromLocal();
                 break;
             case ITEM_VOICE_CALL:
@@ -433,8 +471,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             case ITEM_VIDEO_CALL:
                 startVideoCall();
                 break;
+            case ITEM_BURN:
+                // 阅后即焚
+                setupBurn();
+                break;
             //red packet code : 进入发红包页面
             case ITEM_RED_PACKET:
+                if (isBurn) {
+                    Toast.makeText(getActivity(), "阅后即焚模式，无法进行此操作", Toast.LENGTH_LONG).show();
+                    break;
+                }
                 if (chatType == Constant.CHATTYPE_SINGLE) {
                     //单聊红包修改进入红包的方法，可以在小额随机红包和普通单聊红包之间切换
                     RedPacketUtil.startRandomPacket(new RPRedPacketUtil.RPRandomCallback() {
@@ -451,6 +497,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 }
                 break;
             case ITEM_TRANSFER_PACKET://进入转账页面
+                if (isBurn) {
+                    Toast.makeText(getActivity(), "阅后即焚模式，无法进行此操作", Toast.LENGTH_LONG).show();
+                    break;
+                }
                 RedPacketUtil.startTransferActivityForResult(this, toChatUsername, REQUEST_CODE_SEND_TRANSFER_PACKET);
                 break;
             //end of red packet code

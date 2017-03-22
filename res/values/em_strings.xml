@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string name="app_name">Hyphenate Demo</string>
     <string name="app_slogon">IM as a service</string>
     <string name="text_ack_msg">Read</string>
@@ -24,6 +24,8 @@
     <string name="delete_message">Delete message</string>
     <string name="delete_conversation_messages">Delete conversation and messages</string>
     <string name="delete_conversation">Delete conversation</string>
+    <string name="conversation_top">Stick on top</string>
+    <string name="conversation_cancel_top">Remove from top</string>
     <string name="copy_message">Copy message</string>
     <string name="delete_voice">Delete voice</string>
     <string name="delete_video">Delete video</string>
@@ -155,7 +157,6 @@
     <string name="emojicon_test_name">Test</string>
     <string name="recall_failed_max_time">The message has been over five minutes and can not be withdrawn</string>
     <string name="recall_failed">recall failed</string>
-
 
     <string name="not_add_myself">"Can't add yourself"</string>
     <string name="This_user_is_already_your_friend">This user is already your friend</string>
@@ -296,17 +297,17 @@
     <string name="Is_download_voice_click_later">Downloading the voice message, click later</string>
     <string name="Send_the_following_pictures">Send the following pictures?</string>
     <string name="search_new">Search</string>
-    
+
     <string name="Delete_the_contact">Delete the contact</string>
     <string name="Move_into_the_blacklist_new">Move into the blacklist</string>
     <string name="Change_the_group_name">Change group name</string>
     <string name="change_the_group_description">Change group description</string>
     <string name="Sync_Groups_From_Server">Sync groups with server</string>
-    
+
     <string name="update_contact_list">Update contact list</string>
     <string name="update_black_list">Update black list</string>
     <string name="update_groups">Update groups</string>
-    
+
     <string name="update_contact_list_failed">Update contact list failed</string>
     <string name="update_black_list_failed">Update black list failed</string>
     <string name="update_groups_failed">Update groups failed</string>
@@ -353,7 +354,7 @@
     <string name="group_nick">Group Nickname:</string>
     <string name="group_owner">Group Owner:</string>
     <string name="user_removed_from_group">You are removed from the group</string>
-    
+
     <string name="network_unstable">Network unstable</string>
     <string name="no_call_data">No call data</string>
 
