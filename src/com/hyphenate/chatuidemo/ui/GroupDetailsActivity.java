@@ -1179,6 +1179,16 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		    });
 		    updateGroup();
 	    }
-    }
+
+		@Override
+		public void onMemberJoined(String s, String s1) {
+
+		}
+
+		@Override
+		public void onMemberExited(String s, String s1) {
+
+		}
+	}
 
 }
