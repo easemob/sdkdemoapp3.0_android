@@ -275,6 +275,7 @@ import java.util.List;
                     // refresh conversation list
                     if (conversationListFragment != null) {
                         conversationListFragment.refresh();
+                        conversationListFragment.refreshAffiche();
                     }
                 }
             }
