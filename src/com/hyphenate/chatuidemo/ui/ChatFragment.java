@@ -461,9 +461,16 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     // 收到透传的CMD消息后，调用撤回消息方法进行处理
                     boolean result = EaseMessageUtils.receiveRecallMessage(message);
                     // 撤回消息之后，判断是否当前聊天界面，用来刷新界面
-                    if (toChatUsername.equals(message.getFrom()) && result) {
-                        messageList.refresh();
-                    }
+
+                String conversationId = "";
+                if(message.getChatType() == EMMessage.ChatType.Chat){
+                    conversationId = message.getFrom();
+                }else if(message.getChatType() == EMMessage.ChatType.GroupChat){
+                    conversationId = message.getTo();
+                }
+                if (toChatUsername.equals(conversationId) && result) {
+                    messageList.refresh();
+                }
 
             } else if (action.equals(EaseConstant.MESSAGE_ATTR_BURN_ACTION)) {
                 EaseMessageUtils.receiveBurnCMDMessage(message);
