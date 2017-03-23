@@ -725,12 +725,12 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 										EMClient.getInstance().groupManager().unblockUser(groupId, operationUserId);
 										break;
 									case R.id.menu_item_mute:
-										List<String> muteMembers = new ArrayList<>();
+										List<String> muteMembers = new ArrayList<String>();
 										muteMembers.add(operationUserId);
 										EMClient.getInstance().groupManager().muteGroupMembers(groupId, muteMembers, 20 * 60 * 1000);
 										break;
 									case R.id.menu_item_unmute:
-										List<String> list = new ArrayList<>();
+										List<String> list = new ArrayList<String>();
 										list.add(operationUserId);
 										EMClient.getInstance().groupManager().unMuteGroupMembers(groupId, list);
 										break;
@@ -1180,15 +1180,17 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		    updateGroup();
 	    }
 
-		@Override
-		public void onMemberJoined(String s, String s1) {
-
-		}
-
-		@Override
-		public void onMemberExited(String s, String s1) {
-
-		}
-	}
+	    @Override
+	    public void onMemberJoined(String groupId, String member) {
+	        EMLog.d(TAG, "onMemberJoined");
+	        updateGroup();
+	    }
+	    
+	    @Override
+	    public void onMemberExited(String groupId, String member) {
+	        EMLog.d(TAG, "onMemberExited");
+            updateGroup();
+	    }
+    }
 
 }
