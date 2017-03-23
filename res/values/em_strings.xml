@@ -126,7 +126,7 @@
     <string name="serach_group_message">Search messages</string>
     <string name="Empty_the_chat_record">Clear conversation</string>
     <string name="Shielding_of_the_message">Block message</string>
-    <string name="block_offline_group_push">Block offline push</string>
+    <string name="block_offline_group_push">Message free </string>
     <string name="dismiss_group">Dismiss group</string>
     <string name="Select_the_contact">Select the contact</string>
     <string name="Group_chat_information">The group description</string>

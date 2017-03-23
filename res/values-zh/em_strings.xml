@@ -123,7 +123,7 @@
     <string name="serach_group_message">消息搜索</string>
     <string name="Empty_the_chat_record">清空聊天记录</string>
     <string name="Shielding_of_the_message">屏蔽群消息</string>
-    <string name="block_offline_group_push">屏蔽离线消息推送</string>
+    <string name="block_offline_group_push">只接收不提示群消息</string>
     <string name="dismiss_group">解散群聊</string>
     <string name="Select_the_contact">选择联系人</string>
     <string name="Group_chat_information">群聊资料</string>
