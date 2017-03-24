@@ -295,7 +295,7 @@
     <string name="Send_the_following_pictures">发送以下图片？</string>
     <string name="search_new">搜</string>
     <string name="were_mentioned">[有人@我]</string>
-    <string name="recall_failed_max_time">消息已经超过五分钟，无法撤回</string>
+    <string name="recall_failed_max_time">消息已经超过2分钟，无法撤回</string>
     <string name="recall_failed">撤回失败</string>
     
     <string name="Delete_the_contact">删除联系人</string>
