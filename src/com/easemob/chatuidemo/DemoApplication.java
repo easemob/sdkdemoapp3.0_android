@@ -24,13 +24,12 @@ import com.easemob.easeui.utils.EaseUserUtils;
 import com.easemob.redpacketsdk.RPInitRedPacketCallback;
 import com.easemob.redpacketsdk.RPValueCallback;
 import com.easemob.redpacketsdk.RedPacket;
-// ================== fabric start
-import com.crashlytics.android.Crashlytics;
 import com.easemob.redpacketsdk.bean.RedPacketInfo;
 import com.easemob.redpacketsdk.bean.TokenData;
 import com.easemob.redpacketsdk.constant.RPConstant;
-
-import io.fabric.sdk.android.Fabric;
+// ================== fabric start
+//import com.crashlytics.android.Crashlytics;
+//import io.fabric.sdk.android.Fabric;
 // ================== fabric end
 
 
@@ -53,7 +52,7 @@ public class DemoApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 // ================== fabric start
-		Fabric.with(this, new Crashlytics());
+//		Fabric.with(this, new Crashlytics());
 // ================== fabric end
 		MultiDex.install(this);
         applicationContext = this;
