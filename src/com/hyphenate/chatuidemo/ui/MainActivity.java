@@ -388,6 +388,7 @@ import java.util.List;
 
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
+
         if (disabledIds != null){
             int freeCount = 0;
             for (String groupid:disabledIds){
@@ -438,13 +439,17 @@ import java.util.List;
     public int getUnreadMsgCountTotal() {
         int unreadMsgCountTotal = 0;
         int chatroomUnreadMsgCount = 0;
+        int afficheUnreadCount = 0;
         unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMessageCount();
         for (EMConversation conversation : EMClient.getInstance().chatManager().getAllConversations().values()) {
             if (conversation.getType() == EMConversationType.ChatRoom) {
                 chatroomUnreadMsgCount = chatroomUnreadMsgCount + conversation.getUnreadMsgCount();
             }
+            if (conversation.conversationId().equals(EaseConstant.AFFICHE_CONVERSATION_ID)) {
+                afficheUnreadCount = conversation.getUnreadMsgCount();
+            }
         }
-        return unreadMsgCountTotal - chatroomUnreadMsgCount;
+        return unreadMsgCountTotal - chatroomUnreadMsgCount - afficheUnreadCount;
     }
 
     private InviteMessgeDao inviteMessgeDao;
