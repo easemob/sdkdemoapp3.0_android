@@ -195,14 +195,12 @@
         <activity
             android:name=".ui.VoiceCallActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:theme="@style/nornal_style"/>
         <!-- 视频通话 -->
         <activity
             android:name=".ui.VideoCallActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"/>
         <!-- 群聊简单信息 -->
         <activity
