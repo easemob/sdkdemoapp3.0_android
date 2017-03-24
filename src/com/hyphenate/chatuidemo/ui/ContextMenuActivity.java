@@ -90,6 +90,10 @@ public class ContextMenuActivity extends BaseActivity {
         } else {
             findViewById(R.id.recall).setVisibility(View.GONE);
         }
+        if (message.getChatType() == EMMessage.ChatType.ChatRoom) {
+            findViewById(R.id.recall).setVisibility(View.GONE);
+        }
+
         try {
             JSONArray array = message.getJSONArrayAttribute(EaseConstant.MESSAGE_ATTR_AT_MSG);
             if(array.length()>0){
