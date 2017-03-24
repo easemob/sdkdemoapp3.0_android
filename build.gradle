@@ -74,6 +74,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    // 关闭打包时 studio 资源的强制检查
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+        disable "ResourceType"
+    }
 }
 
 dependencies {

@@ -251,7 +251,7 @@ public class DemoHelper {
         //options.setImPort(6717);
         //// 设置私有化 rest 地址，这里如果有端口直接跟在地址后: xxxx.com:port
         //options.setRestServer("a1.ssy.zhtchina.cn:8080");
-        //options.setAppKey("tgjcare#tgjhealth");
+        options.setAppKey("easemob-demo#coco");
 
         // set if accept the invitation automatically
         options.setAcceptInvitationAlways(false);
@@ -858,37 +858,40 @@ public class DemoHelper {
                     EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
                     // in background, do not refresh UI, notify it in notification bar
                     if (!easeUI.hasForegroundActivies()) {
-                        if (message.getChatType() == EMMessage.ChatType.GroupChat) {
-                            //if (pushConfigs == null){
-                            new Thread(new Runnable() {
-                                @Override public void run() {
-                                    try {
-                                        pushConfigs = EMClient.getInstance().pushManager().getPushConfigsFromServer();
-                                        List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
-                                        Log.i("info", "disabledidssss:" + disabledIds);
-                                        if (disabledIds == null || !disabledIds.contains(message.getTo())) {
+                        // 如果是公告消息，就不发送通知栏提醒
+                        if(!message.getFrom().equals(EaseConstant.AFFICHE_CONVERSATION_ID)){
+                            if (message.getChatType() == EMMessage.ChatType.GroupChat) {
+                                //if (pushConfigs == null){
+                                new Thread(new Runnable() {
+                                    @Override public void run() {
+                                        try {
+                                            pushConfigs = EMClient.getInstance().pushManager().getPushConfigsFromServer();
+                                            List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
+                                            Log.i("info", "disabledidssss:" + disabledIds);
+                                            if (disabledIds == null || !disabledIds.contains(message.getTo())) {
 
-                                            getNotifier().onNewMsg(message);
-                                            isFree = true;
+                                                getNotifier().onNewMsg(message);
+                                                isFree = true;
+                                            }
+                                        } catch (HyphenateException e) {
+                                            e.printStackTrace();
                                         }
-                                    } catch (HyphenateException e) {
-                                        e.printStackTrace();
                                     }
-                                }
-                            }).start();
+                                }).start();
 
-                            //}else {
-                            //    List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
-                            //    Log.i("info","disabledidssss1:"+disabledIds+"-----pushconfig:"+pushConfigs);
-                            //    Log.i("info","disabled nopushgroups:"+EMClient.getInstance().pushManager().getNoPushGroups());
-                            //    if (disabledIds==null || !disabledIds.contains(message.getTo())){
-                            //
-                            //        getNotifier().onNewMsg(message);
-                            //    }
-                            //}
-                        } else {
-                            isFree = false;
-                            getNotifier().onNewMsg(message);
+                                //}else {
+                                //    List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
+                                //    Log.i("info","disabledidssss1:"+disabledIds+"-----pushconfig:"+pushConfigs);
+                                //    Log.i("info","disabled nopushgroups:"+EMClient.getInstance().pushManager().getNoPushGroups());
+                                //    if (disabledIds==null || !disabledIds.contains(message.getTo())){
+                                //
+                                //        getNotifier().onNewMsg(message);
+                                //    }
+                                //}
+                            } else {
+                                isFree = false;
+                                getNotifier().onNewMsg(message);
+                            }
                         }
                     }
                 }

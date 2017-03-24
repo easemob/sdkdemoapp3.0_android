@@ -212,16 +212,19 @@ import java.util.List;
         @Override public void onMessageReceived(List<EMMessage> messages) {
             // notify new message
             for (EMMessage message : messages) {
-                if (message.getChatType() == EMMessage.ChatType.GroupChat) {
-                    List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
-                    if (disabledIds == null || !disabledIds.contains(message.getTo())) {
+                // 如果是公告消息，就不发送通知栏提醒
+                if(!message.getFrom().equals(EaseConstant.AFFICHE_CONVERSATION_ID)){
+                    if (message.getChatType() == EMMessage.ChatType.GroupChat) {
+                        List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
+                        if (disabledIds == null || !disabledIds.contains(message.getTo())) {
 
-                        DemoHelper.getInstance().getNotifier().onNewMsg(message);
+                            DemoHelper.getInstance().getNotifier().onNewMsg(message);
+                            DemoHelper.getInstance().isFree = false;
+                        }
+                    } else {
                         DemoHelper.getInstance().isFree = false;
+                        DemoHelper.getInstance().getNotifier().onNewMsg(message);
                     }
-                } else {
-                    DemoHelper.getInstance().isFree = false;
-                    DemoHelper.getInstance().getNotifier().onNewMsg(message);
                 }
             }
             refreshUIWithMessage();
