@@ -212,16 +212,19 @@ import java.util.List;
         @Override public void onMessageReceived(List<EMMessage> messages) {
             // notify new message
             for (EMMessage message : messages) {
-                if (message.getChatType() == EMMessage.ChatType.GroupChat) {
-                    List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
-                    if (disabledIds == null || !disabledIds.contains(message.getTo())) {
+                // 如果是公告消息，就不发送通知栏提醒
+                if(!message.getFrom().equals(EaseConstant.AFFICHE_CONVERSATION_ID)){
+                    if (message.getChatType() == EMMessage.ChatType.GroupChat) {
+                        List<String> disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
+                        if (disabledIds == null || !disabledIds.contains(message.getTo())) {
 
-                        DemoHelper.getInstance().getNotifier().onNewMsg(message);
+                            DemoHelper.getInstance().getNotifier().onNewMsg(message);
+                            DemoHelper.getInstance().isFree = false;
+                        }
+                    } else {
                         DemoHelper.getInstance().isFree = false;
+                        DemoHelper.getInstance().getNotifier().onNewMsg(message);
                     }
-                } else {
-                    DemoHelper.getInstance().isFree = false;
-                    DemoHelper.getInstance().getNotifier().onNewMsg(message);
                 }
             }
             refreshUIWithMessage();
@@ -388,6 +391,7 @@ import java.util.List;
 
     public void updateUnreadLabel() {
         int count = getUnreadMsgCountTotal();
+
         if (disabledIds != null){
             int freeCount = 0;
             for (String groupid:disabledIds){
@@ -438,13 +442,17 @@ import java.util.List;
     public int getUnreadMsgCountTotal() {
         int unreadMsgCountTotal = 0;
         int chatroomUnreadMsgCount = 0;
+        int afficheUnreadCount = 0;
         unreadMsgCountTotal = EMClient.getInstance().chatManager().getUnreadMessageCount();
         for (EMConversation conversation : EMClient.getInstance().chatManager().getAllConversations().values()) {
             if (conversation.getType() == EMConversationType.ChatRoom) {
                 chatroomUnreadMsgCount = chatroomUnreadMsgCount + conversation.getUnreadMsgCount();
             }
+            if (conversation.conversationId().equals(EaseConstant.AFFICHE_CONVERSATION_ID)) {
+                afficheUnreadCount = conversation.getUnreadMsgCount();
+            }
         }
-        return unreadMsgCountTotal - chatroomUnreadMsgCount;
+        return unreadMsgCountTotal - chatroomUnreadMsgCount - afficheUnreadCount;
     }
 
     private InviteMessgeDao inviteMessgeDao;
