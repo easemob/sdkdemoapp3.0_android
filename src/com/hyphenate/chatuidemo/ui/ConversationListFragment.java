@@ -232,7 +232,7 @@ public class ConversationListFragment extends EaseConversationListFragment {
     public void refreshAffiche() {
         afficheConversation = EMClient.getInstance()
                 .chatManager()
-                .getConversation(Constant.AFFICHE_CONVERSATION_ID);
+                .getConversation(Constant.AFFICHE_CONVERSATION_ID, EMConversationType.Chat, true);
         if (afficheConversation == null) {
             return;
         }
