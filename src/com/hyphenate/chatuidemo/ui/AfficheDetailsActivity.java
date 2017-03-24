@@ -27,6 +27,7 @@ public class AfficheDetailsActivity extends BaseActivity {
 
     // 界面控件
     private EaseTitleBar easeTitleBar;
+    private TextView titleView;
     private LinearLayout afficheLayout;
 
     private EMMessage message;
@@ -37,11 +38,14 @@ public class AfficheDetailsActivity extends BaseActivity {
 
         easeTitleBar = (EaseTitleBar) findViewById(R.id.title_bar);
         easeTitleBar.setLeftImageResource(R.drawable.ease_mm_title_back);
+        easeTitleBar.setTitle("公告详情");
         easeTitleBar.setLeftLayoutClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 finish();
             }
         });
+
+        titleView = (TextView) findViewById(R.id.text_title);
 
         afficheLayout = (LinearLayout) findViewById(R.id.layout_affiche);
 
@@ -59,7 +63,7 @@ public class AfficheDetailsActivity extends BaseActivity {
         String msgId = getIntent().getStringExtra(Constant.MSG_ID);
         message = conversation.getMessage(msgId, true);
         // 设置公告标题
-        easeTitleBar.setTitle(((EMTextMessageBody) message.getBody()).getMessage());
+        titleView.setText(((EMTextMessageBody) message.getBody()).getMessage());
         try {
             JSONArray array = message.getJSONArrayAttribute("info");
             for (int i = 0; i < array.length(); i++) {
