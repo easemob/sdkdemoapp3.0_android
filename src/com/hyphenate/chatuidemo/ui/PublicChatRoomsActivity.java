@@ -69,7 +69,6 @@ public class PublicChatRoomsActivity extends BaseActivity {
     private TextView footLoadingText;
     private EditText etSearch;
     private ImageButton ibClean;
-    private List<EMChatRoom> rooms;
 	private ChatRoomChangeListener chatRoomChangeListener;
 
 	@Override
@@ -86,7 +85,6 @@ public class PublicChatRoomsActivity extends BaseActivity {
 		TextView title = (TextView) findViewById(R.id.tv_title);
 		title.setText(getResources().getString(R.string.chat_room));
 		chatRoomList = new ArrayList<EMChatRoom>();
-		rooms = new ArrayList<EMChatRoom>();
 		
 		View footView = getLayoutInflater().inflate(R.layout.em_listview_footer_view, listView, false);
         footLoadingLayout = (LinearLayout) footView.findViewById(R.id.loading_layout);
@@ -266,7 +264,6 @@ public class PublicChatRoomsActivity extends BaseActivity {
                                 isFirstLoading = false;
                                 adapter = new ChatRoomAdapter(PublicChatRoomsActivity.this, 1, chatRoomList);
                                 listView.setAdapter(adapter);
-                                rooms.addAll(chatRooms);
                             }else{
                                 if(chatRooms.size() < pagesize){
                                     hasMoreData = false;
@@ -346,11 +343,11 @@ public class PublicChatRoomsActivity extends BaseActivity {
 				FilterResults results = new FilterResults();
 				
 				if(constraint == null || constraint.length() == 0){
-					results.values = rooms;
-					results.count = rooms.size();
+					results.values = chatRoomList;
+					results.count = chatRoomList.size();
 				}else{
 					List<EMChatRoom> roomss = new ArrayList<EMChatRoom>();
-					for(EMChatRoom chatRoom : rooms){
+					for(EMChatRoom chatRoom : chatRoomList){
 						if(chatRoom.getName().contains(constraint)){
 							roomss.add(chatRoom);
 						}
