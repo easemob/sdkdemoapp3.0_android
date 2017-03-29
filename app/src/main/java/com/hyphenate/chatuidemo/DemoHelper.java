@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -656,7 +657,69 @@ public class DemoHelper {
             EMLog.d(TAG, "onAutoAcceptInvitationFromGroup groupId:" + groupId);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
+
+        // ============================= group_reform new add api begin
+        @Override
+        public void onMuteListAdded(String groupId, final List<String> mutes, final long muteExpire) {
+            StringBuilder sb = new StringBuilder();
+            for (String member : mutes) {
+                sb.append(member).append(",");
+            }
+            showToast("onMuterListAdded: " + sb.toString());
+        }
+
+
+        @Override
+        public void onMuteListRemoved(String groupId, final List<String> mutes) {
+            StringBuilder sb = new StringBuilder();
+            for (String member : mutes) {
+                sb.append(member).append(",");
+            }
+            showToast("onMuterListRemoved: " + sb.toString());
+        }
+
+
+        @Override
+        public void onAdminAdded(String groupId, String administrator) {
+            showToast("onAdminAdded: " + administrator);
+        }
+
+        @Override
+        public void onAdminRemoved(String groupId, String administrator) {
+            showToast("onAdminRemoved: " + administrator);
+        }
+
+        @Override
+        public void onOwnerChanged(String groupId, String newOwner, String oldOwner) {
+            showToast("onOwnerChanged new:" + newOwner + " old:" + oldOwner);
+        }
+        
+        @Override
+        public void onMemberJoined(String groupId, String member) {
+            EMLog.d(TAG, "onMemberJoined");
+            showToast("onMemberJoined: " + member);
+        }
+        
+        @Override
+        public void onMemberExited(String groupId, String member) {
+            EMLog.d(TAG, "onMemberJoined");
+            showToast("onMemberExited: " + member);
+        }
+        // ============================= group_reform new add api end
     }
+
+    void showToast(final String message) {
+        Message msg = Message.obtain(handler, 0, message);
+        handler.sendMessage(msg);
+    }
+
+    protected android.os.Handler handler = new android.os.Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String str = (String)msg.obj;
+            Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
+        }
+    };
     
     /***
      * 好友变化listener
@@ -686,6 +749,8 @@ public class DemoHelper {
             localUsers.remove(username);
             userDao.deleteContact(username);
             inviteMessgeDao.deleteMessage(username);
+
+            EMClient.getInstance().chatManager().deleteConversation(username, false);
 
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
@@ -838,7 +903,8 @@ public class DemoHelper {
 			
 			@Override
 			public void onMessageChanged(EMMessage message, Object change) {
-				
+                EMLog.d(TAG, "change:");
+				EMLog.d(TAG, "change:" + change);
 			}
 		};
 		

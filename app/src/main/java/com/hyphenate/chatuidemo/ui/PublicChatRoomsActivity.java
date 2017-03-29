@@ -19,9 +19,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -31,18 +33,20 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMPageResult;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.ui.EaseChatRoomListener;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +55,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
 	private ProgressBar pb;
 	private ListView listView;
 	private ChatRoomAdapter adapter;
-	
+
 	private List<EMChatRoom> chatRoomList;
 	private boolean isLoading;
 	private boolean isFirstLoading = true;
@@ -65,7 +69,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
     private TextView footLoadingText;
     private EditText etSearch;
     private ImageButton ibClean;
-    private List<EMChatRoom> rooms;
+	private ChatRoomChangeListener chatRoomChangeListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +85,6 @@ public class PublicChatRoomsActivity extends BaseActivity {
 		TextView title = (TextView) findViewById(R.id.tv_title);
 		title.setText(getResources().getString(R.string.chat_room));
 		chatRoomList = new ArrayList<EMChatRoom>();
-		rooms = new ArrayList<EMChatRoom>();
 		
 		View footView = getLayoutInflater().inflate(R.layout.em_listview_footer_view, listView, false);
         footLoadingLayout = (LinearLayout) footView.findViewById(R.id.loading_layout);
@@ -113,62 +116,87 @@ public class PublicChatRoomsActivity extends BaseActivity {
 			public void afterTextChanged(Editable s) {
 			}
 		});
-        
-        ibClean.setOnClickListener(new View.OnClickListener() {
+
+		etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+						(event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
+								event.getAction() == KeyEvent.ACTION_DOWN)) {
+					final String roomId = etSearch.getText().toString();
+					etSearch.setText("");
+					Thread t = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										pb.setVisibility(View.VISIBLE);
+									}
+								});
+
+								final EMChatRoom room = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId);
+								EMLog.d("chatroom", "roomId:" + room.getId() + " roomName:" + room.getName());
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										chatRoomList.clear();
+										chatRoomList.add(room);
+										adapter.notifyDataSetChanged();
+									}
+								});
+
+							} catch (Exception e) {
+								e.printStackTrace();
+							} finally {
+								runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										pb.setVisibility(View.GONE);
+									}
+								});
+							}
+						}
+					});
+					t.start();
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+		});
+
+
+		ibClean.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				etSearch.getText().clear();
 				hideSoftKeyboard();
+				loadAndShowData();
 			}
 		});
 
+		chatRoomChangeListener = new ChatRoomChangeListener();
+		EMClient.getInstance().chatroomManager().addChatRoomChangeListener(chatRoomChangeListener);
+
         loadAndShowData();
-        
-        EMClient.getInstance().chatroomManager().addChatRoomChangeListener(new EMChatRoomChangeListener(){
-            @Override
-            public void onChatRoomDestroyed(String roomId, String roomName) {
-                chatRoomList.clear();
-                if(adapter != null){
-                    runOnUiThread(new Runnable(){
 
-                        @Override
-                        public void run() {
-                            if(adapter != null){
-                                adapter.notifyDataSetChanged();
-                                loadAndShowData();
-                            }
-                        }
-                        
-                    });
-                }
-            }
-
-            @Override
-            public void onMemberJoined(String roomId, String participant) {                
-            }
-
-            @Override
-            public void onMemberExited(String roomId, String roomName,
-                    String participant) {
-                
-            }
-
-            @Override
-            public void onRemovedFromChatRoom(String roomId, String roomName,
-                                              String participant) {
-            }
-            
-        });
 
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                
-                final EMChatRoom room = adapter.getItem(position);
-                startActivity(new Intent(PublicChatRoomsActivity.this, ChatActivity.class).putExtra("chatType", 3).
-                		putExtra("userId", room.getId()));
+	            if (position == 0) {
+		            // create chat room
+		            startActivity(new Intent(PublicChatRoomsActivity.this, NewChatRoomActivity.class));
+	            } else {
+		            final EMChatRoom room = adapter.getItem(position - 1);
+		            startActivity(new Intent(PublicChatRoomsActivity.this, ChatActivity.class).putExtra("chatType", 3).
+				            putExtra("userId", room.getId()));
+	            }
                 
             }
         });
@@ -193,7 +221,26 @@ public class PublicChatRoomsActivity extends BaseActivity {
         });
         
 	}
-	
+
+	private class ChatRoomChangeListener extends EaseChatRoomListener {
+
+		@Override
+		public void onChatRoomDestroyed(String roomId, String roomName) {
+			if(adapter != null){
+				runOnUiThread(new Runnable(){
+
+					@Override
+					public void run() {
+						if(adapter != null){
+							loadAndShowData();
+						}
+					}
+
+				});
+			}
+		}
+	};
+
 	private void loadAndShowData(){
 		new Thread(new Runnable() {
 
@@ -208,13 +255,15 @@ public class PublicChatRoomsActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
 
                         public void run() {
+	                        if (pagenum == 1) {
+		                        chatRoomList.clear();
+	                        }
                             chatRoomList.addAll(chatRooms);
                             if(isFirstLoading){
                                 pb.setVisibility(View.INVISIBLE);
                                 isFirstLoading = false;
                                 adapter = new ChatRoomAdapter(PublicChatRoomsActivity.this, 1, chatRoomList);
                                 listView.setAdapter(adapter);
-                                rooms.addAll(chatRooms);
                             }else{
                                 if(chatRooms.size() < pagesize){
                                     hasMoreData = false;
@@ -261,11 +310,20 @@ public class PublicChatRoomsActivity extends BaseActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.em_row_group, parent, false);
+			if (position == 0) {
+				if (convertView == null) {
+					convertView = inflater.inflate(R.layout.em_row_add_group, parent, false);
+				}
+				((ImageView) convertView.findViewById(R.id.avatar)).setImageResource(R.drawable.em_create_group);
+				final String newChatRoom = "Create new Chat Room";
+				((TextView) convertView.findViewById(R.id.name)).setText(newChatRoom);
+			} else {
+				if (convertView == null) {
+					convertView = inflater.inflate(R.layout.em_row_group, parent, false);
+				}
+				((ImageView) convertView.findViewById(R.id.avatar)).setImageResource(R.drawable.em_group_icon);
+				((TextView) convertView.findViewById(R.id.name)).setText(getItem(position - 1).getName());
 			}
-
-			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position).getName());
 
 			return convertView;
 		}
@@ -285,11 +343,11 @@ public class PublicChatRoomsActivity extends BaseActivity {
 				FilterResults results = new FilterResults();
 				
 				if(constraint == null || constraint.length() == 0){
-					results.values = rooms;
-					results.count = rooms.size();
+					results.values = chatRoomList;
+					results.count = chatRoomList.size();
 				}else{
 					List<EMChatRoom> roomss = new ArrayList<EMChatRoom>();
-					for(EMChatRoom chatRoom : rooms){
+					for(EMChatRoom chatRoom : chatRoomList){
 						if(chatRoom.getName().contains(constraint)){
 							roomss.add(chatRoom);
 						}
@@ -307,11 +365,30 @@ public class PublicChatRoomsActivity extends BaseActivity {
 				chatRoomList.addAll((List<EMChatRoom>)results.values);
 				notifyDataSetChanged();
 			}
-			
-		}		
+		}
+
+		@Override
+		public int getCount() {
+			return super.getCount() + 1;
+		}
 	}
 	
 	public void back(View view){
 		finish();
+	}
+
+	@Override
+	protected void onDestroy() {
+		EMClient.getInstance().chatroomManager().removeChatRoomListener(chatRoomChangeListener);
+		super.onDestroy();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		pagenum = 0;
+		isFirstLoading = true;
+		hasMoreData = true;
+		loadAndShowData();
 	}
 }
