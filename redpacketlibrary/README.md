@@ -9,9 +9,9 @@
 ## 2. redpacketlibrary目录说明
 
 * libs ：包含了集成红包功能所依赖的jar包。(红包使用了glide库做图片加载，由于已经依赖了easeui这里不重复添加)
-* res ：包含了红包SDK和聊天页面中的资源文件。（红包SDK相关以rp开头，聊天页面相关以em开头）
+* res ：包含了聊天页面中的资源文件。
 * utils ： 封装了收、发红包以及转账的相关方法。
-* widget ：聊天界面中的红包、红包回执以及转账的chatrow(如不使用easeui可继承自己的ChatRow基类)。
+* widget ：聊天界面中的红包、红包回执的chatrow(如不使用easeui可继承自己的ChatRow基类)。
 * **注意: 由于RedPacketUtil类中使用了环信SDK中相关方法，redpacketlibrary依赖了easeui，如不使用easeui可替换掉相关的方法**。
 
 ## 3. 集成步骤
@@ -32,9 +32,7 @@
 
 
 ```java
-
-   include ':EaseUI', ':redpacketlibrary'
-
+ include ':EaseUI', ':redpacketlibrary'
 ```
 ### 3.2 ChatDemo清单文件中注册红包相关组件
 
@@ -43,7 +41,7 @@
         <uses-sdk
             android:minSdkVersion="9"
             android:targetSdkVersion="19"
-            tools:overrideLibrary="com.easemob.redpacketui"
+            tools:overrideLibrary="com.easemob.redpacket"
         />
         
     <!--红包相关界面start-->
@@ -74,20 +72,6 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            />
-
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPBankCardActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
 
         <activity
             android:name="com.easemob.redpacketui.ui.activity.RPGroupMemberActivity"
@@ -102,27 +86,21 @@
             android:exported="false"
             android:screenOrientation="behind"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            />
-            
-       <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPTransferActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateVisible"
-            />
-            
-       <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPTransferDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            />            
+
+        <activity
+            android:name="com.alipay.sdk.app.H5AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+              
       <!--红包相关界面end-->
 ```
 
-### 3.3 初始化红包上下文和token
+### 3.3 初始化红包SDK
 
-* DemoApplication中初始化红包上下文。
+* DemoApplication中初始化红包SDK。
 
 ```java
     import com.easemob.redpacketsdk.RedPacket;
@@ -130,7 +108,37 @@
     @Override
     public void onCreate() {
         super.onCreate();
-        RedPacket.getInstance().initContext(applicationContext);
+        //初始化红包SDK，开启日志输出开关
+		RedPacket.getInstance().initRedPacket(applicationContext, RPConstant.AUTH_METHOD_EASEMOB, new RPInitRedPacketCallback() {
+
+			@Override
+			public void initTokenData(RPValueCallback<TokenData> callback) {
+				TokenData tokenData = new TokenData();
+				tokenData.imUserId = EMClient.getInstance().getCurrentUser();
+				//此处使用环信id代替了appUserId 开发者可传入App的appUserId
+				tokenData.appUserId = EMClient.getInstance().getCurrentUser();
+				tokenData.imToken = EMClient.getInstance().getAccessToken();
+				//同步或异步获取TokenData 获取成功后回调onSuccess()方法
+				callback.onSuccess(tokenData);
+			}
+
+			@Override
+			public RedPacketInfo initCurrentUserSync() {
+				//这里需要同步设置当前用户id、昵称和头像url
+				String fromAvatarUrl = "";
+				String fromNickname = EMClient.getInstance().getCurrentUser();
+				EaseUser easeUser = EaseUserUtils.getUserInfo(fromNickname);
+				if (easeUser != null) {
+					fromAvatarUrl = TextUtils.isEmpty(easeUser.getAvatar()) ? "none" : easeUser.getAvatar();
+					fromNickname = TextUtils.isEmpty(easeUser.getNick()) ? easeUser.getUsername() : easeUser.getNick();
+				}
+				RedPacketInfo redPacketInfo = new RedPacketInfo();
+				redPacketInfo.fromUserId = EMClient.getInstance().getCurrentUser();
+				redPacketInfo.fromAvatarUrl = fromAvatarUrl;
+				redPacketInfo.fromNickName = fromNickname;
+				return redPacketInfo;
+			}
+		});
         //打开Log开关 正式发布时请关闭
         RedPacket.getInstance().setDebugMode(true);
     }
@@ -144,13 +152,11 @@
 
    import com.easemob.redpacketsdk.constant.RPConstant;
    import com.easemob.redpacketui.utils.RedPacketUtil;
-   import com.easemob.redpacketui.widget.ChatRowRedPacket;
-   import com.easemob.redpacketui.widget.ChatRowRedPacketAck;
-   import com.easemob.redpacketui.widget.ChatRowTransfer;
-
+   import com.easemob.redpacket.widget.ChatRowRedPacket;
+   import com.easemob.redpacket.widget.ChatRowRedPacketAck;
 ```
 
-* 添加红包、转账相关常量
+* 添加红包相关常量
 
 
 ```java
@@ -163,20 +169,10 @@
         
    private static final int MESSAGE_TYPE_RECV_RED_PACKET_ACK = 8;
 
-   private static final int MESSAGE_TYPE_RECV_TRANSFER_PACKET = 9;
-
-   private static final int MESSAGE_TYPE_SEND_TRANSFER_PACKET = 10;
-
    private static final int ITEM_RED_PACKET = 16;
         
-   private static final int REQUEST_CODE_SEND_RED_PACKET = 16;
-
-   private static final int REQUEST_CODE_SEND_TRANSFER_PACKET = 17;
-
-   private static final int ITEM_TRANSFER_PACKET = 17;
-
 ```
-* 添加红包、转账入口
+* 添加红包入口
 
 
 ```java
@@ -187,10 +183,6 @@
         //聊天室暂时不支持红包功能
         if (chatType != Constant.CHATTYPE_CHATROOM) {
             inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_red_packet_selector, ITEM_RED_PACKET, extendMenuItemClickListener);
-        }
-        //只在单聊中支持转账功能
-        if (chatType == Constant.CHATTYPE_SINGLE) {
-            inputMenu.registerExtendMenuItem(R.string.attach_transfer_money, R.drawable.em_chat_transfer_selector, ITEM_TRANSFER_PACKET, extendMenuItemClickListener);
         }
     }
 ```
@@ -204,18 +196,16 @@
    if (type == EMMessage.Type.TXT.ordinal()) {
             if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false) ||
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
-                    //屏蔽红包、转账消息的转发功能
-                    || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
-                    || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)){
+                    //屏蔽红包消息的转发功能
+                    || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
                 setContentView(R.layout.em_context_menu_for_location);
             }
         }
         
         
     if (isChatroom
-                //red packet code : 屏蔽红包、转账消息的撤回功能
-                || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)
-                || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
+                //red packet code : 屏蔽红包消息的撤回功能
+                || message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
                 //end of red packet code
             View v = (View) findViewById(R.id.forward);
             if (v != null) {
@@ -224,7 +214,7 @@
         }
 ```
 
-* 进入发红包、转账页面
+* 进入发红包页面
 
 
 ```java
@@ -233,59 +223,34 @@
         switch (itemId) {
         ...
         case ITEM_RED_PACKET://进入红包页面
-            //单聊红包修改进入红包的方法，可以在小额随机红包和普通单聊红包之间切换
-            RedPacketUtil.startRandomPacket(new RPRedPacketUtil.RPRandomCallback() {
-                    @Override
-                    public void onSendPacketSuccess(Intent data) {
-                        sendMessage(RedPacketUtil.createRPMessage(getActivity(), data, toChatUsername));
-                    }
-
-                    @Override
-                    public void switchToNormalPacket() {
-                        RedPacketUtil.startRedPacketActivityForResult(ChatFragment.this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
-                    }
-                },getActivity(),toChatUsername);
+            //注意：不再支持原有的startActivityForResult进入红包相关页面
+            int itemType;
+            if (chatType == EaseConstant.CHATTYPE_SINGLE) {
+                itemType = RPConstant.RP_ITEM_TYPE_SINGLE;
+                //小额随机红包
+                //itemType = RPConstant.RP_ITEM_TYPE_RANDOM;
             } else {
-                RedPacketUtil.startRedPacketActivityForResult(this, chatType, toChatUsername, REQUEST_CODE_SEND_RED_PACKET);
+                itemType = RPConstant.RP_ITEM_TYPE_GROUP;
             }
+            RedPacketUtil.startRedPacket(getActivity(), itemType, toChatUsername, new RPSendPacketCallback() {
+               @Override
+                public void onGenerateRedPacketId(String redPacketId) {
+
+                }
+                @Override
+                public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
+                    //发送红包消息到聊天页面
+                    sendMessage(RedPacketUtil.createRPMessage(getActivity(), redPacketInfo, toChatUsername));
+                }
+            });
             break;
-        case ITEM_TRANSFER_PACKET://进入转账页面
-            RedPacketUtil.startTransferActivityForResult(this, toChatUsername, REQUEST_CODE_SEND_TRANSFER_PACKET);
-            break;
+            //end of red packet code
         default:
             break;
         }
         //不覆盖已有的点击事件
         return false;
     }
-```
-
-* 发送红包、转账消息到聊天窗口
-
-```java
-   @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        ...
-        if(resultCode == Activity.RESULT_OK){
-            switch (requestCode) {
-            ...
-            case REQUEST_CODE_SEND_RED_PACKET://发送红包消息
-                if (data != null){
-                    sendMessage(RedPacketUtils.createRPMessage(getActivity(), data, toChatUsername));
-                }
-                break;
-            case REQUEST_CODE_SEND_TRANSFER_PACKET://发送转账消息
-                if (data != null) {
-                    sendMessage(RedPacketUtil.createTRMessage(getActivity(), data, toChatUsername));
-                }
-                break;
-            default:
-                break;
-            }
-        }     
-    }
-    
 ```
 
 * 领取红包并发送回执消息到聊天窗口
@@ -295,14 +260,7 @@
     public boolean onMessageBubbleClick(EMMessage message) {
         //消息框点击事件，demo这里不做覆盖，如需覆盖，return true
         if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
-            if (RedPacketUtil.isRandomRedPacket(message)){
-                RedPacketUtil.openRandomPacket(getActivity(),message);
-            } else {
-                RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
-            }
-            return true;
-        } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
-            RedPacketUtil.openTransferPacket(getActivity(), message);
+            RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
             return true;
         }
         return false;
@@ -418,16 +376,7 @@
                                 }
                             }
                             return msg;
-                        } else if (lastMessage.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, false)) {
-                               String transferAmount = lastMessage.getStringAttribute(RPConstant.EXTRA_TRANSFER_AMOUNT, "");
-                               String msg;
-                               if (lastMessage.direct() == EMMessage.Direct.RECEIVE) {
-                                   msg =  String.format(getResources().getString(R.string.msg_transfer_to_you), transferAmount);
-                               } else {
-                                   msg =  String.format(getResources().getString(R.string.msg_transfer_from_you),transferAmount);
-                               }
-                            return msg;
-                        }
+                        } 
                         return null;
                     }
                 });
@@ -435,17 +384,10 @@
     }
 ```
 
-### 3.7 添加零钱页的入口
-
-* 在需要添加零钱的页面调用下面的方法
-
+### 3.7 进入红包记录的入口
 
 ```java
-
-    import com.easemob.redpacketui.utils.RedPacketUtils;
-
-    RedPacketUtils.startChangeActivity(getActivity());
-
+RPRedPacketUtil.getInstance().startRecordActivity(getActivity());
 ```
 
 ### 4.拆红包音效
