@@ -60,6 +60,8 @@ public class RedPacketUtil {
                 public void getGroupMember(String groupId, RPValueCallback<List<RPUserBean>> callback) {
                     EMGroup group = EMClient.getInstance().groupManager().getGroup(groupId);
                     List<String> members = group.getMembers();
+                    members.add(group.getOwner());
+                    members.addAll(group.getAdminList());
                     List<RPUserBean> userBeanList = new ArrayList<RPUserBean>();
                     EaseUser user;
                     for (int i = 0; i < members.size(); i++) {
