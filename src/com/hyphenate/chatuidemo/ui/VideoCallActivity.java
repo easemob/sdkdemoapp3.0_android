@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.format.DateFormat;
 
 import com.hyphenate.chat.EMCallManager.EMCameraDataProcessor;
 import com.hyphenate.chat.EMCallManager.EMVideoCallHelper;
@@ -49,9 +50,11 @@ import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.util.EMLog;
 import com.superrtc.sdk.VideoView;
 
-import java.text.DateFormat;
+import java.io.File;
+
 import java.util.Date;
 import java.util.UUID;
+
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
 
@@ -564,9 +567,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             handler.sendEmptyMessage(MSG_CALL_SWITCH_CAMERA);
             break;
         case R.id.btn_capture_image:
-            DateFormat df = DateFormat.getDateTimeInstance();
+            DateFormat df = new DateFormat();
             Date d = new Date();
-            final String filename = Environment.getExternalStorageDirectory() + df.format(d) + ".jpg";
+            File storage = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            final String filename = storage.getAbsolutePath() + "/" + df.format("MM-dd-yy--h-mm-ss", d) + ".jpg";
             EMClient.getInstance().callManager().getVideoCallHelper().takePicture(filename);
             runOnUiThread(new Runnable() {
                 @Override
