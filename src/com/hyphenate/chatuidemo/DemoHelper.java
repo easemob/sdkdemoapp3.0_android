@@ -151,7 +151,11 @@ public class DemoHelper {
 	    EMOptions options = initChatOptions();
 	    //use default options if options is null
 		if (EaseUI.getInstance().init(context, options)) {
-		    appContext = context;
+
+            EMClient.getInstance().callManager().getCallOptions().setVideoKbps(800);
+            EMClient.getInstance().callManager().getCallOptions().setVideoResolution(640, 480);
+
+            appContext = context;
 		    
 		    //debug mode, you'd better set it to false, if you want release your App officially.
 		    EMClient.getInstance().setDebugMode(true);
