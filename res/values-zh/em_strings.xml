@@ -40,6 +40,7 @@
     <string name="revoke_error">撤回失败 失败错误码 </string>
     <string name="button_logout">退出登录</string>
     <string name="button_uploadlog">上传运行日志</string>
+    <string name="button_zip_email_log">压缩并email日志</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="prompt">提示</string>

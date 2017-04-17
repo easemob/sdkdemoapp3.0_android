@@ -1,8 +1,10 @@
 package com.easemob.chatuidemo.ui;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,6 +17,9 @@ import com.easemob.EMCallBack;
 import com.easemob.chat.EMChat;
 import com.easemob.chatuidemo.R;
 import com.easemob.util.EMLog;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
@@ -36,6 +41,7 @@ import com.easemob.util.EMLog;
 public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 	private TextView currentVersion;
 	private Button uploadLog;
+	private Button emailLogButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,9 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 
 		currentVersion = (TextView) findViewById(R.id.tv_version);
 		uploadLog = (Button) findViewById(R.id.button_uploadlog);
+		emailLogButton = (Button) findViewById(R.id.btn_email_log);
 		uploadLog.setOnClickListener(this);
+		emailLogButton.setOnClickListener(this);
 		String strVersion = "";
 		try {
 			strVersion = getVersionName();
@@ -75,12 +83,29 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.button_uploadlog:
-			uploadlog();
-			break;
+			case R.id.button_uploadlog:
+				uploadlog();
+				break;
 
-		default:
-			break;
+			case R.id.btn_email_log:
+				File zipFile = EMChat.getInstance().zipLogFiles();
+
+				if(zipFile != null && zipFile.exists()) {
+					Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+					intent.setData(Uri.parse("mailto:"));
+					intent.putExtra(Intent.EXTRA_SUBJECT, "log");
+					intent.putExtra(Intent.EXTRA_TEXT, "log in attachment: " + zipFile.getAbsolutePath());
+
+					intent.setType("application/octet-stream");
+					ArrayList<Uri> uris = new ArrayList<>();
+					uris.add(Uri.fromFile(zipFile));
+					intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+					startActivity(intent);
+				}
+				break;
+
+			default:
+				break;
 		}
 
 	}

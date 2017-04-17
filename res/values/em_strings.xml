@@ -40,6 +40,7 @@
     <string name="revoke_error">Revoke failed with error code </string>
     <string name="button_logout">Logout</string>
     <string name="button_uploadlog">Upload the log</string>
+    <string name="button_zip_email_log">Zip and email log</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="prompt">Prompt</string>
