@@ -251,7 +251,7 @@ public class DemoHelper {
         //options.setImPort(6717);
         //// 设置私有化 rest 地址，这里如果有端口直接跟在地址后: xxxx.com:port
         //options.setRestServer("a1.ssy.zhtchina.cn:8080");
-        options.setAppKey("easemob-demo#coco");
+//        options.setAppKey("easemob-demo#coco");
 
         // set if accept the invitation automatically
         options.setAcceptInvitationAlways(false);
@@ -280,6 +280,17 @@ public class DemoHelper {
         if (demoModel.isCustomAppkeyEnabled() && demoModel.getCutomAppkey() != null && !demoModel.getCutomAppkey().isEmpty()) {
             options.setAppKey(demoModel.getCutomAppkey());
         }
+
+        if (demoModel.isCustomDnsUrlEnabled() && demoModel.getCutomDnsUrl() != null && !demoModel.getCutomDnsUrl().isEmpty()) {
+            options.setDnsUrl(demoModel.getCutomDnsUrl());
+            Log.d("set dns url - ", demoModel.getCutomDnsUrl());
+        }
+
+//        if(demoModel.isCustomDnsIpEnabled() && demoModel.getCutomDnsIp() != null && !demoModel.getCutomDnsIp().isEmpty()){
+//            options.setDnsIp(demoModel.getCutomDnsIp());
+//            Log.d("set dns ip - ", demoModel.getCutomDnsIp());
+//
+//        }
 
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());

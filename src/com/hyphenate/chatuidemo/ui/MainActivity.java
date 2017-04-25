@@ -471,17 +471,17 @@ import java.util.List;
         sdkHelper.pushActivity(this);
 
         if (DemoHelper.getInstance().pushConfigs == null) {
-            final ProgressDialog dialog = ProgressDialog.show(this, "loading...", "waiting...",false,true);
+//            final ProgressDialog dialog = ProgressDialog.show(this, "loading...", "waiting...",false,true);
             new Thread(new Runnable() {
                 @Override public void run() {
                     try {
                         EMClient.getInstance().pushManager().getPushConfigsFromServer();
                         disabledIds = EMClient.getInstance().pushManager().getNoPushGroups();
-                        runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                dialog.dismiss();
-                            }
-                        });
+//                        runOnUiThread(new Runnable() {
+//                            @Override public void run() {
+//                                dialog.dismiss();
+//                            }
+//                        });
                     } catch (HyphenateException e) {
                         e.printStackTrace();
                     }

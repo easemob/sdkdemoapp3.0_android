@@ -310,7 +310,7 @@
                         android:minWidth="100dp"
                         android:layout_centerVertical="true"
                         android:paddingLeft="10dip"
-                        android:text="@string/set_custom_server"
+                        android:hint="@string/set_custom_appkey"
                         android:textColor="@android:color/black"
                         android:textSize="14sp"
                         android:typeface="serif" />
@@ -331,6 +331,75 @@
                         android:layout_toLeftOf="@id/switch_custom_appkey"
                         android:layout_centerVertical="true"/>
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_custom_dnsUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/em_btn_bottom_selector"
+                    android:padding="10dip">
+
+                    <EditText
+                        android:id="@+id/edit_custom_dnsUrl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="100dp"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="10dip"
+                        android:hint="@string/set_custom_dnsUrl"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:typeface="serif" />
+
+                    <com.hyphenate.easeui.widget.EaseSwitchButton
+                        android:id="@+id/switch_custom_dnsUrl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        app:switchStatus="close" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/switch_custom_dnsUrl"
+                        android:text="@string/set_custom_dnsUrl"
+                        android:textSize="@dimen/size36px" />
+                </RelativeLayout>
+
+                <!--<RelativeLayout-->
+                    <!--android:id="@+id/rl_custom_dnsIp"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/em_btn_bottom_selector"-->
+                    <!--android:padding="10dip">-->
+                    <!--<EditText-->
+                        <!--android:id="@+id/edit_custom_dnsIp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:minWidth="100dp"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:paddingLeft="10dip"-->
+                        <!--android:hint="@string/set_custom_dnsIp"-->
+                        <!--android:textColor="@android:color/black"-->
+                        <!--android:textSize="14sp"-->
+                        <!--android:typeface="serif" />-->
+                    <!--<com.hyphenate.easeui.widget.EaseSwitchButton-->
+                        <!--android:id="@+id/switch_custom_dnsIp"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_alignParentRight="true"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--app:switchStatus="close" />-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:layout_toLeftOf="@id/switch_custom_dnsIp"-->
+                        <!--android:text="@string/set_custom_dnsIp"-->
+                        <!--android:textSize="@dimen/size36px" />-->
+                <!--</RelativeLayout>-->
 
 
                 <RelativeLayout
@@ -515,7 +584,7 @@
                     android:layout_centerVertical="true" />
             </RelativeLayout>
 
-            
+
             <RelativeLayout
                 android:id="@+id/rl_switch_delete_msg_when_exit_group"
                 android:layout_width="match_parent"
@@ -540,7 +609,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
-            
+
             <RelativeLayout
                 android:id="@+id/rl_switch_auto_accept_group_invitation"
                 android:layout_width="match_parent"
@@ -565,7 +634,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
-            
+
             <RelativeLayout
                 android:id="@+id/rl_switch_adaptive_video_encode"
                 android:layout_width="match_parent"

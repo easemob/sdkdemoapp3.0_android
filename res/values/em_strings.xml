@@ -94,6 +94,9 @@
     <string name="book_black">Black list</string>
     <string name="set_custom_appkey">Set custom App key</string>
     <string name="set_custom_server">Set custom servers</string>
+    <string name="set_custom_dns">Set custom dns</string>
+    <string name="set_custom_dnsUrl">Set custom dnsUrl</string>
+    <string name="set_custom_dnsIp">Set custom dnsIp</string>
     <string name="session">Conversation</string>
     <string name="address_book">Address book</string>
     <string name="setting">Settings</string>

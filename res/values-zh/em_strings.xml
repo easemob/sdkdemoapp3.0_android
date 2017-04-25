@@ -91,6 +91,9 @@
     <string name="book_black">通讯录黑名单</string>
     <string name="set_custom_appkey">自定义App key</string>
     <string name="set_custom_server">自定义server</string>
+    <string name="set_custom_dns">自定义dns</string>
+    <string name="set_custom_dnsUrl">自定义dnsUrl</string>
+    <string name="set_custom_dnsIp">自定义dnsIp</string>
     <string name="session">会话</string>
     <string name="address_book">通讯录</string>
     <string name="setting">设置</string>

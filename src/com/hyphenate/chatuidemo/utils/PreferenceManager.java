@@ -50,6 +50,10 @@ public class PreferenceManager {
 	private static String SHARED_KEY_ENABLE_CUSTOM_SERVER = "SHARED_KEY_ENABLE_CUSTOM_SERVER";
 	private static String SHARED_KEY_ENABLE_CUSTOM_APPKEY = "SHARED_KEY_ENABLE_CUSTOM_APPKEY";
 	private static String SHARED_KEY_CUSTOM_APPKEY = "SHARED_KEY_CUSTOM_APPKEY";
+	private static String SHARED_KEY_ENABLE_CUSTOM_DNSURL = "SHARED_KEY_ENABLE_CUSTOM_DNSURL";
+	private static String SHARED_KEY_CUSTOM_DNSURL = "SHARED_KEY_CUSTOM_DNSURL";
+	private static String SHARED_KEY_ENABLE_CUSTOM_DNSIP = "SHARED_KEY_ENABLE_CUSTOM_DNSIP";
+	private static String SHARED_KEY_CUSTOM_DNSIP = "SHARED_KEY_CUSTOM_DNSIP";
 
 	private static String SHARED_KEY_CALL_MIN_VIDEO_KBPS = "SHARED_KEY_CALL_MIN_VIDEO_KBPS";
 	private static String SHARED_KEY_CALL_MAX_VIDEO_KBPS = "SHARED_KEY_CALL_Max_VIDEO_KBPS";
@@ -263,6 +267,42 @@ public class PreferenceManager {
 
 	public void setCustomAppkey(String appkey) {
 		editor.putString(SHARED_KEY_CUSTOM_APPKEY, appkey);
+		editor.apply();
+	}
+
+	public void enableCustomDnsUrl(boolean enable) {
+		editor.putBoolean(SHARED_KEY_ENABLE_CUSTOM_DNSURL, enable);
+		editor.apply();
+	}
+
+	public boolean isCustomDnsUrlEnabled() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_CUSTOM_DNSURL, false);
+	}
+
+	public String getCustomDnsUrl() {
+		return mSharedPreferences.getString(SHARED_KEY_CUSTOM_DNSURL, "");
+	}
+
+	public void setCustomDnsUrl(String dnsUrl) {
+		editor.putString(SHARED_KEY_CUSTOM_DNSURL, dnsUrl);
+		editor.apply();
+	}
+
+	public void enableCustomDnsIp(boolean enable) {
+		editor.putBoolean(SHARED_KEY_ENABLE_CUSTOM_DNSIP, enable);
+		editor.apply();
+	}
+
+	public boolean isCustomDnsIpEnabled() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_ENABLE_CUSTOM_DNSIP, false);
+	}
+
+	public String getCustomDnsIp() {
+		return mSharedPreferences.getString(SHARED_KEY_CUSTOM_DNSIP, "");
+	}
+
+	public void setCustomDnsIp(String dnsIp) {
+		editor.putString(SHARED_KEY_CUSTOM_DNSIP, dnsIp);
 		editor.apply();
 	}
 
