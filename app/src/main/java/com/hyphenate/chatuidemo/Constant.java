@@ -22,6 +22,8 @@ public class Constant extends EaseConstant{
 	public static final String ACCOUNT_REMOVED = "account_removed";
 	public static final String ACCOUNT_CONFLICT = "conflict";
 	public static final String ACCOUNT_FORBIDDEN = "user_forbidden";
+	public static final String ACCOUNT_KICKED_BY_CHANGE_PASSWORD = "kicked_by_change_password";
+	public static final String ACCOUNT_KICKED_BY_OTHER_DEVICE = "kicked_by_another_device";
 	public static final String CHAT_ROBOT = "item_robots";
 	public static final String MESSAGE_ATTR_ROBOT_MSGTYPE = "msgtype";
 	public static final String ACTION_GROUP_CHANAGED = "action_group_changed";

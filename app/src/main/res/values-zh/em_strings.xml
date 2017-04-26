@@ -100,6 +100,7 @@
     <string name="diagnose">诊断</string>
     <string name="push_nick">iOS离线推送昵称</string>
     <string name="call_option">通话设置</string>
+    <string name="multi_device_management">多设备管理</string>
     <string name="Current_version">当前版本</string>
     <string name="Not_Set">未设置</string>
     <string name="Upload_the_log">上传日志中</string>
@@ -143,8 +144,8 @@
     <string name="Please_enter_a_username">请输入用户名</string>
     <string name="is_down_please_wait">正在下载视频请稍候</string>
     <string name="Exit_the_group_chat">退出群聊</string>
-    <string name="accept_join_group">同意加入群：</string>
-    <string name="refuse_join_group">拒绝加入群：</string>
+    <string name="accept_join_group">%s同意加入群</string>
+    <string name="refuse_join_group">%s拒绝加入群</string>
     <string name="at_your_in_group">%s在群聊中@了你</string>
     <string name="emojicon_test_name">示例</string>
     <string name="all_members">所有成员</string>
@@ -380,4 +381,34 @@
     <string name="Failed_to_create_chat_room">创建聊天室失败</string>
 
     <string name="mail_log_title">发送邮件附件中包含log</string>
+
+    <string name="multi_device_contact_accept">接受%s的好友邀请[remote]</string>
+    <string name="multi_device_contact_decline">拒绝%s的好友邀请[remote]</string>
+    <string name="multi_device_contact_add">发送好友邀请给%s[remote]</string>
+    <string name="multi_device_contact_ban">加%s到黑名单[remote]</string>
+    <string name="multi_device_contact_allow">移除%s从黑名单[remote]</string>
+
+    <string name="multi_device_group_create">创建群组[remote]</string>
+    <string name="multi_device_group_destroy">销毁群组[remote]</string>
+    <string name="multi_device_group_join">加入群组[remote]</string>
+    <string name="multi_device_group_leave">离开群组[remote]</string>
+    <string name="multi_device_group_apply">申请加入群组[remote]</string>
+    <string name="multi_device_group_apply_accept">接受%s入群申请[remote]</string>
+    <string name="multi_device_group_apply_decline">拒绝%s入群申请[remote]</string>
+    <string name="multi_device_group_invite">邀请%s加入群组[remote]</string>
+    <string name="multi_device_group_invite_accept">接受%s入群邀请[remote]</string>
+    <string name="multi_device_group_invite_decline">拒绝%s入群邀请[remote]</string>
+    <string name="multi_device_group_kick">将%s从群组移除[remote]</string>
+    <string name="multi_device_group_ban">将%s加入群组的黑名单[remote]</string>
+    <string name="multi_device_group_allow">将%s从群组的黑名单移除[remote]</string>
+    <string name="multi_device_group_block">停止接受群组消息[remote]</string>
+    <string name="multi_device_group_unblock">可以接受群组的消息[remote]</string>
+    <string name="multi_device_group_assign_owner">将群组所有者权限转移给%1$s[remote]</string>
+    <string name="multi_device_group_add_admin">添加%s作为群组的管理员[remote]</string>
+    <string name="multi_device_group_remove_admin">移除%s在群组的管理员身份[remote]</string>
+    <string name="multi_device_group_add_mute">将%s在群组中禁言[remote]</string>
+    <string name="multi_device_group_remove_mute">将%s在群组中解除禁言[remote]</string>
+
+    <string name="multi_device_logged_in_device_kick_item">将设备移除</string>
+
 </resources>
