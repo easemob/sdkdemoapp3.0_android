@@ -4,17 +4,11 @@
 buildscript {
     repositories {
         jcenter()
-        // ============== fabric start
-//        maven { url 'https://maven.fabric.io/public' }
-        // ============== fabric end
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-        // ============== fabric start
-//        classpath 'io.fabric.tools:gradle:1.+'
-        // ============== fabric end
     }
 }
 
