@@ -19,4 +19,4 @@ include $(CLEAR_VARS)
 PB_LITE=1
 ENABLE_CALL=1
 #libhyphenate.so
-include $(LOCAL_PATH)/../../emclient-linux/Android.mk
+include $(LOCAL_PATH)/../../../emclient-linux/Android.mk

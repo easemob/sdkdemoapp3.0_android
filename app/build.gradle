@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+// ============== fabric start
+//apply plugin: 'io.fabric'
+// ============== fabric end
+
+// ============== fabric start
+//repositories {
+//    maven { url 'https://maven.fabric.io/public' }
+//}
+// ============== fabric end
+
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion '25.0.2'
+
+    defaultConfig {
+        applicationId "com.hyphenate.chatuidemo"
+        minSdkVersion 11
+        targetSdkVersion 22
+        multiDexEnabled true
+    }
+
+    Properties props = new Properties()
+    props.load(new FileInputStream('../emclient-android/signing.properties'))
+    signingConfigs { //gradle assembleRelease
+        release {
+            storeFile file('../../emclient-android/hyphenate.keystore')
+            keyAlias props['KEY_ALIAS']
+            keyPassword props['KEY_PASSWORD']
+            storePassword props['KEYSTORE_PASSWORD']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+	sourceSets {
+		main {
+			jniLibs.srcDirs = ['libs']
+		}
+	}
+}
+
+dependencies {
+    compile project(':redpacketlibrary')
+    compile project(':easeui')
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'com.parse:parse-android:1.13.1'
+    compile 'com.android.support:multidex:1.0.0'
+    //考虑到在eclipse中,直接使用源码
+//    compile ('com.anthonycr.grant:permissions:1.0'){
+//        exclude module: 'support-v4'
+//    }
+// ============== fabric start
+//    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
+//        transitive = true;
+//    }
+// ============== fabric end
+}
