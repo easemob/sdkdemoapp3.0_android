@@ -31,3 +31,7 @@ local.properties
 gradle-app.setting
 
 #*.properties
+
+#debug libs
+app/libs
+app/obj
