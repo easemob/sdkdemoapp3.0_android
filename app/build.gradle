@@ -11,12 +11,12 @@ apply plugin: 'com.android.application'
 
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "com.hyphenate.chatuidemo"
-        minSdkVersion 11
+        minSdkVersion 15
         targetSdkVersion 22
         multiDexEnabled true
     }
@@ -59,11 +59,8 @@ dependencies {
     compile project(':easeui')
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.parse:parse-android:1.13.1'
-    compile 'com.android.support:multidex:1.0.0'
-    //考虑到在eclipse中,直接使用源码
-//    compile ('com.anthonycr.grant:permissions:1.0'){
-//        exclude module: 'support-v4'
-//    }
+    compile 'com.android.support:multidex:1.0.1'
+
 // ============== fabric start
 //    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
 //        transitive = true;
