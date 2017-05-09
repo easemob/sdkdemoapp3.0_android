@@ -36,7 +36,7 @@ import com.easemob.chatuidemo.DemoHelper;
 import com.easemob.chatuidemo.DemoModel;
 import com.easemob.chatuidemo.R;
 import com.easemob.easeui.widget.EaseSwitchButton;
-import com.easemob.redpacketui.utils.RedPacketUtil;
+import com.easemob.redpacketui.utils.RPRedPacketUtil;
 
 /**
  * 设置界面
@@ -208,9 +208,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			//red packet code : 进入零钱页面
+			//red packet code : 进入零钱或红包记录页面
 			case R.id.ll_change:
-				RedPacketUtil.startChangeActivity(getActivity());
+				//支付宝版红包SDK调用如下方法进入红包记录页面
+				RPRedPacketUtil.getInstance().startRecordActivity(getActivity());
+				//钱包版红包SDK调用如下方法进入零钱页面
+//				RPRedPacketUtil.getInstance().startChangeActivity(getActivity());
 				break;
 			//end of red packet code
 		case R.id.rl_switch_notification:

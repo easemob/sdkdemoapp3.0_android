@@ -58,7 +58,7 @@ import com.easemob.easeui.utils.EaseACKUtil;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.redpacketsdk.constant.RPConstant;
-import com.easemob.redpacketui.utils.RedPacketUtil;
+import com.easemob.redpacket.utils.RedPacketUtil;
 import com.easemob.util.EMLog;
 
 import java.util.ArrayList;
