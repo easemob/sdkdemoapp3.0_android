@@ -870,7 +870,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		}
 
 		@Override
-		public void onAnnouncementChanged(String chatroomId, String announcement) {
+		public void onAnnouncementChanged(String chatRoomId, String announcement) {
 			announcementText.setText(announcement);
 		}
 	}
