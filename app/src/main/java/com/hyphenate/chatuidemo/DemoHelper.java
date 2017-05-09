@@ -10,8 +10,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacket.utils.RedPacketUtil;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -169,10 +169,7 @@ public class DemoHelper {
 			PreferenceManager.init(context);
 			//initialize profile manager
 			getUserProfileManager().init(context);
-<<<<<<< HEAD:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
             //set Call options
-            setCallOptions();
-=======
             setCallOptions();
 
             // TODO: set Call options
@@ -230,7 +227,6 @@ public class DemoHelper {
             // Offline call push
             EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
 
->>>>>>> f95e55e7ec2dc24e882d720b7df7344190fd7608:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
             setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
 	        initDbDao();
@@ -302,7 +298,6 @@ public class DemoHelper {
             EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
         }
 
-<<<<<<< HEAD:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
         /**
          * This function is only meaningful when your app need recording
          * If not, remove it.
@@ -312,8 +307,6 @@ public class DemoHelper {
          */
         //EMClient.getInstance().callManager().getVideoCallHelper().setPreferMovFormatEnable(true);
 
-=======
->>>>>>> f95e55e7ec2dc24e882d720b7df7344190fd7608:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
         // resolution
         String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
         if (resolution.equals("")) {
