@@ -169,8 +169,68 @@ public class DemoHelper {
 			PreferenceManager.init(context);
 			//initialize profile manager
 			getUserProfileManager().init(context);
+<<<<<<< HEAD:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
             //set Call options
             setCallOptions();
+=======
+            setCallOptions();
+
+            // TODO: set Call options
+            // min video kbps
+            int minBitRate = PreferenceManager.getInstance().getCallMinVideoKbps();
+            if (minBitRate != -1) {
+                EMClient.getInstance().callManager().getCallOptions().setMinVideoKbps(minBitRate);
+            }
+
+            // max video kbps
+            int maxBitRate = PreferenceManager.getInstance().getCallMaxVideoKbps();
+            if (maxBitRate != -1) {
+                EMClient.getInstance().callManager().getCallOptions().setMaxVideoKbps(maxBitRate);
+            }
+
+            // max frame rate
+            int maxFrameRate = PreferenceManager.getInstance().getCallMaxFrameRate();
+            if (maxFrameRate != -1) {
+                EMClient.getInstance().callManager().getCallOptions().setMaxVideoFrameRate(maxFrameRate);
+            }
+
+            // audio sample rate
+            int audioSampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
+            if (audioSampleRate != -1) {
+                EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
+            }
+
+            /**
+             * This function is only meaningful when your app need recording
+             * If not, remove it.
+             * This function need be called before the video stream started, so we set it in onCreate function.
+             * This method will set the preferred video record encoding codec.
+             * Using default encoding format, recorded file may not be played by mobile player.
+             */
+            //EMClient.getInstance().callManager().getVideoCallHelper().setPreferMovFormatEnable(true);
+
+            // resolution
+            String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
+            if (resolution.equals("")) {
+                resolution = PreferenceManager.getInstance().getCallFrontCameraResolution();
+            }
+            String[] wh = resolution.split("x");
+            if (wh.length == 2) {
+                try {
+                    EMClient.getInstance().callManager().getCallOptions().setVideoResolution(new Integer(wh[0]).intValue(), new Integer(wh[1]).intValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // enabled fixed sample rate
+            boolean enableFixSampleRate = PreferenceManager.getInstance().isCallFixedVideoResolution();
+            EMClient.getInstance().callManager().getCallOptions().enableFixedVideoResolution(enableFixSampleRate);
+
+            // Offline call push
+            EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
+
+>>>>>>> f95e55e7ec2dc24e882d720b7df7344190fd7608:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
             setGlobalListeners();
 			broadcastManager = LocalBroadcastManager.getInstance(appContext);
 	        initDbDao();
@@ -242,6 +302,7 @@ public class DemoHelper {
             EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
         }
 
+<<<<<<< HEAD:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
         /**
          * This function is only meaningful when your app need recording
          * If not, remove it.
@@ -251,6 +312,8 @@ public class DemoHelper {
          */
         //EMClient.getInstance().callManager().getVideoCallHelper().setPreferMovFormatEnable(true);
 
+=======
+>>>>>>> f95e55e7ec2dc24e882d720b7df7344190fd7608:app/src/main/java/com/hyphenate/chatuidemo/DemoHelper.java
         // resolution
         String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
         if (resolution.equals("")) {
