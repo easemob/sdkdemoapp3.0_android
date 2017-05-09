@@ -313,6 +313,9 @@
     <string name="adaptive_video_encode">视频自适应码率编码</string>
     <string name="offline_call_push">通话离线推送</string>
     <string name="group_id">群ID</string>
+    <string name="group_announcement">公告</string>
+    <string name="share_files">共享文件</string>
+    <string name="upload_files">上传</string>
     <string name="move_out_backlist">移出黑名单</string>
     <string name="input_new_nick_hint">输入新昵称</string>
     <string name="search_pubic_group">搜索公开群</string>

@@ -52,7 +52,7 @@ dependencies {
     compile project(':redpacketlibrary')
     compile project(':easeui')
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.parse:parse-android:1.13.1'
+
     //考虑到在eclipse中,直接使用源码
 //    compile ('com.anthonycr.grant:permissions:1.0'){
 //        exclude module: 'support-v4'
@@ -62,4 +62,5 @@ dependencies {
 //        transitive = true;
 //    }
 // ============== fabric end
+    compile 'com.parse:parse-android:1.13.1'
 }

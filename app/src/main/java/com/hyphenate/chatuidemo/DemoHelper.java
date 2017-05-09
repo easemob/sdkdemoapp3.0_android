@@ -26,6 +26,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
 import com.hyphenate.chat.EMMessage.Status;
 import com.hyphenate.chat.EMMessage.Type;
+import com.hyphenate.chat.EMMucShareFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
@@ -150,6 +151,10 @@ public class DemoHelper {
 	public void init(Context context) {
 	    demoModel = new DemoModel(context);
 	    EMOptions options = initChatOptions();
+        options.setRestServer("103.241.230.122:31111");
+        options.setIMServer("103.241.230.122");
+        options.setImPort(31097);
+
 	    //use default options if options is null
 		if (EaseUI.getInstance().init(context, options)) {
 		    appContext = context;
@@ -704,6 +709,21 @@ public class DemoHelper {
         public void onMemberExited(String groupId, String member) {
             EMLog.d(TAG, "onMemberJoined");
             showToast("onMemberExited: " + member);
+        }
+
+        @Override
+        public void onAnnouncementChanged(String groupId, String announcement) {
+
+        }
+
+        @Override
+        public void onShareFileAdded(String groupId, EMMucShareFile shareFile) {
+
+        }
+
+        @Override
+        public void onShareFileDeleted(String groupId, String fileId) {
+
         }
         // ============================= group_reform new add api end
     }
