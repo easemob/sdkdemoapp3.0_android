@@ -10,8 +10,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacket.utils.RedPacketUtil;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -26,6 +26,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
 import com.hyphenate.chat.EMMessage.Status;
 import com.hyphenate.chat.EMMessage.Type;
+import com.hyphenate.chat.EMMucShareFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
@@ -150,6 +151,10 @@ public class DemoHelper {
 	public void init(Context context) {
 	    demoModel = new DemoModel(context);
 	    EMOptions options = initChatOptions();
+        options.setRestServer("103.241.230.122:31111");
+        options.setIMServer("103.241.230.122");
+        options.setImPort(31097);
+
 	    //use default options if options is null
 		if (EaseUI.getInstance().init(context, options)) {
 		    appContext = context;
@@ -164,6 +169,7 @@ public class DemoHelper {
 			PreferenceManager.init(context);
 			//initialize profile manager
 			getUserProfileManager().init(context);
+            //set Call options
             setCallOptions();
 
             // TODO: set Call options
@@ -291,6 +297,15 @@ public class DemoHelper {
         if (audioSampleRate != -1) {
             EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(audioSampleRate);
         }
+
+        /**
+         * This function is only meaningful when your app need recording
+         * If not, remove it.
+         * This function need be called before the video stream started, so we set it in onCreate function.
+         * This method will set the preferred video record encoding codec.
+         * Using default encoding format, recorded file may not be played by mobile player.
+         */
+        //EMClient.getInstance().callManager().getVideoCallHelper().setPreferMovFormatEnable(true);
 
         // resolution
         String resolution = PreferenceManager.getInstance().getCallBackCameraResolution();
@@ -750,6 +765,21 @@ public class DemoHelper {
         public void onMemberExited(String groupId, String member) {
             EMLog.d(TAG, "onMemberJoined");
             showToast("onMemberExited: " + member);
+        }
+
+        @Override
+        public void onAnnouncementChanged(String groupId, String announcement) {
+
+        }
+
+        @Override
+        public void onShareFileAdded(String groupId, EMMucShareFile shareFile) {
+
+        }
+
+        @Override
+        public void onShareFileDeleted(String groupId, String fileId) {
+
         }
         // ============================= group_reform new add api end
     }

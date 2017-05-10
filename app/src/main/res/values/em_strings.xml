@@ -313,6 +313,9 @@
     <string name="adaptive_video_encode">Adaptive video encode</string>
     <string name="offline_call_push">Offline call push</string>
     <string name="group_id">Group ID</string>
+    <string name="group_announcement">Announcement</string>
+    <string name="share_files">Shared Files</string>
+    <string name="upload_files">Upload</string>
     <string name="move_out_backlist">Remove from blacklist</string>
     <string name="input_new_nick_hint">Input a new nickname</string>
     <string name="search_pubic_group">Search public group</string>

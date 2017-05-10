@@ -63,6 +63,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 	private OwnerAdminAdapter ownerAdminAdapter;
 	private MemberAdapter membersAdapter;
 	private ProgressDialog progressDialog;
+	private TextView announcementText;
 
 	public static ChatRoomDetailsActivity instance;
 
@@ -120,9 +121,13 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		EaseExpandGridView userGridView = (EaseExpandGridView) findViewById(R.id.gridview);
 		userGridView.setAdapter(membersAdapter);
 
+		RelativeLayout announcementLayout = (RelativeLayout) findViewById(R.id.layout_group_announcement);
+		announcementText = (TextView) findViewById(R.id.tv_group_announcement_value);
+
 		updateRoom();
 
 		changeChatRoomNameLayout.setOnClickListener(this);
+		announcementLayout.setOnClickListener(this);
 
 		final EMChatRoom finalRoom = room;
 		new Thread(new Runnable() {
@@ -326,6 +331,9 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					blackList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomBlackList(roomId, 0, 500));
 					memberList.removeAll(muteList);
 					memberList.removeAll(blackList);
+
+					EMClient.getInstance().chatroomManager().fetchChatRoomAnnouncement(roomId);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -340,6 +348,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 							chatRoomNickTextView.setText(room.getName());
 							loadingPB.setVisibility(View.INVISIBLE);
 
+							announcementText.setText(room.getAnnouncement());
 
 							Button destroyButton = (Button)ChatRoomDetailsActivity.this.findViewById(R.id.btn_destroy_chatroom);
 							destroyButton.setVisibility(EMClient.getInstance().getCurrentUser().equals(room.getOwner()) ?
@@ -858,6 +867,11 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
                 });
 				updateRoom();
 			}
+		}
+
+		@Override
+		public void onAnnouncementChanged(String chatRoomId, String announcement) {
+			announcementText.setText(announcement);
 		}
 	}
 }
