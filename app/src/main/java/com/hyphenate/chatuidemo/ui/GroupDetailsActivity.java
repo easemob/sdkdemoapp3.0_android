@@ -41,7 +41,7 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMMucShareFile;
+import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMPushConfigs;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.ui.EaseGroupListener;
@@ -1292,12 +1292,12 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 
 		@Override
-		public void onShareFileAdded(String groupId, EMMucShareFile shareFile) {
+		public void onSharedFileAdded(String groupId, EMMucSharedFile sharedFile) {
 
 		}
 
 		@Override
-		public void onShareFileDeleted(String groupId, String fileId) {
+		public void onSharedFileDeleted(String groupId, String fileId) {
 
 		}
 	}
