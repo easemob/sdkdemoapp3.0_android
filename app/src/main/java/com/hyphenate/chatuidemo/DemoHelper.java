@@ -26,7 +26,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
 import com.hyphenate.chat.EMMessage.Status;
 import com.hyphenate.chat.EMMessage.Type;
-import com.hyphenate.chat.EMMucShareFile;
+import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
@@ -773,12 +773,12 @@ public class DemoHelper {
         }
 
         @Override
-        public void onShareFileAdded(String groupId, EMMucShareFile shareFile) {
+        public void onSharedFileAdded(String groupId, EMMucSharedFile sharedFile) {
 
         }
 
         @Override
-        public void onShareFileDeleted(String groupId, String fileId) {
+        public void onSharedFileDeleted(String groupId, String fileId) {
 
         }
         // ============================= group_reform new add api end

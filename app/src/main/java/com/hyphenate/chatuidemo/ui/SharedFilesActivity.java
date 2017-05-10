@@ -25,8 +25,10 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMMucShareFile;
+import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.util.FileUtils;
+import com.hyphenate.util.PathUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class SharedFilesActivity extends BaseActivity {
 
     private String groupId;
     EMGroup group;
-    private List<EMMucShareFile> fileList;
+    private List<EMMucSharedFile> fileList;
 
     private FilesAdapter adapter;
 
@@ -63,6 +65,12 @@ public class SharedFilesActivity extends BaseActivity {
 
         showFileList(true);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                showFile(fileList.get(position));
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -75,9 +83,9 @@ public class SharedFilesActivity extends BaseActivity {
 
     private void showFileList(boolean isRefresh) {
         swipeRefreshLayout.setRefreshing(true);
-        EMClient.getInstance().groupManager().asyncFetchGroupShareFiles(groupId, pageNum, pageSize, new EMValueCallBack<List<EMMucShareFile>>() {
+        EMClient.getInstance().groupManager().asyncFetchGroupSharedFileList(groupId, pageNum, pageSize, new EMValueCallBack<List<EMMucSharedFile>>() {
             @Override
-            public void onSuccess(final List<EMMucShareFile> value) {
+            public void onSuccess(final List<EMMucSharedFile> value) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -108,6 +116,58 @@ public class SharedFilesActivity extends BaseActivity {
         });
     }
 
+    /**
+     * If local file doesn't exits, download it first.
+     * else show file directly
+     * @param file
+     */
+    private void showFile(EMMucSharedFile file){
+        final File localFile = new File(PathUtil.getInstance().getFilePath(), file.getFileName());
+
+        final ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Downloading...");
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
+        EMClient.getInstance().groupManager().asyncDownloadGroupSharedFile(
+                groupId,
+                file.getFileId(),
+                localFile.getAbsolutePath(),
+                new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                pd.dismiss();
+                                openFile(localFile);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(int code, final String error) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(SharedFilesActivity.this, "Download file fails, " + error, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+                    }
+                }
+        );
+    }
+
+    private void openFile(File file){
+        if(file != null && file.exists()){
+            FileUtils.openFile(file, this);
+            return;
+        }
+    }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -123,7 +183,7 @@ public class SharedFilesActivity extends BaseActivity {
 
         final int position = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position;
 
-        EMClient.getInstance().groupManager().asyncDeleteGroupShareFile(
+        EMClient.getInstance().groupManager().asyncDeleteGroupSharedFile(
                 groupId,
                 fileList.get(position).getFileId(),
                 new EMCallBack() {
@@ -216,7 +276,7 @@ public class SharedFilesActivity extends BaseActivity {
         pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Uploading...");
         pd.show();
-        EMClient.getInstance().groupManager().asyncUploadGroupShareFile(groupId, filePath, new EMCallBack() {
+        EMClient.getInstance().groupManager().asyncUploadGroupSharedFile(groupId, filePath, new EMCallBack() {
             @Override
             public void onSuccess() {
                 runOnUiThread(new Runnable() {
@@ -279,11 +339,11 @@ public class SharedFilesActivity extends BaseActivity {
         return filePath;
     }
 
-    private static class FilesAdapter extends ArrayAdapter<EMMucShareFile> {
+    private static class FilesAdapter extends ArrayAdapter<EMMucSharedFile> {
 
-        List<EMMucShareFile> list;
+        List<EMMucSharedFile> list;
 
-        public FilesAdapter(@NonNull Context context, int resource, @NonNull List<EMMucShareFile> objects) {
+        public FilesAdapter(@NonNull Context context, int resource, @NonNull List<EMMucSharedFile> objects) {
             super(context, resource, objects);
             list = objects;
         }
