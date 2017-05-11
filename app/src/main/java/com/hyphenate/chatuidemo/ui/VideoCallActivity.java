@@ -45,8 +45,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
+import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
 import com.superrtc.sdk.VideoView;
 
@@ -64,6 +63,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private boolean endCallTriggerByMe = false;
     private boolean monitor = true;
 
+    // 视频通话画面显示控件，这里在新版中使用同一类型的控件，方便本地和远端视图切换
+    protected EMCallSurfaceView localSurface;
+    protected EMCallSurfaceView oppositeSurface;
+    private int surfaceState = -1;
+
     private TextView callStateTextView;
 
     private LinearLayout comingBtnContainer;
@@ -80,7 +84,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private LinearLayout bottomContainer;
     private TextView monitorTextView;
     private TextView netwrokStatusVeiw;
-    
+
     private Handler uiHandler;
 
     private boolean isInCalling;
@@ -88,9 +92,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 //    private Button recordBtn;
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
-    
+
     private BrightnessDataProcess dataProcessor = new BrightnessDataProcess();
-    
+
     // dynamic adjust brightness
     class BrightnessDataProcess implements EMCameraDataProcessor {
         byte yDelta = 0;
@@ -125,7 +129,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
         DemoHelper.getInstance().isVideoCalling = true;
         callType = 1;
-        
+
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
@@ -174,12 +178,13 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         nickTextView.setText(username);
 
         // local surfaceview
-        localSurface = (EMLocalSurfaceView) findViewById(R.id.local_surface);
+        localSurface = (EMCallSurfaceView) findViewById(R.id.local_surface);
+        localSurface.setOnClickListener(this);
         localSurface.setZOrderMediaOverlay(true);
         localSurface.setZOrderOnTop(true);
 
         // remote surfaceview
-        oppositeSurface = (EMOppositeSurfaceView) findViewById(R.id.opposite_surface);
+        oppositeSurface = (EMCallSurfaceView) findViewById(R.id.opposite_surface);
 
         // set call state listener
         addCallStateListener();
@@ -216,7 +221,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             ringtone.play();
             EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
         }
-        
+
         final int MAKE_CALL_TIMEOUT = 50 * 1000;
         handler.removeCallbacks(timeoutHangup);
         handler.postDelayed(timeoutHangup, MAKE_CALL_TIMEOUT);
@@ -226,12 +231,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
         EMClient.getInstance().callManager().setCameraDataProcessor(dataProcessor);
     }
-    
+
     class YDeltaSeekBarListener implements SeekBar.OnSeekBarChangeListener {
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            dataProcessor.setYDelta((byte)(20.0f * (progress - 50) / 50.0f)); 
+            dataProcessor.setYDelta((byte)(20.0f * (progress - 50) / 50.0f));
         }
 
         @Override
@@ -241,7 +246,19 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
         }
-        
+    }
+
+    /**
+     * 切换通话界面，这里就是交换本地和远端画面控件设置，以达到通话大小画面的切换
+     */
+    private void changeCallView() {
+        if (surfaceState == 0) {
+            surfaceState = 1;
+            EMClient.getInstance().callManager().setSurfaceView(oppositeSurface, localSurface);
+        } else {
+            surfaceState = 0;
+            EMClient.getInstance().callManager().setSurfaceView(localSurface, oppositeSurface);
+        }
     }
 
     /**
@@ -276,6 +293,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     break;
 
                 case ACCEPTED: // call is accepted
+                    surfaceState = 0;
                     handler.removeCallbacks(timeoutHangup);
                     runOnUiThread(new Runnable() {
 
@@ -390,13 +408,13 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             String s3 = getResources().getString(R.string.The_other_party_is_not_online);
                             String s4 = getResources().getString(R.string.The_other_is_on_the_phone_please);
                             String s5 = getResources().getString(R.string.The_other_party_did_not_answer);
-                            
+
                             String s6 = getResources().getString(R.string.hang_up);
                             String s7 = getResources().getString(R.string.The_other_is_hang_up);
                             String s8 = getResources().getString(R.string.did_not_answer);
                             String s9 = getResources().getString(R.string.Has_been_cancelled);
                             String s10 = getResources().getString(R.string.Refused);
-                            
+
                             if (fError == CallError.REJECTED) {
                                 callingState = CallingState.BEREFUSED;
                                 callStateTextView.setText(s1);
@@ -456,7 +474,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         };
         EMClient.getInstance().callManager().addCallStateChangeListener(callStateListener);
     }
-    
+
     void removeCallStateListener() {
         EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
     }
@@ -464,6 +482,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+        case R.id.local_surface:
+            changeCallView();
+            break;
         case R.id.btn_refuse_call: // decline the call
             isRefused = true;
             refuseBtn.setEnabled(false);
@@ -476,7 +497,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             openSpeakerOn();
             if (ringtone != null)
                 ringtone.stop();
-            
+
             callStateTextView.setText("answering...");
             handler.sendEmptyMessage(MSG_CALL_ANSWER);
             handsFreeImage.setImageResource(R.drawable.em_icon_speaker_on);
@@ -555,7 +576,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     bottomContainer.setVisibility(View.GONE);
                     topContainer.setVisibility(View.GONE);
                     oppositeSurface.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFill);
-                    
+
                 } else {
                     bottomContainer.setVisibility(View.VISIBLE);
                     topContainer.setVisibility(View.VISIBLE);
@@ -583,7 +604,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             break;
         }
     }
-    
+
     @Override
     protected void onDestroy() {
         DemoHelper.getInstance().isVideoCalling = false;
@@ -604,7 +625,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         callDruationText = chronometer.getText().toString();
         super.onBackPressed();
     }
-    
+
     /**
      * for debug & testing, you can remove this when release
      */
@@ -621,9 +642,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     + "\nLost：" + callHelper.getVideoLostRate()
                                     + "\nLocalBitrate：" + callHelper.getLocalBitrate()
                                     + "\nRemoteBitrate：" + callHelper.getRemoteBitrate());
-                            
+
                             ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
-                                    ? R.string.direct_call : R.string.relay_call);                            
+                                    ? R.string.direct_call : R.string.relay_call);
                         }
                     });
                     try {
@@ -634,11 +655,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             }
         }, "CallMonitor").start();
     }
-    
+
     void stopMonitor(){
         monitor = false;
     }
-    
+
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
@@ -650,7 +671,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             }
         }
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();

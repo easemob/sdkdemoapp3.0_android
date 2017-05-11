@@ -6,10 +6,23 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true" >
 
-    <com.hyphenate.media.EMOppositeSurfaceView
-        android:id="@+id/opposite_surface"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:id="@+id/layout_surface_container"
+        >
+        <com.hyphenate.media.EMCallSurfaceView
+            android:id="@+id/opposite_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.hyphenate.media.EMCallSurfaceView
+            android:id="@+id/local_surface"
+            android:layout_width="100dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="96dp"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/ll_btns"
@@ -65,7 +78,7 @@
         </LinearLayout>
 
            <!-- 演示视频录制功能 -->
-        <Button 
+        <Button
             android:id="@+id/btn_record_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,8 +86,8 @@
             android:layout_below="@id/ll_top_container"
             android:visibility="gone"
             />
-        
-        <Button 
+
+        <Button
             android:id="@+id/btn_switch_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -104,8 +117,8 @@
             android:text="暂停视频"
             android:layout_below="@id/btn_record_video"
             /> -->
-        
-        <TextView 
+
+        <TextView
             android:id="@+id/tv_call_monitor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -115,12 +128,6 @@
             android:textSize="12sp"
             android:layout_marginBottom="6dp"
             />
-        <com.hyphenate.media.EMLocalSurfaceView
-            android:id="@+id/local_surface"
-            android:layout_width="100dp"
-            android:layout_height="120dp"
-            android:layout_above="@+id/ll_surface_baseline"
-            android:layout_alignParentRight="true" />
 
         <LinearLayout
             android:id="@+id/ll_surface_baseline"
@@ -242,7 +249,7 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-    
+
     <TextView
         android:id="@+id/tv_network_status"
         android:layout_width="wrap_content"
