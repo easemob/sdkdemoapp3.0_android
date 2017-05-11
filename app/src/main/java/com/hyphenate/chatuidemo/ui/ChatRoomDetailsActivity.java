@@ -102,8 +102,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
         RelativeLayout changeChatRoomNameLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_name);
         RelativeLayout changeChatRoomDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_detail);
-        changeChatRoomNameLayout.setVisibility(isCurrentOwner(room) ? View.VISIBLE : View.GONE);
-        changeChatRoomDescriptionLayout.setVisibility(isCurrentAdmin(room) ? View.VISIBLE : View.GONE);
 
 		// adapter data list
 		List<String> ownerAdminList = new ArrayList<String>();
@@ -353,11 +351,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 							Button destroyButton = (Button)ChatRoomDetailsActivity.this.findViewById(R.id.btn_destroy_chatroom);
 							destroyButton.setVisibility(EMClient.getInstance().getCurrentUser().equals(room.getOwner()) ?
 									View.VISIBLE : View.GONE);
-
-                            RelativeLayout changeChatRoomNameLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_name);
-                            RelativeLayout changeChatRoomDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_detail);
-                            changeChatRoomNameLayout.setVisibility(isCurrentOwner(room) ? View.VISIBLE : View.GONE);
-                            changeChatRoomDescriptionLayout.setVisibility(isCurrentAdmin(room) ? View.VISIBLE : View.GONE);
                         }
 					});
 				}
@@ -414,11 +407,13 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 				}, true).show();
 				break;
 			case R.id.rl_change_chatroom_name:
-				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getName()).putExtra("title", "edit chat room name"),
+				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getName()).putExtra("title", "edit chat room name").
+								putExtra("editable", isCurrentOwner(room)),
 						REQUEST_CODE_EDIT_CHAT_ROOM_NAME);
 				break;
 			case R.id.rl_change_chatroom_detail:
-				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getDescription()).putExtra("title", "edit chat room detail"),
+				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getDescription()).putExtra("title", "edit chat room detail").
+								putExtra("editable", isCurrentOwner(room)),
 						REQUEST_CODE_EDIT_CHAT_ROOM_DESCRIPTION);
 				break;
 			default:
