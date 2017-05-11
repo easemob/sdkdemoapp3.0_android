@@ -20,6 +20,7 @@
             android:id="@+id/local_surface"
             android:layout_width="100dp"
             android:layout_height="120dp"
+            android:layout_marginTop="96dp"
             android:layout_alignParentRight="true" />
     </RelativeLayout>
 
@@ -77,7 +78,7 @@
         </LinearLayout>
 
            <!-- 演示视频录制功能 -->
-        <Button 
+        <Button
             android:id="@+id/btn_record_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,8 +86,8 @@
             android:layout_below="@id/ll_top_container"
             android:visibility="gone"
             />
-        
-        <Button 
+
+        <Button
             android:id="@+id/btn_switch_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -116,8 +117,8 @@
             android:text="暂停视频"
             android:layout_below="@id/btn_record_video"
             /> -->
-        
-        <TextView 
+
+        <TextView
             android:id="@+id/tv_call_monitor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -248,7 +249,7 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-    
+
     <TextView
         android:id="@+id/tv_network_status"
         android:layout_width="wrap_content"
