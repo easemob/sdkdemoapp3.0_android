@@ -201,8 +201,10 @@
     <string name="is_modify_the_group_description">正在修改群详情..</string>
     <string name="Modify_the_group_name_successful">修改群名称成功</string>
     <string name="Modify_the_group_description_successful">修改群详情成功</string>
+    <string name="Modify_the_group_extension_successful">修改群扩展成功</string>
     <string name="change_the_group_name_failed_please">改变群名称失败，请检查网络或稍后重试</string>
     <string name="change_the_group_description_failed_please">修改群详情失败，请检查网络或稍后重试</string>
+    <string name="change_the_group_extension_failed_please">修改群扩展失败，请检查网络或稍后重试</string>
     <string name="Are_moving_to_blacklist">正在移入至黑名单</string>
     <string name="failed_to_move_into">移入黑名单失败,请检查网络或稍后重试</string>
     <string name="Exit_the_group_chat_failure">退出群聊失败:</string>
@@ -294,6 +296,7 @@
     <string name="Move_into_the_blacklist_new">移入到黑名单</string>
     <string name="Change_the_group_name">改变群名称</string>
     <string name="change_the_group_description">改变群描述</string>
+    <string name="change_the_group_extension">改变群扩展</string>
     <string name="Sync_Groups_From_Server">从服务器下载群聊信息</string>
     
     <string name="update_contact_list">更新联系人列表</string>
@@ -313,6 +316,9 @@
     <string name="adaptive_video_encode">视频自适应码率编码</string>
     <string name="offline_call_push">通话离线推送</string>
     <string name="group_id">群ID</string>
+    <string name="group_announcement">公告</string>
+    <string name="share_files">共享文件</string>
+    <string name="upload_files">上传</string>
     <string name="move_out_backlist">移出黑名单</string>
     <string name="input_new_nick_hint">输入新昵称</string>
     <string name="search_pubic_group">搜索公开群</string>

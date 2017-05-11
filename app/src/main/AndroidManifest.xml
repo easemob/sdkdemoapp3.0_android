@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hyphenate.chatuidemo"
-    android:versionCode="38"
-    android:versionName="3.3.1">
+    android:versionCode="39"
+    android:versionName="3.3.2">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -45,6 +45,7 @@
         android:protectionLevel="signatureOrSystem" />
 
     <uses-permission android:name="com.hyphenate.chatuidemo.permission.MIPUSH_RECEIVE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".DemoApplication"
@@ -228,6 +229,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateVisible" />
+        <activity android:name=".ui.SharedFilesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            />
         <activity
             android:name="com.hyphenate.easeui.ui.EaseShowVideoActivity"
             android:screenOrientation="portrait"
@@ -276,9 +281,6 @@
             android:name=".ui.OfflinePushSettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
-
-
-
         <activity
             android:name=".ui.CallOptionActivity"
             android:screenOrientation="portrait"
@@ -322,40 +324,41 @@
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
 
-        <!--钱包版红包SDK需额外几个Activity的声明-->
+        <!-- 钱包版红包SDK需额外几个Activity的声明 -->
 
-        <!--&lt;!&ndash; WebView相关 &ndash;&gt;-->
-        <!--<activity-->
-        <!--android:name="com.easemob.redpacketui.ui.activity.RPWebViewActivity"-->
-        <!--android:screenOrientation="portrait"-->
-        <!--android:theme="@style/horizontal_slide"-->
-        <!--android:windowSoftInputMode="adjustResize|stateHidden" />-->
-        <!--&lt;!&ndash; 零钱 &ndash;&gt;-->
-        <!--<activity-->
-        <!--android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity"-->
-        <!--android:screenOrientation="portrait"-->
-        <!--android:theme="@style/horizontal_slide"-->
-        <!--android:windowSoftInputMode="adjustResize|stateHidden" />-->
-        <!--&lt;!&ndash; 绑定银行卡 &ndash;&gt;-->
-        <!--<activity-->
-        <!--android:name="com.easemob.redpacketui.ui.activity.RPBankCardActivity"-->
-        <!--android:screenOrientation="portrait"-->
-        <!--android:theme="@style/horizontal_slide"-->
-        <!--android:windowSoftInputMode="adjustPan|stateHidden" />-->
-        <!--&lt;!&ndash;转账页面&ndash;&gt;-->
-        <!--<activity-->
-            <!--android:name="com.easemob.redpacketui.ui.activity.RPTransferActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:windowSoftInputMode="adjustPan|stateVisible"/>-->
-        <!--&lt;!&ndash;转账详情页面&ndash;&gt;-->
-        <!--<activity-->
-            <!--android:name="com.easemob.redpacketui.ui.activity.RPTransferDetailActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:windowSoftInputMode="adjustPan|stateHidden"/>-->
-        <!---->
-         <!--红包相关Activity end-->
+
+        <!-- &lt;!&ndash; WebView相关 &ndash;&gt; -->
+        <!-- <activity -->
+        <!-- android:name="com.easemob.redpacketui.ui.activity.RPWebViewActivity" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/horizontal_slide" -->
+        <!-- android:windowSoftInputMode="adjustResize|stateHidden" /> -->
+        <!-- &lt;!&ndash; 零钱 &ndash;&gt; -->
+        <!-- <activity -->
+        <!-- android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/horizontal_slide" -->
+        <!-- android:windowSoftInputMode="adjustResize|stateHidden" /> -->
+        <!-- &lt;!&ndash; 绑定银行卡 &ndash;&gt; -->
+        <!-- <activity -->
+        <!-- android:name="com.easemob.redpacketui.ui.activity.RPBankCardActivity" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/horizontal_slide" -->
+        <!-- android:windowSoftInputMode="adjustPan|stateHidden" /> -->
+        <!-- &lt;!&ndash;转账页面&ndash;&gt; -->
+        <!-- <activity -->
+        <!-- android:name="com.easemob.redpacketui.ui.activity.RPTransferActivity" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:windowSoftInputMode="adjustPan|stateVisible"/> -->
+        <!-- &lt;!&ndash;转账详情页面&ndash;&gt; -->
+        <!-- <activity -->
+        <!-- android:name="com.easemob.redpacketui.ui.activity.RPTransferDetailActivity" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:windowSoftInputMode="adjustPan|stateHidden"/> -->
+        <!--  -->
+        <!-- 红包相关Activity end -->
 
 
         <!-- 开机自启动服务 -->
@@ -517,6 +520,7 @@
             android:name="io.fabric.ApiKey"
             android:value="6b54bd4edc63eba3ef59d69f8e0a5070bea384e2" />
         <!-- fabric end -->
+
     </application>
 
 </manifest>

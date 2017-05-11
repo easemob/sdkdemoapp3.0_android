@@ -183,6 +183,43 @@
                     android:layout_marginRight="10dip"
                     android:background="#E6E6E6" />
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/layout_group_announcement"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:background="@drawable/em_btn_bottom_selector">
+
+                <TextView
+                    android:id="@+id/tv_group_announcement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="20dip"
+                    android:text="@string/group_announcement"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/tv_group_announcement_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@id/tv_group_announcement"
+                    android:ellipsize="end"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:background="#E6E6E6" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/clear_all_history"
