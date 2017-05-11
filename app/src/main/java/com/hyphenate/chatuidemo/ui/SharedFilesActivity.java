@@ -123,6 +123,10 @@ public class SharedFilesActivity extends BaseActivity {
      */
     private void showFile(EMMucSharedFile file){
         final File localFile = new File(PathUtil.getInstance().getFilePath(), file.getFileName());
+        if(localFile.exists()){
+            openFile(localFile);
+            return;
+        }
 
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Downloading...");
@@ -149,6 +153,7 @@ public class SharedFilesActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                pd.dismiss();
                                 Toast.makeText(SharedFilesActivity.this, "Download file fails, " + error, Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -164,7 +169,6 @@ public class SharedFilesActivity extends BaseActivity {
     private void openFile(File file){
         if(file != null && file.exists()){
             FileUtils.openFile(file, this);
-            return;
         }
     }
 
@@ -352,7 +356,7 @@ public class SharedFilesActivity extends BaseActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             TextView textView = new TextView(getContext());
-            textView.setPadding(20,20,20,20);
+            textView.setPadding(20,40,20,40);
             textView.setText(list.get(position).getFileName());
 
             return textView;
