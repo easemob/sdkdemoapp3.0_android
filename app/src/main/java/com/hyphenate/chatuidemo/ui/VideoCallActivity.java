@@ -293,6 +293,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     break;
 
                 case ACCEPTED: // call is accepted
+                    surfaceState = 0;
                     handler.removeCallbacks(timeoutHangup);
                     runOnUiThread(new Runnable() {
 
