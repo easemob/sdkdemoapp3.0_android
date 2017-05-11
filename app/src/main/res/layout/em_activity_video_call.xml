@@ -6,10 +6,22 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true" >
 
-    <com.hyphenate.media.EMOppositeSurfaceView
-        android:id="@+id/opposite_surface"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:id="@+id/layout_surface_container"
+        >
+        <com.hyphenate.media.EMCallSurfaceView
+            android:id="@+id/opposite_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.hyphenate.media.EMCallSurfaceView
+            android:id="@+id/local_surface"
+            android:layout_width="100dp"
+            android:layout_height="120dp"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/ll_btns"
@@ -115,12 +127,6 @@
             android:textSize="12sp"
             android:layout_marginBottom="6dp"
             />
-        <com.hyphenate.media.EMLocalSurfaceView
-            android:id="@+id/local_surface"
-            android:layout_width="100dp"
-            android:layout_height="120dp"
-            android:layout_above="@+id/ll_surface_baseline"
-            android:layout_alignParentRight="true" />
 
         <LinearLayout
             android:id="@+id/ll_surface_baseline"
