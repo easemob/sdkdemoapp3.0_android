@@ -151,9 +151,9 @@ public class DemoHelper {
 	public void init(Context context) {
 	    demoModel = new DemoModel(context);
 	    EMOptions options = initChatOptions();
-        options.setRestServer("103.241.230.122:31111");
-        options.setIMServer("103.241.230.122");
-        options.setImPort(31097);
+        //options.setRestServer("103.241.230.122:31111");
+        //options.setIMServer("103.241.230.122");
+        //options.setImPort(31097);
 
 	    //use default options if options is null
 		if (EaseUI.getInstance().init(context, options)) {
