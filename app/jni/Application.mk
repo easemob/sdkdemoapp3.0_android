@@ -5,4 +5,3 @@ APP_ABI := armeabi-v7a
 APP_STL := gnustl_static
 LOCAL_MULTILIB := 32
 APP_PLATFORM:=11
-T

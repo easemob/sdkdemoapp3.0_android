@@ -798,7 +798,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onMuteListAdded(final String chatRoomId, final List<String> mutes, final long expireTime) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -815,7 +815,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onMuteListRemoved(final String chatRoomId, final List<String> mutes) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
 				final StringBuilder sb = new StringBuilder();
 				for (String mute : mutes) {
 					sb.append(mute + " ");
@@ -832,7 +832,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onAdminAdded(final String chatRoomId, final String admin) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -845,7 +845,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onAdminRemoved(final String chatRoomId, final String admin) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -858,7 +858,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onOwnerChanged(final String chatRoomId, final String newOwner, final String oldOwner) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -870,8 +870,15 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		}
 
 		@Override
-		public void onAnnouncementChanged(String chatRoomId, String announcement) {
-			announcementText.setText(announcement);
+		public void onAnnouncementChanged(String chatRoomId, final String announcement) {
+			if (chatRoomId.equals(roomId)) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						announcementText.setText(announcement);
+					}
+				});
+			}
 		}
 	}
 }

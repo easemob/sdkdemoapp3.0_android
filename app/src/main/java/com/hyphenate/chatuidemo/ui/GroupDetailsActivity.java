@@ -1324,22 +1324,38 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 		@Override
 		public void onAnnouncementChanged(String groupId, final String announcement) {
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					announcementText.setText(announcement);
-				}
-			});
+			if(groupId.equals(GroupDetailsActivity.this.groupId)) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						announcementText.setText(announcement);
+					}
+				});
+			}
 		}
 
 		@Override
-		public void onSharedFileAdded(String groupId, EMMucSharedFile sharedFile) {
-
+		public void onSharedFileAdded(String groupId, final EMMucSharedFile sharedFile) {
+			if(groupId.equals(GroupDetailsActivity.this.groupId)) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(GroupDetailsActivity.this, "Group added a share file", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
 		}
 
 		@Override
 		public void onSharedFileDeleted(String groupId, String fileId) {
-
+			if(groupId.equals(GroupDetailsActivity.this.groupId)) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(GroupDetailsActivity.this, "Group deleted a share file", Toast.LENGTH_SHORT).show();
+					}
+				});
+			}
 		}
 	}
 
