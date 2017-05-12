@@ -141,9 +141,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				|| !group.getOwner().equals(EMClient.getInstance().getCurrentUser())) {
 			exitBtn.setVisibility(View.GONE);
 			deleteBtn.setVisibility(View.GONE);
-			changeGroupNameLayout.setVisibility(View.GONE);
-			changeGroupDescriptionLayout.setVisibility(View.GONE);
-			changeGroupExtension.setVisibility(View.GONE);
 		}
 		// show dismiss button if you are owner of group
 		if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
@@ -594,11 +591,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				break;
 
 			case R.id.rl_change_group_name:
-				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", group.getGroupName()), REQUEST_CODE_EDIT_GROUPNAME);
+				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", group.getGroupName()).putExtra("editable", isCurrentOwner(group)),
+						REQUEST_CODE_EDIT_GROUPNAME);
 				break;
 			case R.id.rl_change_group_description:
 				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", group.getDescription()).
-						putExtra("title", getString(R.string.change_the_group_description)), REQUEST_CODE_EDIT_GROUP_DESCRIPTION);
+						putExtra("title", getString(R.string.change_the_group_description)).putExtra("editable", isCurrentOwner(group)),
+						REQUEST_CODE_EDIT_GROUP_DESCRIPTION);
 				break;
 			case R.id.rl_search:
 				startActivity(new Intent(this, GroupSearchMessageActivity.class).putExtra("groupId", groupId));
@@ -615,7 +614,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				break;
 			case R.id.rl_change_group_extension:
 				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", group.getExtension()).
-						putExtra("title", getString(R.string.change_the_group_extension)), REQUEST_CODE_EDIT_GROUP_DESCRIPTION);
+						putExtra("title", getString(R.string.change_the_group_extension)).putExtra("editable", isCurrentOwner(group)), REQUEST_CODE_EDIT_GROUP_EXTENSION);
 				break;
 			default:
 				break;
@@ -1209,8 +1208,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							boolean isOwner = isCurrentOwner(group);
 							exitBtn.setVisibility(isOwner ? View.GONE : View.VISIBLE);
 							deleteBtn.setVisibility(isOwner ? View.VISIBLE : View.GONE);
-							changeGroupNameLayout.setVisibility(isOwner ? View.VISIBLE : View.GONE);
-							changeGroupDescriptionLayout.setVisibility(isOwner ? View.VISIBLE : View.GONE);
 						}
 					});
 
