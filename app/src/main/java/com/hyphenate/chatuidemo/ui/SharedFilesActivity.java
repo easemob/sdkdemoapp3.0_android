@@ -307,7 +307,10 @@ public class SharedFilesActivity extends BaseActivity {
 
     private void uploadFileWithUri(Uri uri) {
         String filePath = getFilePath(uri);
-        if (filePath == null) return;
+        if (filePath == null) {
+            Toast.makeText(this, "only support upload image when android os >= 4.4", Toast.LENGTH_SHORT).show();
+            return;
+        }
         File file = new File(filePath);
         if (!file.exists()) {
             Toast.makeText(this, R.string.File_does_not_exist, Toast.LENGTH_SHORT).show();
