@@ -13,9 +13,11 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -31,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.EMChatRoomChangeListener;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
@@ -102,8 +106,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
         RelativeLayout changeChatRoomNameLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_name);
         RelativeLayout changeChatRoomDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_detail);
-        changeChatRoomNameLayout.setVisibility(isCurrentOwner(room) ? View.VISIBLE : View.GONE);
-        changeChatRoomDescriptionLayout.setVisibility(isCurrentAdmin(room) ? View.VISIBLE : View.GONE);
 
 		// adapter data list
 		List<String> ownerAdminList = new ArrayList<String>();
@@ -307,8 +309,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		new Thread(new Runnable() {
 			public void run() {
 				try {
-					room = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId, true);
-
 					room = EMClient.getInstance().chatroomManager().fetchChatRoomFromServer(roomId);
 					adminList.clear();
 					adminList.addAll(room.getAdminList());
@@ -324,6 +324,12 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					memberList.remove(room.getOwner());
 					memberList.removeAll(adminList);
 
+					try {
+						EMClient.getInstance().chatroomManager().fetchChatRoomAnnouncement(roomId);
+					} catch (HyphenateException e) {
+						e.printStackTrace();
+					}
+
 					// those two operation need authentication, may failed
 					muteList.clear();
 					muteList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomMuteList(roomId, 0, 500).keySet());
@@ -331,8 +337,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					blackList.addAll(EMClient.getInstance().chatroomManager().fetchChatRoomBlackList(roomId, 0, 500));
 					memberList.removeAll(muteList);
 					memberList.removeAll(blackList);
-
-					EMClient.getInstance().chatroomManager().fetchChatRoomAnnouncement(roomId);
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -353,11 +357,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 							Button destroyButton = (Button)ChatRoomDetailsActivity.this.findViewById(R.id.btn_destroy_chatroom);
 							destroyButton.setVisibility(EMClient.getInstance().getCurrentUser().equals(room.getOwner()) ?
 									View.VISIBLE : View.GONE);
-
-                            RelativeLayout changeChatRoomNameLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_name);
-                            RelativeLayout changeChatRoomDescriptionLayout = (RelativeLayout) findViewById(R.id.rl_change_chatroom_detail);
-                            changeChatRoomNameLayout.setVisibility(isCurrentOwner(room) ? View.VISIBLE : View.GONE);
-                            changeChatRoomDescriptionLayout.setVisibility(isCurrentAdmin(room) ? View.VISIBLE : View.GONE);
                         }
 					});
 				}
@@ -414,12 +413,17 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 				}, true).show();
 				break;
 			case R.id.rl_change_chatroom_name:
-				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getName()).putExtra("title", "edit chat room name"),
+				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getName()).putExtra("title", "edit chat room name").
+								putExtra("editable", isCurrentOwner(room)),
 						REQUEST_CODE_EDIT_CHAT_ROOM_NAME);
 				break;
 			case R.id.rl_change_chatroom_detail:
-				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getDescription()).putExtra("title", "edit chat room detail"),
+				startActivityForResult(new Intent(this, EditActivity.class).putExtra("data", room.getDescription()).putExtra("title", "edit chat room detail").
+								putExtra("editable", isCurrentOwner(room)),
 						REQUEST_CODE_EDIT_CHAT_ROOM_DESCRIPTION);
+				break;
+			case R.id.layout_group_announcement:
+				showAnnouncementDialog();
 				break;
 			default:
 				break;
@@ -448,6 +452,77 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
         }
     }
 
+	private void showAnnouncementDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.group_announcement);
+		if(room.getOwner().equals(EMClient.getInstance().getCurrentUser()) ||
+				room.getAdminList().contains(EMClient.getInstance().getCurrentUser())){
+			final EditText et = new EditText(ChatRoomDetailsActivity.this);
+			et.setText(room.getAnnouncement());
+			builder.setView(et);
+			builder.setNegativeButton(R.string.cancel,null)
+					.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							final String text = et.getText().toString();
+							if(!text.equals(room.getAnnouncement())){
+								dialog.dismiss();
+								updateAnnouncement(text);
+							}
+						}
+					});
+		}else{
+			builder.setMessage(room.getAnnouncement());
+			builder.setPositiveButton(R.string.ok, null);
+		}
+		builder.show();
+	}
+	/**
+	 * update with the passed announcement
+	 * @param announcement
+	 */
+	private void updateAnnouncement(final String announcement) {
+		createProgressDialog();
+		progressDialog.setMessage("Updating ...");
+		progressDialog.show();
+
+		EMClient.getInstance().groupManager().asyncUpdateGroupAnnouncement(roomId, announcement,
+				new EMCallBack() {
+					@Override
+					public void onSuccess() {
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								progressDialog.dismiss();
+								announcementText.setText(announcement);
+							}
+						});
+					}
+
+					@Override
+					public void onError(int code, final String error) {
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								progressDialog.dismiss();
+								Toast.makeText(ChatRoomDetailsActivity.this, "update fail," + error, Toast.LENGTH_LONG).show();
+							}
+						});
+					}
+
+					@Override
+					public void onProgress(int progress, String status) {
+					}
+				});
+
+	}
+	private ProgressDialog createProgressDialog(){
+		if (progressDialog == null) {
+			progressDialog = new ProgressDialog(ChatRoomDetailsActivity.this);
+			progressDialog.setCanceledOnTouchOutside(false);
+		}
+		return progressDialog;
+	}
 
     private class OwnerAdminAdapter extends ArrayAdapter<String> {
 		private int res;
@@ -798,7 +873,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onMuteListAdded(final String chatRoomId, final List<String> mutes, final long expireTime) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -815,7 +890,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onMuteListRemoved(final String chatRoomId, final List<String> mutes) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
 				final StringBuilder sb = new StringBuilder();
 				for (String mute : mutes) {
 					sb.append(mute + " ");
@@ -832,7 +907,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onAdminAdded(final String chatRoomId, final String admin) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -845,7 +920,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onAdminRemoved(final String chatRoomId, final String admin) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -858,7 +933,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		@Override
 		public void onOwnerChanged(final String chatRoomId, final String newOwner, final String oldOwner) {
-			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -870,8 +945,14 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		}
 
 		@Override
-		public void onAnnouncementChanged(String chatRoomId, String announcement) {
-			announcementText.setText(announcement);
+		public void onAnnouncementChanged(String chatRoomId, final String announcement) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId))
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					announcementText.setText(announcement);
+				}
+			});
 		}
 	}
 }

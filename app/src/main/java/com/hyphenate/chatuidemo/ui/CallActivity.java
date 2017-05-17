@@ -23,9 +23,6 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
-import com.hyphenate.media.EMCallSurfaceView;
-import com.hyphenate.media.EMLocalSurfaceView;
-import com.hyphenate.media.EMOppositeSurfaceView;
 import com.hyphenate.util.EMLog;
 
 @SuppressLint("Registered")

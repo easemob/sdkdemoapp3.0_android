@@ -90,11 +90,16 @@ public class MainActivity extends BaseActivity {
 		    String packageName = getPackageName();
 		    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		    if (!pm.isIgnoringBatteryOptimizations(packageName)) {
-		        Intent intent = new Intent();
-		        intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-		        intent.setData(Uri.parse("package:" + packageName));
-		        startActivity(intent);
-		    }
+				try {
+					//some device doesn't has activity to handle this intent
+					//so add try catch
+					Intent intent = new Intent();
+					intent.setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+					intent.setData(Uri.parse("package:" + packageName));
+					startActivity(intent);
+				} catch (Exception e) {
+				}
+			}
 		}
 		
 		//make sure activity will not in background if user is logged into another device or removed

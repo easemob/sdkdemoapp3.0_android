@@ -15,9 +15,11 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.util.DensityUtil;
 import com.hyphenate.util.FileUtils;
 import com.hyphenate.util.PathUtil;
 
@@ -39,7 +42,7 @@ public class SharedFilesActivity extends BaseActivity {
     private static final int REQUEST_CODE_SELECT_FILE = 1;
     private ListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private int pageSize = 50;
+    private int pageSize = 10;
     private int pageNum = 1;
 
     private String groupId;
@@ -47,6 +50,9 @@ public class SharedFilesActivity extends BaseActivity {
     private List<EMMucSharedFile> fileList;
 
     private FilesAdapter adapter;
+    private boolean hasMoreData;
+    private boolean isLoading;
+    private ProgressBar loadmorePB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,7 @@ public class SharedFilesActivity extends BaseActivity {
 
         listView = (ListView) findViewById(R.id.list_view);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
+        loadmorePB = (ProgressBar) findViewById(R.id.pb_load_more);
         registerForContextMenu(listView);
 
         showFileList(true);
@@ -71,27 +78,62 @@ public class SharedFilesActivity extends BaseActivity {
                 showFile(fileList.get(position));
             }
         });
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                int lasPos = view.getLastVisiblePosition();
+                if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                        && hasMoreData
+                        && !isLoading
+                        && lasPos == fileList.size() -1){
+                    showFileList(false);
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                pageNum = 1;
                 showFileList(true);
             }
         });
 
     }
 
-    private void showFileList(boolean isRefresh) {
-        swipeRefreshLayout.setRefreshing(true);
+    private void showFileList(final boolean isRefresh) {
+        isLoading = true;
+        if(isRefresh){
+            pageNum = 1;
+            swipeRefreshLayout.setRefreshing(true);
+        }else{
+            pageNum++;
+            loadmorePB.setVisibility(View.VISIBLE);
+        }
         EMClient.getInstance().groupManager().asyncFetchGroupSharedFileList(groupId, pageNum, pageSize, new EMValueCallBack<List<EMMucSharedFile>>() {
             @Override
             public void onSuccess(final List<EMMucSharedFile> value) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                        fileList.clear();
+                        if(isRefresh) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }else{
+                            loadmorePB.setVisibility(View.INVISIBLE);
+                        }
+                        isLoading = false;
+                        if(isRefresh)
+                            fileList.clear();
                         fileList.addAll(value);
+                        if(value.size() == pageSize){
+                            hasMoreData = true;
+                        }else{
+                            hasMoreData = false;
+                        }
                         if(adapter == null){
                             adapter = new FilesAdapter(SharedFilesActivity.this, 1, fileList);
                             listView.setAdapter(adapter);
@@ -265,7 +307,10 @@ public class SharedFilesActivity extends BaseActivity {
 
     private void uploadFileWithUri(Uri uri) {
         String filePath = getFilePath(uri);
-        if (filePath == null) return;
+        if (filePath == null) {
+            Toast.makeText(this, "only support upload image when android os >= 4.4", Toast.LENGTH_SHORT).show();
+            return;
+        }
         File file = new File(filePath);
         if (!file.exists()) {
             Toast.makeText(this, R.string.File_does_not_exist, Toast.LENGTH_SHORT).show();
@@ -346,6 +391,8 @@ public class SharedFilesActivity extends BaseActivity {
     private static class FilesAdapter extends ArrayAdapter<EMMucSharedFile> {
 
         List<EMMucSharedFile> list;
+        int widthPadding = DensityUtil.dip2px(getContext(),10f);
+        int heightPadding = DensityUtil.dip2px(getContext(),20f);
 
         public FilesAdapter(@NonNull Context context, int resource, @NonNull List<EMMucSharedFile> objects) {
             super(context, resource, objects);
@@ -356,7 +403,7 @@ public class SharedFilesActivity extends BaseActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             TextView textView = new TextView(getContext());
-            textView.setPadding(20,40,20,40);
+            textView.setPadding(widthPadding,heightPadding,widthPadding,heightPadding);
             textView.setText(list.get(position).getFileName());
 
             return textView;
