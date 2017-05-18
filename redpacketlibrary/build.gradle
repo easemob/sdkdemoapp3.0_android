@@ -46,5 +46,10 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    //使用不同版本的红包SDK只需要修改依赖和清单文件即可，无需修改相关方法。
+    //支付宝版红包SDK使用下面的远程依赖
+    compile 'com.hyphenate.redpacket:redpacket-alipay:1.1.2'
+    //钱包版红包SDK使用下面的远程依赖
+    //compile 'com.hyphenate.redpacket:redpacket-wallet:3.4.4'
     compile project(':EaseUI')
 }

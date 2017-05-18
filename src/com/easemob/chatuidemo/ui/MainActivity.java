@@ -49,7 +49,7 @@ import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.easeui.EaseConstant;
 import com.easemob.easeui.utils.EaseCommonUtils;
 import com.easemob.redpacketsdk.constant.RPConstant;
-import com.easemob.redpacketui.utils.RedPacketUtil;
+import com.easemob.redpacket.utils.RedPacketUtil;
 import com.easemob.util.NetUtils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;

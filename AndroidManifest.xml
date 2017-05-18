@@ -9,7 +9,7 @@
     <uses-sdk
         android:minSdkVersion="9"
         android:targetSdkVersion="19"
-        tools:overrideLibrary="com.easemob.redpacketui"
+        tools:overrideLibrary="com.easemob.redpacket, com.easemob.redpacketui"
         />
 
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -361,28 +361,7 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"
             />
-        <!-- WebView相关 -->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPWebViewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            />
-        <!-- 零钱 -->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            />
-        <!-- 绑定银行卡 -->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPBankCardActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+
         <!-- 群成员列表页 -->
         <activity
             android:name="com.easemob.redpacketui.ui.activity.RPGroupMemberActivity"
@@ -398,20 +377,51 @@
             android:screenOrientation="behind"
             android:windowSoftInputMode="adjustResize|stateHidden"
             />
-        <!-- 转账页面 -->
+        <!-- 支付宝h5授权页面 -->
         <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPTransferActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateVisible"
-            />
-        <!-- 转账详情页面 -->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPTransferDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+            android:name="com.alipay.sdk.app.H5AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
+
+        <!--钱包版红包SDK需额外几个Activity的声明-->
+        <!--&lt;!&ndash; WebView相关 &ndash;&gt;-->
+        <!--<activity-->
+            <!--android:name="com.easemob.redpacketui.ui.activity.RPWebViewActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/horizontal_slide"-->
+            <!--android:windowSoftInputMode="adjustResize|stateHidden"-->
+            <!--/>-->
+        <!--&lt;!&ndash; 零钱 &ndash;&gt;-->
+        <!--<activity-->
+            <!--android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity"-->
+            <!--android:configChanges="orientation|keyboardHidden|screenSize"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/horizontal_slide"-->
+            <!--android:windowSoftInputMode="adjustResize|stateHidden"-->
+            <!--/>-->
+        <!--&lt;!&ndash; 绑定银行卡 &ndash;&gt;-->
+        <!--<activity-->
+            <!--android:name="com.easemob.redpacketui.ui.activity.RPBankCardActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/horizontal_slide"-->
+            <!--android:windowSoftInputMode="adjustPan|stateHidden"-->
+            <!--/>-->
+        <!--&lt;!&ndash; 转账页面 &ndash;&gt;-->
+        <!--<activity-->
+            <!--android:name="com.easemob.redpacketui.ui.activity.RPTransferActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/horizontal_slide"-->
+            <!--android:windowSoftInputMode="adjustPan|stateVisible"-->
+            <!--/>-->
+        <!--&lt;!&ndash; 转账详情页面 &ndash;&gt;-->
+        <!--<activity-->
+            <!--android:name="com.easemob.redpacketui.ui.activity.RPTransferDetailActivity"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@style/horizontal_slide"-->
+            <!--android:windowSoftInputMode="adjustPan|stateHidden"-->
+            <!--/>-->
         <!--红包相关界面end-->
 
         <!-- 设置环信应用的appkey -->

@@ -2,5 +2,5 @@ include ':EaseUI', ':redpacketlibrary'
 project(':EaseUI').projectDir = new File('../easeui')
 
 //release时需要把下面的include相关注释掉
-include ':easemobchatsdk'
-project(':easemobchatsdk').projectDir = new File('../emclient-android/easemobchatsdk')
+//include ':easemobchatsdk'
+//project(':easemobchatsdk').projectDir = new File('../emclient-android/easemobchatsdk')

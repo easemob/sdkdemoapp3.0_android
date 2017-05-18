@@ -4,12 +4,6 @@
     <string name="msg_someone_take_red_packet">%1$s领取了你的红包</string>
     <string name="easemob_red_packet">环信红包</string>
     <string name="attach_red_packet">红包</string>
-    <string name="attach_transfer_money">转账</string>
     <string name="change">零钱</string>
     <string name="exclusive_red_packet">专属红包</string>
-    <string name="easemob_transfer_packet">[转账]转账%1$s元</string>
-    <string name="easemob_transfer_msg_sent">对方已收到转账</string>
-    <string name="easemob_transfer_msg_received">已收到对方转账</string>
-    <string name="msg_transfer_to_you">[转账]向你转账%1$s元</string>
-    <string name="msg_transfer_from_you">[转账]转账%1$s元</string>
 </resources>
