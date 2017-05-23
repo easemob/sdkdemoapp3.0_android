@@ -21,17 +21,6 @@ android {
         multiDexEnabled true
     }
 
-    Properties props = new Properties()
-    props.load(new FileInputStream('../emclient-android/signing.properties'))
-    signingConfigs { //gradle assembleRelease
-        release {
-            storeFile file('../../emclient-android/hyphenate.keystore')
-            keyAlias props['KEY_ALIAS']
-            keyPassword props['KEY_PASSWORD']
-            storePassword props['KEYSTORE_PASSWORD']
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
