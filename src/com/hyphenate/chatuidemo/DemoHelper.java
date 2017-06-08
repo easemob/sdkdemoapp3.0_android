@@ -69,6 +69,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.hyphenate.chat.EMOptions.EM_CRYPTO_ALGORITHM.EM_CRYPTO_AES;
+
 public class DemoHelper {
     /**
      * data sync listener
@@ -259,6 +261,8 @@ public class DemoHelper {
         options.setRequireAck(true);
         // set if you need delivery ack
         options.setRequireDeliveryAck(false);
+        //设置消息加密
+        options.setCryptoAlgorithm(EM_CRYPTO_AES);
 
         //you need apply & set your own id if you want to use google cloud messaging.
         options.setGCMNumber("324169311137");
