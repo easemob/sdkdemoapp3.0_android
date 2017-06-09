@@ -105,7 +105,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
         changeChatRoomDescriptionLayout.setVisibility(isCurrentAdmin(room) ? View.VISIBLE : View.GONE);
 
 		// adapter data list
-		List<String> ownerAdminList = new ArrayList<>();
+		List<String> ownerAdminList = new ArrayList<String>();
 		ownerAdminList.add(room.getOwner());
 		ownerAdminList.addAll(room.getAdminList());
 		ownerAdminAdapter = new OwnerAdminAdapter(this, R.layout.em_grid_owner, ownerAdminList);
@@ -114,7 +114,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
 		// normal member list & black list && mute list
 		// most show 500 members, most show 500 mute members, most show 500 black list
-		List<String> memberMuteBlockList = new ArrayList<>();
+		List<String> memberMuteBlockList = new ArrayList<String>();
 		memberMuteBlockList.addAll(room.getMemberList());
 		membersAdapter = new MemberAdapter(this, R.layout.em_grid_owner, memberMuteBlockList);
 		EaseExpandGridView userGridView = (EaseExpandGridView) findViewById(R.id.gridview);
@@ -553,30 +553,30 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 										EMClient.getInstance().chatroomManager().removeChatRoomAdmin(roomId, operationUserId);
 										break;
                                     case R.id.menu_item_remove_member: {
-                                            List<String> list = new ArrayList<>();
+                                            List<String> list = new ArrayList<String>();
                                             list.add(operationUserId);
                                             EMClient.getInstance().chatroomManager().removeChatRoomMembers(roomId, list);
                                         }
                                         break;
 									case R.id.menu_item_add_to_blacklist: {
-											List<String> list = new ArrayList<>();
+											List<String> list = new ArrayList<String>();
 											list.add(operationUserId);
 											EMClient.getInstance().chatroomManager().blockChatroomMembers(roomId, list);
 										}
 										break;
 									case R.id.menu_item_remove_from_blacklist: {
-											List<String> list1 = new ArrayList<>();
+											List<String> list1 = new ArrayList<String>();
 											list1.add(operationUserId);
 											EMClient.getInstance().chatroomManager().unblockChatRoomMembers(roomId, list1);
 										}
 										break;
 									case R.id.menu_item_mute:
-										List<String> muteMembers = new ArrayList<>();
+										List<String> muteMembers = new ArrayList<String>();
 										muteMembers.add(operationUserId);
 										EMClient.getInstance().chatroomManager().muteChatRoomMembers(roomId, muteMembers, 20 * 60 * 1000);
 										break;
 									case R.id.menu_item_unmute:
-										List<String> list = new ArrayList<>();
+										List<String> list = new ArrayList<String>();
 										list.add(operationUserId);
 										EMClient.getInstance().chatroomManager().unMuteChatRoomMembers(roomId, list);
 										break;

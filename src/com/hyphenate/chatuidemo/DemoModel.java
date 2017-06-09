@@ -291,6 +291,38 @@ public class DemoModel {
         return PreferenceManager.getInstance().getCustomAppkey();
     }
 
+    public void enableCustomDnsUrl(boolean enable) {
+        PreferenceManager.getInstance().enableCustomDnsUrl(enable);
+    }
+
+    public boolean isCustomDnsUrlEnabled() {
+        return PreferenceManager.getInstance().isCustomDnsUrlEnabled();
+    }
+
+    public void setCustomDnsUrl(String dnsUrl) {
+        PreferenceManager.getInstance().setCustomDnsUrl(dnsUrl);
+    }
+
+    public String getCutomDnsUrl() {
+        return PreferenceManager.getInstance().getCustomDnsUrl();
+    }
+
+    public void enableCustomDnsIp(boolean enable) {
+        PreferenceManager.getInstance().enableCustomDnsIp(enable);
+    }
+
+    public boolean isCustomDnsIpEnabled() {
+        return PreferenceManager.getInstance().isCustomDnsIpEnabled();
+    }
+
+    public void setCustomDnsIp(String dnsIp) {
+        PreferenceManager.getInstance().setCustomDnsIp(dnsIp);
+    }
+
+    public String getCutomDnsIp() {
+        return PreferenceManager.getInstance().getCustomDnsIp();
+    }
+
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,

@@ -94,7 +94,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private RelativeLayout rl_switch_auto_accept_group_invitation;
     private RelativeLayout rl_switch_adaptive_video_encode;
 	private RelativeLayout rl_custom_appkey;
-    private RelativeLayout rl_custom_server;
+	private RelativeLayout rl_custom_dnsUrl;
+//	private RelativeLayout rl_custom_dnsIp;
+	private RelativeLayout rl_custom_server;
 	RelativeLayout rl_push_settings;
 	private LinearLayout   ll_call_option;
 	private RelativeLayout rl_mail_log;
@@ -118,10 +120,15 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton switch_adaptive_video_encode;
 	private EaseSwitchButton customServerSwitch;
 	private EaseSwitchButton customAppkeySwitch;
-    private DemoModel settingsModel;
+	private EaseSwitchButton customDnsUrlSwitch;
+//	private EaseSwitchButton customDnsIpSwitch;
+	private DemoModel settingsModel;
     private EMOptions chatOptions;
 	private EditText edit_custom_appkey;
-	
+	private EditText edit_custom_dnsUrl;
+//	private EditText edit_custom_dnsIp;
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.em_fragment_conversation_settings, container, false);
@@ -141,6 +148,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_auto_accept_group_invitation = (RelativeLayout) getView().findViewById(R.id.rl_switch_auto_accept_group_invitation);
 		rl_switch_adaptive_video_encode = (RelativeLayout) getView().findViewById(R.id.rl_switch_adaptive_video_encode);
 		rl_custom_appkey = (RelativeLayout) getView().findViewById(R.id.rl_custom_appkey);
+		rl_custom_dnsUrl = (RelativeLayout) getView().findViewById(R.id.rl_custom_dnsUrl);
+//		rl_custom_dnsIp = (RelativeLayout) getView().findViewById(R.id.rl_custom_dnsIp);
 		rl_custom_server = (RelativeLayout) getView().findViewById(R.id.rl_custom_server);
 		rl_push_settings = (RelativeLayout) getView().findViewById(R.id.rl_push_settings);
 
@@ -163,6 +172,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		}
 		customServerSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_custom_server);
 		customAppkeySwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_custom_appkey);
+		customDnsUrlSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_custom_dnsUrl);
+//		customDnsIpSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_custom_dnsIp);
 
 		textview1 = (TextView) getView().findViewById(R.id.textview1);
 		textview2 = (TextView) getView().findViewById(R.id.textview2);
@@ -172,6 +183,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		llDiagnose=(LinearLayout) getView().findViewById(R.id.ll_diagnose);
 		pushNick=(LinearLayout) getView().findViewById(R.id.ll_set_push_nick);
 		edit_custom_appkey = (EditText) getView().findViewById(R.id.edit_custom_appkey);
+		edit_custom_dnsUrl = (EditText) getView().findViewById(R.id.edit_custom_dnsUrl);
+//		edit_custom_dnsIp = (EditText) getView().findViewById(R.id.edit_custom_dnsIp);
+
 
 		settingsModel = DemoHelper.getInstance().getModel();
 		chatOptions = EMClient.getInstance().getOptions();
@@ -183,6 +197,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_vibrate.setOnClickListener(this);
 		rl_switch_speaker.setOnClickListener(this);
 		customAppkeySwitch.setOnClickListener(this);
+		customDnsUrlSwitch.setOnClickListener(this);
+//		customDnsIpSwitch.setOnClickListener(this);
 		customServerSwitch.setOnClickListener(this);
 		rl_custom_server.setOnClickListener(this);
 		logoutBtn.setOnClickListener(this);
@@ -264,9 +280,24 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		} else {
 			customAppkeySwitch.closeSwitch();
 		}
+		if (settingsModel.isCustomDnsUrlEnabled()) {
+			customDnsUrlSwitch.openSwitch();
+		} else {
+			customDnsUrlSwitch.closeSwitch();
+		}
+//		if (settingsModel.isCustomDnsIpEnabled()) {
+//			customDnsIpSwitch.openSwitch();
+//		} else {
+//			customDnsIpSwitch.closeSwitch();
+//		}
 		edit_custom_appkey.setEnabled(settingsModel.isCustomAppkeyEnabled());
+		edit_custom_dnsUrl.setEnabled(settingsModel.isCustomDnsUrlEnabled());
+//		edit_custom_dnsIp.setEnabled(settingsModel.isCustomDnsIpEnabled());
 
 		edit_custom_appkey.setText(settingsModel.getCutomAppkey());
+		edit_custom_dnsUrl.setText(settingsModel.getCutomDnsUrl());
+//		edit_custom_dnsIp.setText(settingsModel.getCutomDnsIp());
+
 		edit_custom_appkey.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -277,6 +308,26 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				PreferenceManager.getInstance().setCustomAppkey(s.toString());
 			}
 		});
+		edit_custom_dnsUrl.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			@Override
+			public void afterTextChanged(Editable s) {
+				PreferenceManager.getInstance().setCustomDnsUrl(s.toString());
+			}
+		});
+//		edit_custom_dnsIp.addTextChangedListener(new TextWatcher() {
+//			@Override
+//			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+//			@Override
+//			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+//			@Override
+//			public void afterTextChanged(Editable s) {
+//				PreferenceManager.getInstance().setCustomDnsIp(s.toString());
+//			}
+//		});
 	}
 
 	
@@ -416,6 +467,26 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				}
 				edit_custom_appkey.setEnabled(customAppkeySwitch.isSwitchOpen());
 				break;
+			case R.id.switch_custom_dnsUrl:
+				if(customDnsUrlSwitch.isSwitchOpen()){
+					customDnsUrlSwitch.closeSwitch();
+					settingsModel.enableCustomDnsUrl(false);
+				}else{
+					customDnsUrlSwitch.openSwitch();
+					settingsModel.enableCustomDnsUrl(true);
+				}
+				edit_custom_dnsUrl.setEnabled(customDnsUrlSwitch.isSwitchOpen());
+				break;
+//			case R.id.switch_custom_dnsIp:
+//				if(customDnsIpSwitch.isSwitchOpen()){
+//					customDnsIpSwitch.closeSwitch();
+//					settingsModel.enableCustomDnsIp(false);
+//				}else{
+//					customDnsIpSwitch.openSwitch();
+//					settingsModel.enableCustomDnsIp(true);
+//				}
+//				edit_custom_dnsIp.setEnabled(customDnsIpSwitch.isSwitchOpen());
+//				break;
 			case R.id.rl_custom_server:
 				startActivity(new Intent(getActivity(), SetServersActivity.class));
 				break;
