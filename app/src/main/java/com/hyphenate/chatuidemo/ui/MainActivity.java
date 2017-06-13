@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacket.utils.RedPacketUtil;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMClientListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -142,9 +143,20 @@ public class MainActivity extends BaseActivity {
 		
 		
 		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
+		EMClient.getInstance().addClientListener(clientListener);
 		//debug purpose only
         registerInternalDebugReceiver();
 	}
+
+	EMClientListener clientListener = new EMClientListener() {
+		@Override
+		public void onMigrate2x(boolean success) {
+			Toast.makeText(MainActivity.this, "onUpgradeFrom 2.x to 3.x " + (success ? "success" : "fail"), Toast.LENGTH_LONG).show();
+			if (success) {
+				refreshUIWithMessage();
+			}
+		}
+	};
 
 	@TargetApi(23)
 	private void requestPermissions() {
@@ -423,6 +435,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onStop() {
 		EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+		EMClient.getInstance().removeClientListener(clientListener);
 		DemoHelper sdkHelper = DemoHelper.getInstance();
 		sdkHelper.popActivity(this);
 
