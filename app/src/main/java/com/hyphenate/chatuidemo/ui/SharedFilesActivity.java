@@ -316,11 +316,6 @@ public class SharedFilesActivity extends BaseActivity {
             Toast.makeText(this, R.string.File_does_not_exist, Toast.LENGTH_SHORT).show();
             return;
         }
-        //limit the size < 10M
-        if (file.length() > 10 * 1024 * 1024) {
-            Toast.makeText(this, R.string.The_file_is_not_greater_than_10_m, Toast.LENGTH_SHORT).show();
-            return;
-        }
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Uploading...");

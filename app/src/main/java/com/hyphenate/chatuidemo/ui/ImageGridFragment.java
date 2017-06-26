@@ -177,12 +177,6 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			startActivityForResult(intent, 100);
 		}else{
 			VideoEntity vEntty=mList.get(position-1);
-			// limit the size to 10M
-			if (vEntty.size > 1024 * 1024 * 10) {
-				String st = getResources().getString(R.string.temporary_does_not);
-				Toast.makeText(getActivity(), st, Toast.LENGTH_SHORT).show();
-				return;
-			}
 			Intent intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);
 			getActivity().setResult(Activity.RESULT_OK, intent);
 			getActivity().finish();
