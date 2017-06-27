@@ -40,6 +40,7 @@ import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
+import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
@@ -314,12 +315,12 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					adminList.addAll(room.getAdminList());
 
 					// page size set to 20 is convenient for testing, should be applied to big value
-					List<String> result;
+					EMCursorResult<String> result = new EMCursorResult<String>();
 					memberList.clear();
 					do {
-						result = EMClient.getInstance().chatroomManager().fetchChatRoomMembers(roomId, 0, 20);
-						memberList.addAll(result);
-					} while (result != null && result.size() == 20);
+						result = EMClient.getInstance().chatroomManager().fetchChatRoomMembers(roomId, result.getCursor(), 20);
+						memberList.addAll(result.getData());
+					} while (result != null && result.getData().size() == 20);
 
 					memberList.remove(room.getOwner());
 					memberList.removeAll(adminList);
