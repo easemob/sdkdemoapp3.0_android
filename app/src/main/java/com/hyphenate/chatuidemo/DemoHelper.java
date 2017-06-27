@@ -588,7 +588,7 @@ public class DemoHelper {
             msg.setGroupName(groupName);
             msg.setReason(reason);
             msg.setGroupInviter(inviter);
-            Log.d(TAG, "receive invitation to join the group：" + groupName);
+            showToast("receive invitation to join the group：" + groupName);
             msg.setStatus(InviteMesageStatus.GROUPINVITATION);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
@@ -619,7 +619,7 @@ public class DemoHelper {
             msg.setGroupName(_group == null ? groupId : _group.getGroupName());
             msg.setReason(reason);
             msg.setGroupInviter(invitee);
-            Log.d(TAG, invitee + "Accept to join the group：" + _group == null ? groupId : _group.getGroupName());
+            showToast(invitee + "Accept to join the group：" + _group == null ? groupId : _group.getGroupName());
             msg.setStatus(InviteMesageStatus.GROUPINVITATION_ACCEPTED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
@@ -648,7 +648,7 @@ public class DemoHelper {
             msg.setGroupName(group.getGroupName());
             msg.setReason(reason);
             msg.setGroupInviter(invitee);
-            Log.d(TAG, invitee + "Declined to join the group：" + group.getGroupName());
+            showToast(invitee + "Declined to join the group：" + group.getGroupName());
             msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
@@ -658,12 +658,14 @@ public class DemoHelper {
         public void onUserRemoved(String groupId, String groupName) {
             //user is removed from group
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+            showToast("current user removed, groupId:" + groupId);
         }
 
         @Override
         public void onGroupDestroyed(String groupId, String groupName) {
         	// group is dismissed, 
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+            showToast("group destroyed, groupId:" + groupId);
         }
 
         @Override
@@ -676,7 +678,7 @@ public class DemoHelper {
             msg.setGroupId(groupId);
             msg.setGroupName(groupName);
             msg.setReason(reason);
-            Log.d(TAG, applyer + " Apply to join group：" + groupName);
+            showToast(applyer + " Apply to join group：" + groupId);
             msg.setStatus(InviteMesageStatus.BEAPPLYED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
@@ -699,12 +701,14 @@ public class DemoHelper {
             // notify the accept message
             getNotifier().vibrateAndPlayTone(msg);
 
+            showToast("request to join accepted, groupId:" + groupId);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
 
         @Override
         public void onRequestToJoinDeclined(String groupId, String groupName, String decliner, String reason) {
             // your application was declined, we do nothing here in demo
+            showToast("request to join declined, groupId:" + groupId);
         }
 
         @Override
@@ -722,7 +726,7 @@ public class DemoHelper {
             EMClient.getInstance().chatManager().saveMessage(msg);
             // notify invitation message
             getNotifier().vibrateAndPlayTone(msg);
-            EMLog.d(TAG, "onAutoAcceptInvitationFromGroup groupId:" + groupId);
+            showToast("auto accept invitation from groupId:" + groupId);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
 
@@ -764,34 +768,33 @@ public class DemoHelper {
         
         @Override
         public void onMemberJoined(String groupId, String member) {
-            EMLog.d(TAG, "onMemberJoined");
             showToast("onMemberJoined: " + member);
         }
         
         @Override
         public void onMemberExited(String groupId, String member) {
-            EMLog.d(TAG, "onMemberJoined");
             showToast("onMemberExited: " + member);
         }
 
         @Override
         public void onAnnouncementChanged(String groupId, String announcement) {
-
+            showToast("onAnnouncementChanged, groupId" + groupId);
         }
 
         @Override
         public void onSharedFileAdded(String groupId, EMMucSharedFile sharedFile) {
-
+            showToast("onSharedFileAdded, groupId" + groupId);
         }
 
         @Override
         public void onSharedFileDeleted(String groupId, String fileId) {
-
+            showToast("onSharedFileDeleted, groupId" + groupId);
         }
         // ============================= group_reform new add api end
     }
 
     void showToast(final String message) {
+        Log.d(TAG, "receive invitation to join the group：" + message);
         if (handler != null) {
             Message msg = Message.obtain(handler, 0, message);
             handler.sendMessage(msg);
@@ -833,6 +836,7 @@ public class DemoHelper {
             localUsers.putAll(toAddUsers);
 
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+            showToast("onContactAdded:" + username);
         }
 
         @Override
@@ -845,6 +849,7 @@ public class DemoHelper {
             EMClient.getInstance().chatManager().deleteConversation(username, false);
 
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+            showToast("onContactDeleted:" + username);
         }
 
         @Override
@@ -861,7 +866,7 @@ public class DemoHelper {
             msg.setFrom(username);
             msg.setTime(System.currentTimeMillis());
             msg.setReason(reason);
-            Log.d(TAG, username + "apply to be your friend,reason: " + reason);
+            showToast(username + "apply to be your friend,reason: " + reason);
             // set invitation status
             msg.setStatus(InviteMesageStatus.BEINVITEED);
             notifyNewInviteMessage(msg);
@@ -880,7 +885,7 @@ public class DemoHelper {
             InviteMessage msg = new InviteMessage();
             msg.setFrom(username);
             msg.setTime(System.currentTimeMillis());
-            Log.d(TAG, username + "accept your request");
+            showToast(username + " accept your to be friend");
             msg.setStatus(InviteMesageStatus.BEAGREED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
@@ -889,7 +894,7 @@ public class DemoHelper {
         @Override
         public void onFriendRequestDeclined(String username) {
             // your request was refused
-            Log.d(username, username + " refused to your request");
+            showToast(username + " refused to be your friend");
         }
     }
     
