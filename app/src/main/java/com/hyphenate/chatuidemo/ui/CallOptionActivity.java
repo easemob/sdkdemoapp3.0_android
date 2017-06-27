@@ -235,7 +235,8 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
 
     void initAudioSampleRateSpinner(int spinnerId) {
         final List<String> sampleRateList = new ArrayList<String>();
-        sampleRateList.add("Not set");
+        // Notice: some of devices may not support 48KHz, but 16KHz is widely accepted
+        sampleRateList.add("Not set(prefer 16KHz)");
         sampleRateList.add("8000Hz");
         sampleRateList.add("11025Hz");
         sampleRateList.add("22050Hz");
