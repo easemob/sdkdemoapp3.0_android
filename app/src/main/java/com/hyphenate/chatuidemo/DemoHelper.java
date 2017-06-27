@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -63,7 +64,9 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DemoHelper {
     /**
@@ -132,7 +135,11 @@ public class DemoHelper {
 
     private boolean isGroupAndContactListenerRegisted;
 
-	private DemoHelper() {
+    protected android.os.Handler handler;
+
+    Queue<String> msgQueue = new ConcurrentLinkedQueue<>();
+
+    private DemoHelper() {
 	}
 
 	public synchronized static DemoHelper getInstance() {
@@ -785,17 +792,26 @@ public class DemoHelper {
     }
 
     void showToast(final String message) {
-        Message msg = Message.obtain(handler, 0, message);
-        handler.sendMessage(msg);
+        if (handler != null) {
+            Message msg = Message.obtain(handler, 0, message);
+            handler.sendMessage(msg);
+        } else {
+            msgQueue.add(message);
+        }
     }
 
-    protected android.os.Handler handler = new android.os.Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String str = (String)msg.obj;
-            Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
+    public void initHandler(Looper looper) {
+        handler = new android.os.Handler(looper) {
+            @Override
+            public void handleMessage(Message msg) {
+                String str = (String)msg.obj;
+                Toast.makeText(appContext, str, Toast.LENGTH_LONG).show();
+            }
+        };
+        while (!msgQueue.isEmpty()) {
+            showToast(msgQueue.remove());
         }
-    };
+    }
     
     /***
      * 好友变化listener
