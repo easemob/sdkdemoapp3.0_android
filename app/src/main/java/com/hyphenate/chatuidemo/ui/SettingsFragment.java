@@ -33,7 +33,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.redpacket.utils.RedPacketUtil;
 import com.easemob.redpacketui.utils.RPRedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -98,6 +97,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private RelativeLayout rl_custom_server;
 	RelativeLayout rl_push_settings;
 	private LinearLayout   ll_call_option;
+	private LinearLayout   ll_multi_device;
 	private RelativeLayout rl_mail_log;
 
 	/**
@@ -147,6 +147,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_push_settings = (RelativeLayout) getView().findViewById(R.id.rl_push_settings);
 
 		ll_call_option = (LinearLayout) getView().findViewById(R.id.ll_call_option);
+		ll_multi_device = (LinearLayout) getView().findViewById(R.id.ll_multi_device_management);
 
 		rl_mail_log = (RelativeLayout) getView().findViewById(R.id.rl_mail_log);
 		
@@ -197,6 +198,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 //		rl_switch_offline_call_push.setOnClickListener(this);
 		rl_push_settings.setOnClickListener(this);
 		ll_call_option.setOnClickListener(this);
+		ll_multi_device.setOnClickListener(this);
 		llChange.setOnClickListener(this);
 		rl_mail_log.setOnClickListener(this);
 
@@ -398,6 +400,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				break;
 			case R.id.ll_call_option:
 				startActivity(new Intent(getActivity(), CallOptionActivity.class));
+				break;
+			case R.id.ll_multi_device_management:
+				startActivity(new Intent(getActivity(), MultiDeviceActivity.class));
 				break;
 			case R.id.ll_user_profile:
 				startActivity(new Intent(getActivity(), UserProfileActivity.class).putExtra("setting", true)

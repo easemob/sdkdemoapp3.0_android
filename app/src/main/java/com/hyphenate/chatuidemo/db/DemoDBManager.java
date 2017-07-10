@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.domain.InviteMessage;
-import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMesageStatus;
+import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMessageStatus;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -200,7 +200,7 @@ public class DemoDBManager {
         }
         return id;
     }
-    
+
     /**
      * update message
      * @param msgId
@@ -241,25 +241,76 @@ public class DemoDBManager {
                 msg.setTime(time);
                 msg.setGroupInviter(groupInviter);
                 
-                if(status == InviteMesageStatus.BEINVITEED.ordinal())
-                    msg.setStatus(InviteMesageStatus.BEINVITEED);
-                else if(status == InviteMesageStatus.BEAGREED.ordinal())
-                    msg.setStatus(InviteMesageStatus.BEAGREED);
-                else if(status == InviteMesageStatus.BEREFUSED.ordinal())
-                    msg.setStatus(InviteMesageStatus.BEREFUSED);
-                else if(status == InviteMesageStatus.AGREED.ordinal())
-                    msg.setStatus(InviteMesageStatus.AGREED);
-                else if(status == InviteMesageStatus.REFUSED.ordinal())
-                    msg.setStatus(InviteMesageStatus.REFUSED);
-                else if(status == InviteMesageStatus.BEAPPLYED.ordinal())
-                    msg.setStatus(InviteMesageStatus.BEAPPLYED);
-                else if(status == InviteMesageStatus.GROUPINVITATION.ordinal())
-                    msg.setStatus(InviteMesageStatus.GROUPINVITATION);
-                else if(status == InviteMesageStatus.GROUPINVITATION_ACCEPTED.ordinal())
-                    msg.setStatus(InviteMesageStatus.GROUPINVITATION_ACCEPTED);
-                else if(status == InviteMesageStatus.GROUPINVITATION_DECLINED.ordinal())
-                    msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
-                
+                if(status == InviteMessageStatus.BEINVITEED.ordinal())
+                    msg.setStatus(InviteMessageStatus.BEINVITEED);
+                else if(status == InviteMessageStatus.BEAGREED.ordinal())
+                    msg.setStatus(InviteMessageStatus.BEAGREED);
+                else if(status == InviteMessageStatus.BEREFUSED.ordinal())
+                    msg.setStatus(InviteMessageStatus.BEREFUSED);
+                else if(status == InviteMessageStatus.AGREED.ordinal())
+                    msg.setStatus(InviteMessageStatus.AGREED);
+                else if(status == InviteMessageStatus.REFUSED.ordinal())
+                    msg.setStatus(InviteMessageStatus.REFUSED);
+                else if(status == InviteMessageStatus.BEAPPLYED.ordinal())
+                    msg.setStatus(InviteMessageStatus.BEAPPLYED);
+                else if(status == InviteMessageStatus.GROUPINVITATION.ordinal())
+                    msg.setStatus(InviteMessageStatus.GROUPINVITATION);
+                else if(status == InviteMessageStatus.GROUPINVITATION_ACCEPTED.ordinal())
+                    msg.setStatus(InviteMessageStatus.GROUPINVITATION_ACCEPTED);
+                else if(status == InviteMessageStatus.GROUPINVITATION_DECLINED.ordinal())
+                    msg.setStatus(InviteMessageStatus.GROUPINVITATION_DECLINED);
+
+                else if(status == InviteMessageStatus.MULTI_DEVICE_CONTACT_ACCEPT.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_CONTACT_ACCEPT);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_CONTACT_DECLINE.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_CONTACT_DECLINE);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_CONTACT_ADD.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_CONTACT_ADD);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_CONTACT_BAN.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_CONTACT_BAN);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_CONTACT_ALLOW.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_CONTACT_ALLOW);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_CREATE.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_CREATE);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_DESTROY.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_DESTROY);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_JOIN.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_JOIN);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_LEAVE.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_LEAVE);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_ACCEPT.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_ACCEPT);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_DECLINE.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_APPLY_DECLINE);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_ACCEPT.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_ACCEPT);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_DECLINE.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_INVITE_DECLINE);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_KICK.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_KICK);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_BAN.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_BAN);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_ALLOW.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_ALLOW);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_BLOCK.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_BLOCK);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_UNBLOCK.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_UNBLOCK);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_ASSIGN_OWNER.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_ASSIGN_OWNER);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_ADMIN.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_ADMIN);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_ADMIN.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_ADMIN);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_MUTE.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_ADD_MUTE);
+                else if(status == InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_MUTE.ordinal())
+                    msg.setStatus(InviteMessageStatus.MULTI_DEVICE_GROUP_REMOVE_MUTE);
+
                 msgs.add(msg);
             }
             cursor.close();
@@ -275,6 +326,29 @@ public class DemoDBManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db.isOpen()){
             db.delete(InviteMessgeDao.TABLE_NAME, InviteMessgeDao.COLUMN_NAME_FROM + " = ?", new String[]{from});
+        }
+    }
+
+    /**
+     * delete invitation message
+     * @param groupId
+     */
+    synchronized public void deleteGroupMessage(String groupId){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if(db.isOpen()){
+            db.delete(InviteMessgeDao.TABLE_NAME, InviteMessgeDao.COLUMN_NAME_GROUP_ID + " = ?", new String[]{groupId});
+        }
+    }
+
+    /**
+     * delete invitation message
+     * @param groupId
+     */
+    synchronized public void deleteGroupMessage(String groupId, String from){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if(db.isOpen()){
+            db.delete(InviteMessgeDao.TABLE_NAME, InviteMessgeDao.COLUMN_NAME_GROUP_ID + " = ? AND " + InviteMessgeDao.COLUMN_NAME_FROM + " = ? ",
+                    new String[]{groupId, from});
         }
     }
     

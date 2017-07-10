@@ -42,7 +42,7 @@
     <string name="prompt">Prompt</string>
     <string name="clear_records">Clear conversation?</string>
     <string name="clear_all_records">Clear all conversations？</string>
-    <string name="location_recv">[%1$s location]</string>
+    <string name="location_recv">[%s location]</string>
     <string name="location_message">The location information</string>
     <string name="recording_video">Record video</string>
     <string name="stop_record">Stop record</string>
@@ -69,7 +69,7 @@
     <string name="network_isnot_available">The network is not available</string>
     <string name="recoding_fail">The recording failure, please try again！</string>
     <string name="select_contacts">Select the contact</string>
-    <string name="confirm_forward_to">Confirm to forward to：%1$s ?</string>
+    <string name="confirm_forward_to">Confirm to forward to：%s ?</string>
     <string name="logout">Logout</string>
     <string name="logout_hint">Logout will never clear the chat history, this account can be used on next login</string>
     <string name="exit_group_hint">The group messages will not be received after exiting the group</string>
@@ -104,6 +104,7 @@
     <string name="diagnose">Debug</string>
     <string name="push_nick">nickname for Notification</string>
     <string name="call_option">Call Option</string>
+    <string name="multi_device_management">Multi device management</string>
     <string name="Current_version">SDK version</string>
     <string name="Not_Set">Not set</string>
     <string name="Upload_the_log">Uploading the log</string>
@@ -146,8 +147,8 @@
     <string name="Please_enter_a_username">Please enter a username</string>
     <string name="is_down_please_wait">Downloading video, please wait a moment</string>
     <string name="Exit_the_group_chat">Exit the group</string>
-    <string name="accept_join_group">accept join group:</string>
-    <string name="refuse_join_group">refuse join group:</string>
+    <string name="accept_join_group">%s accept join group</string>
+    <string name="refuse_join_group">%s refuse join group</string>
     <string name="at_your_in_group">%s @ you in group chat</string>
     <string name="emojicon_test_name">Test</string>
     
@@ -380,4 +381,35 @@
     <string name="Failed_to_create_chat_room">Failed to create chat room</string>
 
     <string name="mail_log_title">Send mail, contain logs</string>
+
+    <string name="multi_device_contact_accept">Accept contact %s in other device</string>
+    <string name="multi_device_contact_decline">Decline contact %s in other device</string>
+    <string name="multi_device_contact_add">Send contact invite to %s in other device</string>
+    <string name="multi_device_contact_ban">add %s into black list in other device</string>
+    <string name="multi_device_contact_allow">remove %s from black list in other device</string>
+
+
+    <string name="multi_device_group_create">Create group [remote]</string>
+    <string name="multi_device_group_destroy">Destroy group [remote]</string>
+    <string name="multi_device_group_join">Join group [remote]</string>
+    <string name="multi_device_group_leave">Leave group [remote]</string>
+    <string name="multi_device_group_apply">Apply to join group [remote]</string>
+    <string name="multi_device_group_apply_accept">Accept %s join group application[remote]</string>
+    <string name="multi_device_group_apply_decline">Decline %s join group application[remote]</string>
+    <string name="multi_device_group_invite">Invite %s join group [remote]</string>
+    <string name="multi_device_group_invite_accept">Accept %s join group invitation[remote]</string>
+    <string name="multi_device_group_invite_decline">Decline %s join group invitation[remote]</string>
+
+    <string name="multi_device_group_kick">Kick %s from group [remote]</string>
+    <string name="multi_device_group_ban">Add %s into blacklist in group [remote]</string>
+    <string name="multi_device_group_allow">Remove %s from blacklist in group [remote]</string>
+    <string name="multi_device_group_block">Block group [remote]</string>
+    <string name="multi_device_group_unblock">Unblock group [remote]</string>
+    <string name="multi_device_group_assign_owner">Assign group owner to %s [remote]</string>
+    <string name="multi_device_group_add_admin">Add %s as group admin [remote]</string>
+    <string name="multi_device_group_remove_admin">Deprive %s group admin role [remote]</string>
+    <string name="multi_device_group_add_mute">Mute %s from group [remote]</string>
+    <string name="multi_device_group_remove_mute">UnMute %s from group [remote]</string>
+
+    <string name="multi_device_logged_in_device_kick_item">kick online device</string>
 </resources>
