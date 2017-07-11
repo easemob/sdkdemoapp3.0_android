@@ -13,10 +13,13 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.MotionEvent;
@@ -34,6 +37,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.adapter.GroupAdapter;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 
 import java.util.List;
@@ -136,7 +140,27 @@ public class GroupsActivity extends BaseActivity {
 				return false;
 			}
 		});
-		
+
+		registerGroupChangeReceiver();
+	}
+
+	void registerGroupChangeReceiver() {
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
+		BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				String action = intent.getAction();
+				if(action.equals(Constant.ACTION_GROUP_CHANAGED)){
+					if (EaseCommonUtils.getTopActivity(GroupsActivity.this).equals(GroupsActivity.class.getName())) {
+						refresh();
+					}
+				}
+			}
+		};
+		LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+		broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
 	}
 
 	@Override

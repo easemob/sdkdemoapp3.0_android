@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+     <item
+        android:id="@+id/menu_item_multi_device_kick"
+        android:title="@string/multi_device_logged_in_device_kick_item"/>
+</menu>

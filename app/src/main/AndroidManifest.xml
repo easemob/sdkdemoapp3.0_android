@@ -255,6 +255,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".ui.MultiDeviceActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/horizontal_slide"
+                  android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:name=".ui.NamePasswordActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/horizontal_slide"/>
 
         <!-- iOS offline push nick -->
         <activity
