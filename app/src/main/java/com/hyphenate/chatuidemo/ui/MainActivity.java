@@ -34,12 +34,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacket.utils.RedPacketUtil;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMClientListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
+import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
@@ -102,14 +103,17 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 		}
-		
+
 		//make sure activity will not in background if user is logged into another device or removed
-		if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
-		    DemoHelper.getInstance().logout(false,null);
+		if (getIntent() != null &&
+				(getIntent().getBooleanExtra(Constant.ACCOUNT_REMOVED, false) ||
+						getIntent().getBooleanExtra(Constant.ACCOUNT_KICKED_BY_CHANGE_PASSWORD, false) ||
+						getIntent().getBooleanExtra(Constant.ACCOUNT_KICKED_BY_OTHER_DEVICE, false))) {
+			DemoHelper.getInstance().logout(false,null);
 			finish();
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
-		} else if (savedInstanceState != null && savedInstanceState.getBoolean("isConflict", false)) {
+		} else if (getIntent() != null && getIntent().getBooleanExtra("isConflict", false)) {
 			finish();
 			startActivity(new Intent(this, LoginActivity.class));
 			return;
@@ -144,6 +148,7 @@ public class MainActivity extends BaseActivity {
 		
 		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 		EMClient.getInstance().addClientListener(clientListener);
+		EMClient.getInstance().addMultiDeviceListener(new MyMultiDeviceListener());
 		//debug purpose only
         registerInternalDebugReceiver();
 	}
@@ -311,7 +316,7 @@ public class MainActivity extends BaseActivity {
 				}
 				//end of red packet code
 			}
-        };
+	         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
 	
@@ -339,6 +344,25 @@ public class MainActivity extends BaseActivity {
         public void onFriendRequestAccepted(String username) {}
         @Override
         public void onFriendRequestDeclined(String username) {}
+	}
+
+	public class MyMultiDeviceListener implements EMMultiDeviceListener {
+
+		@Override
+		public void onContactEvent(int event, String target, String ext) {
+
+		}
+
+		@Override
+		public void onGroupEvent(int event, String target, final List<String> username) {
+			switch (event) {
+			case EMMultiDeviceListener.GROUP_LEAVE:
+				ChatActivity.activityInstance.finish();
+				break;
+			default:
+				break;
+			}
+		}
 	}
 	
 	private void unregisterBroadcastReceiver(){
@@ -519,7 +543,11 @@ public class MainActivity extends BaseActivity {
             showExceptionDialog(Constant.ACCOUNT_REMOVED);
         } else if (!isExceptionDialogShow && intent.getBooleanExtra(Constant.ACCOUNT_FORBIDDEN, false)) {
             showExceptionDialog(Constant.ACCOUNT_FORBIDDEN);
-        }   
+        } else if (intent.getBooleanExtra(Constant.ACCOUNT_KICKED_BY_CHANGE_PASSWORD, false) ||
+                intent.getBooleanExtra(Constant.ACCOUNT_KICKED_BY_OTHER_DEVICE, false)) {
+            this.finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        }
 	}
 
 	@Override
