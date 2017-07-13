@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.domain.InviteMessage;
-import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMesageStatus;
+import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMessageStatus;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -200,7 +200,7 @@ public class DemoDBManager {
         }
         return id;
     }
-    
+
     /**
      * update message
      * @param msgId
@@ -240,26 +240,7 @@ public class DemoDBManager {
                 msg.setReason(reason);
                 msg.setTime(time);
                 msg.setGroupInviter(groupInviter);
-                
-                if(status == InviteMesageStatus.BEINVITEED.ordinal())
-                    msg.setStatus(InviteMesageStatus.BEINVITEED);
-                else if(status == InviteMesageStatus.BEAGREED.ordinal())
-                    msg.setStatus(InviteMesageStatus.BEAGREED);
-                else if(status == InviteMesageStatus.BEREFUSED.ordinal())
-                    msg.setStatus(InviteMesageStatus.BEREFUSED);
-                else if(status == InviteMesageStatus.AGREED.ordinal())
-                    msg.setStatus(InviteMesageStatus.AGREED);
-                else if(status == InviteMesageStatus.REFUSED.ordinal())
-                    msg.setStatus(InviteMesageStatus.REFUSED);
-                else if(status == InviteMesageStatus.BEAPPLYED.ordinal())
-                    msg.setStatus(InviteMesageStatus.BEAPPLYED);
-                else if(status == InviteMesageStatus.GROUPINVITATION.ordinal())
-                    msg.setStatus(InviteMesageStatus.GROUPINVITATION);
-                else if(status == InviteMesageStatus.GROUPINVITATION_ACCEPTED.ordinal())
-                    msg.setStatus(InviteMesageStatus.GROUPINVITATION_ACCEPTED);
-                else if(status == InviteMesageStatus.GROUPINVITATION_DECLINED.ordinal())
-                    msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
-                
+                msg.setStatus(InviteMessageStatus.values()[status]);
                 msgs.add(msg);
             }
             cursor.close();
@@ -275,6 +256,29 @@ public class DemoDBManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db.isOpen()){
             db.delete(InviteMessgeDao.TABLE_NAME, InviteMessgeDao.COLUMN_NAME_FROM + " = ?", new String[]{from});
+        }
+    }
+
+    /**
+     * delete invitation message
+     * @param groupId
+     */
+    synchronized public void deleteGroupMessage(String groupId){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if(db.isOpen()){
+            db.delete(InviteMessgeDao.TABLE_NAME, InviteMessgeDao.COLUMN_NAME_GROUP_ID + " = ?", new String[]{groupId});
+        }
+    }
+
+    /**
+     * delete invitation message
+     * @param groupId
+     */
+    synchronized public void deleteGroupMessage(String groupId, String from){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if(db.isOpen()){
+            db.delete(InviteMessgeDao.TABLE_NAME, InviteMessgeDao.COLUMN_NAME_GROUP_ID + " = ? AND " + InviteMessgeDao.COLUMN_NAME_FROM + " = ? ",
+                    new String[]{groupId, from});
         }
     }
     
