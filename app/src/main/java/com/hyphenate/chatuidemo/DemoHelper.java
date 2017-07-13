@@ -947,10 +947,10 @@ public class DemoHelper {
                     updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_DECLINE);
                     showToast("CONTACT_DECLINE");
                     break;
-                case CONTACT_ADD:
-                    updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_ADD);
-                    showToast("CONTACT_ADD");
-                break;
+//                case CONTACT_ADD:
+//                    updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_ADD);
+//                    showToast("CONTACT_ADD");
+//                break;
                 case CONTACT_BAN:
                     updateContactNotificationStatus(target, "", InviteMessageStatus.MULTI_DEVICE_CONTACT_BAN);
                     showToast("CONTACT_BAN");
