@@ -1146,7 +1146,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 									20);
 							EMLog.d(TAG, "fetchGroupMembers result.size:" + result.getData().size());
 							memberList.addAll(result.getData());
-						} while (result.getData().size() == 20);
+						} while (result.getCursor() != null && !result.getCursor().isEmpty());
 
 						muteList.clear();
 						muteList.addAll(EMClient.getInstance().groupManager().fetchGroupMuteList(groupId, 0, 200).keySet());

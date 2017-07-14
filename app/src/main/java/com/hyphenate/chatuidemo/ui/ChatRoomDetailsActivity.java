@@ -320,7 +320,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 					do {
 						result = EMClient.getInstance().chatroomManager().fetchChatRoomMembers(roomId, result.getCursor(), 20);
 						memberList.addAll(result.getData());
-					} while (result != null && result.getData().size() == 20);
+					} while (result.getCursor() != null && !result.getCursor().isEmpty());
 
 					memberList.remove(room.getOwner());
 					memberList.removeAll(adminList);
