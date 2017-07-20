@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -421,9 +422,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					membersAdapter.addAll(memberList);
 				}
 
-				synchronized (muteList) {
-					membersAdapter.addAll(muteList);
-				}
 				synchronized (blackList) {
 					membersAdapter.addAll(blackList);
 				}
@@ -802,113 +800,121 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 	}
 
-	Dialog createMemberMenuDialog() {
-		final Dialog dialog = new Dialog(GroupDetailsActivity.this);
-		dialog.setTitle("group");
-		dialog.setContentView(R.layout.em_chatroom_member_menu);
+	class MemberMenuDialog extends Dialog {
 
-		int ids[] = { R.id.menu_item_add_admin,
+		private MemberMenuDialog(@NonNull Context context) {
+			super(context);
+
+			init();
+		}
+
+		void init() {
+			final MemberMenuDialog dialog = this;
+			dialog.setTitle("group");
+			dialog.setContentView(R.layout.em_chatroom_member_menu);
+
+			int ids[] = { R.id.menu_item_add_admin,
+					R.id.menu_item_rm_admin,
+					R.id.menu_item_remove_member,
+					R.id.menu_item_add_to_blacklist,
+					R.id.menu_item_remove_from_blacklist,
+					R.id.menu_item_transfer_owner,
+					R.id.menu_item_mute,
+					R.id.menu_item_unmute};
+
+			for (int id : ids) {
+				LinearLayout linearLayout = (LinearLayout)dialog.findViewById(id);
+				linearLayout.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(final View v) {
+						dialog.dismiss();
+						loadingPB.setVisibility(View.VISIBLE);
+
+						new Thread(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									switch (v.getId()) {
+										case R.id.menu_item_add_admin:
+											EMClient.getInstance().groupManager().addGroupAdmin(groupId, operationUserId);
+											break;
+										case R.id.menu_item_rm_admin:
+											EMClient.getInstance().groupManager().removeGroupAdmin(groupId, operationUserId);
+											break;
+										case R.id.menu_item_remove_member:
+											EMClient.getInstance().groupManager().removeUserFromGroup(groupId, operationUserId);
+											break;
+										case R.id.menu_item_add_to_blacklist:
+											EMClient.getInstance().groupManager().blockUser(groupId, operationUserId);
+											break;
+										case R.id.menu_item_remove_from_blacklist:
+											EMClient.getInstance().groupManager().unblockUser(groupId, operationUserId);
+											break;
+										case R.id.menu_item_mute:
+											List<String> muteMembers = new ArrayList<String>();
+											muteMembers.add(operationUserId);
+											EMClient.getInstance().groupManager().muteGroupMembers(groupId, muteMembers, 20 * 60 * 1000);
+											break;
+										case R.id.menu_item_unmute:
+											List<String> list = new ArrayList<String>();
+											list.add(operationUserId);
+											EMClient.getInstance().groupManager().unMuteGroupMembers(groupId, list);
+											break;
+										case R.id.menu_item_transfer_owner:
+											EMClient.getInstance().groupManager().changeOwner(groupId, operationUserId);
+											break;
+										default:
+											break;
+									}
+									updateGroup();
+								} catch (final HyphenateException e) {
+									runOnUiThread(new Runnable() {
+										              @Override
+										              public void run() {
+											              Toast.makeText(GroupDetailsActivity.this, e.getDescription(), Toast.LENGTH_SHORT).show();
+										              }
+									              }
+									);
+									e.printStackTrace();
+
+								} finally {
+									runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											loadingPB.setVisibility(View.INVISIBLE);
+										}
+									});
+								}
+							}
+						}).start();
+					}
+				});
+			}
+		}
+
+		void setVisibility(boolean[] visibilities) throws Exception {
+			if (ids.length != visibilities.length) {
+				throw new Exception("");
+			}
+
+			for (int i = 0; i < ids.length; i++) {
+				View view = this.findViewById(ids[i]);
+				view.setVisibility(visibilities[i] ? View.VISIBLE : View.GONE);
+			}
+		}
+
+		int[] ids = {
+				R.id.menu_item_transfer_owner,
+				R.id.menu_item_add_admin,
 				R.id.menu_item_rm_admin,
 				R.id.menu_item_remove_member,
 				R.id.menu_item_add_to_blacklist,
 				R.id.menu_item_remove_from_blacklist,
-				R.id.menu_item_transfer_owner,
 				R.id.menu_item_mute,
-				R.id.menu_item_unmute};
-
-		for (int id : ids) {
-			LinearLayout linearLayout = (LinearLayout)dialog.findViewById(id);
-			linearLayout.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(final View v) {
-					dialog.dismiss();
-					loadingPB.setVisibility(View.VISIBLE);
-
-					new Thread(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								switch (v.getId()) {
-									case R.id.menu_item_add_admin:
-										EMClient.getInstance().groupManager().addGroupAdmin(groupId, operationUserId);
-										break;
-									case R.id.menu_item_rm_admin:
-										EMClient.getInstance().groupManager().removeGroupAdmin(groupId, operationUserId);
-										break;
-									case R.id.menu_item_remove_member:
-										EMClient.getInstance().groupManager().removeUserFromGroup(groupId, operationUserId);
-										break;
-									case R.id.menu_item_add_to_blacklist:
-										EMClient.getInstance().groupManager().blockUser(groupId, operationUserId);
-										break;
-									case R.id.menu_item_remove_from_blacklist:
-										EMClient.getInstance().groupManager().unblockUser(groupId, operationUserId);
-										break;
-									case R.id.menu_item_mute:
-										List<String> muteMembers = new ArrayList<String>();
-										muteMembers.add(operationUserId);
-										EMClient.getInstance().groupManager().muteGroupMembers(groupId, muteMembers, 20 * 60 * 1000);
-										break;
-									case R.id.menu_item_unmute:
-										List<String> list = new ArrayList<String>();
-										list.add(operationUserId);
-										EMClient.getInstance().groupManager().unMuteGroupMembers(groupId, list);
-										break;
-									case R.id.menu_item_transfer_owner:
-										EMClient.getInstance().groupManager().changeOwner(groupId, operationUserId);
-										break;
-									default:
-										break;
-								}
-								updateGroup();
-							} catch (final HyphenateException e) {
-								runOnUiThread(new Runnable() {
-									              @Override
-									              public void run() {
-										              Toast.makeText(GroupDetailsActivity.this, e.getDescription(), Toast.LENGTH_SHORT).show();
-									              }
-								              }
-								);
-								e.printStackTrace();
-
-							} finally {
-								runOnUiThread(new Runnable() {
-									@Override
-									public void run() {
-										loadingPB.setVisibility(View.INVISIBLE);
-									}
-								});
-							}
-						}
-					}).start();
-				}
-			});
-		}
-		return dialog;
+				R.id.menu_item_unmute
+		};
 	}
-
-	void setVisibility(Dialog viewGroups, int[] ids, boolean[] visibilities) throws Exception {
-		if (ids.length != visibilities.length) {
-			throw new Exception("");
-		}
-
-		for (int i = 0; i < ids.length; i++) {
-			View view = viewGroups.findViewById(ids[i]);
-			view.setVisibility(visibilities[i] ? View.VISIBLE : View.GONE);
-		}
-	}
-
-	int[] ids = {
-			R.id.menu_item_transfer_owner,
-			R.id.menu_item_add_admin,
-			R.id.menu_item_rm_admin,
-			R.id.menu_item_remove_member,
-			R.id.menu_item_add_to_blacklist,
-			R.id.menu_item_remove_from_blacklist,
-			R.id.menu_item_mute,
-			R.id.menu_item_unmute
-	};
 
 	/**
 	 * 群组Owner和管理员gridadapter
@@ -949,7 +955,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 
 			LinearLayout id_background = (LinearLayout) convertView.findViewById(R.id.l_bg_id);
 			id_background.setBackgroundColor(convertView.getResources().getColor(
-					position == 0 ? R.color.holo_red_light: R.color.holo_orange_light));
+					position == 0 ? R.color.holo_red_light :
+							(isInMuteList(username) ? R.color.gray_normal : R.color.holo_orange_light)));
+
 			button.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -960,7 +968,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						return;
 					}
 					operationUserId = username;
-					Dialog dialog = createMemberMenuDialog();
+					MemberMenuDialog dialog = new MemberMenuDialog(GroupDetailsActivity.this);
 					dialog.show();
 
 					boolean[] adminVisibilities = {
@@ -974,7 +982,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							false,      //R.id.menu_item_unmute
 					};
 					try {
-						setVisibility(dialog, ids, adminVisibilities);
+						dialog.setVisibility(adminVisibilities);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -1062,7 +1070,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							return;
 						}
 						operationUserId = username;
-						Dialog dialog = createMemberMenuDialog();
+						MemberMenuDialog dialog = new MemberMenuDialog(GroupDetailsActivity.this);
 						dialog.show();
 
 						boolean[] normalVisibilities = {
@@ -1102,11 +1110,11 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						boolean inMuteList = isInMuteList(username);
 						try {
 							if (inBlackList) {
-								setVisibility(dialog, ids, blackListVisibilities);
+								dialog.setVisibility(blackListVisibilities);
 							} else if (inMuteList) {
-								setVisibility(dialog, ids, muteListVisibilities);
+								dialog.setVisibility(muteListVisibilities);
 							} else {
-								setVisibility(dialog, ids, normalVisibilities);
+								dialog.setVisibility(normalVisibilities);
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -1158,7 +1166,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					} finally {
 						memberList.remove(group.getOwner());
 						memberList.removeAll(adminList);
-						memberList.removeAll(muteList);
 					}
 
 					try {
