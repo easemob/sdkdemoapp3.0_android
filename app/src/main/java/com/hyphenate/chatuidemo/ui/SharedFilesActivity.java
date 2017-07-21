@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +30,13 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.util.DensityUtil;
 import com.hyphenate.util.FileUtils;
 import com.hyphenate.util.PathUtil;
+import com.hyphenate.util.TextFormater;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SharedFilesActivity extends BaseActivity {
@@ -384,27 +386,44 @@ public class SharedFilesActivity extends BaseActivity {
     }
 
     private static class FilesAdapter extends ArrayAdapter<EMMucSharedFile> {
-
+        private Context mContext;
+        private LayoutInflater inflater;
         List<EMMucSharedFile> list;
-        int widthPadding = DensityUtil.dip2px(getContext(),10f);
-        int heightPadding = DensityUtil.dip2px(getContext(),20f);
 
         public FilesAdapter(@NonNull Context context, int resource, @NonNull List<EMMucSharedFile> objects) {
             super(context, resource, objects);
+            mContext = context;
+            this.inflater = LayoutInflater.from(context);
             list = objects;
         }
 
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            TextView textView = new TextView(getContext());
-            textView.setPadding(widthPadding,heightPadding,widthPadding,heightPadding);
-            textView.setText(list.get(position).getFileName());
+            final ViewHolder holder;
+            if (convertView == null) {
+                holder = new ViewHolder();
+                convertView = View.inflate(mContext, R.layout.em_shared_file_row, null);
+                holder.tv_file_name = (TextView) convertView.findViewById(R.id.tv_file_name);
+                holder.tv_file_size = (TextView) convertView.findViewById(R.id.tv_file_size);
+                holder.tv_update_time = (TextView) convertView.findViewById(R.id.tv_update_time);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
 
-            return textView;
+            holder.tv_file_name.setText(getItem(position).getFileName());
+            holder.tv_file_size.setText(TextFormater.getDataSize(getItem(position).getFileSize()));
+            holder.tv_update_time.setText(new Date(getItem(position).getFileUpdateTime()).toString());
+
+            return convertView;
         }
     }
 
-
+    private static class ViewHolder {
+        TextView tv_file_name;
+        TextView tv_file_size;
+        TextView tv_update_time;
+    }
 
 }
