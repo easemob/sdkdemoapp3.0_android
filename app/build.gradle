@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "com.hyphenate.chatuidemo"
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 22
         multiDexEnabled true
     }
