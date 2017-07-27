@@ -315,6 +315,7 @@
     <string name="delete_msg_when_exit_group">Delete messages when exit group</string>
     <string name="auto_accept_group_invitation">Auto accept group invitation</string>
     <string name="adaptive_video_encode">Adaptive video encode</string>
+    <string name="msg_roaming">message roaming</string>
     <string name="offline_call_push">Offline call push</string>
     <string name="group_id">Group ID</string>
     <string name="group_announcement">Announcement</string>

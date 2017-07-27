@@ -18,13 +18,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-import com.easemob.redpacketsdk.RPSendPacketCallback;
-import com.easemob.redpacketsdk.bean.RedPacketInfo;
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacket.utils.RedPacketUtil;
 import com.easemob.redpacket.widget.ChatRowRandomPacket;
 import com.easemob.redpacket.widget.ChatRowRedPacket;
 import com.easemob.redpacket.widget.ChatRowRedPacketAck;
+import com.easemob.redpacketsdk.RPSendPacketCallback;
+import com.easemob.redpacketsdk.bean.RedPacketInfo;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.utils.RPRedPacketUtil;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
@@ -88,7 +88,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return super.onCreateView(inflater, container, savedInstanceState,
+                DemoHelper.getInstance().getModel().isMsgRoaming());
     }
 
     @Override
@@ -292,6 +293,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public void onMessageBubbleLongClick(EMMessage message) {
     	// no message forward when in chat room
+        if (isRoaming) {
+            return;
+        }
         startActivityForResult((new Intent(getActivity(), ContextMenuActivity.class)).putExtra("message",message)
                 .putExtra("ischatroom", chatType == EaseConstant.CHATTYPE_CHATROOM),
                 REQUEST_CODE_CONTEXT_MENU);

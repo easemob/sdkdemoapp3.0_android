@@ -93,6 +93,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private RelativeLayout rl_switch_delete_msg_when_exit_group;
     private RelativeLayout rl_switch_auto_accept_group_invitation;
     private RelativeLayout rl_switch_adaptive_video_encode;
+	private RelativeLayout rl_msg_roaming;
 	private RelativeLayout rl_custom_appkey;
     private RelativeLayout rl_custom_server;
 	RelativeLayout rl_push_settings;
@@ -119,6 +120,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton switch_adaptive_video_encode;
 	private EaseSwitchButton customServerSwitch;
 	private EaseSwitchButton customAppkeySwitch;
+	private EaseSwitchButton switch_msg_Roaming;
     private DemoModel settingsModel;
     private EMOptions chatOptions;
 	private EditText edit_custom_appkey;
@@ -145,6 +147,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_custom_server = (RelativeLayout) getView().findViewById(R.id.rl_custom_server);
 //		rl_switch_offline_call_push =  (RelativeLayout) getView().findViewById(rl_switch_offline_call_push);
 		rl_push_settings = (RelativeLayout) getView().findViewById(R.id.rl_push_settings);
+		rl_msg_roaming = (RelativeLayout) getView().findViewById(R.id.rl_msg_roaming);
 
 		ll_call_option = (LinearLayout) getView().findViewById(R.id.ll_call_option);
 		ll_multi_device = (LinearLayout) getView().findViewById(R.id.ll_multi_device_management);
@@ -159,6 +162,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		switch_delete_msg_when_exit_group = (EaseSwitchButton) getView().findViewById(R.id.switch_delete_msg_when_exit_group);
 		switch_auto_accept_group_invitation = (EaseSwitchButton) getView().findViewById(R.id.switch_auto_accept_group_invitation);
 		switch_adaptive_video_encode = (EaseSwitchButton) getView().findViewById(R.id.switch_adaptive_video_encode);
+		switch_msg_Roaming = (EaseSwitchButton) getView().findViewById(R.id.switch_msg_roaming);
+
 		LinearLayout llChange = (LinearLayout) getView().findViewById(R.id.ll_change);
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
 		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
@@ -201,6 +206,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		ll_multi_device.setOnClickListener(this);
 		llChange.setOnClickListener(this);
 		rl_mail_log.setOnClickListener(this);
+		rl_msg_roaming.setOnClickListener(this);
 
 		// the vibrate and sound notification are allowed or not?
 		if (settingsModel.getSettingMsgNotification()) {
@@ -269,6 +275,13 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		} else {
 			customAppkeySwitch.closeSwitch();
 		}
+
+		if (settingsModel.isMsgRoaming()) {
+			switch_msg_Roaming.openSwitch();
+		} else {
+			switch_msg_Roaming.closeSwitch();
+		}
+
 		edit_custom_appkey.setEnabled(settingsModel.isCustomAppkeyEnabled());
 
 		edit_custom_appkey.setText(settingsModel.getCutomAppkey());
@@ -426,6 +439,15 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 					settingsModel.enableCustomAppkey(true);
 				}
 				edit_custom_appkey.setEnabled(customAppkeySwitch.isSwitchOpen());
+				break;
+			case R.id.rl_msg_roaming:
+				if (switch_msg_Roaming.isSwitchOpen()) {
+					switch_msg_Roaming.closeSwitch();
+					settingsModel.setMsgRoaming(false);
+				} else {
+					switch_msg_Roaming.openSwitch();
+					settingsModel.setMsgRoaming(true);
+				}
 				break;
 			case R.id.rl_custom_server:
 				startActivity(new Intent(getActivity(), SetServersActivity.class));

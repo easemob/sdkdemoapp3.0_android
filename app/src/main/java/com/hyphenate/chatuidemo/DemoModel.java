@@ -287,6 +287,14 @@ public class DemoModel {
         PreferenceManager.getInstance().setCustomAppkey(appkey);
     }
 
+    public boolean isMsgRoaming() {
+        return PreferenceManager.getInstance().isMsgRoaming();
+    }
+
+    public void setMsgRoaming(boolean roaming) {
+        PreferenceManager.getInstance().setMsgRoaming(roaming);
+    }
+
     public String getCutomAppkey() {
         return PreferenceManager.getInstance().getCustomAppkey();
     }
