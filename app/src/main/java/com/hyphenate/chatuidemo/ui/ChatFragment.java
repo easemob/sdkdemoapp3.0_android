@@ -18,13 +18,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-import com.easemob.redpacketsdk.RPSendPacketCallback;
-import com.easemob.redpacketsdk.bean.RedPacketInfo;
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacket.utils.RedPacketUtil;
 import com.easemob.redpacket.widget.ChatRowRandomPacket;
 import com.easemob.redpacket.widget.ChatRowRedPacket;
 import com.easemob.redpacket.widget.ChatRowRedPacketAck;
+import com.easemob.redpacketsdk.RPSendPacketCallback;
+import com.easemob.redpacketsdk.bean.RedPacketInfo;
+import com.easemob.redpacketsdk.constant.RPConstant;
 import com.easemob.redpacketui.utils.RPRedPacketUtil;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
@@ -173,7 +173,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 Intent intent = new Intent(getActivity(), ForwardMessageActivity.class);
                 intent.putExtra("forward_msg_id", contextMenuMessage.getMsgId());
                 startActivity(intent);
-                
+                break;
+            case ContextMenuActivity.RESULT_CODE_RECALL://recall
+                EMClient.getInstance().chatManager().recallMessage(contextMenuMessage);
+                //messageList.refresh();
                 break;
 
             default:

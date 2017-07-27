@@ -1,0 +1,1180 @@
+[2017/07/20 19:12:13:330]: =============EMChatClientImpl::init()==================
+[2017/07/20 19:12:13:330]: dns config mode is 1
+[2017/07/20 19:12:13:330]: EMConfigManager::init() 
+[2017/07/20 19:12:13:330]: No config file, do nothing
+[2017/07/20 19:12:13:331]: addConnectionListener
+[2017/07/20 19:12:13:331]: addConnectionListener
+[2017/07/20 19:12:13:331]: addConnectionListener
+[2017/07/20 19:12:13:338]: =============== Call Manager init ===============
+[2017/07/20 19:12:13:340]: addConnectionListener
+[2017/07/20 19:12:13:353]: registerContactListener
+[2017/07/20 19:12:13:375]: restBaseUrl()
+[2017/07/20 19:12:13:375]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:12:13:375]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:13:376]: valid_time: 
+[2017/07/20 19:12:13:376]: no saved dns list, download it
+[2017/07/20 19:12:13:376]: getDnsListFromServer()
+[2017/07/20 19:12:13:376]: buildUrl(): http://rs.easemob.com/easemob/server.json?sdk_version=3.3.2&app_key=easemob-demo%23chatdemoui&file_version=1
+[2017/07/20 19:12:13:380]: httprequest perform: http://rs.easemob.com/easemob/server.json?sdk_version=3.3.2&app_key=easemob-demo%23chatdemoui&file_version=1
+[2017/07/20 19:12:13:473]: Java_com_hyphenate_chat_adapter_EMACallManager_nativeAddListener 
+[2017/07/20 19:12:13:473]: Java_com_hyphenate_chat_adapter_EMACallManager_nativeAddListener listener:0x7f9013bde0 builder:0x7f9013bde8
+[2017/07/20 19:12:13:474]: [EMCallManager$RTC] [rapi]++ initGlobal, useVideoCodecHw=false
+[2017/07/20 19:12:13:477]: [EMCallManager$RTC] [rapi]-- initGlobal, useVideoCodecHw=false
+[2017/07/20 19:12:13:481]: [global listener] onDisconnect2
+[2017/07/20 19:12:13:483]: [group] add group change listener:com.hyphenate.chatuidemo.DemoHelper$MyGroupChangeListener
+[2017/07/20 19:12:13:546]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:12:13:547]: 1 time retry
+[2017/07/20 19:12:13:547]: DNS List size: 2798
+[2017/07/20 19:12:13:547]: EMDNSManager::parseDnsServer: {"file_version":"188","resolver":{"hosts":[{"protocol":"https","port":"443","domain":"rs3.easemob.com"},{"protocol":"https","port":"443","domain":"rs4.easemob.com"},{"port":"80","domain":"rs.easemob.com","ip":"120.26.15.207"},{"protocol":"https","port":"443","domain":"rs1.easemob.com"},{"port":"80","domain":"rs.easemob.com","ip":"112.126.66.111"},{"protocol":"https","port":"443","domain":"rs.easemob.com"},{"protocol":"https","port":"443","domain":"rs2.easemob.com"},{"port":"80","domain":"rs.easemob.com","ip":"59.110.89.59"},{"port":"80","domain":"rs.easemob.com","ip":"116.62.83.103"},{"port":"80","domain":"rs.easemob.com","ip":"182.92.174.78"},{"port":"80","domain":"rs.easemob.com","ip":"120.26.17.225"}]},"rest":{"hosts":[{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"60.205.130.59"},{"protocol":"https","port":"443","domain":"a5.easemob.com"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"182.92.4.52"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"47.94.182.48"},{"protocol":"https","port":"443","domain":"a3.easemob.com"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"47.94.182.49"},{"protocol":"https","port":"443","domain":"a4.easemob.com"},{"protocol":"https","port":"443","domain":"a1.easemob.com"},{"protocol":"https","port":"443","domain":"a6.easemob.com"}]},"valid_before":"1508268182","im":{"hosts":[{"port":"443","domain":"im1.easemob.com","ip":"182.92.251.77"},{"port":"443","domain":"im1.easemob.com","ip":"182.92.20.117"},{"port":"443","domain":"im1.easemob.com","ip":"182.92.23.59"},{"port":"443","domain":"im1.easemob.com","ip":"182.92.26.56"},{"port":"443","domain":"im1.easemob.com","ip":"101.201.170.84"}]},"deploy_name":"ebs","tcp_resolver":{"hosts":[{"port":"2020","domain":"rs.easemob.com","ip":"59.110.89.59"},{"port":"2020","domain":"rs.easemob.com","ip":"182.92.174.78"},{"port":"2020","domain":"rs.easemob.com","ip":"116.62.83.103"},{"port":"2020","domain":"rs.easemob.com","ip":"112.126.66.111"},{"port":"2020","domain":"rs.easemob.com","ip":"120.26.15.207"},{"port":"2020","domain":"rs.easemob.com","ip":"120.26.17.225"}]},"msync-im":{"hosts":[{"port":"17020","domain":"msync-im1.easemob.com","ip":"59.110.86.77"},{"port":"7820","domain":"msync-im1.easemob.com","ip":"60.205.109.58"},{"port":"6820","domain":"msync-im1.easemob.com","ip":"60.205.131.133"},{"port":"18020","domain":"msync-im1.easemob.com","ip":"59.110.86.76"}]},"xmpp":{"hosts":[{"protocol":"http","port":"80","domain":"im-api.easemob.com","ip":"im-api.easemob.com"},{"protocol":"http","port":"5280","domain":"im-api.easemob.com","ip":"182.92.159.193"},{"protocol":"http","port":"5280","domain":"im-api.easemob.com","ip":"182.92.228.160"},{"protocol":"https","port":"443","domain":"im-api.easemob.com"}]},"gcm_enabled":"true"}
+[2017/07/20 19:12:13:547]: current time: 1500549133547
+[2017/07/20 19:12:13:547]: valid time: 1508268182000
+[2017/07/20 19:12:13:547]: saveConfigs()
+[2017/07/20 19:12:13:547]: write to config file: {
+    "dns_time":"1508268182000"
+}
+[2017/07/20 19:12:13:548]: ranomOffer
+[2017/07/20 19:12:13:548]: imServer before random: 
+[2017/07/20 19:12:13:548]: 59.110.86.77
+[2017/07/20 19:12:13:548]: 60.205.109.58
+[2017/07/20 19:12:13:548]: 60.205.131.133
+[2017/07/20 19:12:13:548]: 59.110.86.76
+[2017/07/20 19:12:13:548]: randomServers 
+[2017/07/20 19:12:13:548]: randomServers 
+[2017/07/20 19:12:13:548]: randomServers 
+[2017/07/20 19:12:13:548]: randomServers 
+[2017/07/20 19:12:13:548]: imServer after random: 
+[2017/07/20 19:12:13:548]: 60.205.131.133
+[2017/07/20 19:12:13:548]: 59.110.86.76
+[2017/07/20 19:12:13:548]: 59.110.86.77
+[2017/07/20 19:12:13:548]: 60.205.109.58
+[2017/07/20 19:12:13:549]: checkDNS finished
+[2017/07/20 19:12:13:549]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:12:13:549]: current host: domain: a6.easemob.com port: 443
+[2017/07/20 19:12:18:808]: [EMActiveCollector] device info: {"version":"7.0","manufacturer":"Xiaomi","model":"MI 5","imei":"869161024285645","operator":"","hyphenate.version":"3.3.2","loc.lat":39.965009,"loc.lng":116.316936,"token":"6cc29f9b-3851-3921-99c1-75d820545c65","device_uuid":"6cc29f9b-3851-3921-99c1-75d820545c65"}
+[2017/07/20 19:12:18:812]: [HttpClientManager] try send request, request url: https://a6.easemob.com:443/easemob-demo/chatdemoui/devices with number: 0
+[2017/07/20 19:12:45:469]: [EMClient] emchat manager login in process:7182
+[2017/07/20 19:12:45:487]: performMigrationIfNecessary current DB version: 0
+[2017/07/20 19:12:45:504]: EMSessionManager::login(): laoshizhuceshibai
+[2017/07/20 19:12:45:504]: getDnsListFromServer()
+[2017/07/20 19:12:45:504]: EMDNSManager::getHost: type: 0
+[2017/07/20 19:12:45:504]: current host: domain: 112.126.66.111 port: 80
+[2017/07/20 19:12:45:504]: buildUrl(): http://112.126.66.111/easemob/server.json?sdk_version=3.3.2&app_key=easemob-demo%23chatdemoui&file_version=188
+[2017/07/20 19:12:45:504]: httprequest perform: http://112.126.66.111/easemob/server.json?sdk_version=3.3.2&app_key=easemob-demo%23chatdemoui&file_version=188
+[2017/07/20 19:12:45:608]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:12:45:609]: 1 time retry
+[2017/07/20 19:12:45:609]: DNS List size: 2798
+[2017/07/20 19:12:45:609]: EMDNSManager::parseDnsServer: {"file_version":"188","resolver":{"hosts":[{"protocol":"https","port":"443","domain":"rs1.easemob.com"},{"protocol":"https","port":"443","domain":"rs2.easemob.com"},{"port":"80","domain":"rs.easemob.com","ip":"116.62.83.103"},{"protocol":"https","port":"443","domain":"rs.easemob.com"},{"port":"80","domain":"rs.easemob.com","ip":"112.126.66.111"},{"port":"80","domain":"rs.easemob.com","ip":"120.26.17.225"},{"port":"80","domain":"rs.easemob.com","ip":"59.110.89.59"},{"port":"80","domain":"rs.easemob.com","ip":"182.92.174.78"},{"port":"80","domain":"rs.easemob.com","ip":"120.26.15.207"},{"protocol":"https","port":"443","domain":"rs3.easemob.com"},{"protocol":"https","port":"443","domain":"rs4.easemob.com"}]},"rest":{"hosts":[{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"60.205.130.59"},{"protocol":"https","port":"443","domain":"a4.easemob.com"},{"protocol":"https","port":"443","domain":"a6.easemob.com"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"47.94.182.49"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"47.94.182.48"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"182.92.4.52"},{"protocol":"https","port":"443","domain":"a3.easemob.com"},{"protocol":"https","port":"443","domain":"a1.easemob.com"},{"protocol":"https","port":"443","domain":"a5.easemob.com"}]},"valid_before":"1508268182","im":{"hosts":[{"port":"443","domain":"im1.easemob.com","ip":"182.92.251.77"},{"port":"443","domain":"im1.easemob.com","ip":"182.92.23.59"},{"port":"443","domain":"im1.easemob.com","ip":"101.201.170.84"},{"port":"443","domain":"im1.easemob.com","ip":"182.92.20.117"},{"port":"443","domain":"im1.easemob.com","ip":"182.92.26.56"}]},"deploy_name":"ebs","tcp_resolver":{"hosts":[{"port":"2020","domain":"rs.easemob.com","ip":"182.92.174.78"},{"port":"2020","domain":"rs.easemob.com","ip":"59.110.89.59"},{"port":"2020","domain":"rs.easemob.com","ip":"112.126.66.111"},{"port":"2020","domain":"rs.easemob.com","ip":"116.62.83.103"},{"port":"2020","domain":"rs.easemob.com","ip":"120.26.17.225"},{"port":"2020","domain":"rs.easemob.com","ip":"120.26.15.207"}]},"msync-im":{"hosts":[{"port":"6820","domain":"msync-im1.easemob.com","ip":"60.205.131.133"},{"port":"18020","domain":"msync-im1.easemob.com","ip":"59.110.86.76"},{"port":"17020","domain":"msync-im1.easemob.com","ip":"59.110.86.77"},{"port":"7820","domain":"msync-im1.easemob.com","ip":"60.205.109.58"}]},"xmpp":{"hosts":[{"protocol":"http","port":"5280","domain":"im-api.easemob.com","ip":"182.92.228.160"},{"protocol":"https","port":"443","domain":"im-api.easemob.com"},{"protocol":"http","port":"5280","domain":"im-api.easemob.com","ip":"182.92.159.193"},{"protocol":"http","port":"80","domain":"im-api.easemob.com","ip":"im-api.easemob.com"}]},"gcm_enabled":"true"}
+[2017/07/20 19:12:45:609]: current time: 1500549165609
+[2017/07/20 19:12:45:609]: valid time: 1508268182000
+[2017/07/20 19:12:45:609]: saveConfigs()
+[2017/07/20 19:12:45:609]: write to config file: {
+    "dns_time":"1508268182000"
+}
+[2017/07/20 19:12:45:609]: ranomOffer
+[2017/07/20 19:12:45:609]: imServer before random: 
+[2017/07/20 19:12:45:609]: 60.205.131.133
+[2017/07/20 19:12:45:609]: 59.110.86.76
+[2017/07/20 19:12:45:609]: 59.110.86.77
+[2017/07/20 19:12:45:609]: 60.205.109.58
+[2017/07/20 19:12:45:609]: randomServers 
+[2017/07/20 19:12:45:609]: randomServers 
+[2017/07/20 19:12:45:609]: randomServers 
+[2017/07/20 19:12:45:609]: randomServers 
+[2017/07/20 19:12:45:610]: imServer after random: 
+[2017/07/20 19:12:45:610]: 59.110.86.77
+[2017/07/20 19:12:45:610]: 60.205.109.58
+[2017/07/20 19:12:45:610]: 60.205.131.133
+[2017/07/20 19:12:45:610]: 59.110.86.76
+[2017/07/20 19:12:45:610]: fetchToken()
+[2017/07/20 19:12:45:610]: restBaseUrl()
+[2017/07/20 19:12:45:610]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:12:45:610]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:45:610]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:12:45:610]: current host: domain: 182.92.4.52 port: 80
+[2017/07/20 19:12:45:610]: fetchTokenForUser()http://182.92.4.52:80/easemob-demo/chatdemoui/token
+[2017/07/20 19:12:45:610]: httprequest perform: http://182.92.4.52:80/easemob-demo/chatdemoui/token
+[2017/07/20 19:12:45:731]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:12:45:731]: [retrieve token time] 0: 0:121
+[2017/07/20 19:12:45:731]: fetchToken success 
+[2017/07/20 19:12:45:732]: saveToken(): user: laoshizhuceshibai time: 1500549165731
+[2017/07/20 19:12:45:751]: savetoken() result: 1
+[2017/07/20 19:12:45:752]: EMDNSManager::getCurrentHost: type: 2
+[2017/07/20 19:12:45:752]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:45:752]: EMDNSManager::getHost: type: 2
+[2017/07/20 19:12:45:752]: current host: domain: 59.110.86.77 port: 17020
+[2017/07/20 19:12:45:752]: token is valid
+[2017/07/20 19:12:45:752]: token status:  0
+[2017/07/20 19:12:45:752]: setServer: 59.110.86.77
+[2017/07/20 19:12:45:752]: Calling connect...
+[2017/07/20 19:12:45:752]: doConnect()
+[2017/07/20 19:12:45:752]: current connectState: 0
+[2017/07/20 19:12:45:752]: log: level: 0, area: 1, ChatClient::connect() 
+[2017/07/20 19:12:45:752]: log: level: 0, area: 2, getSocket(): 109
+[2017/07/20 19:12:45:752]: log: level: 1, area: 2, connectSocket(): start to connecting...
+[2017/07/20 19:12:45:791]: log: level: 1, area: 2, connectSocket(): connect finished
+[2017/07/20 19:12:45:791]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, guid : easemob-demo#chatdemoui_laoshizhuceshibai@easemob.com/mobile, auth : ***, compress_algorimth : 0, command : PROVISION, payload : { os_type : 1, version : 3.3.2, is_manual_login : true } }
+
+[2017/07/20 19:12:45:792]: Calling connect result: 1
+[2017/07/20 19:12:45:792]: start startReceive()
+[2017/07/20 19:12:45:857]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : PROVISION, payload : { status : { error_code : 0 } } }
+
+[2017/07/20 19:12:45:857]: EMSessionManager::onConnect()
+[2017/07/20 19:12:45:857]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : UNREAD, payload : {  } }
+
+[2017/07/20 19:12:45:857]: notify state change to connection listener
+[2017/07/20 19:12:45:857]: EMConnectionListener onConnected
+[2017/07/20 19:12:45:858]: [im login time] 0: 0:105
+[2017/07/20 19:12:45:858]: login return: 0
+[2017/07/20 19:12:45:858]: [chat login time] 0: 0:387
+[2017/07/20 19:12:45:859]: [EMClient] on new login created
+[2017/07/20 19:12:45:861]: callback getNetState
+[2017/07/20 19:12:45:863]: getContactsFromServer()
+[2017/07/20 19:12:45:864]: restBaseUrl()
+[2017/07/20 19:12:45:864]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:12:45:864]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:45:864]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:12:45:864]: current host: domain: 182.92.4.52 port: 80
+[2017/07/20 19:12:45:864]: token is valid
+[2017/07/20 19:12:45:864]: [net] has wifi connection
+[2017/07/20 19:12:45:865]: httprequest perform: http://182.92.4.52:80/easemob-demo/chatdemoui/users/laoshizhuceshibai/rosters/?version=
+[2017/07/20 19:12:45:865]: getBlackListFromServer()
+[2017/07/20 19:12:45:865]: restBaseUrl()
+[2017/07/20 19:12:45:865]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:12:45:865]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:45:865]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:12:45:865]: current host: domain: 182.92.4.52 port: 80
+[2017/07/20 19:12:45:865]: token is valid
+[2017/07/20 19:12:45:865]: httprequest perform: http://182.92.4.52:80/easemob-demo/chatdemoui/users/laoshizhuceshibai/blocks/users
+[2017/07/20 19:12:45:867]: [net] wifi is connected
+[2017/07/20 19:12:45:868]: restBaseUrl()
+[2017/07/20 19:12:45:868]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:12:45:868]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:45:869]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:12:45:869]: current host: domain: 182.92.4.52 port: 80
+[2017/07/20 19:12:45:869]: token is valid
+[2017/07/20 19:12:45:869]: httprequest perform: http://182.92.4.52:80/easemob-demo/chatdemoui/users/laoshizhuceshibai/joined_chatgroups?detail=true&version=v3&pagenum=1&pagesize=200
+[2017/07/20 19:12:45:894]: [EMDBManager] initDB : laoshizhuceshibai
+[2017/07/20 19:12:45:896]: [EMDBManager] created chatdb for :laoshizhuceshibai
+[2017/07/20 19:12:45:906]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : UNREAD, payload : { status : { error_code : 0 }, timestamp : 1500549164834 } }
+
+[2017/07/20 19:12:45:906]: log: level: 0, area: 1, NO unread queue, an response for ping?
+[2017/07/20 19:12:45:926]: [EMDBManager] close msg db
+[2017/07/20 19:12:45:958]: [EMClient] connectivity receiver onReceiver
+[2017/07/20 19:12:45:960]: [net] wifi is connected
+[2017/07/20 19:12:45:960]: [EMClient] has wifi connection
+[2017/07/20 19:12:45:960]: native_1onNetworkChanged: 2
+[2017/07/20 19:12:45:961]: onNetworkChanged(): 2
+[2017/07/20 19:12:45:964]: [smart ping] change smart ping state from : EMReady to : EMEvaluating
+[2017/07/20 19:12:45:964]: [smart ping] reset interval...
+[2017/07/20 19:12:45:964]: [smart ping] change smart ping state from : EMEvaluating to : EMEvaluating
+[2017/07/20 19:12:45:969]: [smart ping]  onConnectred ...
+[2017/07/20 19:12:45:969]: [smart ping] reset interval...
+[2017/07/20 19:12:45:971]: [net] wifi is connected
+[2017/07/20 19:12:45:971]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:12:45:971]: getContactsFromServer response: {
+  "action" : "get",
+  "params" : {
+    "version" : [ "" ]
+  },
+  "uri" : "http://182.92.4.52/easemob-demo/chatdemoui/users/laoshizhuceshibai/rosters/",
+  "entities" : [ ],
+  "data" : {
+    "roster" : [ ],
+    "version" : "5e02d2fb58d78f38abb41ff50450a7a27a4c6712"
+  },
+  "timestamp" : 1500549164890,
+  "duration" : 5,
+  "count" : 0
+}
+[2017/07/20 19:12:45:972]: [retrieve contacts from server time] time spent on loading contacts size :0 with time spent :  0: 0:107
+[2017/07/20 19:12:45:972]: saveRosterVersion(): user: laoshizhuceshibai
+[2017/07/20 19:12:45:974]: [smart ping] prevWifi:false isWifi:true prevWIFISSID: SSID:"huanxin-guest"
+[2017/07/20 19:12:45:975]: [net] wifi is connected
+[2017/07/20 19:12:45:975]: [smart ping] change smart ping state from : EMEvaluating to : EMEvaluating
+[2017/07/20 19:12:45:975]: [smart ping] reset currentInterval:02:00:000
+[2017/07/20 19:12:45:976]: [smart ping] schedule next alarm
+[2017/07/20 19:12:45:976]: [smart ping] current heartbeat interval : 02:00:000 smart ping state : EMEvaluating
+[2017/07/20 19:12:45:979]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:12:45:983]: [net] has wifi connection
+[2017/07/20 19:12:45:991]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:45:991]: isEnabledGCM: 1
+[2017/07/20 19:12:45:992]: [EMPushHelper] GCM is enabled : true
+[2017/07/20 19:12:45:997]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:12:45:997]: getBlackListFromServer response: {
+  "action" : "get",
+  "uri" : "http://182.92.4.52/easemob-demo/chatdemoui/users/laoshizhuceshibai/blocks/users",
+  "entities" : [ ],
+  "data" : [ ],
+  "timestamp" : 1500549164913,
+  "duration" : 5,
+  "count" : 0
+}
+[2017/07/20 19:12:46:008]: [EMPushHelper] GCM service available : false
+[2017/07/20 19:12:46:017]: _EMAGroupListenerImpl onUpdateMyGroupList
+[2017/07/20 19:12:46:027]: [EMPushHelper] mipush available : true
+[2017/07/20 19:12:46:027]: [EMPushHelper] third-party push available
+[2017/07/20 19:12:46:039]: [load all local groups] load all local group with size : 0 with time spent :  0: 0:  9
+[2017/07/20 19:12:46:039]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeLoadAllConversationsFromDB
+[2017/07/20 19:12:46:039]: msgList.size0
+[2017/07/20 19:12:46:040]: conversationMap.size:0
+[2017/07/20 19:12:46:040]: [load all conversations time] time spent on loading all conversations : conversation size 0 messages count : 0 with time spent :  0: 0:  1
+[2017/07/20 19:12:46:043]: [EMPushManager] nick name is null or empty
+[2017/07/20 19:12:46:101]: [DemoHelper] set contact syn status to true
+[2017/07/20 19:12:46:125]: setPresence: login time: 387 location: {"imei":"869161024285645","deviceid":"6cc29f9b-3851-3921-99c1-75d820545c65","app-id":"com.hyphenate.chatuidemo","hid":"laoshizhuceshibai","os":"android","os-version":"7.0","manufacturer":"Xiaomi","model":"MI 5","lon":116.316936,"lat":39.965009,"wifissid":"\"huanxin-guest\"","WifiMacAddress":"64:cc:2e:d8:92:48","width":1080,"height":1920,"dpi":480}
+[2017/07/20 19:12:46:125]: setPresence: {"imei":"869161024285645","deviceid":"6cc29f9b-3851-3921-99c1-75d820545c65","app-id":"com.hyphenate.chatuidemo","hid":"laoshizhuceshibai","os":"android","os-version":"7.0","manufacturer":"Xiaomi","model":"MI 5","lon":116.316936,"lat":39.965009,"wifissid":"\"huanxin-guest\"","WifiMacAddress":"64:cc:2e:d8:92:48","width":1080,"height":1920,"dpi":480}
+[2017/07/20 19:12:46:126]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 302, ns : STATISTIC, payload : { operation : 0, im_time : 105, chat_time : 387, location : {"imei":"869161024285645","deviceid":"6cc29f9b-3851-3921-99c1-75d820545c65","app-id":"com.hyphenate.chatuidemo","hid":"laoshizhuceshibai","os":"android","os-version":"7.0","manufacturer":"Xiaomi","model":"MI 5","lon":116.316936,"lat":39.965009,"wifissid":"\"huanxin-guest\"","WifiMacAddress":"64:cc:2e:d8:92:48","width":1080,"height":1920,"dpi":480} } } } }
+
+[2017/07/20 19:12:46:163]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 302, server_id : 356415134165370864, timestamp : 1500549165098 } }
+
+[2017/07/20 19:12:46:163]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:12:46:163]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:12:46:204]: [MainActivity] showExceptionDialogFromIntent
+[2017/07/20 19:12:46:309]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:12:46:318]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:12:46:405]: Java_com_hyphenate_chat_adapter_EMAContactManager_nativeGetBlackListFromDB
+[2017/07/20 19:12:46:405]: getBlackListFromDB()
+[2017/07/20 19:12:46:422]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:12:46:489]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:12:46:625]: [EMMipushReceiver] mi push reigster success
+[2017/07/20 19:12:46:625]: [EMPushHelper] devicetoken = GUhZql+8GzvDICU/wasSAPG06B1MjWEI26cnj6Vx/+E=
+[2017/07/20 19:12:46:626]: restBaseUrl()
+[2017/07/20 19:12:46:626]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:12:46:626]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:46:626]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:12:46:626]: current host: domain: 182.92.4.52 port: 80
+[2017/07/20 19:12:46:626]: [HttpClientManager] try send request, request url: http://182.92.4.52:80/easemob-demo/chatdemoui/devices with number: 0
+[2017/07/20 19:12:46:754]: [ContactListFragment] on contactinfo list sync success:true
+[2017/07/20 19:12:46:756]: Java_com_hyphenate_chat_adapter_EMAContactManager_nativeGetBlackListFromDB
+[2017/07/20 19:12:46:756]: getBlackListFromDB()
+[2017/07/20 19:12:46:758]: [EMPushHelper] sendDeviceToServer SC_OK:
+[2017/07/20 19:12:46:759]: restBaseUrl()
+[2017/07/20 19:12:46:760]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:12:46:760]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:46:760]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:12:46:760]: current host: domain: 182.92.4.52 port: 80
+[2017/07/20 19:12:46:765]: [EMPushHelper] send device token to server, token = GUhZql+8GzvDICU/wasSAPG06B1MjWEI26cnj6Vx/+E=,url = http://182.92.4.52:80/easemob-demo/chatdemoui/users/laoshizhuceshibai,notifier_name = 2882303761517426801
+[2017/07/20 19:12:46:765]: token is valid
+[2017/07/20 19:12:46:765]: [HttpClientManager] try send request, request url: http://182.92.4.52:80/easemob-demo/chatdemoui/users/laoshizhuceshibai with number: 0
+[2017/07/20 19:12:46:922]: [EMPushHelper] sendTokenToServer SC_OK:
+[2017/07/20 19:12:46:931]: [EMClient] do stop service
+[2017/07/20 19:12:48:937]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:12:48:951]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:12:49:967]: Java_com_hyphenate_chat_adapter_EMAContactManager_nativeGetBlackListFromDB
+[2017/07/20 19:12:49:967]: getBlackListFromDB()
+[2017/07/20 19:12:50:560]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:12:50:978]: Java_com_hyphenate_chat_adapter_EMAContactManager_nativeGetBlackListFromDB
+[2017/07/20 19:12:50:978]: getBlackListFromDB()
+[2017/07/20 19:12:51:551]: restBaseUrl()
+[2017/07/20 19:12:51:551]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:12:51:551]: EMSessionManager::checkDNS()
+[2017/07/20 19:12:51:551]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:12:51:551]: current host: domain: 182.92.4.52 port: 80
+[2017/07/20 19:12:51:551]: token is valid
+[2017/07/20 19:12:51:551]: [HttpClientManager] try send request, request url: http://182.92.4.52:80/easemob-demo/chatdemoui/robots with number: 0
+[2017/07/20 19:12:53:021]: _EMAChatManagerListenerImpl onUpdateConversationList
+[2017/07/20 19:12:53:024]: [EMChatManager] onUpdateConversationList
+[2017/07/20 19:12:53:026]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:12:53:147]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:12:55:756]: asyncSendMessage: 15005491757450003 retry = 2
+[2017/07/20 19:12:55:756]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 15005491757450003, to : robotone, ns : CHAT, payload : { chattype : CHAT, from : laoshizhuceshibai, to : robotone, contents : [ { contenttype : TEXT, text : hello } ], exts : [ { key : em_robot_message, type : 1, value : 1 } ] } } } }
+
+[2017/07/20 19:12:55:757]: asyncSendMessage: 15005491757450003 trackerRetry = 2
+[2017/07/20 19:12:55:854]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:12:55:876]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 15005491757450003, server_id : 356415175462488048, timestamp : 1500549174768 } }
+
+[2017/07/20 19:12:55:876]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:12:55:893]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:12:55:894]: callback onSuccess
+[2017/07/20 19:12:55:896]: [msg] getRef weak:null
+[2017/07/20 19:12:55:896]: [msg] CallbackHolder getRef: null
+[2017/07/20 19:12:56:067]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : NOTICE, payload : { queue : admin } }
+
+[2017/07/20 19:12:56:067]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { queue : admin } }
+
+[2017/07/20 19:12:56:145]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, metas : [ { id : 356415176532038784, timestamp : 1500549174983, ns : CHAT, payload : { chattype : CHAT, from : robotone, to : laoshizhuceshibai, contents : [ { contenttype : TEXT, text : Hey, I am 嬛嬛,what can I do for you? } ], exts : [ { key : em_robot_message, type : 1, value : 1 } ] } } ], next_key : 356415176532038784, queue : admin, timestamp : 1500549175044 } }
+
+[2017/07/20 19:12:56:145]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:12:56:145]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { key : 356415176532038784, queue : admin } }
+
+[2017/07/20 19:12:56:145]: log: level: 1, area: 1, ChatClient::notifyChatEvent begin
+[2017/07/20 19:12:56:167]: log: level: 1, area: 1, ChatClient::notifyChatEvent complete
+[2017/07/20 19:12:56:167]: auto easemob::EMChatManager::callbackReceievedMessages(const std::vector<EMMessagePtr> &)::(anonymous class)::operator()() const : shouldCreate : 1
+[2017/07/20 19:12:56:167]: _EMAChatManagerListenerImpl onReceiveMessage
+[2017/07/20 19:12:56:167]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:12:56:171]: [DemoHelper] onMessageReceived id : 356415176532038784
+[2017/07/20 19:12:56:213]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, queue : admin, is_last : true, timestamp : 1500549175129 } }
+
+[2017/07/20 19:12:56:213]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:12:56:213]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:12:56:275]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:12:56:303]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 814, to : robotone, ns : CHAT, payload : { chattype : READ_ACK, from : laoshizhuceshibai, to : robotone, ack_message_id : 356415176532038784 } } } }
+
+[2017/07/20 19:12:56:519]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 814, server_id : 356415177865824240, timestamp : 1500549175365 } }
+
+[2017/07/20 19:12:56:519]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:12:56:519]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:14:45:995]: [EMHeartBeatReceiver] onReceive EMHeartBeatReceiver
+[2017/07/20 19:14:46:001]: [smart ping] post heartbeat runnable
+[2017/07/20 19:14:46:012]: [net] has wifi connection
+[2017/07/20 19:14:46:013]: [smart ping] has network connection:true has data conn:true isConnected to hyphenate server : true
+[2017/07/20 19:14:46:028]: [net] has wifi connection
+[2017/07/20 19:14:46:032]: [smart ping] acquire wake lock
+[2017/07/20 19:14:46:033]: [smart ping] check pingpong ...
+[2017/07/20 19:14:47:075]: [smart ping] send ping-pong type heartbeat
+[2017/07/20 19:14:47:076]: log: level: 0, area: 1, sendPing
+[2017/07/20 19:14:47:076]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : UNREAD, payload : {  } }
+
+[2017/07/20 19:14:47:130]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : UNREAD, payload : { status : { error_code : 0 }, timestamp : 1500549286047 } }
+
+[2017/07/20 19:14:47:130]: log: level: 0, area: 1, NO unread queue, an response for ping?
+[2017/07/20 19:14:47:133]: native_1sendPing
+[2017/07/20 19:14:47:141]: [smart ping] success to send ping pong ... with current heartbeat interval : 02:00:000
+[2017/07/20 19:14:47:144]: [smart ping] send ping-pong successes
+[2017/07/20 19:14:47:153]: [smart ping] released the wake lock
+[2017/07/20 19:14:47:160]: [smart ping] schedule next alarm
+[2017/07/20 19:14:47:166]: [smart ping] current heartbeat interval : 02:45:000 smart ping state : EMEvaluating
+[2017/07/20 19:14:47:169]: [net] has wifi connection
+[2017/07/20 19:17:32:187]: [EMHeartBeatReceiver] onReceive EMHeartBeatReceiver
+[2017/07/20 19:17:32:195]: [smart ping] post heartbeat runnable
+[2017/07/20 19:17:32:209]: [net] has wifi connection
+[2017/07/20 19:17:32:212]: [smart ping] has network connection:true has data conn:true isConnected to hyphenate server : true
+[2017/07/20 19:17:32:218]: [net] has wifi connection
+[2017/07/20 19:17:32:225]: [smart ping] acquire wake lock
+[2017/07/20 19:17:32:227]: [smart ping] check pingpong ...
+[2017/07/20 19:17:33:271]: [smart ping] send ping-pong type heartbeat
+[2017/07/20 19:17:33:274]: log: level: 0, area: 1, sendPing
+[2017/07/20 19:17:33:276]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : UNREAD, payload : {  } }
+
+[2017/07/20 19:17:33:325]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : UNREAD, payload : { status : { error_code : 0 }, timestamp : 1500549452250 } }
+
+[2017/07/20 19:17:33:326]: log: level: 0, area: 1, NO unread queue, an response for ping?
+[2017/07/20 19:17:33:328]: native_1sendPing
+[2017/07/20 19:17:33:334]: [smart ping] success to send ping pong ... with current heartbeat interval : 02:45:000
+[2017/07/20 19:17:33:336]: [smart ping] send ping-pong successes
+[2017/07/20 19:17:33:344]: [smart ping] released the wake lock
+[2017/07/20 19:17:33:345]: [smart ping] schedule next alarm
+[2017/07/20 19:17:33:349]: [smart ping] current heartbeat interval : 03:30:000 smart ping state : EMEvaluating
+[2017/07/20 19:17:33:353]: [net] has wifi connection
+[2017/07/20 19:21:03:373]: [EMHeartBeatReceiver] onReceive EMHeartBeatReceiver
+[2017/07/20 19:21:03:379]: [smart ping] post heartbeat runnable
+[2017/07/20 19:21:03:389]: [net] has wifi connection
+[2017/07/20 19:21:03:390]: [smart ping] has network connection:true has data conn:true isConnected to hyphenate server : true
+[2017/07/20 19:21:03:393]: [net] has wifi connection
+[2017/07/20 19:21:03:396]: [smart ping] acquire wake lock
+[2017/07/20 19:21:03:397]: [smart ping] check pingpong ...
+[2017/07/20 19:21:04:444]: [smart ping] send ping-pong type heartbeat
+[2017/07/20 19:21:04:449]: log: level: 0, area: 1, sendPing
+[2017/07/20 19:21:04:454]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : UNREAD, payload : {  } }
+
+[2017/07/20 19:21:04:518]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : UNREAD, payload : { status : { error_code : 0 }, timestamp : 1500549663426 } }
+
+[2017/07/20 19:21:04:518]: log: level: 0, area: 1, NO unread queue, an response for ping?
+[2017/07/20 19:21:04:521]: native_1sendPing
+[2017/07/20 19:21:04:539]: [smart ping] success to send ping pong ... with current heartbeat interval : 03:30:000
+[2017/07/20 19:21:04:545]: [smart ping] send ping-pong successes
+[2017/07/20 19:21:04:549]: [smart ping] released the wake lock
+[2017/07/20 19:21:04:551]: [smart ping] schedule next alarm
+[2017/07/20 19:21:04:554]: [smart ping] current heartbeat interval : 04:15:000 smart ping state : EMEvaluating
+[2017/07/20 19:21:04:558]: [net] has wifi connection
+[2017/07/20 19:25:19:584]: [EMHeartBeatReceiver] onReceive EMHeartBeatReceiver
+[2017/07/20 19:25:19:591]: [smart ping] post heartbeat runnable
+[2017/07/20 19:25:19:601]: [net] has wifi connection
+[2017/07/20 19:25:19:603]: [smart ping] has network connection:true has data conn:true isConnected to hyphenate server : true
+[2017/07/20 19:25:19:605]: [net] has wifi connection
+[2017/07/20 19:25:19:608]: [smart ping] acquire wake lock
+[2017/07/20 19:25:19:609]: [smart ping] check pingpong ...
+[2017/07/20 19:25:20:646]: [smart ping] send ping-pong type heartbeat
+[2017/07/20 19:25:20:648]: log: level: 0, area: 1, sendPing
+[2017/07/20 19:25:20:649]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : UNREAD, payload : {  } }
+
+[2017/07/20 19:25:20:722]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : UNREAD, payload : { status : { error_code : 0 }, timestamp : 1500549919625 } }
+
+[2017/07/20 19:25:20:722]: log: level: 0, area: 1, NO unread queue, an response for ping?
+[2017/07/20 19:25:20:725]: native_1sendPing
+[2017/07/20 19:25:20:730]: [smart ping] success to send ping pong ... with current heartbeat interval : 04:15:000
+[2017/07/20 19:25:20:733]: [smart ping] send ping-pong successes
+[2017/07/20 19:25:20:740]: [smart ping] released the wake lock
+[2017/07/20 19:25:20:743]: [smart ping] schedule next alarm
+[2017/07/20 19:25:20:747]: [smart ping] current heartbeat interval : 04:30:000 smart ping state : EMEvaluating
+[2017/07/20 19:25:20:751]: [net] has wifi connection
+[2017/07/20 19:29:50:770]: [EMHeartBeatReceiver] onReceive EMHeartBeatReceiver
+[2017/07/20 19:29:50:777]: [smart ping] post heartbeat runnable
+[2017/07/20 19:29:50:790]: [net] has wifi connection
+[2017/07/20 19:29:50:796]: [smart ping] has network connection:true has data conn:true isConnected to hyphenate server : true
+[2017/07/20 19:29:50:801]: [net] has wifi connection
+[2017/07/20 19:29:50:804]: [smart ping] acquire wake lock
+[2017/07/20 19:29:50:805]: [smart ping] check pingpong ...
+[2017/07/20 19:29:51:848]: [smart ping] send ping-pong type heartbeat
+[2017/07/20 19:29:51:850]: log: level: 0, area: 1, sendPing
+[2017/07/20 19:29:51:855]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : UNREAD, payload : {  } }
+
+[2017/07/20 19:29:51:926]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : UNREAD, payload : { status : { error_code : 0 }, timestamp : 1500550190827 } }
+
+[2017/07/20 19:29:51:927]: log: level: 0, area: 1, NO unread queue, an response for ping?
+[2017/07/20 19:29:51:929]: native_1sendPing
+[2017/07/20 19:29:51:935]: [smart ping] success to send ping pong ... with current heartbeat interval : 04:30:000
+[2017/07/20 19:29:51:938]: [smart ping] send ping-pong successes
+[2017/07/20 19:29:51:940]: [smart ping] Find the best interval, interval is the max interval
+[2017/07/20 19:29:51:944]: [smart ping] enter the ping state : EMEvaluating
+[2017/07/20 19:29:51:946]: [smart ping] change smart ping state from : EMEvaluating to : EMHitted
+[2017/07/20 19:29:51:951]: [smart ping] released the wake lock
+[2017/07/20 19:29:51:953]: [smart ping] schedule next alarm
+[2017/07/20 19:29:51:955]: [smart ping] current heartbeat interval : 04:30:000 smart ping state : EMHitted
+[2017/07/20 19:29:51:958]: [net] has wifi connection
+[2017/07/20 19:33:11:363]: =============EMChatClientImpl::init()==================
+[2017/07/20 19:33:11:363]: dns config mode is 1
+[2017/07/20 19:33:11:363]: EMConfigManager::init() 
+[2017/07/20 19:33:11:363]: ----------------------begin of config----------------------
+[2017/07/20 19:33:11:363]: key: dns_time value: 1508268182000
+[2017/07/20 19:33:11:364]: ----------------------end of config----------------------
+[2017/07/20 19:33:11:364]: addConnectionListener
+[2017/07/20 19:33:11:364]: addConnectionListener
+[2017/07/20 19:33:11:364]: addConnectionListener
+[2017/07/20 19:33:11:369]: =============== Call Manager init ===============
+[2017/07/20 19:33:11:372]: addConnectionListener
+[2017/07/20 19:33:11:394]: registerContactListener
+[2017/07/20 19:33:11:453]: performMigrationIfNecessary current DB version: 4
+[2017/07/20 19:33:11:455]: [load all local groups] load all local group with size : 0 with time spent :  0: 0:  0
+[2017/07/20 19:33:11:456]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeLoadAllConversationsFromDB
+[2017/07/20 19:33:11:456]: msgList.size1
+[2017/07/20 19:33:11:457]: conversationMap.size:1
+[2017/07/20 19:33:11:457]: [load all conversations time] time spent on loading all conversations : conversation size 1 messages count : 2 with time spent :  0: 0:  1
+[2017/07/20 19:33:11:459]: [EMClient] emchat manager login in process:8714
+[2017/07/20 19:33:11:461]: [EMClient] on new login created
+[2017/07/20 19:33:11:477]: [EMDBManager] initDB : laoshizhuceshibai
+[2017/07/20 19:33:11:480]: [EMDBManager] created chatdb for :laoshizhuceshibai
+[2017/07/20 19:33:11:486]: [EMDBManager] close msg db
+[2017/07/20 19:33:11:537]: [smart ping] change smart ping state from : EMReady to : EMEvaluating
+[2017/07/20 19:33:11:539]: [smart ping] reset interval...
+[2017/07/20 19:33:11:539]: [smart ping] change smart ping state from : EMEvaluating to : EMEvaluating
+[2017/07/20 19:33:11:542]: [smart ping]  onDisconnected ...2
+[2017/07/20 19:33:11:559]: performMigrationIfNecessary current DB version: 4
+[2017/07/20 19:33:11:560]: autoLogin
+[2017/07/20 19:33:11:560]: EMSessionManager::login(): laoshizhuceshibai
+[2017/07/20 19:33:11:561]: EMDNSManager::getCurrentHost: type: 2
+[2017/07/20 19:33:11:561]: EMSessionManager::checkDNS()
+[2017/07/20 19:33:11:562]: valid_time: 1508268182000
+[2017/07/20 19:33:11:562]: EMDNSManager::parseDnsServer: 
+[2017/07/20 19:33:11:563]: current time: 1500550391563
+[2017/07/20 19:33:11:563]: valid time: 1508268182000
+[2017/07/20 19:33:11:564]: saveConfigs()
+[2017/07/20 19:33:11:564]: write to config file: {
+    "dns_time":"1508268182000"
+}
+[2017/07/20 19:33:11:564]: ranomOffer
+[2017/07/20 19:33:11:565]: imServer before random: 
+[2017/07/20 19:33:11:565]: 60.205.131.133
+[2017/07/20 19:33:11:565]: 59.110.86.76
+[2017/07/20 19:33:11:565]: 59.110.86.77
+[2017/07/20 19:33:11:565]: 60.205.109.58
+[2017/07/20 19:33:11:565]: randomServers 
+[2017/07/20 19:33:11:565]: randomServers 
+[2017/07/20 19:33:11:565]: randomServers 
+[2017/07/20 19:33:11:566]: randomServers 
+[2017/07/20 19:33:11:566]: imServer after random: 
+[2017/07/20 19:33:11:566]: 60.205.109.58
+[2017/07/20 19:33:11:566]: 60.205.131.133
+[2017/07/20 19:33:11:566]: 59.110.86.77
+[2017/07/20 19:33:11:566]: 59.110.86.76
+[2017/07/20 19:33:11:566]: passed_time: -7717790434
+[2017/07/20 19:33:11:566]: current time: 1500550391566
+[2017/07/20 19:33:11:566]: validBefore: 1508268182000
+[2017/07/20 19:33:11:567]: DNS config expired: 0
+[2017/07/20 19:33:11:567]: checkDNS finished
+[2017/07/20 19:33:11:567]: EMDNSManager::getHost: type: 2
+[2017/07/20 19:33:11:567]: current host: domain: 60.205.109.58 port: 7820
+[2017/07/20 19:33:11:567]: Java_com_hyphenate_chat_adapter_EMACallManager_nativeAddListener 
+[2017/07/20 19:33:11:567]: token is valid
+[2017/07/20 19:33:11:567]: token status:  0
+[2017/07/20 19:33:11:567]: setServer: 60.205.109.58
+[2017/07/20 19:33:11:567]: Calling connect...
+[2017/07/20 19:33:11:567]: Java_com_hyphenate_chat_adapter_EMACallManager_nativeAddListener listener:0x7f9013afe0 builder:0x7f9013afe8
+[2017/07/20 19:33:11:567]: [EMCallManager$RTC] [rapi]++ initGlobal, useVideoCodecHw=false
+[2017/07/20 19:33:11:570]: [EMCallManager$RTC] [rapi]-- initGlobal, useVideoCodecHw=false
+[2017/07/20 19:33:11:573]: [global listener] onDisconnect2
+[2017/07/20 19:33:11:575]: [group] add group change listener:com.hyphenate.chatuidemo.DemoHelper$MyGroupChangeListener
+[2017/07/20 19:33:11:582]: doConnect()
+[2017/07/20 19:33:11:582]: current connectState: 0
+[2017/07/20 19:33:11:582]: log: level: 0, area: 1, ChatClient::connect() 
+[2017/07/20 19:33:11:586]: log: level: 0, area: 2, getSocket(): 71
+[2017/07/20 19:33:11:586]: log: level: 1, area: 2, connectSocket(): start to connecting...
+[2017/07/20 19:33:11:652]: log: level: 1, area: 2, connectSocket(): connect finished
+[2017/07/20 19:33:11:652]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, guid : easemob-demo#chatdemoui_laoshizhuceshibai@easemob.com/mobile, auth : ***, compress_algorimth : 0, command : PROVISION, payload : { os_type : 1, version : 3.3.2, is_manual_login : false } }
+
+[2017/07/20 19:33:11:652]: Calling connect result: 1
+[2017/07/20 19:33:11:652]: start startReceive()
+[2017/07/20 19:33:11:737]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : PROVISION, payload : { status : { error_code : 0 } } }
+
+[2017/07/20 19:33:11:737]: EMSessionManager::onConnect()
+[2017/07/20 19:33:11:737]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : UNREAD, payload : {  } }
+
+[2017/07/20 19:33:11:737]: [im login time] 0: 0:170
+[2017/07/20 19:33:11:737]: login return: 0
+[2017/07/20 19:33:11:737]: notify state change to connection listener
+[2017/07/20 19:33:11:738]: EMConnectionListener onConnected
+[2017/07/20 19:33:11:738]: EMSessionManager::checkDNS()
+[2017/07/20 19:33:11:738]: isEnabledGCM: 1
+[2017/07/20 19:33:11:738]: [EMPushHelper] GCM is enabled : true
+[2017/07/20 19:33:11:742]: [smart ping]  onConnectred ...
+[2017/07/20 19:33:11:743]: [smart ping] reset interval...
+[2017/07/20 19:33:11:745]: [net] wifi is connected
+[2017/07/20 19:33:11:755]: [smart ping] prevWifi:false isWifi:true prevWIFISSID: SSID:"huanxin-guest"
+[2017/07/20 19:33:11:757]: [net] wifi is connected
+[2017/07/20 19:33:11:758]: [smart ping] change smart ping state from : EMEvaluating to : EMEvaluating
+[2017/07/20 19:33:11:761]: [smart ping] reset currentInterval:02:00:000
+[2017/07/20 19:33:11:761]: [smart ping] schedule next alarm
+[2017/07/20 19:33:11:763]: [smart ping] current heartbeat interval : 02:00:000 smart ping state : EMEvaluating
+[2017/07/20 19:33:11:753]: [EMPushHelper] GCM service available : false
+[2017/07/20 19:33:11:775]: [net] has wifi connection
+[2017/07/20 19:33:11:777]: [DemoHelper] group and contact already synced with servre
+[2017/07/20 19:33:11:793]: [EMPushHelper] mipush available : true
+[2017/07/20 19:33:11:793]: [EMPushHelper] third-party push available
+[2017/07/20 19:33:11:795]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : UNREAD, payload : { status : { error_code : 0 }, timestamp : 1500550390707 } }
+
+[2017/07/20 19:33:11:795]: log: level: 0, area: 1, NO unread queue, an response for ping?
+[2017/07/20 19:33:11:801]: restBaseUrl()
+[2017/07/20 19:33:11:802]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:33:11:802]: EMSessionManager::checkDNS()
+[2017/07/20 19:33:11:802]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:33:11:802]: current host: domain: 60.205.130.59 port: 80
+[2017/07/20 19:33:11:803]: [EMPushHelper] send device token to server, token = GUhZql+8GzvDICU/wasSAPG06B1MjWEI26cnj6Vx/+E=,url = http://60.205.130.59:80/easemob-demo/chatdemoui/users/laoshizhuceshibai,notifier_name = 2882303761517426801
+[2017/07/20 19:33:11:808]: token is valid
+[2017/07/20 19:33:11:808]: [HttpClientManager] try send request, request url: http://60.205.130.59:80/easemob-demo/chatdemoui/users/laoshizhuceshibai with number: 0
+[2017/07/20 19:33:11:820]: setPresence: login time: 0 location: {"lon":116.316936,"lat":39.965009,"wifissid":"\"huanxin-guest\"","WifiMacAddress":"64:cc:2e:d8:92:48","width":1080,"height":1920,"dpi":480}
+[2017/07/20 19:33:11:820]: setPresence: {"lon":116.316936,"lat":39.965009,"wifissid":"\"huanxin-guest\"","WifiMacAddress":"64:cc:2e:d8:92:48","width":1080,"height":1920,"dpi":480}
+[2017/07/20 19:33:11:820]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 295, ns : STATISTIC, payload : { operation : 0, im_time : 170, chat_time : 0, location : {"lon":116.316936,"lat":39.965009,"wifissid":"\"huanxin-guest\"","WifiMacAddress":"64:cc:2e:d8:92:48","width":1080,"height":1920,"dpi":480} } } } }
+
+[2017/07/20 19:33:11:865]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 295, server_id : 356420398402766904, timestamp : 1500550390790 } }
+
+[2017/07/20 19:33:11:865]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:11:865]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:33:11:992]: [EMPushHelper] sendTokenToServer SC_OK:
+[2017/07/20 19:33:12:030]: [EMClient] do stop service
+[2017/07/20 19:33:12:047]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeLoadAllConversationsFromDB
+[2017/07/20 19:33:12:048]: msgList.size1
+[2017/07/20 19:33:12:048]: conversationMap.size:1
+[2017/07/20 19:33:12:049]: [smart ping] app onForeground
+[2017/07/20 19:33:12:049]: [load all conversations time] time spent on loading all conversations : conversation size 1 messages count : 2 with time spent :  0: 0:  2
+[2017/07/20 19:33:12:050]: [load all local groups] load all local group with size : 0 with time spent :  0: 0:  0
+[2017/07/20 19:33:12:083]: [EMClient] connectivity receiver onReceiver
+[2017/07/20 19:33:12:084]: [net] wifi is connected
+[2017/07/20 19:33:12:084]: [EMClient] has wifi connection
+[2017/07/20 19:33:12:085]: native_1onNetworkChanged: 2
+[2017/07/20 19:33:12:085]: onNetworkChanged(): 2
+[2017/07/20 19:33:14:178]: [MainActivity] showExceptionDialogFromIntent
+[2017/07/20 19:33:14:284]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:33:14:306]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:33:14:405]: Java_com_hyphenate_chat_adapter_EMAContactManager_nativeGetBlackListFromDB
+[2017/07/20 19:33:14:405]: getBlackListFromDB()
+[2017/07/20 19:33:14:415]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:33:14:466]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:33:14:523]: [HanziToPinyin] There is no Chinese collator, HanziToPinyin is disabled
+[2017/07/20 19:33:14:618]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:33:14:694]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:33:16:704]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:16:704]: nativeLoadMoreMessages with refMsgId
+[2017/07/20 19:33:16:705]: loadMoreConversationMessages with msg id: 356415176532038784
+[2017/07/20 19:33:16:705]:  sql result: 1
+[2017/07/20 19:33:16:829]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:18:700]: [key] keyCode:67 action:0
+[2017/07/20 19:33:18:719]: [key] keyCode:67 action:1
+[2017/07/20 19:33:20:846]: asyncSendMessage: 15005504008400008 retry = 2
+[2017/07/20 19:33:20:847]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 15005504008400008, to : robotone, ns : CHAT, payload : { chattype : CHAT, from : laoshizhuceshibai, to : robotone, contents : [ { contenttype : TEXT, text : hhh } ], exts : [ { key : em_robot_message, type : 1, value : 1 } ] } } } }
+
+[2017/07/20 19:33:20:847]: asyncSendMessage: 15005504008400008 trackerRetry = 2
+[2017/07/20 19:33:20:913]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 15005504008400008, server_id : 356420437166524472, timestamp : 1500550399828 } }
+
+[2017/07/20 19:33:20:913]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:20:927]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:33:20:927]: callback onSuccess
+[2017/07/20 19:33:20:928]: [msg] getRef weak:null
+[2017/07/20 19:33:20:928]: [msg] CallbackHolder getRef: null
+[2017/07/20 19:33:20:945]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:21:433]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : NOTICE, payload : { queue : admin } }
+
+[2017/07/20 19:33:21:434]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { queue : admin } }
+
+[2017/07/20 19:33:21:513]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, metas : [ { id : 356420439330784352, timestamp : 1500550400309, ns : CHAT, payload : { chattype : CHAT, from : robotone, to : laoshizhuceshibai, contents : [ { contenttype : TEXT, text : {
+    "ext": {
+        "msgtype": {
+            "choice": {
+                "list": [
+                    "环信IM介绍",
+                    "环信移动客服"
+                ],
+                "title": "请选择您要咨询的问题类型:"
+            }
+        }
+    }
+} } ], exts : [ { key : msgtype, type : 8, value : {"choice":{"list":["环信IM介绍","环信移动客服"],"title":"请选择您要咨询的问题类型:"}} }, { key : em_robot_message, type : 1, value : 1 } ] } } ], next_key : 356420439330784352, queue : admin, timestamp : 1500550400406 } }
+
+[2017/07/20 19:33:21:513]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:21:513]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { key : 356420439330784352, queue : admin } }
+
+[2017/07/20 19:33:21:514]: log: level: 1, area: 1, ChatClient::notifyChatEvent begin
+[2017/07/20 19:33:21:537]: log: level: 1, area: 1, ChatClient::notifyChatEvent complete
+[2017/07/20 19:33:21:537]: auto easemob::EMChatManager::callbackReceievedMessages(const std::vector<EMMessagePtr> &)::(anonymous class)::operator()() const : shouldCreate : 1
+[2017/07/20 19:33:21:537]: _EMAChatManagerListenerImpl onReceiveMessage
+[2017/07/20 19:33:21:537]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:33:21:540]: [DemoHelper] onMessageReceived id : 356420439330784352
+[2017/07/20 19:33:21:591]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, queue : admin, is_last : true, timestamp : 1500550400495 } }
+
+[2017/07/20 19:33:21:591]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:21:591]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:33:21:641]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:21:669]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 807, to : robotone, ns : CHAT, payload : { chattype : READ_ACK, from : laoshizhuceshibai, to : robotone, ack_message_id : 356420439330784352 } } } }
+
+[2017/07/20 19:33:21:734]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 807, server_id : 356420440714905656, timestamp : 1500550400649 } }
+
+[2017/07/20 19:33:21:734]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:21:734]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:33:23:110]: asyncSendMessage: 15005504031080019 retry = 2
+[2017/07/20 19:33:23:111]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 15005504031080019, to : robotone, ns : CHAT, payload : { chattype : CHAT, from : laoshizhuceshibai, to : robotone, contents : [ { contenttype : TEXT, text : ghg } ], exts : [ { key : em_robot_message, type : 1, value : 1 } ] } } } }
+
+[2017/07/20 19:33:23:111]: asyncSendMessage: 15005504031080019 trackerRetry = 2
+[2017/07/20 19:33:23:211]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:23:225]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 15005504031080019, server_id : 356420446981195832, timestamp : 1500550402097 } }
+
+[2017/07/20 19:33:23:225]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:23:238]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:33:23:239]: callback onSuccess
+[2017/07/20 19:33:23:688]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : NOTICE, payload : { queue : admin } }
+
+[2017/07/20 19:33:23:688]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { queue : admin } }
+
+[2017/07/20 19:33:23:751]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, metas : [ { id : 356420448994464864, timestamp : 1500550402565, ns : CHAT, payload : { chattype : CHAT, from : robotone, to : laoshizhuceshibai, contents : [ { contenttype : TEXT, text : {
+    "ext": {
+        "msgtype": {
+            "choice": {
+                "list": [
+                    "环信IM介绍",
+                    "环信移动客服"
+                ],
+                "title": "请选择您要咨询的问题类型:"
+            }
+        }
+    }
+} } ], exts : [ { key : msgtype, type : 8, value : {"choice":{"list":["环信IM介绍","环信移动客服"],"title":"请选择您要咨询的问题类型:"}} }, { key : em_robot_message, type : 1, value : 1 } ] } } ], next_key : 356420448994464864, queue : admin, timestamp : 1500550402661 } }
+
+[2017/07/20 19:33:23:751]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:23:751]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { key : 356420448994464864, queue : admin } }
+
+[2017/07/20 19:33:23:752]: log: level: 1, area: 1, ChatClient::notifyChatEvent begin
+[2017/07/20 19:33:23:772]: log: level: 1, area: 1, ChatClient::notifyChatEvent complete
+[2017/07/20 19:33:23:772]: auto easemob::EMChatManager::callbackReceievedMessages(const std::vector<EMMessagePtr> &)::(anonymous class)::operator()() const : shouldCreate : 1
+[2017/07/20 19:33:23:772]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:33:23:772]: _EMAChatManagerListenerImpl onReceiveMessage
+[2017/07/20 19:33:23:774]: [DemoHelper] onMessageReceived id : 356420448994464864
+[2017/07/20 19:33:23:830]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, queue : admin, is_last : true, timestamp : 1500550402737 } }
+
+[2017/07/20 19:33:23:830]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:23:830]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:33:23:875]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:23:887]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 1319, to : robotone, ns : CHAT, payload : { chattype : READ_ACK, from : laoshizhuceshibai, to : robotone, ack_message_id : 356420448994464864 } } } }
+
+[2017/07/20 19:33:24:006]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 1319, server_id : 356420450248558648, timestamp : 1500550402898 } }
+
+[2017/07/20 19:33:24:006]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:24:006]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:33:25:933]: asyncSendMessage: 15005504059300020 retry = 2
+[2017/07/20 19:33:25:933]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 15005504059300020, to : robotone, ns : CHAT, payload : { chattype : CHAT, from : laoshizhuceshibai, to : robotone, contents : [ { contenttype : TEXT, text : gbbh } ], exts : [ { key : em_robot_message, type : 1, value : 1 } ] } } } }
+
+[2017/07/20 19:33:25:933]: asyncSendMessage: 15005504059300020 trackerRetry = 2
+[2017/07/20 19:33:26:014]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 15005504059300020, server_id : 356420459018848312, timestamp : 1500550404916 } }
+
+[2017/07/20 19:33:26:015]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:26:027]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:33:26:027]: callback onSuccess
+[2017/07/20 19:33:26:028]: [msg] getRef weak:null
+[2017/07/20 19:33:26:028]: [msg] CallbackHolder getRef: null
+[2017/07/20 19:33:26:035]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:26:350]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : NOTICE, payload : { queue : admin } }
+
+[2017/07/20 19:33:26:350]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { queue : admin } }
+
+[2017/07/20 19:33:26:402]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, metas : [ { id : 356420460457497692, timestamp : 1500550405226, ns : CHAT, payload : { chattype : CHAT, from : robotone, to : laoshizhuceshibai, contents : [ { contenttype : TEXT, text : {
+    "ext": {
+        "msgtype": {
+            "choice": {
+                "list": [
+                    "环信IM介绍",
+                    "环信移动客服"
+                ],
+                "title": "请选择您要咨询的问题类型:"
+            }
+        }
+    }
+} } ], exts : [ { key : msgtype, type : 8, value : {"choice":{"list":["环信IM介绍","环信移动客服"],"title":"请选择您要咨询的问题类型:"}} }, { key : em_robot_message, type : 1, value : 1 } ] } } ], next_key : 356420460457497692, queue : admin, timestamp : 1500550405327 } }
+
+[2017/07/20 19:33:26:403]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:26:403]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { key : 356420460457497692, queue : admin } }
+
+[2017/07/20 19:33:26:403]: log: level: 1, area: 1, ChatClient::notifyChatEvent begin
+[2017/07/20 19:33:26:422]: auto easemob::EMChatManager::callbackReceievedMessages(const std::vector<EMMessagePtr> &)::(anonymous class)::operator()() const : shouldCreate : 1
+[2017/07/20 19:33:26:422]: log: level: 1, area: 1, ChatClient::notifyChatEvent complete
+[2017/07/20 19:33:26:422]: _EMAChatManagerListenerImpl onReceiveMessage
+[2017/07/20 19:33:26:423]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:33:26:424]: [DemoHelper] onMessageReceived id : 356420460457497692
+[2017/07/20 19:33:26:481]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, queue : admin, is_last : true, timestamp : 1500550405396 } }
+
+[2017/07/20 19:33:26:481]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:26:481]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:33:26:527]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:26:536]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 1831, to : robotone, ns : CHAT, payload : { chattype : READ_ACK, from : laoshizhuceshibai, to : robotone, ack_message_id : 356420460457497692 } } } }
+
+[2017/07/20 19:33:26:616]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 1831, server_id : 356420461661259832, timestamp : 1500550405527 } }
+
+[2017/07/20 19:33:26:616]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:26:616]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:33:38:378]: asyncSendMessage: 15005504183760033 retry = 2
+[2017/07/20 19:33:38:378]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 15005504183760033, to : robotone, ns : CHAT, payload : { chattype : CHAT, from : laoshizhuceshibai, to : robotone, contents : [ { contenttype : TEXT, text : hhhhhh } ], exts : [ { key : em_robot_message, type : 1, value : 1 } ] } } } }
+
+[2017/07/20 19:33:38:378]: asyncSendMessage: 15005504183760033 trackerRetry = 2
+[2017/07/20 19:33:38:451]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 15005504183760033, server_id : 356420512546560056, timestamp : 1500550417368 } }
+
+[2017/07/20 19:33:38:451]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:38:458]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:33:38:458]: callback onSuccess
+[2017/07/20 19:33:38:459]: [msg] getRef weak:null
+[2017/07/20 19:33:38:460]: [msg] CallbackHolder getRef: null
+[2017/07/20 19:33:38:478]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:38:944]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : NOTICE, payload : { queue : admin } }
+
+[2017/07/20 19:33:38:944]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { queue : admin } }
+
+[2017/07/20 19:33:38:993]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, metas : [ { id : 356420513981006968, timestamp : 1500550417698, ns : CHAT, payload : { chattype : CHAT, from : robotone, to : laoshizhuceshibai, contents : [ { contenttype : TEXT, text : {
+    "ext": {
+        "msgtype": {
+            "choice": {
+                "list": [
+                    "环信IM介绍",
+                    "环信移动客服"
+                ],
+                "title": "请选择您要咨询的问题类型:"
+            }
+        }
+    }
+} } ], exts : [ { key : msgtype, type : 8, value : {"choice":{"list":["环信IM介绍","环信移动客服"],"title":"请选择您要咨询的问题类型:"}} }, { key : em_robot_message, type : 1, value : 1 } ] } } ], next_key : 356420513981006968, queue : admin, timestamp : 1500550417920 } }
+
+[2017/07/20 19:33:38:993]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:38:994]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { key : 356420513981006968, queue : admin } }
+
+[2017/07/20 19:33:38:994]: log: level: 1, area: 1, ChatClient::notifyChatEvent begin
+[2017/07/20 19:33:39:014]: log: level: 1, area: 1, ChatClient::notifyChatEvent complete
+[2017/07/20 19:33:39:014]: auto easemob::EMChatManager::callbackReceievedMessages(const std::vector<EMMessagePtr> &)::(anonymous class)::operator()() const : shouldCreate : 1
+[2017/07/20 19:33:39:014]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:33:39:014]: _EMAChatManagerListenerImpl onReceiveMessage
+[2017/07/20 19:33:39:016]: [DemoHelper] onMessageReceived id : 356420513981006968
+[2017/07/20 19:33:39:073]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, queue : admin, is_last : true, timestamp : 1500550417984 } }
+
+[2017/07/20 19:33:39:073]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:39:073]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:33:39:116]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:33:39:133]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 2343, to : robotone, ns : CHAT, payload : { chattype : READ_ACK, from : laoshizhuceshibai, to : robotone, ack_message_id : 356420513981006968 } } } }
+
+[2017/07/20 19:33:39:201]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 2343, server_id : 356420515805538360, timestamp : 1500550418119 } }
+
+[2017/07/20 19:33:39:201]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:33:39:201]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:34:41:349]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:34:41:367]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:34:44:929]: [EMCallManager] no incoming active call
+[2017/07/20 19:34:44:934]: [EMPushHelper] push notification helper ondestory
+[2017/07/20 19:34:44:934]: [EMClient]  SDK Logout
+[2017/07/20 19:34:44:936]: [smart ping] stop heart beat timer
+[2017/07/20 19:34:44:936]: [smart ping] change smart ping state from : EMEvaluating to : EMStopped
+[2017/07/20 19:34:44:936]: [smart ping] reset interval...
+[2017/07/20 19:34:44:936]: [smart ping] change smart ping state from : EMStopped to : EMEvaluating
+[2017/07/20 19:34:44:939]: begin logout ..
+[2017/07/20 19:34:44:939]: EMSessionManager::disconnect()
+[2017/07/20 19:34:44:939]: clearDnsConfig()
+[2017/07/20 19:34:44:939]: logout complete
+[2017/07/20 19:34:44:939]: saveConfigs()
+[2017/07/20 19:34:44:939]: write to config file: {
+    "dns_time":"-1"
+}
+[2017/07/20 19:34:44:962]: [EMClient] do stop service
+[2017/07/20 19:34:45:294]: stopReceive()
+[2017/07/20 19:34:45:294]: log: level: 0, area: 1, ChatClient::disconnect()
+[2017/07/20 19:34:45:294]: log: level: 1, area: 2, cleanup() 71
+[2017/07/20 19:34:45:294]: log: level: 1, area: 2, closeSocket() 71
+[2017/07/20 19:34:45:295]: log: level: 2, area: 1, handleDisconnect:14
+[2017/07/20 19:34:49:825]: [EMClient] emchat manager login in process:8714
+[2017/07/20 19:34:49:829]: performMigrationIfNecessary current DB version: 4
+[2017/07/20 19:34:49:829]: EMSessionManager::login(): laoshizhuceshibai
+[2017/07/20 19:34:49:829]: getDnsListFromServer()
+[2017/07/20 19:34:49:829]: buildUrl(): http://rs.easemob.com/easemob/server.json?sdk_version=3.3.2&app_key=easemob-demo%23chatdemoui&file_version=188
+[2017/07/20 19:34:49:833]: httprequest perform: http://rs.easemob.com/easemob/server.json?sdk_version=3.3.2&app_key=easemob-demo%23chatdemoui&file_version=188
+[2017/07/20 19:34:49:957]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:34:49:958]: 1 time retry
+[2017/07/20 19:34:49:958]: DNS List size: 2798
+[2017/07/20 19:34:49:958]: EMDNSManager::parseDnsServer: {"file_version":"188","resolver":{"hosts":[{"port":"80","domain":"rs.easemob.com","ip":"182.92.174.78"},{"protocol":"https","port":"443","domain":"rs2.easemob.com"},{"protocol":"https","port":"443","domain":"rs4.easemob.com"},{"port":"80","domain":"rs.easemob.com","ip":"120.26.17.225"},{"port":"80","domain":"rs.easemob.com","ip":"116.62.83.103"},{"port":"80","domain":"rs.easemob.com","ip":"120.26.15.207"},{"protocol":"https","port":"443","domain":"rs1.easemob.com"},{"protocol":"https","port":"443","domain":"rs3.easemob.com"},{"protocol":"https","port":"443","domain":"rs.easemob.com"},{"port":"80","domain":"rs.easemob.com","ip":"112.126.66.111"},{"port":"80","domain":"rs.easemob.com","ip":"59.110.89.59"}]},"rest":{"hosts":[{"protocol":"https","port":"443","domain":"a4.easemob.com"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"47.94.182.48"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"182.92.4.52"},{"protocol":"https","port":"443","domain":"a1.easemob.com"},{"protocol":"https","port":"443","domain":"a5.easemob.com"},{"protocol":"https","port":"443","domain":"a3.easemob.com"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"47.94.182.49"},{"protocol":"https","port":"443","domain":"a6.easemob.com"},{"protocol":"http","port":"80","domain":"a1.easemob.com","ip":"60.205.130.59"}]},"valid_before":"1508268182","im":{"hosts":[{"port":"443","domain":"im1.easemob.com","ip":"182.92.23.59"},{"port":"443","domain":"im1.easemob.com","ip":"182.92.26.56"},{"port":"443","domain":"im1.easemob.com","ip":"101.201.170.84"},{"port":"443","domain":"im1.easemob.com","ip":"182.92.251.77"},{"port":"443","domain":"im1.easemob.com","ip":"182.92.20.117"}]},"deploy_name":"ebs","tcp_resolver":{"hosts":[{"port":"2020","domain":"rs.easemob.com","ip":"120.26.17.225"},{"port":"2020","domain":"rs.easemob.com","ip":"182.92.174.78"},{"port":"2020","domain":"rs.easemob.com","ip":"59.110.89.59"},{"port":"2020","domain":"rs.easemob.com","ip":"116.62.83.103"},{"port":"2020","domain":"rs.easemob.com","ip":"112.126.66.111"},{"port":"2020","domain":"rs.easemob.com","ip":"120.26.15.207"}]},"msync-im":{"hosts":[{"port":"17020","domain":"msync-im1.easemob.com","ip":"59.110.86.77"},{"port":"6820","domain":"msync-im1.easemob.com","ip":"60.205.131.133"},{"port":"7820","domain":"msync-im1.easemob.com","ip":"60.205.109.58"},{"port":"18020","domain":"msync-im1.easemob.com","ip":"59.110.86.76"}]},"xmpp":{"hosts":[{"protocol":"http","port":"5280","domain":"im-api.easemob.com","ip":"182.92.228.160"},{"protocol":"https","port":"443","domain":"im-api.easemob.com"},{"protocol":"http","port":"5280","domain":"im-api.easemob.com","ip":"182.92.159.193"},{"protocol":"http","port":"80","domain":"im-api.easemob.com","ip":"im-api.easemob.com"}]},"gcm_enabled":"true"}
+[2017/07/20 19:34:49:958]: current time: 1500550489958
+[2017/07/20 19:34:49:958]: valid time: 1508268182000
+[2017/07/20 19:34:49:958]: saveConfigs()
+[2017/07/20 19:34:49:958]: write to config file: {
+    "dns_time":"1508268182000"
+}
+[2017/07/20 19:34:49:958]: ranomOffer
+[2017/07/20 19:34:49:958]: imServer before random: 
+[2017/07/20 19:34:49:958]: 59.110.86.77
+[2017/07/20 19:34:49:958]: 60.205.131.133
+[2017/07/20 19:34:49:958]: 60.205.109.58
+[2017/07/20 19:34:49:958]: 59.110.86.76
+[2017/07/20 19:34:49:958]: randomServers 
+[2017/07/20 19:34:49:958]: randomServers 
+[2017/07/20 19:34:49:958]: randomServers 
+[2017/07/20 19:34:49:958]: randomServers 
+[2017/07/20 19:34:49:958]: imServer after random: 
+[2017/07/20 19:34:49:958]: 59.110.86.77
+[2017/07/20 19:34:49:958]: 60.205.109.58
+[2017/07/20 19:34:49:959]: 60.205.131.133
+[2017/07/20 19:34:49:959]: 59.110.86.76
+[2017/07/20 19:34:49:959]: fetchToken()
+[2017/07/20 19:34:49:959]: restBaseUrl()
+[2017/07/20 19:34:49:959]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:34:49:959]: EMSessionManager::checkDNS()
+[2017/07/20 19:34:49:959]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:34:49:959]: current host: domain: 47.94.182.48 port: 80
+[2017/07/20 19:34:49:959]: fetchTokenForUser()http://47.94.182.48:80/easemob-demo/chatdemoui/token
+[2017/07/20 19:34:49:959]: httprequest perform: http://47.94.182.48:80/easemob-demo/chatdemoui/token
+[2017/07/20 19:34:50:168]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:34:50:168]: [retrieve token time] 0: 0:209
+[2017/07/20 19:34:50:168]: fetchToken success 
+[2017/07/20 19:34:50:168]: saveToken(): user: laoshizhuceshibai time: 1500550490168
+[2017/07/20 19:34:50:241]: savetoken() result: 1
+[2017/07/20 19:34:50:241]: EMDNSManager::getCurrentHost: type: 2
+[2017/07/20 19:34:50:241]: EMSessionManager::checkDNS()
+[2017/07/20 19:34:50:241]: EMDNSManager::getHost: type: 2
+[2017/07/20 19:34:50:241]: current host: domain: 59.110.86.77 port: 17020
+[2017/07/20 19:34:50:241]: token is valid
+[2017/07/20 19:34:50:241]: token status:  0
+[2017/07/20 19:34:50:241]: setServer: 59.110.86.77
+[2017/07/20 19:34:50:241]: Calling connect...
+[2017/07/20 19:34:50:241]: doConnect()
+[2017/07/20 19:34:50:241]: current connectState: 0
+[2017/07/20 19:34:50:241]: log: level: 0, area: 1, ChatClient::connect() 
+[2017/07/20 19:34:50:242]: log: level: 0, area: 2, getSocket(): 111
+[2017/07/20 19:34:50:242]: log: level: 1, area: 2, connectSocket(): start to connecting...
+[2017/07/20 19:34:50:283]: log: level: 1, area: 2, connectSocket(): connect finished
+[2017/07/20 19:34:50:283]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, guid : easemob-demo#chatdemoui_laoshizhuceshibai@easemob.com/mobile, auth : ***, compress_algorimth : 0, command : PROVISION, payload : { os_type : 1, version : 3.3.2, compress_type : [ COMPRESS_NONE ], is_manual_login : true } }
+
+[2017/07/20 19:34:50:284]: Calling connect result: 1
+[2017/07/20 19:34:50:284]: start startReceive()
+[2017/07/20 19:34:50:386]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : PROVISION, payload : { compress_type : [ COMPRESS_NONE ], status : { error_code : 0 } } }
+
+[2017/07/20 19:34:50:386]: EMSessionManager::onConnect()
+[2017/07/20 19:34:50:386]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : UNREAD, payload : {  } }
+
+[2017/07/20 19:34:50:386]: [im login time] 0: 0:144
+[2017/07/20 19:34:50:386]: login return: 0
+[2017/07/20 19:34:50:386]: [chat login time] 0: 0:559
+[2017/07/20 19:34:50:387]: notify state change to connection listener
+[2017/07/20 19:34:50:387]: EMConnectionListener onConnected
+[2017/07/20 19:34:50:387]: [EMClient] on new login created
+[2017/07/20 19:34:50:390]: callback getNetState
+[2017/07/20 19:34:50:391]: getContactsFromServer()
+[2017/07/20 19:34:50:391]: [net] has wifi connection
+[2017/07/20 19:34:50:392]: [net] wifi is connected
+[2017/07/20 19:34:50:392]: restBaseUrl()
+[2017/07/20 19:34:50:392]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:34:50:392]: EMSessionManager::checkDNS()
+[2017/07/20 19:34:50:392]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:34:50:392]: current host: domain: 47.94.182.48 port: 80
+[2017/07/20 19:34:50:392]: token is valid
+[2017/07/20 19:34:50:392]: httprequest perform: http://47.94.182.48:80/easemob-demo/chatdemoui/users/laoshizhuceshibai/joined_chatgroups?detail=true&version=v3&pagenum=1&pagesize=200
+[2017/07/20 19:34:50:392]: restBaseUrl()
+[2017/07/20 19:34:50:393]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:34:50:393]: EMSessionManager::checkDNS()
+[2017/07/20 19:34:50:393]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:34:50:393]: current host: domain: 47.94.182.48 port: 80
+[2017/07/20 19:34:50:393]: token is valid
+[2017/07/20 19:34:50:394]: httprequest perform: http://47.94.182.48:80/easemob-demo/chatdemoui/users/laoshizhuceshibai/rosters/?version=5e02d2fb58d78f38abb41ff50450a7a27a4c6712
+[2017/07/20 19:34:50:395]: getBlackListFromServer()
+[2017/07/20 19:34:50:396]: restBaseUrl()
+[2017/07/20 19:34:50:396]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:34:50:396]: EMSessionManager::checkDNS()
+[2017/07/20 19:34:50:396]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:34:50:396]: current host: domain: 47.94.182.48 port: 80
+[2017/07/20 19:34:50:396]: token is valid
+[2017/07/20 19:34:50:396]: httprequest perform: http://47.94.182.48:80/easemob-demo/chatdemoui/users/laoshizhuceshibai/blocks/users
+[2017/07/20 19:34:50:404]: [EMDBManager] initDB : laoshizhuceshibai
+[2017/07/20 19:34:50:404]: [EMDBManager] created chatdb for :laoshizhuceshibai
+[2017/07/20 19:34:50:407]: [EMDBManager] close msg db
+[2017/07/20 19:34:50:425]: [EMClient] connectivity receiver onReceiver
+[2017/07/20 19:34:50:425]: [smart ping] change smart ping state from : EMEvaluating to : EMEvaluating
+[2017/07/20 19:34:50:426]: [smart ping] reset interval...
+[2017/07/20 19:34:50:426]: [smart ping] change smart ping state from : EMEvaluating to : EMEvaluating
+[2017/07/20 19:34:50:426]: [net] wifi is connected
+[2017/07/20 19:34:50:426]: [EMClient] has wifi connection
+[2017/07/20 19:34:50:426]: native_1onNetworkChanged: 2
+[2017/07/20 19:34:50:426]: onNetworkChanged(): 2
+[2017/07/20 19:34:50:427]: [smart ping]  onConnectred ...
+[2017/07/20 19:34:50:428]: [smart ping] reset interval...
+[2017/07/20 19:34:50:429]: [net] wifi is connected
+[2017/07/20 19:34:50:430]: [smart ping] prevWifi:true isWifi:true prevWIFISSID:"huanxin-guest" SSID:"huanxin-guest"
+[2017/07/20 19:34:50:431]: [net] wifi is connected
+[2017/07/20 19:34:50:431]: [smart ping] change smart ping state from : EMEvaluating to : EMEvaluating
+[2017/07/20 19:34:50:433]: [smart ping] reset currentInterval:02:00:000
+[2017/07/20 19:34:50:435]: [smart ping] schedule next alarm
+[2017/07/20 19:34:50:436]: [smart ping] current heartbeat interval : 02:00:000 smart ping state : EMEvaluating
+[2017/07/20 19:34:50:441]: [net] has wifi connection
+[2017/07/20 19:34:50:444]: EMSessionManager::checkDNS()
+[2017/07/20 19:34:50:445]: isEnabledGCM: 1
+[2017/07/20 19:34:50:445]: [EMPushHelper] GCM is enabled : true
+[2017/07/20 19:34:50:446]: [EMPushHelper] GCM service available : false
+[2017/07/20 19:34:50:446]: [EMPushHelper] mipush available : true
+[2017/07/20 19:34:50:446]: [EMPushHelper] third-party push available
+[2017/07/20 19:34:50:447]: restBaseUrl()
+[2017/07/20 19:34:50:447]: EMDNSManager::getCurrentHost: type: 3
+[2017/07/20 19:34:50:447]: EMSessionManager::checkDNS()
+[2017/07/20 19:34:50:447]: EMDNSManager::getHost: type: 3
+[2017/07/20 19:34:50:447]: current host: domain: 47.94.182.48 port: 80
+[2017/07/20 19:34:50:447]: [EMPushHelper] send device token to server, token = GUhZql+8GzvDICU/wasSAPG06B1MjWEI26cnj6Vx/+E=,url = http://47.94.182.48:80/easemob-demo/chatdemoui/users/laoshizhuceshibai,notifier_name = 2882303761517426801
+[2017/07/20 19:34:50:448]: token is valid
+[2017/07/20 19:34:50:448]: [HttpClientManager] try send request, request url: http://47.94.182.48:80/easemob-demo/chatdemoui/users/laoshizhuceshibai with number: 0
+[2017/07/20 19:34:50:450]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : UNREAD, payload : { status : { error_code : 0 }, timestamp : 1500550489357 } }
+
+[2017/07/20 19:34:50:450]: log: level: 0, area: 1, NO unread queue, an response for ping?
+[2017/07/20 19:34:50:581]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:34:50:581]: getContactsFromServer response: {
+  "action" : "get",
+  "params" : {
+    "version" : [ "5e02d2fb58d78f38abb41ff50450a7a27a4c6712" ]
+  },
+  "uri" : "http://47.94.182.48/easemob-demo/chatdemoui/users/laoshizhuceshibai/rosters/",
+  "entities" : [ ],
+  "data" : {
+    "roster" : [ ],
+    "version" : "5e02d2fb58d78f38abb41ff50450a7a27a4c6712"
+  },
+  "timestamp" : 1500550489495,
+  "duration" : 5,
+  "count" : 0
+}
+[2017/07/20 19:34:50:581]: [retrieve contacts from server time] time spent on loading contacts size :0 with time spent :  0: 0:188
+[2017/07/20 19:34:50:581]: allContacts()
+[2017/07/20 19:34:50:582]: getContactsFromDB()
+[2017/07/20 19:34:50:582]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:34:50:600]: _EMAGroupListenerImpl onUpdateMyGroupList
+[2017/07/20 19:34:50:600]: [load all local groups] load all local group with size : 0 with time spent :  0: 0:  0
+[2017/07/20 19:34:50:600]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeLoadAllConversationsFromDB
+[2017/07/20 19:34:50:601]: [DemoHelper] set contact syn status to true
+[2017/07/20 19:34:50:601]: msgList.size1
+[2017/07/20 19:34:50:601]: conversationMap.size:1
+[2017/07/20 19:34:50:601]: [load all conversations time] time spent on loading all conversations : conversation size 1 messages count : 10 with time spent :  0: 0:  0
+[2017/07/20 19:34:50:603]: [EMPushManager] nick name is null or empty
+[2017/07/20 19:34:50:633]: [EMARHttpAPI] httpExecute code: 200
+[2017/07/20 19:34:50:633]: getBlackListFromServer response: {
+  "action" : "get",
+  "uri" : "http://47.94.182.48/easemob-demo/chatdemoui/users/laoshizhuceshibai/blocks/users",
+  "entities" : [ ],
+  "data" : [ ],
+  "timestamp" : 1500550489535,
+  "duration" : 5,
+  "count" : 0
+}
+[2017/07/20 19:34:50:641]: [EMPushHelper] sendTokenToServer SC_OK:
+[2017/07/20 19:34:50:676]: setPresence: login time: 559 location: {"imei":"869161024285645","deviceid":"6cc29f9b-3851-3921-99c1-75d820545c65","app-id":"com.hyphenate.chatuidemo","hid":"laoshizhuceshibai","os":"android","os-version":"7.0","manufacturer":"Xiaomi","model":"MI 5","lon":116.316936,"lat":39.965009,"wifissid":"\"huanxin-guest\"","WifiMacAddress":"64:cc:2e:d8:92:48","width":1080,"height":1920,"dpi":480}
+[2017/07/20 19:34:50:676]: setPresence: {"imei":"869161024285645","deviceid":"6cc29f9b-3851-3921-99c1-75d820545c65","app-id":"com.hyphenate.chatuidemo","hid":"laoshizhuceshibai","os":"android","os-version":"7.0","manufacturer":"Xiaomi","model":"MI 5","lon":116.316936,"lat":39.965009,"wifissid":"\"huanxin-guest\"","WifiMacAddress":"64:cc:2e:d8:92:48","width":1080,"height":1920,"dpi":480}
+[2017/07/20 19:34:50:676]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 2599, ns : STATISTIC, payload : { operation : 0, im_time : 144, chat_time : 559, location : {"imei":"869161024285645","deviceid":"6cc29f9b-3851-3921-99c1-75d820545c65","app-id":"com.hyphenate.chatuidemo","hid":"laoshizhuceshibai","os":"android","os-version":"7.0","manufacturer":"Xiaomi","model":"MI 5","lon":116.316936,"lat":39.965009,"wifissid":"\"huanxin-guest\"","WifiMacAddress":"64:cc:2e:d8:92:48","width":1080,"height":1920,"dpi":480} } } } }
+
+[2017/07/20 19:34:50:682]: [MainActivity] showExceptionDialogFromIntent
+[2017/07/20 19:34:50:685]: [EMClient] do stop service
+[2017/07/20 19:34:50:696]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:34:50:699]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:34:50:720]: Java_com_hyphenate_chat_adapter_EMAContactManager_nativeGetBlackListFromDB
+[2017/07/20 19:34:50:720]: getBlackListFromDB()
+[2017/07/20 19:34:50:724]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:34:50:730]: Java_com_hyphenate_chat_adapter_EMAChatManager_nativeGetConversations 
+[2017/07/20 19:34:50:733]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 2599, server_id : 356420823000549380, timestamp : 1500550489646 } }
+
+[2017/07/20 19:34:50:733]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:34:50:733]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:34:51:187]: [ContactListFragment] on contactinfo list sync success:true
+[2017/07/20 19:34:51:189]: Java_com_hyphenate_chat_adapter_EMAContactManager_nativeGetBlackListFromDB
+[2017/07/20 19:34:51:189]: getBlackListFromDB()
+[2017/07/20 19:34:51:933]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:34:51:933]: nativeLoadMoreMessages with refMsgId
+[2017/07/20 19:34:51:933]: loadMoreConversationMessages with msg id: 356420513981006968
+[2017/07/20 19:34:51:935]:  sql result: 9
+[2017/07/20 19:34:52:039]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:34:54:280]: asyncSendMessage: 15005504942780041 retry = 2
+[2017/07/20 19:34:54:280]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 15005504942780041, to : robotone, ns : CHAT, payload : { chattype : CHAT, from : laoshizhuceshibai, to : robotone, contents : [ { contenttype : TEXT, text : hhh } ], exts : [ { key : em_robot_message, type : 1, value : 1 } ] } } } }
+
+[2017/07/20 19:34:54:284]: asyncSendMessage: 15005504942780041 trackerRetry = 2
+[2017/07/20 19:34:54:366]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 15005504942780041, server_id : 356420838536251396, timestamp : 1500550493273 } }
+
+[2017/07/20 19:34:54:366]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:34:54:379]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:34:54:379]: callback onSuccess
+[2017/07/20 19:34:54:380]: [msg] getRef weak:null
+[2017/07/20 19:34:54:380]: [msg] CallbackHolder getRef: null
+[2017/07/20 19:34:54:393]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:34:54:795]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : NOTICE, payload : { queue : admin } }
+
+[2017/07/20 19:34:54:795]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { queue : admin } }
+
+[2017/07/20 19:34:54:849]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, metas : [ { id : 356420840373355648, timestamp : 1500550493692, ns : CHAT, payload : { chattype : CHAT, from : robotone, to : laoshizhuceshibai, contents : [ { contenttype : TEXT, text : {
+    "ext": {
+        "msgtype": {
+            "choice": {
+                "list": [
+                    "环信IM介绍",
+                    "环信移动客服"
+                ],
+                "title": "请选择您要咨询的问题类型:"
+            }
+        }
+    }
+} } ], exts : [ { key : msgtype, type : 8, value : {"choice":{"list":["环信IM介绍","环信移动客服"],"title":"请选择您要咨询的问题类型:"}} }, { key : em_robot_message, type : 1, value : 1 } ] } } ], next_key : 356420840373355648, queue : admin, timestamp : 1500550493769 } }
+
+[2017/07/20 19:34:54:849]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:34:54:849]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { key : 356420840373355648, queue : admin } }
+
+[2017/07/20 19:34:54:849]: log: level: 1, area: 1, ChatClient::notifyChatEvent begin
+[2017/07/20 19:34:54:872]: log: level: 1, area: 1, ChatClient::notifyChatEvent complete
+[2017/07/20 19:34:54:872]: auto easemob::EMChatManager::callbackReceievedMessages(const std::vector<EMMessagePtr> &)::(anonymous class)::operator()() const : shouldCreate : 1
+[2017/07/20 19:34:54:872]: _EMAChatManagerListenerImpl onReceiveMessage
+[2017/07/20 19:34:54:872]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:34:54:874]: [DemoHelper] onMessageReceived id : 356420840373355648
+[2017/07/20 19:34:54:921]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, queue : admin, is_last : true, timestamp : 1500550493833 } }
+
+[2017/07/20 19:34:54:921]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:34:54:921]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:34:54:975]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:34:55:002]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 3111, to : robotone, ns : CHAT, payload : { chattype : READ_ACK, from : laoshizhuceshibai, to : robotone, ack_message_id : 356420840373355648 } } } }
+
+[2017/07/20 19:34:55:069]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 3111, server_id : 356420841547761668, timestamp : 1500550493985 } }
+
+[2017/07/20 19:34:55:069]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:34:55:069]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:35:56:604]: asyncSendMessage: 15005505566020056 retry = 2
+[2017/07/20 19:35:56:605]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 15005505566020056, to : robotone, ns : CHAT, payload : { chattype : CHAT, from : laoshizhuceshibai, to : robotone, contents : [ { contenttype : TEXT, text : nihao } ], exts : [ { key : em_robot_message, type : 1, value : 1 } ] } } } }
+
+[2017/07/20 19:35:56:605]: asyncSendMessage: 15005505566020056 trackerRetry = 2
+[2017/07/20 19:35:56:684]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 15005505566020056, server_id : 356421106166401028, timestamp : 1500550555590 } }
+
+[2017/07/20 19:35:56:684]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:35:56:701]: callback onSuccess
+[2017/07/20 19:35:56:702]: [msg] getRef weak:null
+[2017/07/20 19:35:56:703]: log: level: 1, area: 1, ChatClient::handleSync complete: response
+[2017/07/20 19:35:56:704]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:35:56:704]: [msg] CallbackHolder getRef: null
+[2017/07/20 19:35:56:858]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : NOTICE, payload : { queue : admin } }
+
+[2017/07/20 19:35:56:858]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { queue : admin } }
+
+[2017/07/20 19:35:56:912]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, metas : [ { id : 356421106967512148, timestamp : 1500550555765, ns : CHAT, payload : { chattype : CHAT, from : robotone, to : laoshizhuceshibai, contents : [ { contenttype : TEXT, text : 你好，我是嬛嬛，很高兴认识你。 } ], exts : [ { key : em_robot_message, type : 1, value : 1 } ] } } ], next_key : 356421106967512148, queue : admin, timestamp : 1500550555830 } }
+
+[2017/07/20 19:35:56:913]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:35:56:913]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { key : 356421106967512148, queue : admin } }
+
+[2017/07/20 19:35:56:913]: log: level: 1, area: 1, ChatClient::notifyChatEvent begin
+[2017/07/20 19:35:56:928]: log: level: 1, area: 1, ChatClient::notifyChatEvent complete
+[2017/07/20 19:35:56:928]: auto easemob::EMChatManager::callbackReceievedMessages(const std::vector<EMMessagePtr> &)::(anonymous class)::operator()() const : shouldCreate : 1
+[2017/07/20 19:35:56:928]: _EMAChatManagerListenerImpl onReceiveMessage
+[2017/07/20 19:35:56:928]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:35:56:930]: [DemoHelper] onMessageReceived id : 356421106967512148
+[2017/07/20 19:35:56:996]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, queue : admin, is_last : true, timestamp : 1500550555897 } }
+
+[2017/07/20 19:35:56:996]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:35:56:996]: log: level: 1, area: 1, ChatClient::handleSync complete
+[2017/07/20 19:35:57:030]: nativeMarkAllMessagesAsRead
+[2017/07/20 19:35:57:039]: log: level: 1, area: 1, SEND:
+{ verison : MSYNC_V1, compress_algorimth : 0, command : SYNC, payload : { meta : { id : 3623, to : robotone, ns : CHAT, payload : { chattype : READ_ACK, from : laoshizhuceshibai, to : robotone, ack_message_id : 356421106967512148 } } } }
+
+[2017/07/20 19:35:57:116]: log: level: 1, area: 1, RECV:
+{ verison : MSYNC_V1, command : SYNC, payload : { status : { error_code : 0 }, meta_id : 3623, server_id : 356421108095793156, timestamp : 1500550556023 } }
+
+[2017/07/20 19:35:57:116]: log: level: 1, area: 1, ChatClient::handleSync begin
+[2017/07/20 19:35:57:116]: log: level: 1, area: 1, ChatClient::handleSync complete: response
