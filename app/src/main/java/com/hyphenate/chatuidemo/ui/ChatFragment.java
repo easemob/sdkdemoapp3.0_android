@@ -43,6 +43,7 @@ import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
 
@@ -175,8 +176,17 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 startActivity(intent);
                 break;
             case ContextMenuActivity.RESULT_CODE_RECALL://recall
-                EMClient.getInstance().chatManager().recallMessage(contextMenuMessage);
-                //messageList.refresh();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            EMClient.getInstance().chatManager().recallMessage(contextMenuMessage);
+                            messageList.refresh();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
                 break;
 
             default:
@@ -221,7 +231,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         }
         
     }
-    
+
     @Override
     public void onSetMessageAttributes(EMMessage message) {
         if(isRobot){

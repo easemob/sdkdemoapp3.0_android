@@ -67,6 +67,11 @@ public class ContextMenuActivity extends BaseActivity {
 	            v.setVisibility(View.GONE);
 	        }
 		}
+		if(message.direct() == EMMessage.Direct.RECEIVE )
+		{
+			View recall = (View) findViewById(R.id.recall);
+			recall.setVisibility(View.GONE);
+		}
 	}
 
 	@Override

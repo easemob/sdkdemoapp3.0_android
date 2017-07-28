@@ -169,9 +169,9 @@ public class DemoHelper {
 	public void init(Context context) {
 	    demoModel = new DemoModel(context);
 	    EMOptions options = initChatOptions();
-//        options.setRestServer("103.241.230.122:31111");
-//        options.setIMServer("103.241.230.122");
-//        options.setImPort(31097);
+        options.setRestServer("118.193.28.212:31080");
+        options.setIMServer("118.193.28.212");
+        options.setImPort(31097);
 
 	    //use default options if options is null
 		if (EaseUI.getInstance().init(context, options)) {
@@ -1270,8 +1270,13 @@ public class DemoHelper {
 			@Override
 			public void onMessageDelivered(List<EMMessage> message) {
 			}
-			
-			@Override
+
+            @Override
+            public void onMessageRecalled(List<EMMessage> messages) {
+
+            }
+
+            @Override
 			public void onMessageChanged(EMMessage message, Object change) {
                 EMLog.d(TAG, "change:");
 				EMLog.d(TAG, "change:" + change);

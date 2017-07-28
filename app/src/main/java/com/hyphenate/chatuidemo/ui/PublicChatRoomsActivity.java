@@ -239,7 +239,12 @@ public class PublicChatRoomsActivity extends BaseActivity {
 				});
 			}
 		}
-	};
+
+        @Override
+        public void onAnnouncementChanged(String chatRoomId, String announcement) {
+
+        }
+    };
 
 	private void loadAndShowData(){
 		new Thread(new Runnable() {
