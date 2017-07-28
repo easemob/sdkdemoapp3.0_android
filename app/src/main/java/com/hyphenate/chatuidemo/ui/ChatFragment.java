@@ -90,7 +90,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState,
-                DemoHelper.getInstance().getModel().isMsgRoaming());
+                DemoHelper.getInstance().getModel().isMsgRoaming() && (chatType != EaseConstant.CHATTYPE_CHATROOM));
     }
 
     @Override
