@@ -1566,8 +1566,10 @@ public class DemoHelper {
            @Override
            public void run(){
                List<String> usernames = null;
+               List<String> selfIds = null;
                try {
                    usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+                   selfIds = EMClient.getInstance().contactManager().getSelfIdsOnOtherPlatform();
                    // in case that logout already before server returns, we should return immediately
                    if(!isLoggedIn()){
                        isContactsSyncedWithServer = false;
@@ -1575,7 +1577,9 @@ public class DemoHelper {
                        notifyContactsSyncListener(false);
                        return;
                    }
-                  
+                  if (selfIds.size() > 0) {
+                      usernames.addAll(selfIds);
+                  }
                    Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
                    for (String username : usernames) {
                        EaseUser user = new EaseUser(username);
