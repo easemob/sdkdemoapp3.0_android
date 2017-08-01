@@ -258,8 +258,7 @@ public class MainActivity extends BaseActivity {
 
 		@Override
 		public void onMessageRecalled(List<EMMessage> messages) {
-//			updateUnreadLabel();
-//			conversationListFragment.refresh();
+			refreshUIWithMessage();
 		}
 
 		@Override

@@ -35,6 +35,8 @@
     <string name="copy">Copy</string>
     <string name="forward">Forward</string>
     <string name="recall">Recall</string>
+    <string name="msg_recall_by_self">This message has been recall by me</string>
+    <string name="msg_recall_by_others">This message has been recalled by %1$s</string>
     <string name="button_logout">Logout</string>
     <string name="button_uploadlog">Upload the log</string>
     <string name="ok">OK</string>
