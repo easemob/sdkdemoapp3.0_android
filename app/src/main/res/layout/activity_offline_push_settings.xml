@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_offline_push_settings"
+    android:background="@color/common_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.hyphenate.easeui.widget.EaseTitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleBarLeftImage="@drawable/em_mm_title_back"
+        app:titleBarTitle="@string/push_settings"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_save"
+            android:text="@string/save"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ease_common_tab_bg"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            />
+    </com.hyphenate.easeui.widget.EaseTitleBar>
+
+    <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/btn_gray_normal"
+        />-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dip"
+            android:gravity="bottom|left"
+            android:paddingLeft="10dip"
+            android:text="@string/push_no_disturb"
+            android:textColor="@color/btn_gray_pressed" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="@color/btn_gray_normal" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_no_disturb"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="@drawable/em_btn_bottom_selector"
+        android:padding="10dip" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dip"
+            android:text="@string/push_no_disturb_on"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:typeface="serif" />
+
+        <CheckBox
+            android:id="@+id/cb_no_disturb_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="#E6E6E6" />
+    <RelativeLayout
+        android:id="@+id/rl_no_disturb_only_night"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="@drawable/em_btn_bottom_selector"
+        android:padding="10dip" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dip"
+            android:text="@string/push_only_on"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:typeface="serif" />
+
+        <CheckBox
+            android:id="@+id/cb_no_disturb_only_night"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="#E6E6E6" />
+    <RelativeLayout
+        android:id="@+id/rl_no_disturb_off"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="@drawable/em_btn_bottom_selector"
+        android:padding="10dip" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dip"
+            android:text="@string/push_no_disturb_off"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:typeface="serif" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/cb_no_disturb_off" />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="#E6E6E6" />
+</LinearLayout>

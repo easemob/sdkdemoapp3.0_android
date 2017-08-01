@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+// ============== fabric start
+//apply plugin: 'io.fabric'
+// ============== fabric end
+
+// ============== fabric start
+//repositories {
+//    maven { url 'https://maven.fabric.io/public' }
+//}
+// ============== fabric end
+
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.3'
+
+    defaultConfig {
+        applicationId "com.hyphenate.chatuidemo"
+        minSdkVersion 11
+        targetSdkVersion 22
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
+	sourceSets {
+		main {
+			jniLibs.srcDirs = ['libs']
+		}
+	}
+}
+
+dependencies {
+    compile project(':redpacketlibrary')
+    compile project(':easeui')
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'com.parse:parse-android:1.13.1'
+    compile 'com.android.support:multidex:1.0.1'
+
+// ============== fabric start
+//    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
+//        transitive = true;
+//    }
+// ============== fabric end
+}
