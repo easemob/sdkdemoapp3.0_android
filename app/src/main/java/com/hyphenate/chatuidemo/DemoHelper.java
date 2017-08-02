@@ -1271,7 +1271,16 @@ public class DemoHelper {
 
             @Override
             public void onMessageRecalled(List<EMMessage> messages) {
-
+                for (EMMessage msg : messages) {
+                    EMMessage msgNotification = EMMessage.createReceiveMessage(Type.TXT);
+                    EMTextMessageBody txtBody = new EMTextMessageBody(" ");
+                    msgNotification.addBody(txtBody);
+                    msgNotification.setFrom(msg.getFrom());
+                    msgNotification.setMsgTime(msg.getMsgTime());
+                    msgNotification.setLocalTime(msg.getMsgTime());
+                    msgNotification.setAttribute(Constant.MESSAGE_TYPE_RECALL, true);
+                    EMClient.getInstance().chatManager().saveMessage(msgNotification);
+                }
             }
 
             @Override

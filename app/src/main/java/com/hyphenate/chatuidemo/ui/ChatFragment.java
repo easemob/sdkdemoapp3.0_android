@@ -37,6 +37,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.domain.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.widget.ChatRowVoiceCall;
+import com.hyphenate.chatuidemo.widget.EaseChatRowRecall;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
@@ -71,7 +72,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
     private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
     private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
-
+    private static final int MESSAGE_TYPE_RECALL = 9;
     //red packet code : 红包功能使用的常量
     private static final int MESSAGE_TYPE_RECV_RED_PACKET = 5;
     private static final int MESSAGE_TYPE_SEND_RED_PACKET = 6;
@@ -181,10 +182,20 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     @Override
                     public void run() {
                         try {
+                            EMMessage msgNotification = EMMessage.createTxtSendMessage(" ",contextMenuMessage.getTo());
+                            msgNotification.setMsgTime(contextMenuMessage.getMsgTime());
+                            msgNotification.setLocalTime(contextMenuMessage.getMsgTime());
+                            msgNotification.setAttribute(Constant.MESSAGE_TYPE_RECALL, true);
                             EMClient.getInstance().chatManager().recallMessage(contextMenuMessage);
+                            EMClient.getInstance().chatManager().saveMessage(msgNotification);
                             messageList.refresh();
-                        } catch (HyphenateException e) {
+                        } catch (final HyphenateException e) {
                             e.printStackTrace();
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     }
                 }).start();
@@ -411,7 +422,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         public int getCustomChatRowTypeCount() {
             //here the number is the message type in EMMessage::Type
         	//which is used to count the number of different chat row
-            return 10;
+            return 11;
         }
 
         @Override
@@ -423,6 +434,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 }else if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     //video call
                     return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_VIDEO_CALL : MESSAGE_TYPE_SENT_VIDEO_CALL;
+                }
+                 //messagee recall
+                else if(message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)){
+                    return MESSAGE_TYPE_RECALL;
                 }
                 //red packet code : 红包消息、红包回执消息以及转账消息的chatrow type
                 else if (RedPacketUtil.isRandomRedPacket(message)) {
@@ -447,6 +462,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     return new ChatRowVoiceCall(getActivity(), message, position, adapter);
+                }
+                //recall message
+                else if(message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)){
+                    return new EaseChatRowRecall(getActivity(), message, position, adapter);
                 }
                 //red packet code : 红包消息、红包回执消息以及转账消息的chat row
                 else if (RedPacketUtil.isRandomRedPacket(message)) {//小额随机红包
