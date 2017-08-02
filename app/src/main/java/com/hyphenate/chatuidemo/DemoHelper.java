@@ -267,8 +267,6 @@ public class DemoHelper {
         options.setGCMNumber("324169311137");
         //you need apply & set your own id if you want to use Mi push notification
         options.setMipushConfig("2882303761517426801", "5381742660801");
-        //you need apply & set your own id if you want to use Huawei push notification
-        options.setHuaweiPushAppId("10492024");
 
         //set custom servers, commonly used in private deployment
         if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
