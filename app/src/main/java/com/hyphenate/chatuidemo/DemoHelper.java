@@ -1272,12 +1272,18 @@ public class DemoHelper {
             @Override
             public void onMessageRecalled(List<EMMessage> messages) {
                 for (EMMessage msg : messages) {
+                    if(msg.getChatType() == ChatType.GroupChat && EaseAtMessageHelper.get().isAtMeMsg(msg)){
+                        EaseAtMessageHelper.get().removeAtMeGroup(msg.getTo());
+                    }
                     EMMessage msgNotification = EMMessage.createReceiveMessage(Type.TXT);
-                    EMTextMessageBody txtBody = new EMTextMessageBody(" ");
+                    EMTextMessageBody txtBody = new EMTextMessageBody(String.format(appContext.getString(R.string.msg_recall_by_user), msg.getFrom()));
                     msgNotification.addBody(txtBody);
                     msgNotification.setFrom(msg.getFrom());
+                    msgNotification.setTo(msg.getTo());
+                    msgNotification.setUnread(false);
                     msgNotification.setMsgTime(msg.getMsgTime());
                     msgNotification.setLocalTime(msg.getMsgTime());
+                    msgNotification.setChatType(msg.getChatType());
                     msgNotification.setAttribute(Constant.MESSAGE_TYPE_RECALL, true);
                     EMClient.getInstance().chatManager().saveMessage(msgNotification);
                 }

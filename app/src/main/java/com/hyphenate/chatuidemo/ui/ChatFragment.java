@@ -183,6 +183,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     public void run() {
                         try {
                             EMMessage msgNotification = EMMessage.createTxtSendMessage(" ",contextMenuMessage.getTo());
+                            EMTextMessageBody txtBody = new EMTextMessageBody(getResources().getString(R.string.msg_recall_by_self));
+                            msgNotification.addBody(txtBody);
                             msgNotification.setMsgTime(contextMenuMessage.getMsgTime());
                             msgNotification.setLocalTime(contextMenuMessage.getMsgTime());
                             msgNotification.setAttribute(Constant.MESSAGE_TYPE_RECALL, true);
