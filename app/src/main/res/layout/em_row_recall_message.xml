@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:id="@+id/layout_bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/recall_dimen"
+            android:background="@drawable/recall_message_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/recall_dimen_4"
+            android:paddingLeft="@dimen/recall_dimen"
+            android:paddingRight="@dimen/recall_dimen"
+            android:paddingTop="@dimen/recall_dimen_4"
+            >
+            <!--消息内容-->
+            <TextView
+                android:id="@+id/text_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="@dimen/recall_dimen_256"
+                android:textColor="@color/recall_black_38"
+                android:textSize="@dimen/recall_size_12"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
