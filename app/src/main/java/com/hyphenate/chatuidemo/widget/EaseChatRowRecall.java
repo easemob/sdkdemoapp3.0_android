@@ -23,7 +23,7 @@ public class EaseChatRowRecall extends EaseChatRow{
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(R.layout.ease_row_recall_message, this);
+        inflater.inflate(R.layout.em_row_recall_message, this);
     }
 
     @Override
