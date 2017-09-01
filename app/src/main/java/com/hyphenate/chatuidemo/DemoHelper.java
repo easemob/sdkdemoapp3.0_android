@@ -32,6 +32,10 @@ import com.hyphenate.chat.EMMessage.Type;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.conference.EMConferenceListener;
+import com.hyphenate.chat.conference.EMConferenceMember;
+import com.hyphenate.chat.conference.EMConferenceStream;
+import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
@@ -554,7 +558,80 @@ public class DemoHelper {
         if(callReceiver == null){
             callReceiver = new CallReceiver();
         }
+        EMClient.getInstance().conferenceManager().addConferenceListener(new EMConferenceListener() {
+            @Override public void onMemberJoined(EMConferenceMember member) {
+                EMLog.i(TAG, String.format("member joined memberName: %s, username: %s, extension: %s", member.getMemberName(), member.getUsername(),
+                        member.getExtension()));
+                EMLog.i(TAG, String.format("Conference member: %d", EMClient.getInstance().conferenceManager().getMemberMap().size()));
+            }
 
+            @Override public void onMemberExited(EMConferenceMember member) {
+                EMLog.i(TAG, String.format("member exited memberName: %s, username: %s, extension: %s", member.getMemberName(), member.getUsername(),
+                        member.getExtension()));
+                EMLog.i(TAG, String.format("Conference member: %d", EMClient.getInstance().conferenceManager().getMemberMap().size()));
+            }
+
+            @Override public void onStreamAdded(EMConferenceStream stream) {
+                EMLog.i(TAG, String.format("Stream added streamId: %s, streamName: %s, memberName: %s, username: %s, extension: %s, videoOff: %b, mute: %b",
+                        stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
+                        stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
+                EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
+                        EMClient.getInstance().conferenceManager().getSubscribableStreamMap().size(),
+                        EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
+            }
+
+            @Override public void onStreamRemoved(EMConferenceStream stream) {
+                EMLog.i(TAG, String.format("Stream removed streamId: %s, streamName: %s, memberName: %s, username: %s, extension: %s, videoOff: %b, mute: %b",
+                        stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
+                        stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
+                EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
+                        EMClient.getInstance().conferenceManager().getSubscribableStreamMap().size(),
+                        EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
+            }
+
+            @Override public void onStreamUpdate(EMConferenceStream stream) {
+                EMLog.i(TAG, String.format("Stream added streamId: %s, streamName: %s, memberName: %s, username: %s, extension: %s, videoOff: %b, mute: %b",
+                        stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
+                        stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
+                EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
+                        EMClient.getInstance().conferenceManager().getSubscribableStreamMap().size(),
+                        EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
+            }
+
+            @Override public void onPassiveLeave(ConferenceError error, String message) {
+                EMLog.i(TAG, String.format("passive leave code: %d, message: %s", error.errorCode, message));
+            }
+
+            @Override public void onState(ConferenceState state, String confId, Object object) {
+                EMLog.i(TAG, String.format("State code=%d, confId=%s, object=" + object, state.state, confId));
+            }
+
+            @Override public void onError(ConferenceError error, String message) {
+                EMLog.i(TAG, String.format("Conference error: %d, message: %s", error.errorCode, message));
+            }
+
+            @Override public void onPublish(ConferenceState state, ConferenceError error, String message) {
+
+            }
+
+            @Override
+            public void onSubscribe(ConferenceState state, EMConferenceStream stream, ConferenceError error, String message) {
+
+            }
+
+            @Override public void onReceiveInvite(String confId, String password, String extension) {
+                EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
+                if(easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
+                    return;
+                }
+                Intent conferenceIntent = new Intent(appContext, ConferenceActivity.class);
+                conferenceIntent.putExtra("isCreator", false);
+                conferenceIntent.putExtra("confId", confId);
+                conferenceIntent.putExtra("password", password);
+                conferenceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                appContext.startActivity(conferenceIntent);
+            }
+        });
         //register incoming call receiver
         appContext.registerReceiver(callReceiver, callFilter);    
         //register connection listener

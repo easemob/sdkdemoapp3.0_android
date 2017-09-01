@@ -97,6 +97,7 @@
     <string name="nickname_description">设置此昵称以后，在与iOS客户端demo聊天过程中，iOS一侧会显示此昵称而不是环信ID，如果对方使用安卓客户端则此设置不生效</string>
     <string name="group_chat">群聊</string>
     <string name="chat_room">聊天室</string>
+    <string name="voice_and_video_conference">音视频会议</string>
     <string name="add_friend">添加好友</string>
     <string name="search">搜索</string>
     <string name="black_item">黑名单</string>

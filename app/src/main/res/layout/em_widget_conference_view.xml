@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <com.hyphenate.media.EMCallSurfaceView
+        android:id="@+id/item_surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <ImageView
+        android:id="@+id/img_call_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/em_default_avatar"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="#61212121"
+        android:gravity="center"
+        >
+
+        <ImageView
+            android:id="@+id/icon_mute"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_mic_off_white_24dp"
+            android:visibility="gone"
+            />
+
+        <ImageView
+            android:id="@+id/icon_video"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_videocam_off_white_24dp"
+            android:visibility="gone"
+            />
+        <View
+            android:id="@+id/icon_activate"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_margin="8dp"
+            android:background="#89e51c23"
+            />
+    </LinearLayout>
+</RelativeLayout>
