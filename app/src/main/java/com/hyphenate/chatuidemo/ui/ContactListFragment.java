@@ -28,9 +28,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.DemoHelper.DataSyncListener;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
 import com.hyphenate.chatuidemo.widget.ContactItemView;
@@ -67,6 +69,7 @@ public class ContactListFragment extends EaseContactListFragment {
         headerView.findViewById(R.id.group_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.chat_room_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.robot_item).setOnClickListener(clickListener);
+        headerView.findViewById(R.id.conference_item).setOnClickListener(clickListener);
         listView.addHeaderView(headerView);
         //add loading view
         loadingView = LayoutInflater.from(getActivity()).inflate(R.layout.em_layout_loading_data, null);
@@ -193,7 +196,9 @@ public class ContactListFragment extends EaseContactListFragment {
                 //进入Robot列表页面
                 startActivity(new Intent(getActivity(), RobotsActivity.class));
                 break;
-
+            case R.id.conference_item:
+                startActivity(new Intent(getActivity(), ConferenceActivity.class).putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, true));
+                break;
             default:
                 break;
             }
