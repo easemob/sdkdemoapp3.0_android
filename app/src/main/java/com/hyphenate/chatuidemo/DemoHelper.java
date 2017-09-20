@@ -32,8 +32,8 @@ import com.hyphenate.chat.EMMessage.Type;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chat.conference.EMConferenceListener;
-import com.hyphenate.chat.conference.EMConferenceStream;
+import com.hyphenate.chat.EMConferenceListener;
+import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
@@ -65,7 +65,6 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -574,7 +573,7 @@ public class DemoHelper {
                         stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
                         stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
                 EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
-                        EMClient.getInstance().conferenceManager().getSubscribableStreamMap().size(),
+                        EMClient.getInstance().conferenceManager().getAvailableStreamMap().size(),
                         EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
             }
 
@@ -583,7 +582,7 @@ public class DemoHelper {
                         stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
                         stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
                 EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
-                        EMClient.getInstance().conferenceManager().getSubscribableStreamMap().size(),
+                        EMClient.getInstance().conferenceManager().getAvailableStreamMap().size(),
                         EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
             }
 
@@ -592,7 +591,7 @@ public class DemoHelper {
                         stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
                         stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
                 EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
-                        EMClient.getInstance().conferenceManager().getSubscribableStreamMap().size(),
+                        EMClient.getInstance().conferenceManager().getAvailableStreamMap().size(),
                         EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
             }
 
@@ -600,8 +599,12 @@ public class DemoHelper {
                 EMLog.i(TAG, String.format("passive leave code: %d, message: %s", error, message));
             }
 
-            @Override public void onState(ConferenceState state, String confId, Object object) {
-                EMLog.i(TAG, String.format("State code=%d, confId=%s, object=" + object, state.ordinal(), confId));
+            @Override public void onNotice(ConferenceState state) {
+                EMLog.i(TAG, String.format("State code=%d", state.ordinal()));
+            }
+
+            @Override public void onStreamSetup(String streamId) {
+                EMLog.i(TAG, String.format("Stream id - %s", streamId));
             }
 
             @Override public void onReceiveInvite(String confId, String password, String extension) {
