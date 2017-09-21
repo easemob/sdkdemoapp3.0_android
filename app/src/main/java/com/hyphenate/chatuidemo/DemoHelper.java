@@ -599,7 +599,7 @@ public class DemoHelper {
                 EMLog.i(TAG, String.format("passive leave code: %d, message: %s", error, message));
             }
 
-            @Override public void onNotice(ConferenceState state) {
+            @Override public void onConferenceState(ConferenceState state) {
                 EMLog.i(TAG, String.format("State code=%d", state.ordinal()));
             }
 

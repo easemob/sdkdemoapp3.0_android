@@ -587,7 +587,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         });
     }
 
-    @Override public void onNotice(final ConferenceState state) {
+    @Override public void onConferenceState(final ConferenceState state) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 Toast.makeText(activity, "State=" + state, Toast.LENGTH_SHORT).show();
@@ -599,6 +599,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         runOnUiThread(new Runnable() {
             @Override public void run() {
                 if (streamId.indexOf(conference.getPubStreamId()) != -1) {
+                    conference.setPubStreamId(streamId);
                     Toast.makeText(activity, "Publish setup streamId=" + streamId, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(activity, "Subscribe setup streamId=" + streamId, Toast.LENGTH_SHORT).show();
