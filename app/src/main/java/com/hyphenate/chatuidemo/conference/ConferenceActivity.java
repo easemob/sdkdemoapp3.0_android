@@ -25,6 +25,8 @@ import com.hyphenate.chatuidemo.widget.EaseViewGroup;
 import com.hyphenate.util.EMLog;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by lzan13 on 2017/8/15.
@@ -111,6 +113,9 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         password = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_PASS);
 
         param = new EMStreamParam();
+        param.setVideoOff(true);
+        param.setMute(false);
+        cameraSwitch.setActivated(true);
         speakerSwitch.setActivated(true);
         openSpeaker();
 
@@ -321,19 +326,30 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             final String[] members = data.getStringArrayExtra("members");
-            for (int i = 0; i < members.length; i++) {
-                EMClient.getInstance()
-                        .conferenceManager()
-                        .inviteUserToJoinConference(conference.getConferenceId(), conference.getPassword(), members[i],
-                                "{'extension':'invite'}", new EMValueCallBack() {
-                                    @Override public void onSuccess(Object value) {
-                                        EMLog.e(TAG, "invite join conference success");
-                                    }
+            try {
+                JSONObject object = new JSONObject();
+                int type = 0;
+                if (!cameraSwitch.isActivated()) {
+                    type = 1;
+                }
+                object.put("type", type);
+                object.put("creater", EMClient.getInstance().getCurrentUser());
+                for (int i = 0; i < members.length; i++) {
+                    EMClient.getInstance()
+                            .conferenceManager()
+                            .inviteUserToJoinConference(conference.getConferenceId(), conference.getPassword(), members[i],
+                                    object.toString(), new EMValueCallBack() {
+                                        @Override public void onSuccess(Object value) {
+                                            EMLog.e(TAG, "invite join conference success");
+                                        }
 
-                                    @Override public void onError(int error, String errorMsg) {
-                                        EMLog.e(TAG, "invite join conference failed " + error + ", " + errorMsg);
-                                    }
-                                });
+                                        @Override public void onError(int error, String errorMsg) {
+                                            EMLog.e(TAG, "invite join conference failed " + error + ", " + errorMsg);
+                                        }
+                                    });
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -398,21 +414,19 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 订阅指定成员 stream
      */
     private void subscribe(EMConferenceStream stream, final ConferenceMemberView memberView) {
-        EMClient.getInstance()
-                .conferenceManager()
-                .subscribe(stream, memberView.getSurfaceView(), new EMValueCallBack<String>() {
-                    @Override public void onSuccess(String value) {
-                        runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                memberView.setPubOrSub(true);
-                            }
-                        });
-                    }
-
-                    @Override public void onError(int error, String errorMsg) {
-
+        EMClient.getInstance().conferenceManager().subscribe(stream, memberView.getSurfaceView(), new EMValueCallBack<String>() {
+            @Override public void onSuccess(String value) {
+                runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        memberView.setPubOrSub(true);
                     }
                 });
+            }
+
+            @Override public void onError(int error, String errorMsg) {
+
+            }
+        });
     }
 
     /**

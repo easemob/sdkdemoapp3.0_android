@@ -65,8 +65,10 @@ public class ConferenceMemberView extends RelativeLayout {
     public void updateVideoState(boolean state) {
         if (state) {
             videoIcon.setVisibility(View.VISIBLE);
+            avatarView.setVisibility(View.VISIBLE);
         } else {
             videoIcon.setVisibility(View.GONE);
+            avatarView.setVisibility(View.GONE);
         }
     }
 
@@ -90,11 +92,10 @@ public class ConferenceMemberView extends RelativeLayout {
     public void setPubOrSub(boolean activate) {
         isPubOrSub = activate;
         if (isPubOrSub) {
-            avatarView.setVisibility(View.GONE);
             activateView.setBackgroundResource(R.color.btn_green_noraml);
         } else {
-            avatarView.setVisibility(View.VISIBLE);
             activateView.setBackgroundResource(R.color.holo_red_light);
         }
     }
+
 }
