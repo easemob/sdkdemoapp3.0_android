@@ -263,8 +263,15 @@ public class DemoHelper {
         // set if you need delivery ack
         options.setRequireDeliveryAck(false);
 
-        //you need apply & set your own id if you want to use google cloud messaging.
-        options.setGCMNumber("324169311137");
+        /**
+         * 集成sdk Google推送使用GCM还是FCM推送方式通过以下接口设置：
+         * GCM: {@link com.hyphenate.chat.EMOptions#setGCMNumber(String)} 使用GCM推送
+         * FCM: {@link com.hyphenate.chat.EMOptions#setFCMNumber(String)} 使用FCM推送
+         *
+         * NOTE:你需要设置自己申请的Sender ID来使用Google推送功能，详见集成文档
+         */
+//        options.setGCMNumber("324169311137");
+        options.setFCMNumber("921300338324");
         //you need apply & set your own id if you want to use Mi push notification
         options.setMipushConfig("2882303761517426801", "5381742660801");
 

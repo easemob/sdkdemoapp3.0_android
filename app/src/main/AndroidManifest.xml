@@ -405,6 +405,19 @@
         </receiver>
         <!-- gcm end -->
 
+        <!-- FCM required start -->
+        <service android:name=".fcm.EMFCMMSGService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".fcm.EMFCMTokenRefreshService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- FCM required end -->
 
         <!-- mi push -->
         <service

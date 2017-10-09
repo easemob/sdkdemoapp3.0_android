@@ -49,9 +49,15 @@ dependencies {
     compile 'com.parse:parse-android:1.13.1'
     compile 'com.android.support:multidex:1.0.1'
 
+    // Google firebase cloud messaging
+    compile 'com.google.firebase:firebase-messaging:11.4.0'
+
 // ============== fabric start
 //    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
 //        transitive = true;
 //    }
 // ============== fabric end
 }
+
+// Google firebase cloud messaging
+apply plugin: 'com.google.gms.google-services'
