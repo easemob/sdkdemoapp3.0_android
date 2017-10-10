@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "921300338324",
+    "firebase_url": "https://chatuidemo-73c38.firebaseio.com",
+    "project_id": "chatuidemo-73c38",
+    "storage_bucket": "chatuidemo-73c38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921300338324:android:97309bf2bf5a5b61",
+        "android_client_info": {
+          "package_name": "com.hyphenate.chatuidemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921300338324-nk4f6lsgl8i33qcl93k495ms6icfssvl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKsch0tfLf8ydMzGyymPs7XCmV3xGQi-o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
