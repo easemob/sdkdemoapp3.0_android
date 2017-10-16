@@ -19,9 +19,9 @@ import android.widget.BaseAdapter;
 import android.widget.Toast;
 
 import com.easemob.redpacket.utils.RedPacketUtil;
-import com.easemob.redpacket.widget.ChatRowRandomPacket;
-import com.easemob.redpacket.widget.ChatRowRedPacket;
-import com.easemob.redpacket.widget.ChatRowRedPacketAck;
+import com.easemob.redpacket.widget.ChatRowRandomPacketPresenter;
+import com.easemob.redpacket.widget.ChatRowRedPacketAckPresenter;
+import com.easemob.redpacket.widget.ChatRowRedPacketPresenter;
 import com.easemob.redpacketsdk.RPSendPacketCallback;
 import com.easemob.redpacketsdk.bean.RedPacketInfo;
 import com.easemob.redpacketsdk.constant.RPConstant;
@@ -36,14 +36,14 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.domain.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.domain.RobotUser;
-import com.hyphenate.chatuidemo.widget.ChatRowVoiceCall;
-import com.hyphenate.chatuidemo.widget.EaseChatRowRecall;
+import com.hyphenate.chatuidemo.widget.EaseChatRecallPresenter;
+import com.hyphenate.chatuidemo.widget.EaseChatVoiceCallPresenter;
 import com.hyphenate.easeui.EaseConstant;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
-import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
+import com.hyphenate.easeui.widget.presenter.EaseChatRowPresenter;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
@@ -458,24 +458,34 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         }
 
         @Override
-        public EaseChatRow getCustomChatRow(EMMessage message, int position, BaseAdapter adapter) {
+        public EaseChatRowPresenter getCustomChatRow(EMMessage message, int position, BaseAdapter adapter) {
             if(message.getType() == EMMessage.Type.TXT){
                 // voice call or video call
                 if (message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false) ||
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
-                    return new ChatRowVoiceCall(getActivity(), message, position, adapter);
+                    EaseChatRowPresenter presenter = new EaseChatVoiceCallPresenter();
+                    return presenter;
+//                    return new ChatRowVoiceCall(getActivity(), message, position, adapter);
                 }
                 //recall message
                 else if(message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)){
-                    return new EaseChatRowRecall(getActivity(), message, position, adapter);
+                    EaseChatRowPresenter presenter = new EaseChatRecallPresenter();
+                    return presenter;
+//                    return new EaseChatRowRecall(getActivity(), message, position, adapter);
                 }
                 //red packet code : 红包消息、红包回执消息以及转账消息的chat row
                 else if (RedPacketUtil.isRandomRedPacket(message)) {//小额随机红包
-                    return new ChatRowRandomPacket(getActivity(), message, position, adapter);
+                    EaseChatRowPresenter presenter = new ChatRowRandomPacketPresenter();
+                    return presenter;
+//                    return new ChatRowRandomPacket(getActivity(), message, position, adapter);
                 } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {//红包消息
-                    return new ChatRowRedPacket(getActivity(), message, position, adapter);
+                    EaseChatRowPresenter presenter = new ChatRowRedPacketPresenter();
+                    return presenter;
+//                    return new ChatRowRedPacket(getActivity(), message, position, adapter);
                 } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {//红包回执消息
-                    return new ChatRowRedPacketAck(getActivity(), message, position, adapter);
+                    EaseChatRowPresenter presenter = new ChatRowRedPacketAckPresenter();
+                    return presenter;
+//                    return new ChatRowRedPacketAck(getActivity(), message, position, adapter);
                 }
                 //end of red packet code
             }

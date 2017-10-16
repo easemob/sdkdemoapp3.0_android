@@ -40,17 +40,12 @@ public class ChatRowVoiceCall extends EaseChatRow{
         EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
         contentvView.setText(txtBody.getMessage());
     }
-    
-    @Override
-    protected void onUpdateView() {
-        
-    }
 
     @Override
     protected void onBubbleClick() {
-        
     }
 
-  
-
+    @Override
+    protected void onViewUpdate(EMMessage msg) {
+    }
 }

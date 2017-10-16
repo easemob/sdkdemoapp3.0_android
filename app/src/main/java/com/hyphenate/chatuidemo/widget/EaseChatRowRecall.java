@@ -14,7 +14,6 @@ import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 
 public class EaseChatRowRecall extends EaseChatRow{
 
-
     private TextView contentView;
 
     public EaseChatRowRecall(Context context, EMMessage message, int position, BaseAdapter adapter) {
@@ -32,11 +31,6 @@ public class EaseChatRowRecall extends EaseChatRow{
     }
 
     @Override
-    protected void onUpdateView() {
-
-    }
-
-    @Override
     protected void onSetUpView() {
         // 设置显示内容
         String messageStr = null;
@@ -50,6 +44,9 @@ public class EaseChatRowRecall extends EaseChatRow{
 
     @Override
     protected void onBubbleClick() {
+    }
 
+    @Override
+    protected void onViewUpdate(EMMessage msg) {
     }
 }

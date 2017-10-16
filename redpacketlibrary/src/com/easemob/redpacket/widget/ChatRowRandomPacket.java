@@ -41,12 +41,11 @@ public class ChatRowRandomPacket extends EaseChatRow {
     }
 
     @Override
-    protected void onUpdateView() {
-        adapter.notifyDataSetChanged();
+    protected void onBubbleClick() {
     }
 
     @Override
-    protected void onBubbleClick() {
+    protected void onViewUpdate(EMMessage msg) {
     }
 
     public void keepFontSize(){

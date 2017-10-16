@@ -54,12 +54,10 @@ public class ChatRowRedPacketAck extends EaseChatRow {
     }
 
     @Override
-    protected void onUpdateView() {
-
-    }
-
-    @Override
     protected void onBubbleClick() {
     }
 
+    @Override
+    protected void onViewUpdate(EMMessage msg) {
+    }
 }
