@@ -465,27 +465,22 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)){
                     EaseChatRowPresenter presenter = new EaseChatVoiceCallPresenter();
                     return presenter;
-//                    return new ChatRowVoiceCall(getActivity(), message, position, adapter);
                 }
                 //recall message
                 else if(message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)){
                     EaseChatRowPresenter presenter = new EaseChatRecallPresenter();
                     return presenter;
-//                    return new EaseChatRowRecall(getActivity(), message, position, adapter);
                 }
                 //red packet code : 红包消息、红包回执消息以及转账消息的chat row
                 else if (RedPacketUtil.isRandomRedPacket(message)) {//小额随机红包
                     EaseChatRowPresenter presenter = new ChatRowRandomPacketPresenter();
                     return presenter;
-//                    return new ChatRowRandomPacket(getActivity(), message, position, adapter);
                 } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {//红包消息
                     EaseChatRowPresenter presenter = new ChatRowRedPacketPresenter();
                     return presenter;
-//                    return new ChatRowRedPacket(getActivity(), message, position, adapter);
                 } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {//红包回执消息
                     EaseChatRowPresenter presenter = new ChatRowRedPacketAckPresenter();
                     return presenter;
-//                    return new ChatRowRedPacketAck(getActivity(), message, position, adapter);
                 }
                 //end of red packet code
             }

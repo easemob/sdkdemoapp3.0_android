@@ -43,10 +43,6 @@ public class EaseChatRowRecall extends EaseChatRow{
     }
 
     @Override
-    protected void onBubbleClick() {
-    }
-
-    @Override
     protected void onViewUpdate(EMMessage msg) {
     }
 }

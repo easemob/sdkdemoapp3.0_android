@@ -52,10 +52,6 @@ public class ChatRowRedPacket extends EaseChatRow {
     }
 
     @Override
-    protected void onBubbleClick() {
-    }
-
-    @Override
     protected void onViewUpdate(EMMessage msg) {
         switch (msg.status()) {
             case CREATE:
@@ -73,22 +69,22 @@ public class ChatRowRedPacket extends EaseChatRow {
         }
     }
 
-    protected void onMessageCreate() {
+    private void onMessageCreate() {
         progressBar.setVisibility(View.VISIBLE);
         statusView.setVisibility(View.GONE);
     }
 
-    protected void onMessageSuccess() {
+    private void onMessageSuccess() {
         progressBar.setVisibility(View.GONE);
         statusView.setVisibility(View.GONE);
     }
 
-    protected void onMessageError() {
+    private void onMessageError() {
         progressBar.setVisibility(View.GONE);
         statusView.setVisibility(View.VISIBLE);
     }
 
-    protected void onMessageInProgress() {
+    private void onMessageInProgress() {
         progressBar.setVisibility(View.VISIBLE);
         statusView.setVisibility(View.GONE);
     }

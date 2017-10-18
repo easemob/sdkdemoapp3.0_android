@@ -41,10 +41,6 @@ public class ChatRowRandomPacket extends EaseChatRow {
     }
 
     @Override
-    protected void onBubbleClick() {
-    }
-
-    @Override
     protected void onViewUpdate(EMMessage msg) {
     }
 
