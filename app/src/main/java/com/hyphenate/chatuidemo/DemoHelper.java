@@ -32,6 +32,9 @@ import com.hyphenate.chat.EMMessage.Type;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.EMConferenceListener;
+import com.hyphenate.chat.EMConferenceStream;
+import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
@@ -87,7 +90,7 @@ public class DemoHelper {
     protected static final String TAG = "DemoHelper";
     
 	private EaseUI easeUI;
-	
+
     /**
      * EMEventListener
      */
@@ -556,7 +559,69 @@ public class DemoHelper {
         if(callReceiver == null){
             callReceiver = new CallReceiver();
         }
+        EMClient.getInstance().conferenceManager().addConferenceListener(new EMConferenceListener() {
+            @Override public void onMemberJoined(String username) {
+                EMLog.i(TAG, String.format("member joined username: %s, member: %d", username,
+                        EMClient.getInstance().conferenceManager().getConferenceMemberList().size()));
+            }
 
+            @Override public void onMemberExited(String username) {
+                EMLog.i(TAG, String.format("member exited username: %s, member size: %d", username,
+                        EMClient.getInstance().conferenceManager().getConferenceMemberList().size()));
+            }
+
+            @Override public void onStreamAdded(EMConferenceStream stream) {
+                EMLog.i(TAG, String.format("Stream added streamId: %s, streamName: %s, memberName: %s, username: %s, extension: %s, videoOff: %b, mute: %b",
+                        stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
+                        stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
+                EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
+                        EMClient.getInstance().conferenceManager().getAvailableStreamMap().size(),
+                        EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
+            }
+
+            @Override public void onStreamRemoved(EMConferenceStream stream) {
+                EMLog.i(TAG, String.format("Stream removed streamId: %s, streamName: %s, memberName: %s, username: %s, extension: %s, videoOff: %b, mute: %b",
+                        stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
+                        stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
+                EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
+                        EMClient.getInstance().conferenceManager().getAvailableStreamMap().size(),
+                        EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
+            }
+
+            @Override public void onStreamUpdate(EMConferenceStream stream) {
+                EMLog.i(TAG, String.format("Stream added streamId: %s, streamName: %s, memberName: %s, username: %s, extension: %s, videoOff: %b, mute: %b",
+                        stream.getStreamId(), stream.getStreamName(), stream.getMemberName(), stream.getUsername(),
+                        stream.getExtension(), stream.isVideoOff(), stream.isAudioOff()));
+                EMLog.i(TAG, String.format("Conference stream subscribable: %d, subscribed: %d",
+                        EMClient.getInstance().conferenceManager().getAvailableStreamMap().size(),
+                        EMClient.getInstance().conferenceManager().getSubscribedStreamMap().size()));
+            }
+
+            @Override public void onPassiveLeave(int error, String message) {
+                EMLog.i(TAG, String.format("passive leave code: %d, message: %s", error, message));
+            }
+
+            @Override public void onConferenceState(ConferenceState state) {
+                EMLog.i(TAG, String.format("State code=%d", state.ordinal()));
+            }
+
+            @Override public void onStreamSetup(String streamId) {
+                EMLog.i(TAG, String.format("Stream id - %s", streamId));
+            }
+
+            @Override public void onReceiveInvite(String confId, String password, String extension) {
+                EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
+                if(easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
+                    return;
+                }
+                Intent conferenceIntent = new Intent(appContext, ConferenceActivity.class);
+                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_ID, confId);
+                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_PASS, password);
+                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
+                conferenceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                appContext.startActivity(conferenceIntent);
+            }
+        });
         //register incoming call receiver
         appContext.registerReceiver(callReceiver, callFilter);    
         //register connection listener
@@ -567,7 +632,7 @@ public class DemoHelper {
         registerMessageListener();
         
     }
-    
+
     private void initDbDao() {
         inviteMessgeDao = new InviteMessgeDao(appContext);
         userDao = new UserDao(appContext);
