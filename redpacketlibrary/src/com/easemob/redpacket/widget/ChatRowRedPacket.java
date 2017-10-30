@@ -49,43 +49,43 @@ public class ChatRowRedPacket extends EaseChatRow {
         } else {
             mTvPacketType.setVisibility(GONE);
         }
-        handleTextMessage();
     }
 
-    protected void handleTextMessage() {
-        if (message.direct() == EMMessage.Direct.SEND) {
-            setMessageSendCallback();
-            switch (message.status()) {
-                case CREATE:
-                    progressBar.setVisibility(View.GONE);
-                    statusView.setVisibility(View.VISIBLE);
-                    // 发送消息
-                    break;
-                case SUCCESS: // 发送成功
-                    progressBar.setVisibility(View.GONE);
-                    statusView.setVisibility(View.GONE);
-                    break;
-                case FAIL: // 发送失败
-                    progressBar.setVisibility(View.GONE);
-                    statusView.setVisibility(View.VISIBLE);
-                    break;
-                case INPROGRESS: // 发送中
-                    progressBar.setVisibility(View.VISIBLE);
-                    statusView.setVisibility(View.GONE);
-                    break;
-                default:
-                    break;
-            }
+    @Override
+    protected void onViewUpdate(EMMessage msg) {
+        switch (msg.status()) {
+            case CREATE:
+                onMessageCreate();
+                break;
+            case SUCCESS:
+                onMessageSuccess();
+                break;
+            case FAIL:
+                onMessageError();
+                break;
+            case INPROGRESS:
+                onMessageInProgress( );
+                break;
         }
     }
 
-    @Override
-    protected void onUpdateView() {
-        adapter.notifyDataSetChanged();
+    private void onMessageCreate() {
+        progressBar.setVisibility(View.VISIBLE);
+        statusView.setVisibility(View.GONE);
     }
 
-    @Override
-    protected void onBubbleClick() {
+    private void onMessageSuccess() {
+        progressBar.setVisibility(View.GONE);
+        statusView.setVisibility(View.GONE);
     }
 
+    private void onMessageError() {
+        progressBar.setVisibility(View.GONE);
+        statusView.setVisibility(View.VISIBLE);
+    }
+
+    private void onMessageInProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        statusView.setVisibility(View.GONE);
+    }
 }
