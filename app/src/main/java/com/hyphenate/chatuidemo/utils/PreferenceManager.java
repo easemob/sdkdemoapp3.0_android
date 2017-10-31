@@ -33,7 +33,9 @@ public class PreferenceManager {
 
 	private static String SHARED_KEY_SETTING_CHATROOM_OWNER_LEAVE = "shared_key_setting_chatroom_owner_leave";
     private static String SHARED_KEY_SETTING_DELETE_MESSAGES_WHEN_EXIT_GROUP = "shared_key_setting_delete_messages_when_exit_group";
-    private static String SHARED_KEY_SETTING_AUTO_ACCEPT_GROUP_INVITATION = "shared_key_setting_auto_accept_group_invitation";
+	private static String SHARED_KEY_SETTING_TRANSFERFILE_BY_USERSELF = "shared_key_setting_transferfile_by_userself";
+	private static String SHARED_KEY_SETTING_AUTODOWNLOAD_THUMBNAIL = "shared_key_setting_autodownload_thumbnail";
+	private static String SHARED_KEY_SETTING_AUTO_ACCEPT_GROUP_INVITATION = "shared_key_setting_auto_accept_group_invitation";
     private static String SHARED_KEY_SETTING_ADAPTIVE_VIDEO_ENCODE = "shared_key_setting_adaptive_video_encode";
 	private static String SHARED_KEY_SETTING_OFFLINE_PUSH_CALL = "shared_key_setting_offline_push_call";
 
@@ -141,7 +143,24 @@ public class PreferenceManager {
         return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_DELETE_MESSAGES_WHEN_EXIT_GROUP, true);
     }
 
-    public void setAutoAcceptGroupInvitation(boolean value) {
+	public void setTransferfileByUserself(boolean value) {
+		editor.putBoolean(SHARED_KEY_SETTING_TRANSFERFILE_BY_USERSELF, value);
+		editor.apply();
+	}
+
+	public boolean isSetTransferfileByUserself() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_TRANSFERFILE_BY_USERSELF, true);
+	}
+	public void setAudodownloadThumbnail(boolean autodownload) {
+		editor.putBoolean(SHARED_KEY_SETTING_AUTODOWNLOAD_THUMBNAIL, autodownload);
+		editor.apply();
+	}
+
+	public boolean isSetAutodownloadThumbnail() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_AUTODOWNLOAD_THUMBNAIL, true);
+	}
+
+	public void setAutoAcceptGroupInvitation(boolean value) {
         editor.putBoolean(SHARED_KEY_SETTING_AUTO_ACCEPT_GROUP_INVITATION, value);
         editor.commit();
     }

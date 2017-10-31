@@ -225,7 +225,23 @@ public class DemoModel {
     public boolean isDeleteMessagesAsExitGroup() {
         return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
     }
-    
+
+    public void setTransferfileByUserself(boolean value) {
+        PreferenceManager.getInstance().setTransferfileByUserself(value);
+    }
+
+    public boolean isSetTransferfileByUserself() {
+        return PreferenceManager.getInstance().isSetTransferfileByUserself();
+    }
+
+    public void setAutodownloadThumbnail(boolean autodownload) {
+        PreferenceManager.getInstance().setAudodownloadThumbnail(autodownload);
+    }
+
+    public boolean isSetAutodownloadThumbnail() {
+        return PreferenceManager.getInstance().isSetAutodownloadThumbnail();
+    }
+
     public void setAutoAcceptGroupInvitation(boolean value) {
         PreferenceManager.getInstance().setAutoAcceptGroupInvitation(value);
     }
