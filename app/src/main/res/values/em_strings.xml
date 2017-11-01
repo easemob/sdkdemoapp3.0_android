@@ -102,6 +102,7 @@
     <string name="group_chat">Group chat</string>
     <string name="chat_room">Channel</string>
     <string name="voice_and_video_conference">Voice and video conference</string>
+    <string name="conference_invite_error">Did not get the meeting information, can not invite other people to join</string>
     <string name="add_friend">Add friends</string>
     <string name="search">Search</string>
     <string name="black_item">Black list</string>

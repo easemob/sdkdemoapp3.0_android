@@ -98,6 +98,7 @@
     <string name="group_chat">群聊</string>
     <string name="chat_room">聊天室</string>
     <string name="voice_and_video_conference">音视频会议</string>
+    <string name="conference_invite_error">还没有获取到会议信息，无法邀请其他人加入</string>
     <string name="add_friend">添加好友</string>
     <string name="search">搜索</string>
     <string name="black_item">黑名单</string>

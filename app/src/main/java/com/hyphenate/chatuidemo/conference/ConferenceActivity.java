@@ -318,6 +318,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 邀请他人加入会议
      */
     private void inviteUserToJoinConference() {
+        if (conference == null) {
+            Toast.makeText(activity, R.string.conference_invite_error, Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(activity, ConferenceInviteJoinActivity.class);
         activity.startActivityForResult(intent, 0);
     }
