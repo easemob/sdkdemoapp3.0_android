@@ -226,12 +226,12 @@ public class DemoModel {
         return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
     }
 
-    public void setTransferfileByUserself(boolean value) {
-        PreferenceManager.getInstance().setTransferfileByUserself(value);
+    public void setTransfeFileByUser(boolean value) {
+        PreferenceManager.getInstance().setTransferFileByUser(value);
     }
 
-    public boolean isSetTransferfileByUserself() {
-        return PreferenceManager.getInstance().isSetTransferfileByUserself();
+    public boolean isSetTransferFileByUser() {
+        return PreferenceManager.getInstance().isSetTransferFileByUser();
     }
 
     public void setAutodownloadThumbnail(boolean autodownload) {

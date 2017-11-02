@@ -290,7 +290,7 @@ public class DemoHelper {
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
-        options.setTransferAttachments(getModel().isSetTransferfileByUserself());
+        options.setTransferFileByUser(getModel().isSetTransferFileByUser());
         options.setAutoDownloadThumbnail(getModel().isSetAutodownloadThumbnail());
         return options;
     }
