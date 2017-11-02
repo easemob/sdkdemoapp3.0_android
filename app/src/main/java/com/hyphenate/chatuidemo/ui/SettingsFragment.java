@@ -260,7 +260,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		    switch_delete_msg_when_exit_group.closeSwitch();
 		}
 
-		if(settingsModel.isSetTransferfileByUserself()){
+		if(settingsModel.isSetTransferFileByUser()){
 			set_transfer_file_by_userself.openSwitch();
 		} else {
 			set_transfer_file_by_userself.closeSwitch();
@@ -400,12 +400,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			case R.id.rl_set_transfer_file_by_userself:
 				if(set_transfer_file_by_userself.isSwitchOpen()){
 					set_transfer_file_by_userself.closeSwitch();
-					settingsModel.setTransferfileByUserself(false);
-					chatOptions.setTransferAttachments(false);
+					settingsModel.setTransfeFileByUser(false);
+					chatOptions.setTransferFileByUser(false);
 				}else{
 					set_transfer_file_by_userself.openSwitch();
-					settingsModel.setTransferfileByUserself(true);
-					chatOptions.setTransferAttachments(true);
+					settingsModel.setTransfeFileByUser(true);
+					chatOptions.setTransferFileByUser(true);
 				}
 				break;
 			case R.id.rl_set_autodownload_thumbnail:
