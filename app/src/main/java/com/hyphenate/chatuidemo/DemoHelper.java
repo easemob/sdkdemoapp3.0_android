@@ -290,7 +290,9 @@ public class DemoHelper {
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
-        options.setTransferFileByUser(getModel().isSetTransferFileByUser());
+        // Whether the message attachment is automatically uploaded to the Hyphenate server,
+        options.setAutoTransferMessageAttachments(getModel().isSetTransferFileByUser());
+        // Set Whether auto download thumbnail, default value is true.
         options.setAutoDownloadThumbnail(getModel().isSetAutodownloadThumbnail());
         return options;
     }

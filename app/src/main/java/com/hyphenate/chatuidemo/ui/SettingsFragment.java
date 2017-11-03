@@ -401,11 +401,11 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				if(set_transfer_file_by_userself.isSwitchOpen()){
 					set_transfer_file_by_userself.closeSwitch();
 					settingsModel.setTransfeFileByUser(false);
-					chatOptions.setTransferFileByUser(false);
+					chatOptions.setAutoTransferMessageAttachments(false);
 				}else{
 					set_transfer_file_by_userself.openSwitch();
 					settingsModel.setTransfeFileByUser(true);
-					chatOptions.setTransferFileByUser(true);
+					chatOptions.setAutoTransferMessageAttachments(true);
 				}
 				break;
 			case R.id.rl_set_autodownload_thumbnail:
