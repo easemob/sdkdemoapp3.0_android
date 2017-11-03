@@ -32,7 +32,7 @@ import com.hyphenate.chat.EMMessage.Type;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chat.EMConferenceListener;
+import com.hyphenate.EMConferenceListener;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
