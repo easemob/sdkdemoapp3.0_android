@@ -32,7 +32,7 @@ import com.hyphenate.chat.EMMessage.Type;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chat.EMConferenceListener;
+import com.hyphenate.EMConferenceListener;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
@@ -290,7 +290,10 @@ public class DemoHelper {
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
-
+        // Whether the message attachment is automatically uploaded to the Hyphenate server,
+        options.setAutoTransferMessageAttachments(getModel().isSetTransferFileByUser());
+        // Set Whether auto download thumbnail, default value is true.
+        options.setAutoDownloadThumbnail(getModel().isSetAutodownloadThumbnail());
         return options;
     }
 

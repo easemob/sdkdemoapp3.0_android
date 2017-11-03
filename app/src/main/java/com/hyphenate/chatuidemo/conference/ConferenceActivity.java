@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConference;
-import com.hyphenate.chat.EMConferenceListener;
+import com.hyphenate.EMConferenceListener;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMStreamParam;
 import com.hyphenate.chatuidemo.Constant;
@@ -318,6 +318,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 邀请他人加入会议
      */
     private void inviteUserToJoinConference() {
+        if (conference == null) {
+            Toast.makeText(activity, R.string.conference_invite_error, Toast.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(activity, ConferenceInviteJoinActivity.class);
         activity.startActivityForResult(intent, 0);
     }

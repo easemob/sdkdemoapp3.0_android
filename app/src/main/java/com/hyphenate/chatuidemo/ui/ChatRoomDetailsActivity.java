@@ -487,7 +487,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		progressDialog.setMessage("Updating ...");
 		progressDialog.show();
 
-		EMClient.getInstance().groupManager().asyncUpdateGroupAnnouncement(roomId, announcement,
+		EMClient.getInstance().chatroomManager().asyncUpdateChatRoomAnnouncement(roomId, announcement,
 				new EMCallBack() {
 					@Override
 					public void onSuccess() {
