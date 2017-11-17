@@ -420,4 +420,18 @@
     <string name="multi_device_group_remove_mute">UnMute %s from group [remote]</string>
 
     <string name="multi_device_logged_in_device_kick_item">kick online device</string>
+
+    <string name="sdk_service_check">SDK service check</string>
+    <string name="check_service_start">Start check: %1$s\n</string>
+    <string name="check_result_account_validate_fail">Account validate failed%1$s%2$s</string>
+    <string name="check_result_get_dns_list_fail">Get DNS list from server failed%1$s%2$s</string>
+    <string name="check_result_get_token_fail">Get token from server failed%1$s%2$s</string>
+    <string name="check_result_login_fail">Login failed%1$s%2$s</string>
+    <string name="check_result_msg_send_fail">Message send failed%1$s%2$s</string>
+    <string name="check_result_logout_fail">Logout failed%1$s%2$s</string>
+    <string name="check_result_get_dns_list_success">Get DNS list from server success</string>
+    <string name="check_result_get_token_success">Get token from server success</string>
+    <string name="check_result_login_success">Login success</string>
+    <string name="check_result_msg_send_success">Message send success</string>
+    <string name="check_result_logout_success">Logout success</string>
 </resources>

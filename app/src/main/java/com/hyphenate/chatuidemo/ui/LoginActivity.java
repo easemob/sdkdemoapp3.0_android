@@ -211,6 +211,15 @@ public class LoginActivity extends BaseActivity {
 		startActivityForResult(new Intent(this, RegisterActivity.class), 0);
 	}
 
+	/**
+	 * SDK service check
+	 *
+	 * @param v
+	 */
+	public void serviceCheck(View v) {
+		startActivity(new Intent(this, ServiceCheckActivity.class));
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();

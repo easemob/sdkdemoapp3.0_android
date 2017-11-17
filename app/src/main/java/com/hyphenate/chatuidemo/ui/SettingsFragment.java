@@ -128,7 +128,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private DemoModel settingsModel;
     private EMOptions chatOptions;
 	private EditText edit_custom_appkey;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.em_fragment_conversation_settings, container, false);
@@ -217,6 +217,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		llChange.setOnClickListener(this);
 		rl_mail_log.setOnClickListener(this);
 		rl_msg_roaming.setOnClickListener(this);
+
+		// Add by zhangsong for service check.
+		getView().findViewById(R.id.ll_service_check).setOnClickListener(this);
 
 		// the vibrate and sound notification are allowed or not?
 		if (settingsModel.getSettingMsgNotification()) {
@@ -501,6 +504,9 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				break;
 			case R.id.rl_mail_log:
 				sendLogThroughMail();
+				break;
+			case R.id.ll_service_check:
+				startActivity(new Intent(getActivity(), ServiceCheckActivity.class));
 				break;
 			default:
 				break;
