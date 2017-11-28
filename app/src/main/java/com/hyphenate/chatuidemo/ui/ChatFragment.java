@@ -188,6 +188,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                             msgNotification.setMsgTime(contextMenuMessage.getMsgTime());
                             msgNotification.setLocalTime(contextMenuMessage.getMsgTime());
                             msgNotification.setAttribute(Constant.MESSAGE_TYPE_RECALL, true);
+                            msgNotification.setStatus(EMMessage.Status.SUCCESS);
                             EMClient.getInstance().chatManager().recallMessage(contextMenuMessage);
                             EMClient.getInstance().chatManager().saveMessage(msgNotification);
                             messageList.refresh();
