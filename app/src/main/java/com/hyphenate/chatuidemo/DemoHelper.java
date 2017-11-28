@@ -1355,6 +1355,7 @@ public class DemoHelper {
                     msgNotification.setLocalTime(msg.getMsgTime());
                     msgNotification.setChatType(msg.getChatType());
                     msgNotification.setAttribute(Constant.MESSAGE_TYPE_RECALL, true);
+                    msgNotification.setStatus(Status.SUCCESS);
                     EMClient.getInstance().chatManager().saveMessage(msgNotification);
                 }
             }
