@@ -422,6 +422,7 @@
     <string name="multi_device_logged_in_device_kick_item">kick online device</string>
 
     <string name="sdk_service_check">SDK service check</string>
+    <string name="btn_service_check">CHECK</string>
     <string name="check_service_start">Start check: %1$s\n</string>
     <string name="check_result_account_validate_fail">Account validate failed%1$s%2$s</string>
     <string name="check_result_get_dns_list_fail">Get DNS list from server failed%1$s%2$s</string>

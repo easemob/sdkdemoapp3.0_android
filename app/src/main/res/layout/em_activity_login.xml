@@ -87,6 +87,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/ll_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/rl_password"
@@ -126,16 +127,26 @@
                 android:textSize="18sp" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="28dip"
-            android:layout_marginBottom="20dip"
-            android:onClick="serviceCheck"
-            android:text="@string/sdk_service_check"
-            android:textSize="16sp" />
+        <!-- Add the RelativeLayout to avoid service-check text be pushed upon the keyboard -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ll_btn">
+
+            <TextView
+                android:id="@+id/txt_service_ckeck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="20dip"
+                android:layout_marginRight="28dip"
+                android:onClick="serviceCheck"
+                android:padding="2dip"
+                android:text="@string/sdk_service_check"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </LinearLayout>

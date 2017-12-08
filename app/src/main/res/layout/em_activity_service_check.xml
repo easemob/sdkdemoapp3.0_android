@@ -97,7 +97,7 @@
         android:onClick="serviceCheck"
         android:paddingBottom="7dp"
         android:paddingTop="7dp"
-        android:text="诊断"
+        android:text="@string/btn_service_check"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
 

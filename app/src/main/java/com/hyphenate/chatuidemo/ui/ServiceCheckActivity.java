@@ -93,9 +93,9 @@ public class ServiceCheckActivity extends BaseActivity {
             return;
         }
 
-        final StringBuilder sb = new StringBuilder();
-        sb.append(String.format(getString(R.string.check_service_start), currentUsername));
-        serviceCheckResultView.setText(sb.toString());
+        final StringBuilder builder = new StringBuilder();
+        builder.append(String.format(getString(R.string.check_service_start), currentUsername));
+        serviceCheckResultView.setText(builder.toString());
 
         EMClient.getInstance().check(currentUsername, currentPassword, new EMClient.CheckResultListener() {
             @Override
@@ -103,42 +103,35 @@ public class ServiceCheckActivity extends BaseActivity {
                 switch (type) {
                     case EMCheckType.ACCOUNT_VALIDATION: // Account validation.
                         if (result != EMError.EM_NO_ERROR) {
-                            updateResultOnUiThread(sb, R.string.check_result_account_validate_fail, result, desc);
+                            updateResultOnUiThread(builder, R.string.check_result_account_validate_fail, result, desc);
                         }
                         break;
                     case EMCheckType.GET_DNS_LIST_FROM_SERVER: // Get dns list from server.
                         if (result == EMError.EM_NO_ERROR) {
-                            updateResultOnUiThread(sb, R.string.check_result_get_dns_list_success, 0, null);
+                            updateResultOnUiThread(builder, R.string.check_result_get_dns_list_success, 0, null);
                         } else {
-                            updateResultOnUiThread(sb, R.string.check_result_get_dns_list_fail, result, desc);
+                            updateResultOnUiThread(builder, R.string.check_result_get_dns_list_fail, result, desc);
                         }
                         break;
                     case EMCheckType.GET_TOKEN_FROM_SERVER: // Get token from server.
                         if (result == EMError.EM_NO_ERROR) {
-                            updateResultOnUiThread(sb, R.string.check_result_get_token_success, 0, null);
+                            updateResultOnUiThread(builder, R.string.check_result_get_token_success, 0, null);
                         } else {
-                            updateResultOnUiThread(sb, R.string.check_result_get_token_fail, result, desc);
+                            updateResultOnUiThread(builder, R.string.check_result_get_token_fail, result, desc);
                         }
                         break;
                     case EMCheckType.DO_LOGIN: // User login
                         if (result == EMError.EM_NO_ERROR) {
-                            updateResultOnUiThread(sb, R.string.check_result_login_success, 0, null);
+                            updateResultOnUiThread(builder, R.string.check_result_login_success, 0, null);
                         } else {
-                            updateResultOnUiThread(sb, R.string.check_result_login_fail, result, desc);
-                        }
-                        break;
-                    case EMCheckType.DO_MSG_SEND: // Message send
-                        if (result == EMError.EM_NO_ERROR) {
-                            updateResultOnUiThread(sb, R.string.check_result_msg_send_success, 0, null);
-                        } else {
-                            updateResultOnUiThread(sb, R.string.check_result_msg_send_fail, result, desc);
+                            updateResultOnUiThread(builder, R.string.check_result_login_fail, result, desc);
                         }
                         break;
                     case EMCheckType.DO_LOGOUT: // User logout
                         if (result == EMError.EM_NO_ERROR) {
-                            updateResultOnUiThread(sb, R.string.check_result_logout_success, 0, null);
+                            updateResultOnUiThread(builder, R.string.check_result_logout_success, 0, null);
                         } else {
-                            updateResultOnUiThread(sb, R.string.check_result_logout_fail, result, desc);
+                            updateResultOnUiThread(builder, R.string.check_result_logout_fail, result, desc);
                         }
                         break;
                 }
@@ -146,8 +139,8 @@ public class ServiceCheckActivity extends BaseActivity {
         });
     }
 
-    private void updateResultOnUiThread(final StringBuilder sb, @StringRes int resId, int result, String desc) {
-        sb.append(String.format(getString(resId), result == 0 ? "" : ", error code: " + result,
+    private void updateResultOnUiThread(final StringBuilder builder, @StringRes int resId, int result, String desc) {
+        builder.append(String.format(getString(resId), result == 0 ? "" : ", error code: " + result,
                 TextUtils.isEmpty(desc) ? "" : ", desc: " + desc))
                 .append("\n");
 
@@ -155,7 +148,7 @@ public class ServiceCheckActivity extends BaseActivity {
             @Override
             public void run() {
                 if (isFinishing()) return;
-                serviceCheckResultView.setText(sb.toString());
+                serviceCheckResultView.setText(builder.toString());
             }
         });
     }

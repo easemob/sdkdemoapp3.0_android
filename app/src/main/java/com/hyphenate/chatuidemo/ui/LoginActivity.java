@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -100,6 +101,9 @@ public class LoginActivity extends BaseActivity {
 		if (DemoHelper.getInstance().getCurrentUsernName() != null) {
 			usernameEditText.setText(DemoHelper.getInstance().getCurrentUsernName());
 		}
+
+		TextView serviceCheckTV = (TextView) findViewById(R.id.txt_service_ckeck);
+		serviceCheckTV.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 	}
 
 	/**

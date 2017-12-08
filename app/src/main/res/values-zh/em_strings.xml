@@ -420,6 +420,7 @@
     <string name="multi_device_logged_in_device_kick_item">将设备移除</string>
 
     <string name="sdk_service_check">SDK接口诊断</string>
+    <string name="btn_service_check">诊断</string>
     <string name="check_service_start">开始诊断: %1$s\n</string>
     <string name="check_result_account_validate_fail">账号合法性验证失败%1$s%2$s</string>
     <string name="check_result_get_dns_list_fail">DNS列表获取失败%1$s%2$s</string>
