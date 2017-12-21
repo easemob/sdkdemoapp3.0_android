@@ -47,6 +47,12 @@ public class ServiceCheckActivity extends BaseActivity {
             usernameEditText.setEnabled(false);
             usernameEditText.setFocusable(false);
             usernameEditText.setKeyListener(null);
+
+            // Will replace to the correct password in sdk.
+            passwordEditText.setText("password");
+            passwordEditText.setEnabled(false);
+            passwordEditText.setFocusable(false);
+            passwordEditText.setKeyListener(null);
             return;// Do not set the TextChangedListener
         }
 
@@ -81,7 +87,7 @@ public class ServiceCheckActivity extends BaseActivity {
             return;
         }
 
-        String currentUsername = usernameEditText.getText().toString().trim();
+        final String currentUsername = usernameEditText.getText().toString().trim();
         String currentPassword = passwordEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(currentUsername)) {
@@ -94,8 +100,9 @@ public class ServiceCheckActivity extends BaseActivity {
         }
 
         final StringBuilder builder = new StringBuilder();
-        builder.append(String.format(getString(R.string.check_service_start), currentUsername));
-        serviceCheckResultView.setText(builder.toString());
+
+        builder.append(getString(R.string.check_service_start));
+        showResultOnUiThread(builder.toString());
 
         EMClient.getInstance().check(currentUsername, currentPassword, new EMClient.CheckResultListener() {
             @Override
@@ -140,15 +147,19 @@ public class ServiceCheckActivity extends BaseActivity {
     }
 
     private void updateResultOnUiThread(final StringBuilder builder, @StringRes int resId, int result, String desc) {
-        builder.append(String.format(getString(resId), result == 0 ? "" : ", error code: " + result,
+        builder.append(String.format(getString(resId), result == EMError.EM_NO_ERROR ? "" : ", error code: " + result,
                 TextUtils.isEmpty(desc) ? "" : ", desc: " + desc))
                 .append("\n");
 
+        showResultOnUiThread(builder.toString());
+    }
+
+    private void showResultOnUiThread(final String result) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (isFinishing()) return;
-                serviceCheckResultView.setText(builder.toString());
+                serviceCheckResultView.setText(result);
             }
         });
     }
