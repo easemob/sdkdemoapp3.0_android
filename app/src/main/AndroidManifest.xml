@@ -70,6 +70,13 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustResize|stateVisible" />
 
+        <!-- SDK接口诊断 -->
+        <activity
+            android:name=".ui.ServiceCheckActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustResize|stateVisible" />
+
         <!-- 注册 -->
         <activity
             android:name=".ui.RegisterActivity"
