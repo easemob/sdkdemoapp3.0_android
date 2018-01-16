@@ -362,6 +362,8 @@
     <string name="group_nick">Group Nickname:</string>
     <string name="group_owner">Group Owner:</string>
     <string name="user_removed_from_group">You are removed from the group</string>
+
+    <string name="register_exceed_service_limit">You have exceeded the limit of the community edition,Please upgrade to the enterprise edition</string>
     
     <string name="network_unstable">Network unstable</string>
     <string name="no_call_data">No call data</string>

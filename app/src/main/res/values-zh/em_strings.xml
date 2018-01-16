@@ -362,6 +362,8 @@
     <string name="group_nick">聊天室名称:</string>
     <string name="group_owner">群主：</string>
     <string name="user_removed_from_group">你已经被移除群</string>
+
+    <string name="register_exceed_service_limit">您的App用户注册数量已达上限,请升级至企业版</string>
     
     <string name="network_unstable">网络不稳定</string>
     <string name="no_call_data">没有通话数据</string>
