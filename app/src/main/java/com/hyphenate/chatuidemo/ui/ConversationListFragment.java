@@ -12,17 +12,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
-import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
-import com.hyphenate.easeui.widget.EaseConversationList.EaseConversationListHelper;
 import com.hyphenate.util.NetUtils;
 
 public class ConversationListFragment extends EaseConversationListFragment{
@@ -68,30 +65,7 @@ public class ConversationListFragment extends EaseConversationListFragment{
                 }
             }
         });
-        //red packet code : 红包回执消息在会话列表最后一条消息的展示
-        conversationListView.setConversationListHelper(new EaseConversationListHelper() {
-            @Override
-            public String onSetItemSecondaryText(EMMessage lastMessage) {
-                if (lastMessage.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
-                    String sendNick = lastMessage.getStringAttribute(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, "");
-                    String receiveNick = lastMessage.getStringAttribute(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, "");
-                    String msg;
-                    if (lastMessage.direct() == EMMessage.Direct.RECEIVE) {
-                        msg = String.format(getResources().getString(R.string.msg_someone_take_red_packet), receiveNick);
-                    } else {
-                        if (sendNick.equals(receiveNick)) {
-                            msg = getResources().getString(R.string.msg_take_red_packet);
-                        } else {
-                            msg = String.format(getResources().getString(R.string.msg_take_someone_red_packet), sendNick);
-                        }
-                    }
-                    return msg;
-                }
-                return null;
-            }
-        });
         super.setUpView();
-        //end of red packet code
     }
 
     @Override

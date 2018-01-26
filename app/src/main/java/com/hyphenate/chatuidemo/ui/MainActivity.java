@@ -34,15 +34,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.redpacket.utils.RedPacketUtil;
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMClientListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -236,15 +233,6 @@ public class MainActivity extends BaseActivity {
 		
 		@Override
 		public void onCmdMessageReceived(List<EMMessage> messages) {
-			//red packet code : 处理红包回执透传消息
-			for (EMMessage message : messages) {
-				EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
-				final String action = cmdMsgBody.action();//获取自定义action
-				if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)) {
-					RedPacketUtil.receiveRedPacketAckMessage(message);
-				}
-			}
-			//end of red packet code
 			refreshUIWithMessage();
 		}
 		
@@ -290,7 +278,6 @@ public class MainActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Constant.ACTION_CONTACT_CHANAGED);
         intentFilter.addAction(Constant.ACTION_GROUP_CHANAGED);
-		intentFilter.addAction(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION);
         broadcastReceiver = new BroadcastReceiver() {
             
             @Override
@@ -313,13 +300,6 @@ public class MainActivity extends BaseActivity {
                         GroupsActivity.instance.onResume();
                     }
                 }
-				//red packet code : 处理红包回执透传消息
-				if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
-					if (conversationListFragment != null){
-						conversationListFragment.refresh();
-					}
-				}
-				//end of red packet code
 			}
 	         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);

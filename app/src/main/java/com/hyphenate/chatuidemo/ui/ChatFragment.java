@@ -18,16 +18,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
-import com.easemob.redpacket.utils.RedPacketUtil;
-import com.easemob.redpacket.widget.ChatRowRandomPacketPresenter;
-import com.easemob.redpacket.widget.ChatRowRedPacketAckPresenter;
-import com.easemob.redpacket.widget.ChatRowRedPacketPresenter;
-import com.easemob.redpacketsdk.RPSendPacketCallback;
-import com.easemob.redpacketsdk.bean.RedPacketInfo;
-import com.easemob.redpacketsdk.constant.RPConstant;
-import com.easemob.redpacketui.utils.RPRedPacketUtil;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
@@ -73,15 +64,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
     private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
     private static final int MESSAGE_TYPE_RECALL = 9;
-    //red packet code : 红包功能使用的常量
-    private static final int MESSAGE_TYPE_RECV_RED_PACKET = 5;
-    private static final int MESSAGE_TYPE_SEND_RED_PACKET = 6;
-    private static final int MESSAGE_TYPE_SEND_RED_PACKET_ACK = 7;
-    private static final int MESSAGE_TYPE_RECV_RED_PACKET_ACK = 8;
-    private static final int MESSAGE_TYPE_RECV_RANDOM = 11;
-    private static final int MESSAGE_TYPE_SEND_RANDOM = 12;
-    private static final int ITEM_RED_PACKET = 16;
-    //end of red packet code
 
     /**
      * if it is chatBot 
@@ -150,12 +132,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, ITEM_VOICE_CALL, extendMenuItemClickListener);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL, extendMenuItemClickListener);
         }
-        //聊天室暂时不支持红包功能
-        //red packet code : 注册红包菜单选项
-        if (chatType != Constant.CHATTYPE_CHATROOM) {
-            inputMenu.registerExtendMenuItem(R.string.attach_red_packet, R.drawable.em_chat_red_packet_selector, ITEM_RED_PACKET, extendMenuItemClickListener);
-        }
-        //end of red packet code
     }
     
     @Override
@@ -294,26 +270,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public boolean onMessageBubbleClick(EMMessage message) {
         //消息框点击事件，demo这里不做覆盖，如需覆盖，return true
-        //red packet code : 拆红包页面
-        if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
-            RedPacketUtil.openRedPacket(getActivity(), chatType, message, toChatUsername, messageList);
-            return true;
-        }
-        //end of red packet code
         return false;
     }
     @Override
     public void onCmdMessageReceived(List<EMMessage> messages) {
-        //red packet code : 处理红包回执透传消息
-        for (EMMessage message : messages) {
-            EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
-            String action = cmdMsgBody.action();//获取自定义action
-            if (action.equals(RPConstant.REFRESH_GROUP_RED_PACKET_ACTION)){
-                RedPacketUtil.receiveRedPacketAckMessage(message);
-                messageList.refresh();
-            }
-        }
-        //end of red packet code
         super.onCmdMessageReceived(messages);
     }
 
@@ -341,30 +301,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         case ITEM_VIDEO_CALL:
             startVideoCall();
             break;
-        //red packet code : 进入发红包页面
-        case ITEM_RED_PACKET:
-            //注意：不再支持原有的startActivityForResult进入红包相关页面
-            int itemType;
-            if (chatType == EaseConstant.CHATTYPE_SINGLE) {
-                itemType = RPConstant.RP_ITEM_TYPE_SINGLE;
-                //小额随机红包
-                //itemType = RPConstant.RP_ITEM_TYPE_RANDOM;
-            } else {
-                itemType = RPConstant.RP_ITEM_TYPE_GROUP;
-            }
-            RedPacketUtil.startRedPacket(getActivity(), itemType, toChatUsername, new RPSendPacketCallback() {
-                @Override
-                public void onGenerateRedPacketId(String redPacketId) {
-
-                }
-
-                @Override
-                public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
-                    sendMessage(RedPacketUtil.createRPMessage(getActivity(), redPacketInfo, toChatUsername));
-                }
-            });
-            break;
-            //end of red packet code
         default:
             break;
         }
@@ -442,18 +378,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 else if(message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)){
                     return MESSAGE_TYPE_RECALL;
                 }
-                //red packet code : 红包消息、红包回执消息以及转账消息的chatrow type
-                else if (RedPacketUtil.isRandomRedPacket(message)) {
-                    //小额随机红包
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_RANDOM : MESSAGE_TYPE_SEND_RANDOM;
-                } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
-                    //发送红包消息
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_RED_PACKET : MESSAGE_TYPE_SEND_RED_PACKET;
-                } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {
-                    //领取红包消息
-                    return message.direct() == EMMessage.Direct.RECEIVE ? MESSAGE_TYPE_RECV_RED_PACKET_ACK : MESSAGE_TYPE_SEND_RED_PACKET_ACK;
-                }
-                //end of red packet code
             }
             return 0;
         }
@@ -472,18 +396,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     EaseChatRowPresenter presenter = new EaseChatRecallPresenter();
                     return presenter;
                 }
-                //red packet code : 红包消息、红包回执消息以及转账消息的chat row
-                else if (RedPacketUtil.isRandomRedPacket(message)) {//小额随机红包
-                    EaseChatRowPresenter presenter = new ChatRowRandomPacketPresenter();
-                    return presenter;
-                } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {//红包消息
-                    EaseChatRowPresenter presenter = new ChatRowRedPacketPresenter();
-                    return presenter;
-                } else if (message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, false)) {//红包回执消息
-                    EaseChatRowPresenter presenter = new ChatRowRedPacketAckPresenter();
-                    return presenter;
-                }
-                //end of red packet code
             }
             return null;
         }
@@ -493,7 +405,5 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //调用该方法可防止红包SDK引起的内存泄漏
-        RPRedPacketUtil.getInstance().detachView();
     }
 }

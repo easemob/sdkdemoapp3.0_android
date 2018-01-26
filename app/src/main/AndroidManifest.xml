@@ -5,11 +5,6 @@
     android:versionCode="45"
     android:versionName="3.3.8">
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="22"
-        tools:overrideLibrary="com.easemob.redpacket" />
-
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -304,81 +299,6 @@
             android:name=".ui.CallOptionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
-
-        <!-- 红包相关Activity start -->
-        <!-- 发红包 -->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPRedPacketActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateVisible" />
-        <!-- 红包详情 -->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" />
-        <!-- 红包记录 -->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPRecordActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan" />
-        <!-- 群成员列表页 -->
-        <activity
-            android:name="com.easemob.redpacketui.ui.activity.RPGroupMemberActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
-        <!-- 支付宝h5支付页面 -->
-        <activity
-            android:name="com.alipay.sdk.app.H5PayActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:exported="false"
-            android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <!-- 支付宝h5授权页面 -->
-        <activity
-            android:name="com.alipay.sdk.app.H5AuthActivity"
-            android:configChanges="orientation|keyboardHidden|navigation"
-            android:exported="false"
-            android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-
-        <!-- 钱包版红包SDK需额外几个Activity的声明 -->
-
-
-        <!-- &lt;!&ndash; WebView相关 &ndash;&gt; -->
-        <!-- <activity -->
-        <!-- android:name="com.easemob.redpacketui.ui.activity.RPWebViewActivity" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:theme="@style/horizontal_slide" -->
-        <!-- android:windowSoftInputMode="adjustResize|stateHidden" /> -->
-        <!-- &lt;!&ndash; 零钱 &ndash;&gt; -->
-        <!-- <activity -->
-        <!-- android:name="com.easemob.redpacketui.ui.activity.RPChangeActivity" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:theme="@style/horizontal_slide" -->
-        <!-- android:windowSoftInputMode="adjustResize|stateHidden" /> -->
-        <!-- &lt;!&ndash; 绑定银行卡 &ndash;&gt; -->
-        <!-- <activity -->
-        <!-- android:name="com.easemob.redpacketui.ui.activity.RPBankCardActivity" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:theme="@style/horizontal_slide" -->
-        <!-- android:windowSoftInputMode="adjustPan|stateHidden" /> -->
-        <!-- &lt;!&ndash;转账页面&ndash;&gt; -->
-        <!-- <activity -->
-        <!-- android:name="com.easemob.redpacketui.ui.activity.RPTransferActivity" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:windowSoftInputMode="adjustPan|stateVisible"/> -->
-        <!-- &lt;!&ndash;转账详情页面&ndash;&gt; -->
-        <!-- <activity -->
-        <!-- android:name="com.easemob.redpacketui.ui.activity.RPTransferDetailActivity" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:windowSoftInputMode="adjustPan|stateHidden"/> -->
-        <!--  -->
-        <!-- 红包相关Activity end -->
-
 
         <!-- 开机自启动服务 -->
         <receiver android:name=".receiver.StartServiceReceiver">

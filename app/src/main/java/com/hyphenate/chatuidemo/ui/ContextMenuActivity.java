@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
@@ -37,10 +36,7 @@ public class ContextMenuActivity extends BaseActivity {
 		int type = message.getType().ordinal();
 		if (type == EMMessage.Type.TXT.ordinal()) {
 		    if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VIDEO_CALL, false)
-					|| message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)
-					//red packet code : 屏蔽红包消息的转发功能
-					|| message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)){
-				    //end of red packet code
+					|| message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_VOICE_CALL, false)){
 				setContentView(R.layout.em_context_menu_for_location);
 		    }else if(message.getBooleanAttribute(Constant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
 		        setContentView(R.layout.em_context_menu_for_image);
@@ -58,10 +54,7 @@ public class ContextMenuActivity extends BaseActivity {
 		} else if (type == EMMessage.Type.FILE.ordinal()) {
 		    setContentView(R.layout.em_context_menu_for_location);
 		}
-		if (isChatroom
-				//red packet code : 屏蔽红包消息的撤回功能
-				|| message.getBooleanAttribute(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, false)) {
-			    //end of red packet code
+		if (isChatroom) {
 			View v = (View) findViewById(R.id.forward);
 	        if (v != null) {
 	            v.setVisibility(View.GONE);
