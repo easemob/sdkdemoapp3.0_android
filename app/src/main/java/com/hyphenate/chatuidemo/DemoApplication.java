@@ -27,6 +27,7 @@ import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseUserUtils;
+import com.tencent.bugly.crashreport.CrashReport;
 
 public class DemoApplication extends Application {
 
@@ -46,6 +47,10 @@ public class DemoApplication extends Application {
 		super.onCreate();
         applicationContext = this;
         instance = this;
+
+		// bugly start
+		CrashReport.initCrashReport(getApplicationContext(), "52acc4be41", true);
+		// bugly end
         
         //init demo helper
         DemoHelper.getInstance().init(applicationContext);
