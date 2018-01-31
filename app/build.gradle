@@ -1,14 +1,4 @@
 apply plugin: 'com.android.application'
-// ============== fabric start
-//apply plugin: 'io.fabric'
-// ============== fabric end
-
-// ============== fabric start
-//repositories {
-//    maven { url 'https://maven.fabric.io/public' }
-//}
-// ============== fabric end
-
 
 android {
     compileSdkVersion 25
@@ -51,12 +41,6 @@ dependencies {
 
     // Google firebase cloud messaging
     compile 'com.google.firebase:firebase-messaging:11.4.0'
-
-// ============== fabric start
-//    compile('com.crashlytics.sdk.android:crashlytics:2.6.1@aar') {
-//        transitive = true;
-//    }
-// ============== fabric end
 }
 
 // ADD THIS AT THE BOTTOM
