@@ -67,6 +67,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	private static final int REQUEST_CODE_EDIT_GROUP_DESCRIPTION = 6;
 	private static final int REQUEST_CODE_EDIT_GROUP_EXTENSION = 7;
 
+	public static final int RESULT_CODE_SEND_GROUP_NOTIFICATION = 8;
+
 
 	private String groupId;
 	private ProgressBar loadingPB;
@@ -135,6 +137,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		RelativeLayout announcementLayout = (RelativeLayout) findViewById(R.id.layout_group_announcement);
 		announcementText = (TextView) findViewById(R.id.tv_group_announcement_value);
 
+		// Group notification
+		RelativeLayout groupNotiLayout = (RelativeLayout) findViewById(R.id.layout_group_notification);
+
 		RelativeLayout sharedFilesLayout = (RelativeLayout) findViewById(R.id.layout_share_files);
 
 		idText.setText(groupId);
@@ -176,6 +181,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         searchLayout.setOnClickListener(this);
 		blockOfflineLayout.setOnClickListener(this);
 		announcementLayout.setOnClickListener(this);
+		groupNotiLayout.setOnClickListener(this);
 		sharedFilesLayout.setOnClickListener(this);
 	}
 
@@ -606,6 +612,11 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				break;
 			case R.id.layout_group_announcement:
 				showAnnouncementDialog();
+				break;
+			// To send group ack message.
+			case R.id.layout_group_notification:
+				setResult(RESULT_CODE_SEND_GROUP_NOTIFICATION);
+				finish();
 				break;
 			case R.id.layout_share_files:
 				startActivity(new Intent(this, SharedFilesActivity.class).putExtra("groupId", groupId));

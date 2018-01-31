@@ -250,6 +250,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <!-- Ding msg send activity -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseDingMsgSendActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!-- Ding ack user list activity -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseDingAckUserListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <!-- choose video -->
         <activity
             android:name=".ui.ImageGridActivity"
