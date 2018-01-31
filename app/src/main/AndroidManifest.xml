@@ -456,14 +456,6 @@
         </receiver>
         <!-- huawei push end -->
 
-        <service
-            android:name="com.umeng.update.net.DownloadingService"
-            android:process=":DownloadingService" />
-
-        <activity
-            android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <!-- 设置环信应用的appkey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
@@ -497,13 +489,6 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
-        <!-- umeng appkey，可忽略 -->
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="56aefe07e0f55a250d001a7c" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="hyphenate" />
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="3ecea51f560650b1ed8a4b99808f52e8" />
