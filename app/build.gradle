@@ -33,7 +33,6 @@ android {
 }
 
 dependencies {
-    compile project(':redpacketlibrary')
     compile project(':easeui')
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.parse:parse-android:1.13.1'

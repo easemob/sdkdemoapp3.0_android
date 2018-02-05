@@ -33,7 +33,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easemob.redpacketui.utils.RPRedPacketUtil;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
@@ -172,7 +171,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		switch_adaptive_video_encode = (EaseSwitchButton) getView().findViewById(R.id.switch_adaptive_video_encode);
 		switch_msg_Roaming = (EaseSwitchButton) getView().findViewById(R.id.switch_msg_roaming);
 
-		LinearLayout llChange = (LinearLayout) getView().findViewById(R.id.ll_change);
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
 		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
 			logoutBtn.setText(getString(R.string.button_logout) + "(" + EMClient.getInstance().getCurrentUser() + ")");
@@ -214,7 +212,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_push_settings.setOnClickListener(this);
 		ll_call_option.setOnClickListener(this);
 		ll_multi_device.setOnClickListener(this);
-		llChange.setOnClickListener(this);
 		rl_mail_log.setOnClickListener(this);
 		rl_msg_roaming.setOnClickListener(this);
 
@@ -326,14 +323,6 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			//red packet code : 进入零钱或红包记录页面
-			case R.id.ll_change:
-				//支付宝版红包SDK调用如下方法进入红包记录页面
-				RPRedPacketUtil.getInstance().startRecordActivity(getActivity());
-				//钱包版红包SDK调用如下方法进入零钱页面
-//				RPRedPacketUtil.getInstance().startChangeActivity(getActivity());
-				break;
-			//end of red packet code
 			case R.id.rl_switch_notification:
 				if (notifySwitch.isSwitchOpen()) {
 					notifySwitch.closeSwitch();
