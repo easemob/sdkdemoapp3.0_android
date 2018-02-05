@@ -26,6 +26,9 @@
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!--bugly start-->
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <!--bugly end-->
 
     <permission
         android:name="com.hyphenate.chatuidemo.permission.MIPUSH_RECEIVE"
@@ -245,6 +248,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <!-- Ding msg send activity -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseDingMsgSendActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!-- Ding ack user list activity -->
+        <activity
+            android:name="com.hyphenate.easeui.ui.EaseDingAckUserListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <!-- choose video -->
         <activity
             android:name=".ui.ImageGridActivity"
@@ -376,14 +391,6 @@
         </receiver>
         <!-- huawei push end -->
 
-        <service
-            android:name="com.umeng.update.net.DownloadingService"
-            android:process=":DownloadingService" />
-
-        <activity
-            android:name="com.umeng.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
         <!-- 设置环信应用的appkey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
@@ -417,22 +424,9 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:process=":remote" />
-        <!-- umeng appkey，可忽略 -->
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="56aefe07e0f55a250d001a7c" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="hyphenate" />
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="3ecea51f560650b1ed8a4b99808f52e8" />
-
-        <!-- fabric start -->
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="6b54bd4edc63eba3ef59d69f8e0a5070bea384e2" />
-        <!-- fabric end -->
 
     </application>
 

@@ -19,6 +19,7 @@ import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.easeui.model.EaseAtMessageHelper;
+import com.hyphenate.easeui.model.EaseDingMessageHelper;
 import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.hyphenate.util.NetUtils;
 
@@ -104,6 +105,10 @@ public class ConversationListFragment extends EaseConversationListFragment{
             EMClient.getInstance().chatManager().deleteConversation(tobeDeleteCons.conversationId(), deleteMessage);
             InviteMessgeDao inviteMessgeDao = new InviteMessgeDao(getActivity());
             inviteMessgeDao.deleteMessage(tobeDeleteCons.conversationId());
+            // To delete the native stored adked users in this conversation.
+            if (deleteMessage) {
+                EaseDingMessageHelper.get().delete(tobeDeleteCons);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

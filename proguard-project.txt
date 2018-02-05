@@ -60,6 +60,10 @@
 -keep class com.umeng.** { *; }
 -keep class com.squareup.picasso.* {*;}
 
+# bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+
 -keep class com.hyphenate.** {*;}
 -keep class com.hyphenate.chat.** {*;}
 -keep class org.jivesoftware.** {*;}

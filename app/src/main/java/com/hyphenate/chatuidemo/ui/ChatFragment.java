@@ -30,12 +30,15 @@ import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.widget.EaseChatRecallPresenter;
 import com.hyphenate.chatuidemo.widget.EaseChatVoiceCallPresenter;
 import com.hyphenate.easeui.EaseConstant;
+import com.hyphenate.easeui.model.EaseDingMessageHelper;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.ui.EaseChatFragment.EaseChatFragmentHelper;
+import com.hyphenate.easeui.ui.EaseDingMsgSendActivity;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconMenu;
 import com.hyphenate.easeui.widget.presenter.EaseChatRowPresenter;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
 
@@ -146,6 +149,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             case ContextMenuActivity.RESULT_CODE_DELETE: // delete
                 conversation.removeMessage(contextMenuMessage.getMsgId());
                 messageList.refresh();
+                // To delete the ding-type message native stored acked users.
+                EaseDingMessageHelper.get().delete(contextMenuMessage);
                 break;
 
             case ContextMenuActivity.RESULT_CODE_FORWARD: // forward
@@ -178,6 +183,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                         }
                     }
                 }).start();
+
+                // Delete group-ack data according to this message.
+                EaseDingMessageHelper.get().delete(contextMenuMessage);
                 break;
 
             default:
@@ -220,7 +228,17 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 break;
             }
         }
-        
+        if (requestCode == REQUEST_CODE_GROUP_DETAIL) {
+            switch (resultCode) {
+                case GroupDetailsActivity.RESULT_CODE_SEND_GROUP_NOTIFICATION:
+                    // Start the ding-type msg send ui.
+                    EMLog.i(TAG, "Intent to the ding-msg send activity.");
+                    Intent intent = new Intent(getActivity(), EaseDingMsgSendActivity.class);
+                    intent.putExtra(EaseConstant.EXTRA_USER_ID, toChatUsername);
+                    startActivityForResult(intent, REQUEST_CODE_DING_MSG);
+                    break;
+            }
+        }
     }
 
     @Override

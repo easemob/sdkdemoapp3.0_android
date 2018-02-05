@@ -16,10 +16,8 @@ package com.hyphenate.chatuidemo;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
-// ============== fabric start
-//import com.crashlytics.android.Crashlytics;
-//import io.fabric.sdk.android.Fabric;
-// ============== fabric end
+
+import com.tencent.bugly.crashreport.CrashReport;
 
 public class DemoApplication extends Application {
 
@@ -27,7 +25,7 @@ public class DemoApplication extends Application {
 	private static DemoApplication instance;
 	// login user name
 	public final String PREF_USERNAME = "username";
-	
+
 	/**
 	 * nickname for current user, the nickname instead of ID be shown when user receive notification from APNs
 	 */
@@ -37,12 +35,13 @@ public class DemoApplication extends Application {
 	public void onCreate() {
 		MultiDex.install(this);
 		super.onCreate();
-// ============== fabric start
-//		Fabric.with(this, new Crashlytics());
-// ============== fabric end
         applicationContext = this;
         instance = this;
-        
+
+		// bugly start
+		CrashReport.initCrashReport(getApplicationContext(), "52acc4be41", true);
+		// bugly end
+
         //init demo helper
         DemoHelper.getInstance().init(applicationContext);
 	}
