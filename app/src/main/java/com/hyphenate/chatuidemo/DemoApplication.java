@@ -27,10 +27,7 @@ import com.easemob.redpacketsdk.constant.RPConstant;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseUserUtils;
-// ============== fabric start
-//import com.crashlytics.android.Crashlytics;
-//import io.fabric.sdk.android.Fabric;
-// ============== fabric end
+import com.tencent.bugly.crashreport.CrashReport;
 
 public class DemoApplication extends Application {
 
@@ -48,11 +45,12 @@ public class DemoApplication extends Application {
 	public void onCreate() {
 		MultiDex.install(this);
 		super.onCreate();
-// ============== fabric start
-//		Fabric.with(this, new Crashlytics());
-// ============== fabric end
         applicationContext = this;
         instance = this;
+
+		// bugly start
+		CrashReport.initCrashReport(getApplicationContext(), "52acc4be41", true);
+		// bugly end
         
         //init demo helper
         DemoHelper.getInstance().init(applicationContext);
