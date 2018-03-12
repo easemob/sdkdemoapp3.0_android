@@ -17,8 +17,6 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.tencent.bugly.crashreport.CrashReport;
-
 public class DemoApplication extends Application {
 
 	public static Context applicationContext;
@@ -37,10 +35,6 @@ public class DemoApplication extends Application {
 		super.onCreate();
         applicationContext = this;
         instance = this;
-
-		// bugly start
-		CrashReport.initCrashReport(getApplicationContext(), "52acc4be41", true);
-		// bugly end
 
         //init demo helper
         DemoHelper.getInstance().init(applicationContext);
