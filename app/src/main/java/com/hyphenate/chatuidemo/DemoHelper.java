@@ -294,6 +294,9 @@ public class DemoHelper {
 
         // Offline call push
         EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
+
+        // 设置会议模式
+        EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.LARGE);
     }
 
     protected void setEaseUIProviders() {
@@ -554,6 +557,9 @@ public class DemoHelper {
             @Override public void onStreamSetup(String streamId) {
                 EMLog.i(TAG, String.format("Stream id - %s", streamId));
             }
+
+            @Override
+            public void onSpeakers(List<String> speakers) {}
 
             @Override public void onReceiveInvite(String confId, String password, String extension) {
                 EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));

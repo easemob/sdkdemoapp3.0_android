@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.media.EMCallSurfaceView;
@@ -20,10 +22,15 @@ public class ConferenceMemberView extends RelativeLayout {
 
     private EMCallSurfaceView surfaceView;
     private ImageView avatarView;
-    private ImageView muteIcon;
-    private ImageView videoIcon;
-    private View activateView;
-    private boolean isPubOrSub = false;
+    private ImageView audioOffView;
+    private ImageView talkingView;
+    private TextView nameView;
+
+    private boolean isVideoOff = true;
+    private boolean isAudioOff = false;
+    private boolean isDesktop = false;
+    private String streamId;
+
 
     public ConferenceMemberView(Context context) {
         this(context, null);
@@ -43,9 +50,9 @@ public class ConferenceMemberView extends RelativeLayout {
     private void init() {
         surfaceView = (EMCallSurfaceView) findViewById(R.id.item_surface_view);
         avatarView = (ImageView) findViewById(R.id.img_call_avatar);
-        muteIcon = (ImageView) findViewById(R.id.icon_mute);
-        videoIcon = (ImageView) findViewById(R.id.icon_video);
-        activateView = findViewById(R.id.icon_activate);
+        audioOffView = (ImageView) findViewById(R.id.icon_mute);
+        talkingView = (ImageView) findViewById(R.id.icon_talking);
+        nameView = (TextView) findViewById(R.id.text_name);
 
         surfaceView.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFill);
     }
@@ -54,48 +61,74 @@ public class ConferenceMemberView extends RelativeLayout {
         return surfaceView;
     }
 
-    public void updateMuteState(boolean state) {
-        if (state) {
-            muteIcon.setVisibility(View.VISIBLE);
+    /**
+     * 更新静音状态
+     */
+    public void setAudioOff(boolean state) {
+        if (isDesktop) {
+            return;
+        }
+        isAudioOff = state;
+        if (isAudioOff) {
+            audioOffView.setVisibility(View.VISIBLE);
         } else {
-            muteIcon.setVisibility(View.GONE);
+            audioOffView.setVisibility(View.GONE);
         }
     }
 
-    public void updateVideoState(boolean state) {
-        if (state) {
-            videoIcon.setVisibility(View.VISIBLE);
+    public boolean isAudioOff() {
+        return isAudioOff;
+    }
+
+    /**
+     * 更新视频显示状态
+     */
+    public void setVideoOff(boolean state) {
+        isVideoOff = state;
+        if (isVideoOff) {
             avatarView.setVisibility(View.VISIBLE);
         } else {
-            videoIcon.setVisibility(View.GONE);
             avatarView.setVisibility(View.GONE);
+        }
+    }
+
+    public boolean isVideoOff() {
+        return isVideoOff;
+    }
+
+    public void setDesktop(boolean desktop) {
+        isDesktop = desktop;
+    }
+    /**
+     * 更新说话状态
+     */
+    public void setTalking(boolean talking) {
+        if (isDesktop) {
+            return;
+        }
+        if (talking) {
+            talkingView.setVisibility(VISIBLE);
+        }else{
+            talkingView.setVisibility(GONE);
         }
     }
 
     /**
      * 设置当前 view 对应的 stream 的用户，主要用来语音通话时显示对方头像
      */
-    public void setUser(String username) {
+    public void setUsername(String username) {
         EaseUserUtils.setUserAvatar(context, username, avatarView);
+        nameView.setText(username);
     }
 
     /**
-     * 判断是否已推流或订阅
+     * 设置当前控件显示的 Stream Id
      */
-    public boolean isPubOrSub() {
-        return isPubOrSub;
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
     }
 
-    /**
-     * 设置当前画面状态
-     */
-    public void setPubOrSub(boolean activate) {
-        isPubOrSub = activate;
-        if (isPubOrSub) {
-            activateView.setBackgroundResource(R.color.btn_green_noraml);
-        } else {
-            activateView.setBackgroundResource(R.color.holo_red_light);
-        }
+    public String getStreamId() {
+        return streamId;
     }
-
 }

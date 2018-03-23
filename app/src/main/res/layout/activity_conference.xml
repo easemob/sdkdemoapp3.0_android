@@ -38,7 +38,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             >
             <!--界面最小化按钮-->
             <ImageButton
@@ -46,7 +45,6 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="16dp"
                 android:background="@drawable/em_click_circle_transparent"
                 android:src="@drawable/ic_fullscreen_exit_white_24dp"
                 />
@@ -77,7 +75,6 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="16dp"
                 android:background="@drawable/em_click_circle_transparent"
                 android:src="@drawable/em_add"
                 />
@@ -130,6 +127,16 @@
                     android:src="@drawable/ic_videocam_off_white_24dp"
                     />
 
+                <!--桌面共享-->
+                <ImageButton
+                    android:id="@+id/btn_desktop_switch"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/em_click_circle_transparent"
+                    android:src="@drawable/ic_screen_share_white_24dp"
+                    />
+
                 <!--切换摄像头-->
                 <ImageButton
                     android:id="@+id/btn_change_camera_switch"
@@ -156,7 +163,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="24dp"
                     android:src="@drawable/ic_call_end_white_24dp"
-                    android:background="@color/holo_red_light"
+                    android:background="@drawable/em_click_circle_red"
                     android:padding="16dp"
                     />
 
@@ -168,7 +175,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="24dp"
                     android:src="@drawable/ic_call_end_white_24dp"
-                    android:background="@color/holo_red_light"
+                    android:background="@drawable/em_click_circle_red"
                     android:padding="16dp"
                     />
 
@@ -180,7 +187,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="24dp"
                     android:src="@drawable/ic_call_white_24dp"
-                    android:background="@color/holo_green_light"
+                    android:background="@drawable/em_click_circle_green"
                     android:padding="16dp"
                     />
 
