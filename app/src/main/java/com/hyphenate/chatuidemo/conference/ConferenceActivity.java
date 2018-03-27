@@ -182,7 +182,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 case R.id.btn_desktop_switch:
                     if (screenShareSwitch.isActivated()) {
                         screenShareSwitch.setActivated(false);
-                        unpublish(conference.getPubDesktopId());
+                        unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP));
                     } else {
                         screenShareSwitch.setActivated(true);
                         publishDesktop();
@@ -339,7 +339,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         localView.setTalking(speakers.contains(localView.getStreamId()));
         for (int i=0; i<callConferenceViewGroup.getChildCount(); i++) {
             ConferenceMemberView view = (ConferenceMemberView) callConferenceViewGroup.getChildAt(i);
-            view.setTalking(speakers.contains(localView.getStreamId()));
+            view.setTalking(speakers.contains(view.getStreamId()));
         }
     }
 
@@ -459,11 +459,11 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     private void startAudioTalkingMonitor(){
-        EMClient.getInstance().conferenceManager().startSpeakingMonitor(200);
+        EMClient.getInstance().conferenceManager().startMonitorSpeaker(200);
     }
 
     private void stopAudioTalkingMonitor(){
-        EMClient.getInstance().conferenceManager().stopSpeakingMonitor();
+        EMClient.getInstance().conferenceManager().stopMonitorSpeaker();
     }
 
     /**
@@ -472,7 +472,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private void publish() {
         EMClient.getInstance().conferenceManager().publish(normalParam, new EMValueCallBack<String>() {
             @Override public void onSuccess(String value) {
-                conference.setPubNormalId(value);
+                conference.setPubStreamId(value, EMConferenceStream.StreamType.NORMAL);
                 localView.setStreamId(value);
             }
 
@@ -506,7 +506,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().publish(desktopParam, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
-                conference.setPubDesktopId(value);
+                conference.setPubStreamId(value, EMConferenceStream.StreamType.DESKTOP);
                 startScreenCapture();
             }
 
@@ -522,14 +522,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void unpublish(String publishId) {
         if (ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.RUNNING) {
-            if (!TextUtils.isEmpty(conference.getPubDesktopId()) && publishId.equals(conference.getPubDesktopId())) {
+            if (!TextUtils.isEmpty(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))
+                    && publishId.equals(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))) {
                 ScreenCaptureManager.getInstance().stop();
             }
         }
         EMClient.getInstance().conferenceManager().unpublish(publishId, new EMValueCallBack<String>() {
-            @Override public void onSuccess(String value) {
-                conference.setPubNormalId(value);
-            }
+            @Override public void onSuccess(String value) {}
 
             @Override public void onError(int error, String errorMsg) {
                 EMLog.e(TAG, "unpublish failed: error=" + error + ", msg=" + errorMsg);
@@ -732,8 +731,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     @Override public void onStreamSetup(final String streamId) {
         runOnUiThread(new Runnable() {
             @Override public void run() {
-                if (streamId.indexOf(conference.getPubNormalId()) != -1) {
-                    conference.setPubNormalId(streamId);
+                if (streamId.equals(conference.getPubStreamId(EMConferenceStream.StreamType.NORMAL))
+                        ||streamId.equals(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))) {
                     Toast.makeText(activity, "Publish setup streamId=" + streamId, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(activity, "Subscribe setup streamId=" + streamId, Toast.LENGTH_SHORT).show();

@@ -324,6 +324,7 @@
     <string name="adaptive_video_encode">Adaptive video encode</string>
     <string name="msg_roaming">message roaming</string>
     <string name="offline_call_push">Offline call push</string>
+    <string name="offline_use_large_conference_mode">Large conference mode</string>
     <string name="group_id">Group ID</string>
     <string name="group_announcement">Announcement</string>
     <string name="share_files">Shared Files</string>

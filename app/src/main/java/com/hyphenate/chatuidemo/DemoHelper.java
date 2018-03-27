@@ -296,7 +296,11 @@ public class DemoHelper {
         EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
 
         // 设置会议模式
-        EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.LARGE);
+        if (PreferenceManager.getInstance().isLargeConferenceMode()) {
+            EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.LARGE);
+        }else{
+            EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.NORMAL);
+        }
     }
 
     protected void setEaseUIProviders() {

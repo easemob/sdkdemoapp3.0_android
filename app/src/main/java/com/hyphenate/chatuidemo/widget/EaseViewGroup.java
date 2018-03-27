@@ -198,7 +198,7 @@ public class EaseViewGroup extends ViewGroup {
     /**
      * 设置子控件的点击监听
      */
-    public void setChileOnClick(OnChildListener listener) {
+    public void setChildOnClick(OnChildListener listener) {
         childListener = listener;
         for (int i = 0; i < getChildCount(); i++) {
             childView = getChildAt(i);

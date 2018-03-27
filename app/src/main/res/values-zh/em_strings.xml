@@ -324,6 +324,7 @@
     <string name="adaptive_video_encode">视频自适应码率编码</string>
     <string name="msg_roaming">消息漫游</string>
     <string name="offline_call_push">通话离线推送</string>
+    <string name="offline_use_large_conference_mode">大会议模式</string>
     <string name="group_id">群ID</string>
     <string name="group_announcement">公告</string>
     <string name="share_files">共享文件</string>
