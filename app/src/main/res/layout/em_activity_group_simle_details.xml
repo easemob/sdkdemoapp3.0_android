@@ -116,7 +116,33 @@
                 android:textColor="#080808"
                 android:textSize="14sp" />
         </LinearLayout>
+
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/title_verification_information"
+        android:textColor="#333333"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/et_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:layout_marginRight="11dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/em_button_bg"
+        android:gravity="start"
+        android:hint="@string/Request_to_join"
+        android:lines="3"
+        android:maxLines="3"
+        android:maxLength="30"
+        android:padding="6dip"
+        android:textSize="14sp" />
 
     <Button
         android:id="@+id/btn_add_to_group"
