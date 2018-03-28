@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.hyphenate.EMConferenceListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
@@ -118,6 +119,14 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
             swOfflineCallPush.openSwitch();
         } else {
             swOfflineCallPush.closeSwitch();
+        }
+
+        findViewById(R.id.rl_switch_offline_conference_mode).setOnClickListener(this);
+        EaseSwitchButton swOfflineConferenceMode = (EaseSwitchButton)findViewById(R.id.switch_offline_conference_mode);
+        if (PreferenceManager.getInstance().isLargeConferenceMode()) {
+            swOfflineConferenceMode.openSwitch();
+        } else {
+            swOfflineConferenceMode.closeSwitch();
         }
     }
 
@@ -317,6 +326,18 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                     EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(true);
                     swOfflineCallPush.openSwitch();
                     PreferenceManager.getInstance().setPushCall(true);
+                }
+                break;
+            case R.id.rl_switch_offline_conference_mode:
+                EaseSwitchButton swOfflineConferenceMode = (EaseSwitchButton)findViewById(R.id.switch_offline_conference_mode);
+                if (swOfflineConferenceMode.isSwitchOpen()) {
+                    EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.NORMAL);
+                    swOfflineConferenceMode.closeSwitch();
+                    PreferenceManager.getInstance().setLargeConferenceMode(false);
+                } else {
+                    EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.LARGE);
+                    swOfflineConferenceMode.openSwitch();
+                    PreferenceManager.getInstance().setLargeConferenceMode(true);
                 }
                 break;
             default:
