@@ -23,6 +23,7 @@ import com.hyphenate.EMConferenceListener;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMStreamParam;
 import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.ui.BaseActivity;
 import com.hyphenate.chatuidemo.widget.EaseViewGroup;
@@ -91,6 +92,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
         initConferenceViewGroup();
         EMClient.getInstance().conferenceManager().addConferenceListener(conferenceListener);
+        DemoHelper.getInstance().pushActivity(activity);
     }
 
     /**
@@ -648,6 +650,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     @Override protected void onDestroy() {
         EMClient.getInstance().conferenceManager().removeConferenceListener(conferenceListener);
+        DemoHelper.getInstance().popActivity(activity);
         super.onDestroy();
     }
 
