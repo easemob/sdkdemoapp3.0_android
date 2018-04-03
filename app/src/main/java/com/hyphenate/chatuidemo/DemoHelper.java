@@ -42,6 +42,7 @@ import com.hyphenate.chatuidemo.domain.InviteMessage.InviteMessageStatus;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.parse.UserProfileManager;
 import com.hyphenate.chatuidemo.receiver.CallReceiver;
+import com.hyphenate.chatuidemo.receiver.HeadsetReceiver;
 import com.hyphenate.chatuidemo.ui.ChatActivity;
 import com.hyphenate.chatuidemo.ui.MainActivity;
 import com.hyphenate.chatuidemo.ui.VideoCallActivity;
@@ -241,6 +242,10 @@ public class DemoHelper {
     }
 
     private void setCallOptions() {
+        HeadsetReceiver headsetReceiver = new HeadsetReceiver();
+        IntentFilter headsetFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        appContext.registerReceiver(headsetReceiver, headsetFilter);
+
         // min video kbps
         int minBitRate = PreferenceManager.getInstance().getCallMinVideoKbps();
         if (minBitRate != -1) {

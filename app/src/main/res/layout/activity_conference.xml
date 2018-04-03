@@ -17,13 +17,20 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         >
-        <!--多人会议时显示成员画面控件容器-->
-        <com.hyphenate.chatuidemo.widget.EaseViewGroup
-            android:id="@+id/surface_view_group"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:animateLayoutChanges="true"
-            />
+            >
+
+            <!--多人会议时显示成员画面控件容器-->
+            <com.hyphenate.chatuidemo.widget.EaseViewGroup
+                android:id="@+id/surface_view_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                />
+        </ScrollView>
     </RelativeLayout>
 
     <!--控制按钮层布局-->
@@ -34,20 +41,11 @@
         android:fitsSystemWindows="true"
         >
 
-        <!--头部状态以及最小化操作-->
+        <!--头部状态-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
-            <!--界面最小化按钮-->
-            <ImageButton
-                android:id="@+id/btn_exit_full_screen"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentLeft="true"
-                android:background="@drawable/em_click_circle_transparent"
-                android:src="@drawable/ic_fullscreen_exit_white_24dp"
-                />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
