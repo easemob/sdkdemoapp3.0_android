@@ -92,7 +92,8 @@ public class PublicChatRoomsActivity extends BaseActivity {
         footLoadingText = (TextView) footView.findViewById(R.id.loading_text);
         listView.addFooterView(footView, null, false);
         footLoadingLayout.setVisibility(View.GONE);
-        
+
+        etSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         etSearch.addTextChangedListener(new TextWatcher() {
 			
 			@Override
@@ -120,9 +121,7 @@ public class PublicChatRoomsActivity extends BaseActivity {
 		etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-						(event.getKeyCode() == KeyEvent.KEYCODE_ENTER &&
-								event.getAction() == KeyEvent.ACTION_DOWN)) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 					final String roomId = etSearch.getText().toString();
 					etSearch.setText("");
 					Thread t = new Thread(new Runnable() {
