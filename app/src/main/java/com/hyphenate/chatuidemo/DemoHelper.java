@@ -572,7 +572,7 @@ public class DemoHelper {
 
             @Override public void onReceiveInvite(String confId, String password, String extension) {
                 EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
-                if(easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
+                if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
                     return;
                 }
                 Intent conferenceIntent = new Intent(appContext, ConferenceActivity.class);
