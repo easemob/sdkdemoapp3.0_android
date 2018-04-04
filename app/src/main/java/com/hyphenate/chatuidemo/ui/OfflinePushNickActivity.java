@@ -55,20 +55,24 @@ public class OfflinePushNickActivity extends BaseActivity {
 								}
 							});
 						} else {
-							runOnUiThread(new Runnable() {
-								public void run() {
-									boolean updatenick = DemoHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(inputNickName.getText().toString());
-									if (!updatenick) {
+							boolean updateOK= DemoHelper.getInstance().getUserProfileManager().updateCurrentUserNickName(inputNickName.getText().toString());
+							if (!updateOK) {
+								runOnUiThread(new Runnable() {
+									public void run() {
 										Toast.makeText(OfflinePushNickActivity.this, "update nickname failed!",
-														Toast.LENGTH_SHORT).show();
+												Toast.LENGTH_SHORT).show();
 										dialog.dismiss();
-									} else {
+									}
+								});
+							} else {
+								runOnUiThread(new Runnable() {
+									public void run() {
 										dialog.dismiss();
 										Toast.makeText(OfflinePushNickActivity.this, "update nickname success!",
 												Toast.LENGTH_SHORT).show();
 									}
-								}
-							});
+								});
+							}
 							finish();
 						}
 					}
