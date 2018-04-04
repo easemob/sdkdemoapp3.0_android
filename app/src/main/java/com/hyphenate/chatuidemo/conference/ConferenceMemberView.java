@@ -98,6 +98,9 @@ public class ConferenceMemberView extends RelativeLayout {
 
     public void setDesktop(boolean desktop) {
         isDesktop = desktop;
+        if (isDesktop) {
+            avatarView.setVisibility(View.GONE);
+        }
     }
     /**
      * 更新说话状态

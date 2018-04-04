@@ -67,7 +67,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private View rootView;
     private View controlLayout;
     private RelativeLayout surfaceLayout;
-    private ImageButton exitFullScreenBtn;
     private ImageButton inviteJoinBtn;
     private TextView callTimeView;
     private ImageButton micSwitch;
@@ -91,6 +90,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         init();
 
         initConferenceViewGroup();
+        EMClient.getInstance().conferenceManager().addConferenceListener(conferenceListener);
     }
 
     /**
@@ -103,7 +103,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         rootView = findViewById(R.id.layout_root);
         controlLayout = findViewById(R.id.layout_call_control);
         surfaceLayout = (RelativeLayout) findViewById(R.id.layout_surface_container);
-        exitFullScreenBtn = (ImageButton) findViewById(R.id.btn_exit_full_screen);
         inviteJoinBtn = (ImageButton) findViewById(R.id.btn_invite_join);
         callTimeView = (TextView) findViewById(R.id.text_call_time);
         micSwitch = (ImageButton) findViewById(R.id.btn_mic_switch);
@@ -115,7 +114,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         exitBtn = (ImageButton) findViewById(R.id.btn_exit);
         addBtn = (ImageButton) findViewById(R.id.btn_add);
 
-        exitFullScreenBtn.setOnClickListener(listener);
         inviteJoinBtn.setOnClickListener(listener);
         micSwitch.setOnClickListener(listener);
         speakerSwitch.setOnClickListener(listener);
@@ -160,9 +158,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.btn_exit_full_screen:
-                    Toast.makeText(activity, getString(R.string.toast_no_support), Toast.LENGTH_SHORT).show();
-                    break;
                 case R.id.btn_invite_join:
                     inviteUserToJoinConference();
                     break;
@@ -238,6 +233,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 添加一个展示远端画面的 view
      */
     private void addConferenceView(EMConferenceStream stream) {
+        EMLog.d(TAG, "add conference view -start- " + stream.getMemberName());
+        streamList.add(stream);
         final ConferenceMemberView memberView = new ConferenceMemberView(activity);
         callConferenceViewGroup.addView(memberView);
         ViewGroup.LayoutParams params = memberView.getLayoutParams();
@@ -246,8 +243,11 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         memberView.setLayoutParams(params);
         memberView.setUsername(stream.getUsername());
         memberView.setStreamId(stream.getStreamId());
+        memberView.setAudioOff(stream.isAudioOff());
+        memberView.setVideoOff(stream.isVideoOff());
         memberView.setDesktop(stream.getStreamType() == EMConferenceStream.StreamType.DESKTOP);
         subscribe(stream, memberView);
+        EMLog.d(TAG, "add conference view -end-" + stream.getMemberName());
         memberView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -459,7 +459,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     private void startAudioTalkingMonitor(){
-        EMClient.getInstance().conferenceManager().startMonitorSpeaker(200);
+        EMClient.getInstance().conferenceManager().startMonitorSpeaker(300);
     }
 
     private void stopAudioTalkingMonitor(){
@@ -640,19 +640,15 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().switchCamera();
     }
 
-    @Override protected void onStart() {
-        super.onStart();
-        EMClient.getInstance().conferenceManager().addConferenceListener(conferenceListener);
+    @Override
+    public void onBackPressed() {
+//        exitConference();
     }
 
-    @Override protected void onStop() {
-        super.onStop();
-        EMClient.getInstance().conferenceManager().removeConferenceListener(conferenceListener);
-    }
 
     @Override protected void onDestroy() {
+        EMClient.getInstance().conferenceManager().removeConferenceListener(conferenceListener);
         super.onDestroy();
-        exitConference();
     }
 
     /**
@@ -683,9 +679,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             public void run() {
                 Toast.makeText(activity, stream.getUsername() + " stream add!", Toast.LENGTH_SHORT)
                      .show();
-                streamList.add(stream);
                 addConferenceView(stream);
-                updateConferenceMemberView(stream);
                 updateConferenceViewGroup();
             }
         });
