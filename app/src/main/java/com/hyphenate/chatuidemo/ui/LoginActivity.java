@@ -30,6 +30,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.huawei.android.hms.agent.HMSAgent;
+import com.huawei.android.hms.agent.push.handler.GetTokenHandler;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApplication;
@@ -37,6 +39,9 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.util.EMLog;
+
+import java.lang.reflect.Method;
 
 /**
  * Login screen
@@ -173,6 +178,9 @@ public class LoginActivity extends BaseActivity {
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 				    pd.dismiss();
 				}
+				// 检查是否需要注册华为推送 token
+				checkHWPush();
+
 				// get user's info (this should be get from App's server or 3rd party service)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
 
@@ -205,6 +213,21 @@ public class LoginActivity extends BaseActivity {
 		});
 	}
 
+	/**
+	 * 检查华为推送，确定是否要注册华为推送 token
+	 * 注册华为推送 token 通用错误码列表
+	 * http://developer.huawei.com/consumer/cn/service/hms/catalog/huaweipush_agent.html?page=hmssdk_huaweipush_api_reference_errorcode
+	 */
+	private void checkHWPush(){
+		if (DemoHelper.getInstance().isUseHWHMS()) {
+			HMSAgent.Push.getToken(new GetTokenHandler() {
+				@Override
+				public void onResult(int rst) {
+					EMLog.d("HWHMSPush", "get huawei hms push token result code:" + rst);
+				}
+			});
+		}
+	}
 	
 	/**
 	 * register

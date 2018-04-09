@@ -1,6 +1,7 @@
 package com.hyphenate.chatuidemo;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,9 +10,12 @@ import android.content.IntentFilter;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.huawei.android.hms.agent.HMSAgent;
+import com.huawei.android.hms.agent.push.handler.GetTokenHandler;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
@@ -63,6 +67,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -141,6 +146,9 @@ public class DemoHelper {
 
     private boolean isGroupAndContactListenerRegisted;
 
+    // 是否使用华为 hms
+    private boolean isUseHWHMS = false;
+
     private ExecutorService executor;
 
     protected android.os.Handler handler;
@@ -216,6 +224,8 @@ public class DemoHelper {
         options.setFCMNumber("921300338324");
         //you need apply & set your own id if you want to use Mi push notification
         options.setMipushConfig("2882303761517426801", "5381742660801");
+        // 设置是否使用 fcm，有些华为设备本身带有 google 服务，所以这里根据是否使用华为推送来设置是否使用 fcm
+        options.setUseFCM(!isUseHWHMS);
 
         //set custom servers, commonly used in private deployment
         if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
@@ -1777,6 +1787,36 @@ public class DemoHelper {
 
     public void popActivity(Activity activity) {
         easeUI.popActivity(activity);
+    }
+
+
+    /**
+     * 初始化华为 HMS 推送服务
+     */
+    public void initHMSAgent(Application application){
+        try {
+            if(Class.forName("com.huawei.hms.support.api.push.HuaweiPush") != null){
+                Class<?> classType = Class.forName("android.os.SystemProperties");
+                Method getMethod = classType.getDeclaredMethod("get", new Class<?>[] {String.class});
+                String buildVersion = (String)getMethod.invoke(classType, new Object[]{"ro.build.version.emui"});
+                //在某些手机上，invoke方法不报错
+                if(!TextUtils.isEmpty(buildVersion)){
+                    EMLog.d("HWHMSPush", "huawei hms push is available!");
+                    isUseHWHMS = true;
+                    HMSAgent.init(application);
+                }else{
+                    EMLog.d("HWHMSPush", "huawei hms push is unavailable!");
+                }
+            }else{
+                EMLog.d("HWHMSPush", "no huawei hms push sdk or mobile is not a huawei phone");
+            }
+        } catch (Exception e) {
+            EMLog.d("HWHMSPush", "no huawei hms push sdk or mobile is not a huawei phone");
+        }
+    }
+
+    public boolean isUseHWHMS() {
+        return isUseHWHMS;
     }
 
 }
