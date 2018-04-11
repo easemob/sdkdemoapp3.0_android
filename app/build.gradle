@@ -49,8 +49,7 @@ dependencies {
     compile 'com.tencent.bugly:nativecrashreport:3.3.1'
     // bugly end
 
-    // 华为 HMS push sdk
-    compile 'com.huawei.android.hms:push:2.6.0.301'
+    compile project(':hmspush')
 }
 
 // ADD THIS AT THE BOTTOM

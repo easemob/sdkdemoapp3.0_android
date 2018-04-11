@@ -41,14 +41,6 @@ public class SplashActivity extends BaseActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (DemoHelper.getInstance().isUseHWHMS()) {
-			HMSAgent.connect(this, new ConnectHandler() {
-				@Override
-				public void onConnect(int rst) {
-					EMLog.d("HWHMSPush", "huawei hms push connect result code:" + rst);
-				}
-			});
-		}
 		new Thread(new Runnable() {
 			public void run() {
 				if (DemoHelper.getInstance().isLoggedIn()) {

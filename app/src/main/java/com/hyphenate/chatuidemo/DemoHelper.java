@@ -146,9 +146,6 @@ public class DemoHelper {
 
     private boolean isGroupAndContactListenerRegisted;
 
-    // 是否使用华为 hms
-    private boolean isUseHWHMS = false;
-
     private ExecutorService executor;
 
     protected android.os.Handler handler;
@@ -225,7 +222,7 @@ public class DemoHelper {
         //you need apply & set your own id if you want to use Mi push notification
         options.setMipushConfig("2882303761517426801", "5381742660801");
         // 设置是否使用 fcm，有些华为设备本身带有 google 服务，所以这里根据是否使用华为推送来设置是否使用 fcm
-        options.setUseFCM(!isUseHWHMS);
+        options.setUseFCM(!HMSPushHelper.getInstance().isUseHMSPush());
 
         //set custom servers, commonly used in private deployment
         if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
@@ -1787,36 +1784,6 @@ public class DemoHelper {
 
     public void popActivity(Activity activity) {
         easeUI.popActivity(activity);
-    }
-
-
-    /**
-     * 初始化华为 HMS 推送服务
-     */
-    public void initHMSAgent(Application application){
-        try {
-            if(Class.forName("com.huawei.hms.support.api.push.HuaweiPush") != null){
-                Class<?> classType = Class.forName("android.os.SystemProperties");
-                Method getMethod = classType.getDeclaredMethod("get", new Class<?>[] {String.class});
-                String buildVersion = (String)getMethod.invoke(classType, new Object[]{"ro.build.version.emui"});
-                //在某些手机上，invoke方法不报错
-                if(!TextUtils.isEmpty(buildVersion)){
-                    EMLog.d("HWHMSPush", "huawei hms push is available!");
-                    isUseHWHMS = true;
-                    HMSAgent.init(application);
-                }else{
-                    EMLog.d("HWHMSPush", "huawei hms push is unavailable!");
-                }
-            }else{
-                EMLog.d("HWHMSPush", "no huawei hms push sdk or mobile is not a huawei phone");
-            }
-        } catch (Exception e) {
-            EMLog.d("HWHMSPush", "no huawei hms push sdk or mobile is not a huawei phone");
-        }
-    }
-
-    public boolean isUseHWHMS() {
-        return isUseHWHMS;
     }
 
 }
