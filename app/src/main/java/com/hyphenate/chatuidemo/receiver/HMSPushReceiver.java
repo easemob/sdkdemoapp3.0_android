@@ -18,8 +18,8 @@ import com.huawei.hms.support.api.push.PushReceiver;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.EMLog;
 
-public class HWHMSPushReceiver extends PushReceiver{
-    private static final String TAG = HWHMSPushReceiver.class.getSimpleName();
+public class HMSPushReceiver extends PushReceiver{
+    private static final String TAG = HMSPushReceiver.class.getSimpleName();
 
     @Override
     public void onToken(Context context, String token, Bundle extras){

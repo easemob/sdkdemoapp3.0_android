@@ -6,12 +6,9 @@ import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.huawei.android.hms.agent.HMSAgent;
-import com.huawei.android.hms.agent.common.handler.ConnectHandler;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 
 /**
@@ -41,14 +38,6 @@ public class SplashActivity extends BaseActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (DemoHelper.getInstance().isUseHWHMS()) {
-			HMSAgent.connect(this, new ConnectHandler() {
-				@Override
-				public void onConnect(int rst) {
-					EMLog.d("HWHMSPush", "huawei hms push connect result code:" + rst);
-				}
-			});
-		}
 		new Thread(new Runnable() {
 			public void run() {
 				if (DemoHelper.getInstance().isLoggedIn()) {
