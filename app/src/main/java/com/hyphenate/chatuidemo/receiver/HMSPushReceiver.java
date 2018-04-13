@@ -26,7 +26,7 @@ public class HMSPushReceiver extends PushReceiver{
         //没有失败回调，假定token失败时token为null
         if(token != null && !token.equals("")){
             EMLog.d("HWHMSPush", "register huawei hms push token success token:" + token);
-            EMClient.getInstance().sendHWTokenToServer("10492024", token);
+            EMClient.getInstance().sendHMSPushTokenToServer("10492024", token);
         }else{
             EMLog.e("HWHMSPush", "register huawei hms push token fail!");
         }
