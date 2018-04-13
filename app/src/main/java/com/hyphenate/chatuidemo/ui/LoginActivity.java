@@ -34,6 +34,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.HMSPushHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -104,6 +105,8 @@ public class LoginActivity extends BaseActivity {
 
 		TextView serviceCheckTV = (TextView) findViewById(R.id.txt_service_ckeck);
 		serviceCheckTV.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+
+		HMSPushHelper.getInstance().connectHMS(this);
 	}
 
 	/**
@@ -173,6 +176,10 @@ public class LoginActivity extends BaseActivity {
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 				    pd.dismiss();
 				}
+
+				// 获取华为 HMS 推送 token
+				HMSPushHelper.getInstance().getHMSPushToken();
+
 				// get user's info (this should be get from App's server or 3rd party service)
 				DemoHelper.getInstance().getUserProfileManager().asyncGetCurrentUserInfo();
 
@@ -205,7 +212,6 @@ public class LoginActivity extends BaseActivity {
 		});
 	}
 
-	
 	/**
 	 * register
 	 * 
