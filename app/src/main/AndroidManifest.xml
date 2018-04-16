@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hyphenate.chatuidemo"
-    android:versionCode="47"
-    android:versionName="3.4.0">
+    android:versionCode="48"
+    android:versionName="3.4.0.1">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -364,11 +364,10 @@
         <!-- mi push end -->
 
         <!--华为 HMS Config-->
-        <meta-data
-            android:name="com.huawei.hms.client.appid"
-            android:value="10492024" />
-        <!--华为推送 start-->
-        <receiver android:name="com.hyphenate.chat.EMHWPushReceiver">
+        <!--接入HMSSDK PUSH模块需要注册，第三方相关 :接收Push消息（注册、Push消息、Push连接状态）广播，
+                此receiver类需要开发者自己创建并继承com.huawei.hms.support.api.push.PushReceiver类，
+                参考示例代码中的类：com.huawei.hmsagent.HuaweiPushRevicer-->
+        <receiver android:name=".receiver.HMSPushReceiver">
             <intent-filter>
                 <!-- 必须,用于接收 TOKEN -->
                 <action android:name="com.huawei.android.push.intent.REGISTRATION"/>
@@ -378,13 +377,6 @@
                 <action android:name="com.huawei.android.push.intent.CLICK"/>
                 <!-- 可选，查看 PUSH 通道是否连接，不查看则不需要 -->
                 <action android:name="com.huawei.intent.action.PUSH_STATE"/>
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name="com.huawei.hms.support.api.push.PushEventReceiver">
-            <intent-filter>
-                <!-- 接收通道发来的通知栏消息，兼容老版本 PUSH -->
-                <action android:name="com.huawei.intent.action.PUSH"/>
             </intent-filter>
         </receiver>
         <!-- huawei push end -->

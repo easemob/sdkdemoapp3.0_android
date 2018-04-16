@@ -216,6 +216,8 @@ public class DemoHelper {
         options.setFCMNumber("921300338324");
         //you need apply & set your own id if you want to use Mi push notification
         options.setMipushConfig("2882303761517426801", "5381742660801");
+        // 设置是否使用 fcm，有些华为设备本身带有 google 服务，所以这里根据是否使用华为推送来设置是否使用 fcm
+        options.setUseFCM(!HMSPushHelper.getInstance().isUseHMSPush());
 
         //set custom servers, commonly used in private deployment
         if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
@@ -572,7 +574,7 @@ public class DemoHelper {
 
             @Override public void onReceiveInvite(String confId, String password, String extension) {
                 EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
-                if(easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
+                if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
                     return;
                 }
                 Intent conferenceIntent = new Intent(appContext, ConferenceActivity.class);
