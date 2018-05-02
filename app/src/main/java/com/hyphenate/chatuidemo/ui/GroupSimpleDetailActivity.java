@@ -16,8 +16,10 @@ package com.hyphenate.chatuidemo.ui;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMGroupInfo;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 
 public class GroupSimpleDetailActivity extends BaseActivity {
 	private Button btn_add_group;
@@ -36,6 +39,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 	private EMGroup group;
 	private String groupid;
 	private ProgressBar progressBar;
+	private EditText etReason;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 		btn_add_group = (Button) findViewById(R.id.btn_add_to_group);
 		tv_introduction = (TextView) findViewById(R.id.tv_introduction);
 		progressBar = (ProgressBar) findViewById(R.id.loading);
+		etReason = (EditText) findViewById(R.id.et_reason);
 
 		EMGroupInfo groupInfo = (EMGroupInfo) getIntent().getSerializableExtra("groupinfo");
 		String groupname = null;
@@ -96,8 +101,9 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 	
 	//join the group
 	public void addToGroup(View view){
+		final String reason = TextUtils.isEmpty(etReason.getText().toString()) ? etReason.getHint().toString() : etReason.getText().toString();
+		EMLog.i("AddToGroup", "reason: " + reason);
 		String st1 = getResources().getString(R.string.Is_sending_a_request);
-		final String st2 = getResources().getString(R.string.Request_to_join);
 		final String st3 = getResources().getString(R.string.send_the_request_is);
 		final String st4 = getResources().getString(R.string.Join_the_group_chat);
 		final String st5 = getResources().getString(R.string.Failed_to_join_the_group_chat);
@@ -110,7 +116,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 				try {
 					//if group is membersOnly，you need apply to join
 					if(group.isMembersOnly()){
-					    EMClient.getInstance().groupManager().applyJoinToGroup(groupid, st2);
+					    EMClient.getInstance().groupManager().applyJoinToGroup(groupid, reason);
 					}else{
 					    EMClient.getInstance().groupManager().joinGroup(groupid);
 					}

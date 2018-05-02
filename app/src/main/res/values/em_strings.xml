@@ -438,4 +438,6 @@
     <string name="check_result_login_success">Login success</string>
     <string name="check_result_msg_send_success">Message send success</string>
     <string name="check_result_logout_success">Logout success</string>
+
+    <string name="title_verification_information">Fill in the verification information</string>
 </resources>
