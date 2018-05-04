@@ -1,63 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
-        android:background="@color/top_bar_normal_bg"
-        android:gravity="center_vertical" >
-
-        <LinearLayout
-            android:layout_width="45dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/ease_common_tab_bg"
-            android:onClick="back" >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="9dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/em_mm_title_back" />
-        </LinearLayout>
+        android:background="@android:color/white"
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/Select_the_contact"
-            android:textColor="#ffffff"
+            android:textColor="#000"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/btn_ok"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dip"
+            android:layout_marginRight="8dip"
+            android:layout_marginTop="4dip"
             android:background="@drawable/ease_common_tab_bg"
-            android:text="@string/ok"
-            android:textColor="#fff"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:onClick="onClick"
+            android:padding="8dip"
+            android:text="@string/cancel"
+            android:textColor="#000"
             android:textSize="18sp" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/btn_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dip"
+        android:background="#0000aF"
+        android:clickable="true"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:padding="12dip"
+        android:text="@string/button_start_video_conference"
+        android:textColor="#FFF"
+        android:textSize="16sp" />
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_start"
+        android:layout_below="@+id/title_bar">
 
         <ListView
-            android:id="@+id/list"
+            android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@android:color/white"
             android:cacheColorHint="#00000000"
-            android:background="@android:color/transparent"
-            android:divider="#D4D4D4"
             android:descendantFocusability="afterDescendants"
-            android:dividerHeight="1px"
+            android:divider="@null"
             android:fastScrollEnabled="true" />
 
         <TextView
@@ -73,4 +80,5 @@
             android:textSize="40sp"
             android:visibility="invisible" />
     </RelativeLayout>
-</LinearLayout>
+
+</RelativeLayout>

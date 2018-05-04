@@ -440,4 +440,8 @@
     <string name="check_result_logout_success">Logout success</string>
 
     <string name="title_verification_information">Fill in the verification information</string>
+
+    <string name="button_start_video_conference">Start video conference (%1$d)</string>
+    <string name="tips_invite_to_join">%1$s invite you to join …</string>
+    <string name="tips_select_contacts_first">Select contacts first ~</string>
 </resources>

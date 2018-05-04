@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/ring_00025"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00026"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00027"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00028"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00029"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00030"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00031"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00032"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00033"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00034"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00035"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00036"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00037"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00038"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00039"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00040"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00041"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00042"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00043"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00044"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00045"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00046"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00047"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00048"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00049"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00050"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00051"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00052"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00053"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00054"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00055"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00056"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00057"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00058"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00059"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00060"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00061"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00062"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00063"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00064"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00065"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00066"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00067"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00068"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00069"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00070"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00071"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00072"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00073"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00074"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00075"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00076"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00077"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00078"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00079"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00080"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00081"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00082"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00083"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00084"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00085"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00086"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00087"
+        android:duration="50" />
+    <item
+        android:drawable="@drawable/ring_00088"
+        android:duration="50" />
+</animation-list>

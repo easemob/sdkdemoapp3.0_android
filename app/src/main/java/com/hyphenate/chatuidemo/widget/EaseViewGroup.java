@@ -1,41 +1,138 @@
 package com.hyphenate.chatuidemo.widget;
 
 import android.content.Context;
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.Scroller;
+
+import com.hyphenate.chatuidemo.conference.ConferenceMemberView;
+import com.hyphenate.util.EMLog;
 
 /**
  * Created by lzan13 on 2017/3/25
- *
+ * <p>
  * 自定义ViewGroup类，会根据子控件的宽度自动换行，
  */
 public class EaseViewGroup extends ViewGroup {
+    interface OnViewActionListener {
+        void onChildViewAdd(View v);
 
-    private OnChildListener childListener;
-    private View childView;
-    private int position;
+        void onChildViewRemove(View v);
+
+        void onViewScroll(int index);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public interface OnScreenModeChangeListener {
+        /**
+         * @param isFullScreenMode
+         * @param fullScreenView   Is null if {isFullScreenMode} is false.
+         */
+        void onScreenModeChange(boolean isFullScreenMode, @Nullable View fullScreenView);
+    }
+
+    private static final String TAG = "EaseViewGroup1";
+
+    private static final int MAX_SIZE_PER_PAGE = 9;
+
+    private OnItemClickListener onItemClickListener;
+    private OnScreenModeChangeListener onScreenModeChangeListener;
+    //滚动计算辅助类
+    private Scroller mScroller;
+    private float mLastMotionX = 0;
+    private PointF actionDownPoint = new PointF();
+    private int pageWidth = 0;
+    private int screenHeight = 0;
+    // current page index.
+    private int index = 0;
+    private int pageCount = 1;
+    private View fullScreenView;
+
+    // Android系统认为touch事件为滑动事件的最小距离
+    int touchSlop;
 
     public EaseViewGroup(Context context) {
         super(context);
+        init();
     }
 
     public EaseViewGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
+    }
+
+    public EaseViewGroup(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
+        //初始化辅助类
+        mScroller = new Scroller(getContext());
+
+        post(new Runnable() {
+            @Override
+            public void run() {
+                EMLog.i(TAG, "init: " + getWidth() + " - " + getHeight());
+                pageWidth = getWidth();
+                screenHeight = getHeight();
+            }
+        });
+
+        touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+    }
+
+    @Override
+    public void addView(View child) {
+        super.addView(child);
+        calculatePageCount();
+        index = pageCount - 1;
+        if (isFullScreenMode()) {
+            EMLog.i(TAG, "addView, isFullScreenMode: " + isFullScreenMode());
+            // 全屏模式下不进行子view的大小设置和滑动
+            return;
+        }
+        calculateChildrenParamsAndSet();
+        // Always scroll to the last page.
+        scrollTo(index * pageWidth, 0);
+    }
+
+    @Override
+    public void removeView(View view) {
+        super.removeView(view);
+        calculatePageCount();
+        index = index == pageCount ? --index : index;
+        if (isFullScreenMode()) {
+            if (fullScreenView == view) {
+                // 全屏状态,并且当前全屏view被移除
+                resetAllViews(view);
+            }
+        } else {
+            calculateChildrenParamsAndSet();
+            scrollTo(index * pageWidth, 0);
+        }
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         //子控件的个数
         int count = getChildCount();
-        //ViewParent宽度(包含padding)
-        int width = getWidth();
         //ViewParent 的右边x的布局限制值
-        int rightLimit = width - getPaddingRight();
+        int rightLimit = pageWidth;
 
         //存储基准的left top (子类.layout(),里的坐标是基于父控件的坐标，所以 x应该是从0+父控件左内边距开始，y从0+父控件上内边距开始)
-        int baseLeft = 0 + getPaddingLeft();
-        int baseTop = 0 + getPaddingTop();
+        int baseLeft = 0;
+        int baseTop = 0;
         //存储现在的left top
         int curLeft = baseLeft;
         int curTop = baseTop;
@@ -56,6 +153,16 @@ public class EaseViewGroup extends ViewGroup {
         int lastChildHeight = 0;
         //
         for (int i = 0; i < count; i++) {
+            if ((i + 1) % MAX_SIZE_PER_PAGE == 1) {// A new page start.
+                int p = (i + 1) / MAX_SIZE_PER_PAGE;// current page.
+                baseLeft = pageWidth * p + getPaddingLeft();
+                baseTop = getPaddingTop();
+                rightLimit = pageWidth * (p + 1);
+
+                curLeft = baseLeft;
+                curTop = baseTop;
+            }
+
             child = getChildAt(i);
             //如果gone，不布局了
             if (View.GONE == child.getVisibility()) {
@@ -81,18 +188,16 @@ public class EaseViewGroup extends ViewGroup {
                 viewR = viewL + childW;
                 viewB = viewT + childH;
                 //child.layout(baseLeft + params.leftMargin, curTop + params.topMargin, baseLeft + params.leftMargin + child.getMeasuredWidth(), curTop + params.topMargin + child.getMeasuredHeight());
-                //Log.i(TAG,"新的一行:" +"   ,baseLeft:"+baseLeft +"  curTop:"+curTop+"  baseLeft+childWidth:"+(baseLeft+childWidth)+"  curTop+childHeight:"+ ( curTop+childHeight));
+                //EMLog.i(TAG,"新的一行:" +"   ,baseLeft:"+baseLeft +"  curTop:"+curTop+"  baseLeft+childWidth:"+(baseLeft+childWidth)+"  curTop+childHeight:"+ ( curTop+childHeight));
                 curLeft = baseLeft + childWidth;
-
             } else {
                 //当前行可以放下子View:
                 viewL = curLeft + params.leftMargin;
                 viewT = curTop + params.topMargin;
                 viewR = viewL + childW;
                 viewB = viewT + childH;
-
                 //child.layout(curLeft + params.leftMargin, curTop + params.topMargin, curLeft + params.leftMargin + child.getMeasuredWidth(), curTop + params.topMargin + child.getMeasuredHeight());
-                //Log.i(TAG,"当前行:"+changed +"   ,curLeft:"+curLeft +"  curTop:"+curTop+"  curLeft+childWidth:"+(curLeft+childWidth)+"  curTop+childHeight:"+(curTop+childHeight));
+                //EMLog.i(TAG,"当前行:"+changed +"   ,curLeft:"+curLeft +"  curTop:"+curTop+"  curLeft+childWidth:"+(curLeft+childWidth)+"  curTop+childHeight:"+(curTop+childHeight));
                 curLeft = curLeft + childWidth;
             }
             lastChildHeight = childHeight;
@@ -175,44 +280,279 @@ public class EaseViewGroup extends ViewGroup {
         }
 
         //适配padding,如果是wrap_content,则除了子控件本身占据的控件，还要在加上父控件的padding
+        int measuredWidth = widthMode != MeasureSpec.EXACTLY ? maxLineWidth + getPaddingLeft() + getPaddingRight() : widthMeasure;
         setMeasuredDimension(
-                widthMode != MeasureSpec.EXACTLY ? maxLineWidth + getPaddingLeft() + getPaddingRight() : widthMeasure,
+                measuredWidth * pageCount,
                 heightMode != MeasureSpec.EXACTLY ? totalHeight + getPaddingTop() + getPaddingBottom() : heightMeasure);
     }
 
     @Override
-    public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) {
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!mScroller.isFinished()) {
+            return true;
+        }
+        int action = event.getAction();
+        //判断触发的时间
+        switch (action) {
+            //按下事件
+            case MotionEvent.ACTION_DOWN:
+                actionDownPoint.x = event.getX();
+                actionDownPoint.y = event.getY();
+                EMLog.i(TAG, "onInterceptTouchEvent ACTION_DOWN: downPointX: " + actionDownPoint.x);
+                //获取现在的x坐标
+                mLastMotionX = event.getX();
+                break;
+            //移动事件
+            case MotionEvent.ACTION_MOVE:
+                if (isFullScreenMode()) {
+                    return true;
+                }
+
+                float x = event.getX();
+                EMLog.i(TAG, "onInterceptTouchEvent: move action: " + x);
+                //计算移动的偏移量
+                float delt = mLastMotionX - x;
+                //重置手指位置
+                mLastMotionX = x;
+
+                if ((index == 0 && delt < 0) || (index == pageCount - 1 && delt > 0)) {
+                    delt /= 5;
+                }
+
+                //滚动
+                scrollBy((int) delt, 0);
+                break;
+            //手指抬起事件
+            case MotionEvent.ACTION_UP:
+                EMLog.i(TAG, "onTouchEvent: " + getScrollX());
+                float delta = actionDownPoint.x - event.getX();
+                if (Math.abs(delta) < touchSlop && Math.abs(actionDownPoint.y - event.getY()) < touchSlop) {
+                    performClick((int) event.getX(), (int) event.getY());
+                } else if (Math.abs(delta) < pageWidth / 3) { // 滑动距离未超过1/3,恢复到当前页
+                    smoothScrollTo(index * pageWidth, 0);
+                } else { // 换页
+                    if (delta < 0) { // 滑动到上一页
+                        if (index == 0) { // 已经在第一页
+                            smoothScrollTo(index * pageWidth, 0);
+                        } else {
+                            index--;
+                            smoothScrollTo(index * pageWidth, 0);
+                        }
+                    } else { // 滑动到下一页
+                        if (index == pageCount - 1) { // 已经在最后一页
+                            smoothScrollTo(index * pageWidth, 0);
+                        } else {
+                            index++;
+                            smoothScrollTo(index * pageWidth, 0);
+                        }
+                    }
+                }
+
+                actionDownPoint.set(0, 0);
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * 滚动时需要重写的方法，用于控制滚动
+     */
+    @Override
+    public void computeScroll() {
+        //判断滚动时候停止
+        if (mScroller.computeScrollOffset()) {
+            //滚动到指定的位置
+            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+            //这句话必须写，否则不能实时刷新
+            postInvalidate();
+        }
+    }
+
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new MarginLayoutParams(getContext(), attrs);
     }
 
     @Override
-    protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams lp) {
+    protected LayoutParams generateLayoutParams(LayoutParams lp) {
         return new MarginLayoutParams(lp);
     }
 
     @Override
-    protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
+    protected LayoutParams generateDefaultLayoutParams() {
         return new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public int currentIndex() {
+        return index;
     }
 
     /**
      * 设置子控件的点击监听
      */
-    public void setChildOnClick(OnChildListener listener) {
-        childListener = listener;
-        for (int i = 0; i < getChildCount(); i++) {
-            childView = getChildAt(i);
-            position = i;
-            childView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    childListener.onItemClick(childView, position);
-                }
-            });
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        onItemClickListener = listener;
+    }
+
+    public void setOnScreenModeChangeListener(OnScreenModeChangeListener listener) {
+        onScreenModeChangeListener = listener;
+    }
+
+    public void performClick(int x, int y) {
+        // item click
+        Pair<Integer, View> result = findTargetView(x, y);
+        if (result == null) {
+            EMLog.i(TAG, "onTouchEvent: no child on click point.");
+        } else {
+            EMLog.i(TAG, "onTouchEvent: child click , index: " + result.first + ", child view: " + result.second);
+            handleItemClickAction(result.second, result.first);
         }
     }
 
-    public interface OnChildListener {
-        void onItemClick(View view, int position);
+    public boolean isFullScreenMode() {
+        return fullScreenView != null;
+    }
+
+    public View getFullScreenView() {
+        return fullScreenView;
+    }
+
+    private void smoothScrollTo(int x, int y) {
+        EMLog.i(TAG, "smoothScrollTo: " + getScrollX() + ", target : " + x);
+        int deltaX = x - getScrollX();
+        int deltaY = y - getScrollY();
+        mScroller.startScroll(getScrollX(), 0, deltaX, deltaY);
+        invalidate();
+    }
+
+    private void calculateChildrenParamsAndSet() {
+        int childCount = getChildCount();
+        int itemWidth = pageWidth;
+        if (childCount > 4) { // 3 x 3
+            itemWidth = pageWidth / 3;
+        } else if (childCount > 1) { // 2 x 2
+            itemWidth = pageWidth / 2;
+        }
+
+        View view;
+        ViewGroup.LayoutParams params;
+        for (int i = 0; i < getChildCount(); i++) {
+            view = getChildAt(i);
+            params = view.getLayoutParams();
+            params.width = itemWidth;
+            params.height = itemWidth;
+            view.setLayoutParams(params);
+        }
+    }
+
+    private void calculatePageCount() {
+        pageCount = (getChildCount() - 1) / MAX_SIZE_PER_PAGE + 1;
+    }
+
+    private Pair<Integer, View> findTargetView(int x, int y) {
+        int start = index * MAX_SIZE_PER_PAGE;
+        int count = getChildCount() - start > MAX_SIZE_PER_PAGE ? MAX_SIZE_PER_PAGE : getChildCount() - start;
+        View result;
+        for (int i = start; i < start + count; i++) {
+            result = getChildAt(i);
+            int[] location = new int[2];
+            result.getLocationOnScreen(location);
+            int left = location[0];
+            int top = location[1];
+            int right = left + result.getMeasuredWidth();
+            int bottom = top + result.getMeasuredHeight();
+            if (new Rect(left, top, right, bottom).contains(x, y)) {
+                return new Pair<>(i, result);
+            }
+        }
+        return null;
+    }
+
+    private void handleItemClickAction(View v, int index) {
+        if (isFullScreenMode()) {
+            resetAllViews(v);
+        } else {
+            fullScreen(v);
+        }
+
+        if (onItemClickListener != null) {
+            onItemClickListener.onItemClick(v, index);
+        }
+    }
+
+    private void fullScreen(View view) {
+        fullScreenView = view;
+
+        int pageIndex = indexOfChild(view) / MAX_SIZE_PER_PAGE;
+
+        int start = pageIndex * MAX_SIZE_PER_PAGE;
+        int end = getChildCount() - start > MAX_SIZE_PER_PAGE ? start + MAX_SIZE_PER_PAGE : getChildCount();
+
+        // 只更改child view所在页的所有子view的layout parameters.
+        for (int i = start; i < end; i++) {
+            View child = getChildAt(i);
+            LayoutParams lp = child.getLayoutParams();
+            if (view == child) {
+                lp.width = pageWidth;
+                lp.height = screenHeight;
+            } else {
+                lp.width = 0;
+                lp.height = 0;
+            }
+            child.setLayoutParams(lp);
+        }
+
+        if (view instanceof ConferenceMemberView) {
+            ((ConferenceMemberView) view).setFullScreen(isFullScreenMode());
+        }
+
+        if (onScreenModeChangeListener != null) {
+            onScreenModeChangeListener.onScreenModeChange(isFullScreenMode(), fullScreenView);
+        }
+    }
+
+    private void resetAllViews(View view) {
+        fullScreenView = null;
+
+        if (pageCount == 1) {
+            calculateChildrenParamsAndSet();
+        } else {
+            int pageIndex = indexOfChild(view) / MAX_SIZE_PER_PAGE;
+
+            int start = pageIndex * MAX_SIZE_PER_PAGE;
+            int end = getChildCount() - start > MAX_SIZE_PER_PAGE ? start + MAX_SIZE_PER_PAGE : getChildCount();
+
+            int itemWidth = pageWidth / 3;
+
+            for (int i = start; i < end; i++) {
+                View child = getChildAt(i);
+                LayoutParams lp = child.getLayoutParams();
+                if (view == child) {
+                    lp.width = itemWidth;
+                    lp.height = itemWidth;
+                } else {
+                    lp.width = 0;
+                    lp.height = 0;
+                }
+                child.setLayoutParams(lp);
+            }
+        }
+
+        if (view instanceof ConferenceMemberView) {
+            ((ConferenceMemberView) view).setFullScreen(isFullScreenMode());
+        }
+
+        if (onScreenModeChangeListener != null) {
+            onScreenModeChangeListener.onScreenModeChange(isFullScreenMode(), fullScreenView);
+        }
     }
 }

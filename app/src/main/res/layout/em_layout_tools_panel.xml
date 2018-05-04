@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip">
+
+        <LinearLayout
+            android:id="@+id/first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="#FFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_member_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:singleLine="true"
+                android:textColor="#FFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_call_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="#FFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dip"
+        android:layout_marginRight="16dip"
+        android:orientation="horizontal"
+        android:weightSum="4">
+        <!--切换摄像头-->
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_change_camera_switch"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_camera_toggle" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+            <!--麦克风开关-->
+            <ImageButton
+                android:id="@+id/btn_mic_switch"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_mic" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_camera_switch"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_video" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_speaker_switch"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_speaker" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dip"
+        android:layout_marginRight="16dip"
+        android:layout_marginTop="4dip"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_desk_share"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_desk_share" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_recording"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_recording" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_debug"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_debug" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_invite"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_invite" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dip"
+        android:layout_marginLeft="16dip"
+        android:layout_marginRight="16dip"
+        android:layout_marginTop="10dip"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_scale_mode"
+                style="@style/style_call_tools_panel_button"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/em_call_scale_fill"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
+            <ImageButton
+                android:id="@+id/btn_hangup"
+                android:layout_width="wrap_content"
+                android:layout_height="70dip"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/em_call_btn_bg"
+                android:scaleType="fitCenter"
+                android:src="@drawable/em_call_hangup" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_close"
+                style="@style/style_call_tools_panel_button"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom|center_horizontal"
+                android:src="@drawable/em_call_close" />
+
+            <ImageButton
+                android:id="@+id/btn_zoomin"
+                style="@style/style_call_tools_panel_button"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="bottom|center_horizontal"
+                android:src="@drawable/em_call_zoomin"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

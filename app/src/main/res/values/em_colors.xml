@@ -43,4 +43,7 @@
 	<color name="holo_orange_light">#ffffbb33</color>
 	<color name="holo_red_light">#ffff4444</color>
     <color name="holo_black">#ff111111</color>
+
+    <color name="bg_tools_panel">#474747</color>
+    <color name="color_transparent">#00000000</color>
 </resources>
