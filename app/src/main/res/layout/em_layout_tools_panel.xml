@@ -111,14 +111,6 @@
         <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
 
             <ImageButton
-                android:id="@+id/btn_recording"
-                style="@style/style_call_tools_panel_button"
-                android:src="@drawable/em_call_recording" />
-        </RelativeLayout>
-
-        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
-
-            <ImageButton
                 android:id="@+id/btn_debug"
                 style="@style/style_call_tools_panel_button"
                 android:src="@drawable/em_call_debug" />

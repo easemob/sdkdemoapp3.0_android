@@ -96,8 +96,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private ImageButton changeCameraSwitch;
     // 挂断按钮
     private ImageButton hangupBtn;
-    // 视频录制按钮
-    private ImageButton recordingBtn;
     // 显示debug信息按钮
     private ImageButton debugBtn;
     // 邀请其他成员加入的按钮
@@ -165,7 +163,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         screenShareSwitch = (ImageButton) findViewById(R.id.btn_desk_share);
         changeCameraSwitch = (ImageButton) findViewById(R.id.btn_change_camera_switch);
         hangupBtn = (ImageButton) findViewById(R.id.btn_hangup);
-        recordingBtn = (ImageButton) findViewById(R.id.btn_recording);
         debugBtn = (ImageButton) findViewById(R.id.btn_debug);
         scaleModeBtn = (ImageButton) findViewById(R.id.btn_scale_mode);
         closeBtn = (ImageButton) findViewById(R.id.btn_close);
@@ -199,7 +196,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         screenShareSwitch.setOnClickListener(listener);
         changeCameraSwitch.setOnClickListener(listener);
         hangupBtn.setOnClickListener(listener);
-        recordingBtn.setOnClickListener(listener);
         debugBtn.setOnClickListener(listener);
         scaleModeBtn.setOnClickListener(listener);
         closeBtn.setOnClickListener(listener);
@@ -288,9 +284,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 case R.id.btn_debug:
                     EMLog.i(TAG, "Button debug clicked!!!");
                     openDebugPanel();
-                    break;
-                case R.id.btn_recording:
-                    EMLog.i(TAG, "Button recording clicked!!!");
                     break;
                 case R.id.btn_scale_mode: // 全屏状态下切换视频scale mode
                     changeFullScreenScaleMode();
