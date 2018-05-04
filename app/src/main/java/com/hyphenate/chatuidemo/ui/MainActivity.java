@@ -43,6 +43,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.HMSPushHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
@@ -141,6 +142,10 @@ public class MainActivity extends BaseActivity {
 		EMClient.getInstance().addMultiDeviceListener(new MyMultiDeviceListener());
 		//debug purpose only
         registerInternalDebugReceiver();
+
+		// 获取华为 HMS 推送 token
+		HMSPushHelper.getInstance().connectHMS(this);
+		HMSPushHelper.getInstance().getHMSPushToken();
 	}
 
 	EMClientListener clientListener = new EMClientListener() {

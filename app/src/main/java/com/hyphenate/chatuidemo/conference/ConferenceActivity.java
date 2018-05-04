@@ -22,6 +22,7 @@ import com.hyphenate.chat.EMConference;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMStreamParam;
+import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
@@ -723,6 +724,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 Toast.makeText(activity, "State=" + state, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override public void onStreamStatistics(EMStreamStatistics statistics) {
+
     }
 
     @Override public void onStreamSetup(final String streamId) {
