@@ -1,31 +1,29 @@
 package com.hyphenate.chatuidemo.widget;
 
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.PixelFormat;
-import android.os.Handler;
-import android.os.Message;
+import android.graphics.Point;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.media.EMCallSurfaceView;
+import com.hyphenate.util.EMLog;
 import com.superrtc.sdk.VideoView;
 
 /**
@@ -35,9 +33,6 @@ import com.superrtc.sdk.VideoView;
  */
 public class FloatWindow {
     private static final String TAG = "FloatWindow";
-
-    private final int REFRESH_UI = 0;
-    private final int REFRESH_TIME = 1;
 
     private Context context;
 
@@ -50,13 +45,15 @@ public class FloatWindow {
     private ImageView avatarView;
     private EMCallSurfaceView localView;
 
-    // local broadcast
-    private LocalBroadcastManager localBroadcastManager;
-    private BroadcastReceiver broadcastReceiver;
+    private int screenWidth;
+    private int floatViewWidth;
 
     public FloatWindow(Context context) {
         this.context = context;
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Point point = new Point();
+        windowManager.getDefaultDisplay().getSize(point);
+        screenWidth = point.x;
     }
 
     public static FloatWindow getInstance(Context context) {
@@ -74,7 +71,7 @@ public class FloatWindow {
             return;
         }
         layoutParams = new WindowManager.LayoutParams();
-        layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
+        layoutParams.gravity = Gravity.END | Gravity.TOP;
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.format = PixelFormat.TRANSPARENT;
@@ -83,6 +80,13 @@ public class FloatWindow {
 
         floatView = LayoutInflater.from(context).inflate(R.layout.em_widget_call_float_window, null);
         windowManager.addView(floatView, layoutParams);
+        floatView.post(new Runnable() {
+            @Override
+            public void run() {
+                // Get the size of floatView;
+                floatViewWidth = floatView.getWidth();
+            }
+        });
         avatarView = (ImageView) floatView.findViewById(R.id.iv_avatar);
         EaseUserUtils.setUserAvatar(context, username, avatarView);
 
@@ -102,8 +106,8 @@ public class FloatWindow {
         floatView.setOnTouchListener(new View.OnTouchListener() {
             boolean result = false;
 
-            float x = 0;
-            float y = 0;
+            int left;
+            int top;
             float startX = 0;
             float startY = 0;
 
@@ -112,35 +116,42 @@ public class FloatWindow {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         result = false;
-                        x = event.getX();
-                        y = event.getY();
                         startX = event.getRawX();
                         startY = event.getRawY();
+
+                        left = layoutParams.x;
+                        top = layoutParams.y;
+
+                        EMLog.i(TAG, "startX: " + startX + ", startY: " + startY + ", left: " + left + ", top: " + top);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (Math.abs(event.getRawX() - startX) > 20 || Math.abs(event.getRawY() - startY) > 20) {
                             result = true;
                         }
-                        layoutParams.x = (int) (event.getRawX() - x);
-                        layoutParams.y = (int) (event.getRawY() - y - 25);
+
+                        int deltaX = (int) (startX - event.getRawX());
+
+                        layoutParams.x = left + deltaX;
+                        layoutParams.y = (int) (top + event.getRawY() - startY);
+                        EMLog.i(TAG, "startX: " + (event.getRawX() - startX) + ", startY: " + (event.getRawY() - startY)
+                                + ", left: " + left + ", top: " + top);
                         windowManager.updateViewLayout(floatView, layoutParams);
                         break;
                     case MotionEvent.ACTION_UP:
+                        smoothScrollToBorder();
                         break;
                 }
                 return result;
             }
         });
-        registerBroadcast();
     }
 
     public void updateFloatWindow(int callType) {
         if (callType == 0) {
             floatView.findViewById(R.id.layout_call_voice).setVisibility(View.VISIBLE);
             floatView.findViewById(R.id.layout_call_video).setVisibility(View.GONE);
-            refreshCallTime();
         } else {
-            setupSurfaceView();
+            setupVideoCallView();
         }
     }
 
@@ -151,7 +162,7 @@ public class FloatWindow {
     /**
      * set call surface view
      */
-    private void setupSurfaceView() {
+    private void setupVideoCallView() {
         floatView.findViewById(R.id.layout_call_voice).setVisibility(View.GONE);
         floatView.findViewById(R.id.layout_call_video).setVisibility(View.VISIBLE);
 
@@ -176,7 +187,6 @@ public class FloatWindow {
      */
     public void removeFloatWindow() {
         Log.i(TAG, "removeFloatWindow: ");
-        unregisterBroadcast();
         if (localView != null) {
             if (localView.getRenderer() != null) {
                 localView.getRenderer().dispose();
@@ -190,107 +200,35 @@ public class FloatWindow {
         }
     }
 
-    /**
-     * Register call broadcast receiver
-     */
-    private void registerBroadcast() {
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                boolean isUpdateState = intent.getBooleanExtra("update_state", false);
-                boolean isUpdateTime = intent.getBooleanExtra("update_time", false);
-                if (isUpdateState) {
-                    Message msg = handler.obtainMessage(REFRESH_UI);
-                    msg.obj = intent;
-                    handler.sendMessage(msg);
-                }
-                if (localView == null) { // Voice call type.
-                    Message msg = handler.obtainMessage(REFRESH_TIME);
-                    handler.sendMessage(msg);
-                }
-            }
-        };
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Constant.BROADCAST_ACTION_CALL);
-        localBroadcastManager = LocalBroadcastManager.getInstance(context);
-        localBroadcastManager.registerReceiver(broadcastReceiver, filter);
-    }
+    private void smoothScrollToBorder() {
+        EMLog.i(TAG, "screenWidth: " + screenWidth + ", floatViewWidth: " + floatViewWidth);
+        int splitLine = screenWidth / 2 - floatViewWidth / 2;
+        final int left = layoutParams.x;
+        final int top = layoutParams.y;
+        int targetX;
 
-    private void unregisterBroadcast() {
-        if (localBroadcastManager != null && broadcastReceiver != null) {
-            localBroadcastManager.unregisterReceiver(broadcastReceiver);
+        if (left < splitLine) {
+            // 滑动到最左边
+            targetX = 0;
+        } else {
+            // 滑动到最右边
+            targetX = screenWidth - floatViewWidth;
         }
-    }
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            //super.handleMessage(msg);
-            switch (msg.what) {
-                case REFRESH_UI:
-                    Intent intent = (Intent) msg.obj;
-                    EMCallStateChangeListener.CallState callState =
-                            (EMCallStateChangeListener.CallState) intent.getExtras().get("call_state");
-                    EMCallStateChangeListener.CallError callError =
-                            (EMCallStateChangeListener.CallError) intent.getExtras().get("call_error");
-                    refreshCallView(callState, callError);
-                    break;
-                case REFRESH_TIME:
-                    refreshCallTime();
-                    break;
-            }
-        }
-    };
+        ValueAnimator animator = ValueAnimator.ofInt(left, targetX);
+        animator.setDuration(100)
+                .addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        if (floatView == null) return;
 
-    /**
-     * refresh call ui
-     */
-    private void refreshCallView(EMCallStateChangeListener.CallState callState, EMCallStateChangeListener.CallError callError) {
-        switch (callState) {
-            case CONNECTING:
-                break;
-            case CONNECTED:
-                break;
-            case ACCEPTED:
-                break;
-            case DISCONNECTED:
-//                CallManager.getInstance().removeFloatWindow();
-                break;
-            case NETWORK_DISCONNECTED:
-                Toast.makeText(context, "Remote network disconnected!", Toast.LENGTH_SHORT).show();
-                break;
-            case NETWORK_NORMAL:
-                Toast.makeText(context, "Remote network connected!", Toast.LENGTH_SHORT).show();
-                break;
-            case NETWORK_UNSTABLE:
-                if (callError == EMCallStateChangeListener.CallError.ERROR_NO_DATA) {
-                    Toast.makeText(context, "No call data!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, "Remote network unstable!", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case VIDEO_PAUSE:
-                Toast.makeText(context, "Remote pause video", Toast.LENGTH_SHORT).show();
-                break;
-            case VIDEO_RESUME:
-                Toast.makeText(context, "Remote resume video", Toast.LENGTH_SHORT).show();
-                break;
-            case VOICE_PAUSE:
-                Toast.makeText(context, "Remote pause voice", Toast.LENGTH_SHORT).show();
-                break;
-            case VOICE_RESUME:
-                Toast.makeText(context, "Remote resume voice", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void refreshCallTime() {
-//        int time = CallManager.getInstance().getCallTime();
-//        if (!callTimeView.isShown()) {
-//            callTimeView.setVisibility(View.VISIBLE);
-//        }
-//        callTimeView.setText(DateUtils.toTimeBySecond(time));
+                        int value = (int) animation.getAnimatedValue();
+                        EMLog.i(TAG, "onAnimationUpdate, value: " + value);
+                        layoutParams.x = value;
+                        layoutParams.y = top;
+                        windowManager.updateViewLayout(floatView, layoutParams);
+                    }
+                });
+        animator.start();
     }
 }
