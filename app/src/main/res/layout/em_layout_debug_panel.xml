@@ -53,12 +53,7 @@
             android:layout_weight="1"
             android:background="#000">
 
-            <LinearLayout
-                android:id="@+id/container_debug_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dip"
-                android:orientation="vertical" />
+            <include layout="@layout/em_layout_debug_detail" />
         </ScrollView>
 
     </LinearLayout>

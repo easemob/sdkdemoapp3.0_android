@@ -26,6 +26,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConference;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMStreamParam;
+import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
@@ -169,14 +170,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         zoominBtn = (ImageButton) findViewById(R.id.btn_zoomin);
 
         debugPanelView = (DebugPanelView) findViewById(R.id.layout_debug_panel);
-        // TODO: for test.
-        List<EMConferenceStream> streams = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            EMConferenceStream stream = new EMConferenceStream();
-            stream.setUsername("username_" + i);
-            streams.add(stream);
-        }
-        debugPanelView.setStreamListAndNotify(streams);
 
         membersLayout = findViewById(R.id.layout_members);
         membersTVMain = (TextView) findViewById(R.id.tv_members_main);
@@ -283,6 +276,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     break;
                 case R.id.btn_debug:
                     EMLog.i(TAG, "Button debug clicked!!!");
+                    EMClient.getInstance().conferenceManager().enableStatistics(true);
                     openDebugPanel();
                     break;
                 case R.id.btn_scale_mode: // 全屏状态下切换视频scale mode
@@ -340,11 +334,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         memberView.setDesktop(stream.getStreamType() == EMConferenceStream.StreamType.DESKTOP);
         subscribe(stream, memberView);
         EMLog.d(TAG, "add conference view -end-" + stream.getMemberName());
+        debugPanelView.setStreamListAndNotify(streamList);
     }
 
     private DebugPanelView.OnButtonClickListener onButtonClickListener = new DebugPanelView.OnButtonClickListener() {
         @Override
         public void onCloseClick(@NotNull View v) {
+            EMClient.getInstance().conferenceManager().enableStatistics(false);
             openToolsPanel();
         }
     };
@@ -398,6 +394,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         final ConferenceMemberView memberView = (ConferenceMemberView) callConferenceViewGroup.getChildAt(index + 1);
         streamList.remove(stream);
         callConferenceViewGroup.removeView(memberView);
+        debugPanelView.setStreamListAndNotify(streamList);
     }
 
     /**
@@ -887,6 +884,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 Toast.makeText(activity, "State=" + state, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onStreamStatistics(EMStreamStatistics statistics) {
+        EMLog.i(TAG, "onStreamStatistics" + statistics.toString());
+        debugPanelView.onStreamStatisticsChange(statistics);
     }
 
     @Override

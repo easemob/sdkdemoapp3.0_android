@@ -1,9 +1,7 @@
 package com.hyphenate.chatuidemo.conference
 
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -12,9 +10,12 @@ import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMConferenceStream
+import com.hyphenate.chat.EMStreamStatistics
 import com.hyphenate.chatuidemo.R
 import com.hyphenate.util.EMLog
+import kotlinx.android.synthetic.main.em_layout_debug_detail.view.*
 import kotlinx.android.synthetic.main.em_layout_debug_panel.view.*
 
 /**
@@ -32,6 +33,7 @@ class DebugPanelView : LinearLayout {
     private var onButtonClickListener: OnButtonClickListener? = null
     private var streamList: ArrayList<EMConferenceStream> = ArrayList()
     private var streamAdapter: StreamAdapter? = null
+    private var currentStream: EMConferenceStream? = null
     private var activatedView: View? = null
     private val onClickListener: View.OnClickListener by lazy {
         OnClickListener { v ->
@@ -54,6 +56,10 @@ class DebugPanelView : LinearLayout {
         }
     }
 
+    private val streamStatisticsMap by lazy {
+        HashMap<String, EMStreamStatistics>()
+    }
+
     constructor(context: Context) : super(context) {
         init()
     }
@@ -71,8 +77,20 @@ class DebugPanelView : LinearLayout {
     }
 
     fun setStreamListAndNotify(streamList: List<EMConferenceStream>) {
+        this.streamList.clear()
         this.streamList.addAll(streamList)
         streamAdapter!!.notifyDataSetChanged()
+    }
+
+    fun onStreamStatisticsChange(statistics: EMStreamStatistics) {
+        streamStatisticsMap.put(statistics.streamId, statistics)
+        if (statistics.streamId == currentStream?.streamId) {
+            // Current stream statistics is showing, update it.
+            post {
+                // Run on ui thread.
+                showDebugInfo(currentStream)
+            }
+        }
     }
 
     private fun init() {
@@ -83,19 +101,26 @@ class DebugPanelView : LinearLayout {
         list_stream.onItemClickListener = onItemClickListener
     }
 
-    private fun showDebugInfo(stream: EMConferenceStream) {
-        EMLog.i(TAG, "showDebugInfo, username: " + stream.username)
+    private fun showDebugInfo(stream: EMConferenceStream?) {
+        currentStream = stream
+        EMLog.i(TAG, "showDebugInfo, username: " + stream?.username)
 
-        container_debug_info.removeAllViews()
+        tv_stream_id.text = "Stream Id: " + currentStream?.streamId
+        tv_username_debug.text = "Username: " + stream?.username
 
-        val usernameTV = TextView(context)
-        val lp = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        usernameTV.layoutParams = lp
-        usernameTV.setTextColor(Color.parseColor("#FFFFFF"))
-        usernameTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
-        usernameTV.text = stream.username
-
-        container_debug_info.addView(usernameTV)
+        val statistics = streamStatisticsMap[currentStream?.streamId]
+        EMLog.i(TAG, "showDebugInfo, stream?.username: " + stream?.username + ", EMClient.getInstance().currentUser: " + EMClient.getInstance().currentUser)
+        if (stream?.username == EMClient.getInstance().currentUser) {
+            // TODO: show local statistics info.
+        } else {
+            EMLog.i(TAG, "showDebugInfo, statistics: " + statistics.toString())
+            tv_resolution.text = "Resolution: " + statistics?.remoteHeight + " x " + statistics?.remoteWidth
+            tv_video_fps.text = "Video Fps: " + statistics?.remoteFps
+            tv_video_bitrate.text = "Video Bitrate: " + statistics?.remoteVideoBps
+            tv_video_pack_loss.text = "Video Package Loss: " + statistics?.remoteVideoPacketsLost
+            tv_audio_bitrate.text = "Audio Bitrate: " + statistics?.remoteAudioBps
+            tv_audio_pack_loss.text = "Audio Package Loss: " + statistics?.remoteAudioPacketsLost
+        }
     }
 
     private class StreamAdapter(var context: Context, var streamList: List<EMConferenceStream>) : BaseAdapter() {

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_stream_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_username_debug"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_resolution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_video_fps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_video_bitrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_video_pack_loss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_audio_bitrate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_audio_pack_loss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="#fff"
+        android:textSize="18sp" />
+
+</LinearLayout>
