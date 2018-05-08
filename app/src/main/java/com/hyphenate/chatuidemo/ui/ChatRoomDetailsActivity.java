@@ -864,7 +864,7 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 		}
 
 		@Override
-		public void onRemovedFromChatRoom(final String roomId, final String roomName, final String participant) {
+		public void onRemovedFromChatRoom(final int reason, final String roomId, final String roomName, final String participant) {
 			if (roomId.equals(ChatRoomDetailsActivity.this.roomId)) {
 				if (participant.equals(EMClient.getInstance().getCurrentUser())) {
 					finish();
