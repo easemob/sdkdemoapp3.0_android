@@ -29,6 +29,7 @@ import com.hyphenate.chat.EMMessage.Status;
 import com.hyphenate.chat.EMMessage.Type;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
+import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.chat.EMConferenceStream;
@@ -563,6 +564,10 @@ public class DemoHelper {
 
             @Override public void onConferenceState(ConferenceState state) {
                 EMLog.i(TAG, String.format("State code=%d", state.ordinal()));
+            }
+
+            @Override public void onStreamStatistics(EMStreamStatistics statistics) {
+                EMLog.d(TAG, statistics.toString());
             }
 
             @Override public void onStreamSetup(String streamId) {
