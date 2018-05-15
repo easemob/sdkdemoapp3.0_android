@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import com.bumptech.glide.Glide
 import com.hyphenate.chatuidemo.R
 import kotlinx.android.synthetic.main.em_incoming_call_view.view.*
 
@@ -18,6 +19,7 @@ class IncomingCallView : FrameLayout {
         fun onPickupClick(v: View)
     }
 
+    var drawableAnim: AnimationDrawable? = null
     var onActionListener: OnActionListener? = null
 
     constructor(context: Context) : super(context) {
@@ -32,15 +34,28 @@ class IncomingCallView : FrameLayout {
         init()
     }
 
+    override fun onVisibilityChanged(changedView: View?, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+
+        if (visibility == View.VISIBLE) {
+            iv_call_anim.setBackgroundResource(R.drawable.ring_anim)
+            drawableAnim = iv_call_anim.background as AnimationDrawable
+            drawableAnim!!.isOneShot = false
+            drawableAnim!!.start()
+        } else {
+            if (drawableAnim?.isRunning == true)
+                drawableAnim?.stop()
+
+            drawableAnim = null
+        }
+    }
+
     fun setInviteInfo(inviteInfo: String) {
         tv_inviter_name.text = inviteInfo
     }
 
     fun init() {
         LayoutInflater.from(context).inflate(R.layout.em_incoming_call_view, this)
-        val animation: AnimationDrawable = iv_call_anim.background as AnimationDrawable
-        animation.isOneShot = false
-        animation.start()
         // Reject the video call invite.
         btn_reject.setOnClickListener {
             onActionListener?.onRejectClick(btn_reject)
