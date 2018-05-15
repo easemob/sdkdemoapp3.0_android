@@ -354,12 +354,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private EaseViewGroup.OnScreenModeChangeListener onScreenModeChangeListener = new EaseViewGroup.OnScreenModeChangeListener() {
         @Override
         public void onScreenModeChange(boolean isFullScreenMode, @Nullable View fullScreenView) {
-            if (isFullScreenMode) {
+            if (isFullScreenMode) { // 全屏模式
                 toolsPanelView.setBackgroundColor(getResources().getColor(R.color.color_transparent));
 
-                membersTV.setVisibility(View.GONE);
-                memberCountTV.setVisibility(View.GONE);
-                callTimeView.setVisibility(View.GONE);
+                membersTV.setVisibility(View.INVISIBLE);
+                memberCountTV.setVisibility(View.INVISIBLE);
+                callTimeView.setVisibility(View.INVISIBLE);
 
                 membersLayout.setVisibility(View.VISIBLE);
                 talkingLayout.setVisibility(View.VISIBLE);
@@ -368,20 +368,21 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 scaleModeBtn.setVisibility(View.VISIBLE);
                 closeBtn.setVisibility(View.GONE);
                 zoominBtn.setVisibility(View.VISIBLE);
-            } else {
+            } else { // 非全屏模式
                 toolsPanelView.setBackgroundColor(getResources().getColor(R.color.bg_tools_panel));
 
                 membersTV.setVisibility(View.VISIBLE);
                 memberCountTV.setVisibility(View.VISIBLE);
                 callTimeView.setVisibility(View.VISIBLE);
 
-                membersLayout.setVisibility(View.GONE);
-                talkingLayout.setVisibility(View.GONE);
-                callTimeViewMain.setVisibility(View.GONE);
-
                 scaleModeBtn.setVisibility(View.INVISIBLE);
                 closeBtn.setVisibility(View.VISIBLE);
                 zoominBtn.setVisibility(View.GONE);
+
+                // invisible the full-screen mode views.
+                membersLayout.setVisibility(View.GONE);
+                talkingLayout.setVisibility(View.GONE);
+                callTimeViewMain.setVisibility(View.GONE);
             }
         }
     };
