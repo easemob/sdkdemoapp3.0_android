@@ -577,12 +577,11 @@ public class DemoHelper {
                 EMLog.i(TAG, String.format("State code=%d", state.ordinal()));
             }
 
-            @Override
-            public void onStreamStatistics(EMStreamStatistics statistics) {
+            @Override public void onStreamStatistics(EMStreamStatistics statistics) {
+                EMLog.d(TAG, statistics.toString());
             }
 
-            @Override
-            public void onStreamSetup(String streamId) {
+            @Override public void onStreamSetup(String streamId) {
                 EMLog.i(TAG, String.format("Stream id - %s", streamId));
             }
 
