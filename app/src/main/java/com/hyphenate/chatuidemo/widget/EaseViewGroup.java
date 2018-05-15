@@ -482,7 +482,10 @@ public class EaseViewGroup extends ViewGroup {
         if (isFullScreenMode()) {
             resetAllViews(v);
         } else {
-            fullScreen(v);
+            // 仅当开启视频后才能被点击进入全屏
+            if (v instanceof ConferenceMemberView && !((ConferenceMemberView) v).isVideoOff()) {
+                fullScreen(v);
+            }
         }
 
         if (onItemClickListener != null) {
