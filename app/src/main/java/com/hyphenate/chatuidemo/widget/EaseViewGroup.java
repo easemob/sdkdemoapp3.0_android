@@ -1,6 +1,7 @@
 package com.hyphenate.chatuidemo.widget;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Scroller;
 
 import com.hyphenate.chatuidemo.conference.ConferenceMemberView;
@@ -80,14 +82,13 @@ public class EaseViewGroup extends ViewGroup {
         //初始化辅助类
         mScroller = new Scroller(getContext());
 
-        post(new Runnable() {
-            @Override
-            public void run() {
-                EMLog.i(TAG, "init: " + getWidth() + " - " + getHeight());
-                pageWidth = getWidth();
-                screenHeight = getHeight();
-            }
-        });
+        //测量屏幕宽高,该view默认为全屏,若当前view不为全屏,则该计算方式需要修改.
+        WindowManager wm = (WindowManager) getContext()
+                .getSystemService(Context.WINDOW_SERVICE);
+        Point p = new Point();
+        wm.getDefaultDisplay().getSize(p);
+        pageWidth = p.x;
+        screenHeight = p.y;
 
         touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     }

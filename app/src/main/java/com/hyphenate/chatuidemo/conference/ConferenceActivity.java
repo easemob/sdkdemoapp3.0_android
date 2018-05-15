@@ -220,13 +220,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         isCreator = getIntent().getBooleanExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
         if (isCreator) {
             incomingCallView.setVisibility(View.GONE);
-            callConferenceViewGroup.post(new Runnable() {
-                @Override
-                public void run() {
-                    // Do this after callConferenceViewGroup init finish.
-                    selectUserToJoinConference();
-                }
-            });
+            selectUserToJoinConference();
         } else {
             initLocalConferenceView();
             String inviter = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_INVITER);
