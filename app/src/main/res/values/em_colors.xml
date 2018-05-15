@@ -46,4 +46,7 @@
 
     <color name="bg_tools_panel">#474747</color>
     <color name="color_transparent">#00000000</color>
+
+    <color name="em_blue">#1E88E5</color>
+    <color name="em_blue_pressed">#0000aF</color>
 </resources>

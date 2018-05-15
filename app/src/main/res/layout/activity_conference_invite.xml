@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dip"
-        android:background="#0000aF"
+        android:background="@drawable/em_btn_bg_conference_start"
         android:clickable="true"
         android:gravity="center"
         android:onClick="onClick"
