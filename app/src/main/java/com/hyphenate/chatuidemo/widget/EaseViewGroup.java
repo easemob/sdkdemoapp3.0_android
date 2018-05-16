@@ -23,14 +23,6 @@ import com.hyphenate.util.EMLog;
  * 自定义ViewGroup类，会根据子控件的宽度自动换行，
  */
 public class EaseViewGroup extends ViewGroup {
-    interface OnViewActionListener {
-        void onChildViewAdd(View v);
-
-        void onChildViewRemove(View v);
-
-        void onViewScroll(int index);
-    }
-
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
@@ -97,13 +89,18 @@ public class EaseViewGroup extends ViewGroup {
     public void addView(View child) {
         super.addView(child);
         calculatePageCount();
-        index = pageCount - 1;
         if (isFullScreenMode()) {
             EMLog.i(TAG, "addView, isFullScreenMode: " + isFullScreenMode());
             // 全屏模式下不进行子view的大小设置和滑动
             return;
         }
-        calculateChildrenParamsAndSet();
+        if (pageCount == 1) {
+            calculateChildrenParamsAndSet();
+        } else {
+            int viewBorder = pageWidth / 3;
+            setViewParams(child, viewBorder);
+        }
+        index = pageCount - 1;
         // Always scroll to the last page.
         scrollTo(index * pageWidth, 0);
     }
@@ -119,7 +116,9 @@ public class EaseViewGroup extends ViewGroup {
                 resetAllViews(view);
             }
         } else {
-            calculateChildrenParamsAndSet();
+            if (pageCount == 1) {
+                calculateChildrenParamsAndSet();
+            }
             scrollTo(index * pageWidth, 0);
         }
     }
@@ -310,7 +309,7 @@ public class EaseViewGroup extends ViewGroup {
                 break;
             //移动事件
             case MotionEvent.ACTION_MOVE:
-                if (isFullScreenMode()) {
+                if (isFullScreenMode()) { // 全屏状态下禁止屏幕跟随指头滑动
                     return true;
                 }
 
@@ -333,23 +332,30 @@ public class EaseViewGroup extends ViewGroup {
                 EMLog.i(TAG, "onTouchEvent: " + getScrollX());
                 float delta = actionDownPoint.x - event.getX();
                 if (Math.abs(delta) < touchSlop && Math.abs(actionDownPoint.y - event.getY()) < touchSlop) {
+                    // 滑动距离小于系统设置的最小距离,当作点击事件处理
                     performClick((int) event.getX(), (int) event.getY());
-                } else if (Math.abs(delta) < pageWidth / 3) { // 滑动距离未超过1/3,恢复到当前页
-                    smoothScrollTo(index * pageWidth, 0);
-                } else { // 换页
-                    if (delta < 0) { // 滑动到上一页
-                        if (index == 0) { // 已经在第一页
-                            smoothScrollTo(index * pageWidth, 0);
-                        } else {
-                            index--;
-                            smoothScrollTo(index * pageWidth, 0);
-                        }
-                    } else { // 滑动到下一页
-                        if (index == pageCount - 1) { // 已经在最后一页
-                            smoothScrollTo(index * pageWidth, 0);
-                        } else {
-                            index++;
-                            smoothScrollTo(index * pageWidth, 0);
+                } else { // 页面需要滑动
+                    if (isFullScreenMode()) { // 全屏状态下禁止页面滑动
+                        return true;
+                    }
+
+                    if (Math.abs(delta) < pageWidth / 3) { // 滑动距离未超过1/3,恢复到当前页
+                        smoothScrollTo(index * pageWidth, 0);
+                    } else { // 换页
+                        if (delta < 0) { // 滑动到上一页
+                            if (index == 0) { // 已经在第一页
+                                smoothScrollTo(index * pageWidth, 0);
+                            } else {
+                                index--;
+                                smoothScrollTo(index * pageWidth, 0);
+                            }
+                        } else { // 滑动到下一页
+                            if (index == pageCount - 1) { // 已经在最后一页
+                                smoothScrollTo(index * pageWidth, 0);
+                            } else {
+                                index++;
+                                smoothScrollTo(index * pageWidth, 0);
+                            }
                         }
                     }
                 }
@@ -444,15 +450,16 @@ public class EaseViewGroup extends ViewGroup {
             itemWidth = pageWidth / 2;
         }
 
-        View view;
-        ViewGroup.LayoutParams params;
         for (int i = 0; i < getChildCount(); i++) {
-            view = getChildAt(i);
-            params = view.getLayoutParams();
-            params.width = itemWidth;
-            params.height = itemWidth;
-            view.setLayoutParams(params);
+            setViewParams(getChildAt(i), itemWidth);
         }
+    }
+
+    private void setViewParams(View target, int viewBorder) {
+        ViewGroup.LayoutParams params = target.getLayoutParams();
+        params.width = viewBorder;
+        params.height = viewBorder;
+        target.setLayoutParams(params);
     }
 
     private void calculatePageCount() {
@@ -529,7 +536,7 @@ public class EaseViewGroup extends ViewGroup {
 
         if (pageCount == 1) {
             calculateChildrenParamsAndSet();
-        } else {
+        } else { // 只计算当前页的LayoutParameters.
             int pageIndex = indexOfChild(view) / MAX_SIZE_PER_PAGE;
 
             int start = pageIndex * MAX_SIZE_PER_PAGE;
@@ -538,16 +545,7 @@ public class EaseViewGroup extends ViewGroup {
             int itemWidth = pageWidth / 3;
 
             for (int i = start; i < end; i++) {
-                View child = getChildAt(i);
-                LayoutParams lp = child.getLayoutParams();
-                if (view == child) {
-                    lp.width = itemWidth;
-                    lp.height = itemWidth;
-                } else {
-                    lp.width = 0;
-                    lp.height = 0;
-                }
-                child.setLayoutParams(lp);
+                setViewParams(getChildAt(i), itemWidth);
             }
         }
 
