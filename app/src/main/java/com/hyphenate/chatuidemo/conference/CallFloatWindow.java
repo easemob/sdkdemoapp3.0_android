@@ -1,18 +1,15 @@
-package com.hyphenate.chatuidemo.widget;
+package com.hyphenate.chatuidemo.conference;
 
 import android.animation.ValueAnimator;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -20,7 +17,6 @@ import android.widget.RelativeLayout;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
@@ -31,12 +27,12 @@ import com.superrtc.sdk.VideoView;
  * <p>
  * float window control
  */
-public class FloatWindow {
+public class CallFloatWindow {
     private static final String TAG = "FloatWindow";
 
     private Context context;
 
-    private static FloatWindow instance;
+    private static CallFloatWindow instance;
 
     private WindowManager windowManager = null;
     private WindowManager.LayoutParams layoutParams = null;
@@ -48,7 +44,7 @@ public class FloatWindow {
     private int screenWidth;
     private int floatViewWidth;
 
-    public FloatWindow(Context context) {
+    public CallFloatWindow(Context context) {
         this.context = context;
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Point point = new Point();
@@ -56,9 +52,9 @@ public class FloatWindow {
         screenWidth = point.x;
     }
 
-    public static FloatWindow getInstance(Context context) {
+    public static CallFloatWindow getInstance(Context context) {
         if (instance == null) {
-            instance = new FloatWindow(context);
+            instance = new CallFloatWindow(context);
         }
         return instance;
     }
@@ -66,7 +62,7 @@ public class FloatWindow {
     /**
      * add float window
      */
-    public void addFloatWindow(int callType, String username) { // 0: voice call; 1: video call;
+    public void show(int callType, String username) { // 0: voice call; 1: video call;
         if (floatView != null) {
             return;
         }
@@ -90,7 +86,7 @@ public class FloatWindow {
         avatarView = (ImageView) floatView.findViewById(R.id.iv_avatar);
         EaseUserUtils.setUserAvatar(context, username, avatarView);
 
-        updateFloatWindow(callType);
+        update(callType);
 
         floatView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +95,7 @@ public class FloatWindow {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
 
-                removeFloatWindow();
+                dismiss();
             }
         });
 
@@ -146,7 +142,7 @@ public class FloatWindow {
         });
     }
 
-    public void updateFloatWindow(int callType) {
+    public void update(int callType) {
         if (callType == 0) {
             floatView.findViewById(R.id.layout_call_voice).setVisibility(View.VISIBLE);
             floatView.findViewById(R.id.layout_call_video).setVisibility(View.GONE);
@@ -157,6 +153,24 @@ public class FloatWindow {
 
     public boolean isShowing() {
         return floatView != null;
+    }
+
+    /**
+     * 停止悬浮窗
+     */
+    public void dismiss() {
+        Log.i(TAG, "dismiss: ");
+        if (localView != null) {
+            if (localView.getRenderer() != null) {
+                localView.getRenderer().dispose();
+            }
+            localView.release();
+            localView = null;
+        }
+        if (windowManager != null && floatView != null) {
+            windowManager.removeView(floatView);
+            floatView = null;
+        }
     }
 
     /**
@@ -180,24 +194,6 @@ public class FloatWindow {
 
         localView.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFill);
         EMClient.getInstance().conferenceManager().updateLocalSurfaceView(localView);
-    }
-
-    /**
-     * 停止悬浮窗
-     */
-    public void removeFloatWindow() {
-        Log.i(TAG, "removeFloatWindow: ");
-        if (localView != null) {
-            if (localView.getRenderer() != null) {
-                localView.getRenderer().dispose();
-            }
-            localView.release();
-            localView = null;
-        }
-        if (windowManager != null && floatView != null) {
-            windowManager.removeView(floatView);
-            floatView = null;
-        }
     }
 
     private void smoothScrollToBorder() {

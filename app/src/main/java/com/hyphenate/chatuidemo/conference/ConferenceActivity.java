@@ -32,7 +32,6 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.ui.BaseActivity;
 import com.hyphenate.chatuidemo.widget.EaseViewGroup;
-import com.hyphenate.chatuidemo.widget.FloatWindow;
 import com.hyphenate.util.EMLog;
 import com.superrtc.mediamanager.ScreenCaptureManager;
 import com.superrtc.sdk.VideoView;
@@ -139,6 +138,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
         EMClient.getInstance().conferenceManager().addConferenceListener(conferenceListener);
         DemoHelper.getInstance().pushActivity(activity);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CallFloatWindow.getInstance(getApplicationContext()).dismiss();
+        DeskShareWindow.getInstance(getApplicationContext()).dismiss();
     }
 
     /**
@@ -402,9 +408,9 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         conferenceMemberView.setVideoOff(stream.isVideoOff());
 
         // 更新当前正在显示的悬浮窗.
-        if (FloatWindow.getInstance(getApplicationContext()).isShowing() && position == 0) {
+        if (CallFloatWindow.getInstance(getApplicationContext()).isShowing() && position == 0) {
             int type = streamList.get(0).isVideoOff() ? 0 : 1;
-            FloatWindow.getInstance(getApplicationContext()).updateFloatWindow(type);
+            CallFloatWindow.getInstance(getApplicationContext()).update(type);
         }
     }
 
@@ -864,9 +870,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             public void run() {
                 Toast.makeText(activity, "Passive exit " + error + ", message" + message, Toast.LENGTH_SHORT).show();
                 // 当前用户被踢出会议,如果显示了悬浮窗,隐藏
-                if (FloatWindow.getInstance(getApplicationContext()).isShowing()) {
-                    FloatWindow.getInstance(getApplicationContext()).removeFloatWindow();
-                }
+                CallFloatWindow.getInstance(getApplicationContext()).dismiss();
+                DeskShareWindow.getInstance(getApplicationContext()).dismiss();
             }
         });
     }
@@ -1029,17 +1034,22 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     private void showFloatWindow() {
-        int type;
-        String username;
-        if (streamList.size() > 0) { // 如果会议中有其他成员,则显示第一个成员
-            type = streamList.get(0).isVideoOff() ? 0 : 1;
-            username = streamList.get(0).getUsername();
-        } else { // 会议中无其他成员,显示自己信息
-            type = normalParam.isVideoOff() ? 0 : 1;
-            username = EMClient.getInstance().getCurrentUser();
+        if (screenShareSwitch.isActivated()) { // 已开启桌面共享,显示桌面共享window
+            DeskShareWindow.getInstance(getApplicationContext()).show();
+        } else { // 显示通话悬浮窗
+            int type;
+            String username;
+            if (streamList.size() > 0) { // 如果会议中有其他成员,则显示第一个成员
+                type = streamList.get(0).isVideoOff() ? 0 : 1;
+                username = streamList.get(0).getUsername();
+            } else { // 会议中无其他成员,显示自己信息
+                type = normalParam.isVideoOff() ? 0 : 1;
+                username = EMClient.getInstance().getCurrentUser();
+            }
+
+            CallFloatWindow.getInstance(getApplicationContext()).show(type, username);
         }
 
-        FloatWindow.getInstance(getApplicationContext()).addFloatWindow(type, username);
         ConferenceActivity.this.moveTaskToBack(false);
     }
 

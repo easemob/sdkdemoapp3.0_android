@@ -444,4 +444,6 @@
     <string name="button_start_video_conference">Start video conference (%1$d)</string>
     <string name="tips_invite_to_join">%1$s invite you to join …</string>
     <string name="tips_select_contacts_first">Select contacts first ~</string>
+
+    <string name="tips_desk_share">You\'re sharing screen</string>
 </resources>
