@@ -80,11 +80,15 @@ class DebugPanelView : LinearLayout {
         this.streamList.clear()
         this.streamList.addAll(streamList)
         streamAdapter!!.notifyDataSetChanged()
+        currentStream = streamList[0]
+        post {
+            list_stream.getChildAt(0)?.isActivated = true
+        }
     }
 
     fun onStreamStatisticsChange(statistics: EMStreamStatistics) {
         streamStatisticsMap.put(statistics.streamId, statistics)
-        if (statistics.streamId == currentStream?.streamId) {
+        if (currentStream?.streamId != null && statistics.streamId.startsWith(currentStream!!.streamId)) {
             // Current stream statistics is showing, update it.
             post {
                 // Run on ui thread.
@@ -104,17 +108,24 @@ class DebugPanelView : LinearLayout {
 
     private fun showDebugInfo(stream: EMConferenceStream?) {
         currentStream = stream
-        EMLog.i(TAG, "showDebugInfo, username: " + stream?.username)
+        EMLog.i(TAG, "showDebugInfo, username: " + stream?.username + ", streamId: " + stream?.streamId)
 
         tv_stream_id.text = "Stream Id: " + currentStream?.streamId
         tv_username_debug.text = "Username: " + stream?.username
 
-        val statistics = streamStatisticsMap[currentStream?.streamId]
+        val targetKey: String? = streamStatisticsMap.keys.firstOrNull { it.startsWith(currentStream!!.streamId) }
+        val statistics = streamStatisticsMap[targetKey]
         EMLog.i(TAG, "showDebugInfo, stream?.username: " + stream?.username + ", EMClient.getInstance().currentUser: " + EMClient.getInstance().currentUser)
         if (stream?.username == EMClient.getInstance().currentUser) {
-            // TODO: show local statistics info.
+            EMLog.i(TAG, "showDebugInfo, local statistics: " + statistics.toString())
+            tv_resolution.text = "Encode Resolution: " + statistics?.localEncodedWidth + " x " + statistics?.localEncodedHeight
+            tv_video_fps.text = "Video Encode Fps: " + statistics?.localEncodedFps
+            tv_video_bitrate.text = "Video Bitrate: " + statistics?.localVideoActualBps
+            tv_video_pack_loss.text = "Video Package Loss: " + statistics?.localVideoPacketsLost
+            tv_audio_bitrate.text = "Audio Bitrate: " + statistics?.localAudioBps
+            tv_audio_pack_loss.text = "Audio Package Loss: " + statistics?.localAudioPacketsLostrate
         } else {
-            EMLog.i(TAG, "showDebugInfo, statistics: " + statistics.toString())
+            EMLog.i(TAG, "showDebugInfo, remote statistics: " + statistics.toString())
             tv_resolution.text = "Resolution: " + statistics?.remoteHeight + " x " + statistics?.remoteWidth
             tv_video_fps.text = "Video Fps: " + statistics?.remoteFps
             tv_video_bitrate.text = "Video Bitrate: " + statistics?.remoteVideoBps

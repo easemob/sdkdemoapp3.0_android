@@ -401,7 +401,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void removeConferenceView(EMConferenceStream stream) {
         int index = streamList.indexOf(stream);
-        final ConferenceMemberView memberView = (ConferenceMemberView) callConferenceViewGroup.getChildAt(index + 1);
+        final ConferenceMemberView memberView = (ConferenceMemberView) callConferenceViewGroup.getChildAt(index);
         streamList.remove(stream);
         callConferenceViewGroup.removeView(memberView);
         debugPanelView.setStreamListAndNotify(streamList);
@@ -412,7 +412,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void updateConferenceMemberView(EMConferenceStream stream) {
         int position = streamList.indexOf(stream);
-        ConferenceMemberView conferenceMemberView = (ConferenceMemberView) callConferenceViewGroup.getChildAt(position + 1);
+        ConferenceMemberView conferenceMemberView = (ConferenceMemberView) callConferenceViewGroup.getChildAt(position);
         conferenceMemberView.setAudioOff(stream.isAudioOff());
         conferenceMemberView.setVideoOff(stream.isVideoOff());
 
@@ -571,6 +571,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     createAndJoinConference(new EMValueCallBack<EMConference>() {
                         @Override
                         public void onSuccess(EMConference value) {
+                            EMConferenceStream localStream = new EMConferenceStream();
+                            localStream.setUsername(EMClient.getInstance().getCurrentUser());
+                            localStream.setStreamId("local-stream");
+                            streamList.add(localStream);
                             inviteUserToJoinConference(members);
                         }
 
@@ -858,7 +862,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     removeConferenceView(stream);
 
                     if (CallFloatWindow.getInstance(getApplicationContext()).isShowing()) { // 通话悬浮窗显示中...
-                        if (position == 0) { // 正在显示悬浮窗的成员退出聊天室
+                        if (position == 1) { // 正在显示悬浮窗的成员退出聊天室
                             showFloatWindow();
                         }
                     }
@@ -920,6 +924,9 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 }
             }
         });
+
+        streamList.get(0).setStreamId(streamId);
+        debugPanelView.setStreamListAndNotify(streamList);
     }
 
     @Override
@@ -1054,8 +1061,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         } else { // 显示通话悬浮窗
             CallFloatWindow.getInstance(getApplicationContext()).show();
 
-            if (streamList.size() > 0) { // 如果会议中有其他成员,则显示第一个成员
-                windowStream = streamList.get(0);
+            if (streamList.size() > 1) { // 如果会议中有其他成员,则显示第一个成员
+                windowStream = streamList.get(1);
             } else { // 会议中无其他成员,显示自己信息
                 windowStream = new EMConferenceStream();
                 windowStream.setUsername(EMClient.getInstance().getCurrentUser());
