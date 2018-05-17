@@ -198,8 +198,6 @@ public class ContactListFragment extends EaseContactListFragment {
                 break;
             case R.id.conference_item:
                 startActivity(new Intent(getActivity(), ConferenceActivity.class).putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, true));
-                // TODO: for test
-//                startActivity(new Intent(getActivity(), ConferenceTestActivity.class));
                 break;
             default:
                 break;

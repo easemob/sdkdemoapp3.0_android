@@ -211,7 +211,7 @@
             android:taskAffinity=":call"
             android:screenOrientation="portrait"
             android:theme="@style/nornal_style"/>
-        <!-- zhangsong -->
+        <!-- 会议成员邀请 -->
         <activity
             android:name=".conference.ConferenceInviteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

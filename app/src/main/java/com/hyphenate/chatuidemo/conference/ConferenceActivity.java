@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -67,7 +66,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private String confId = "";
     private String password = "";
 
-    private int screenWidth;
+    // 正在显示音视频Window的stream
+    private static EMConferenceStream windowStream;
 
     private List<EMConferenceStream> streamList = new ArrayList<>();
 
@@ -121,8 +121,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     // ------ full screen views end -------
 
     private TimeHandler timeHandler;
-    // TODO: for test
-    private EMConferenceStream globalStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +141,22 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     @Override
     protected void onResume() {
         super.onResume();
+        if (windowStream != null) {
+            // 从window状态进入activity.
+            if (!windowStream.isVideoOff()) {
+                boolean isSelf = windowStream.getUsername().equals(EMClient.getInstance().getCurrentUser());
+                if (isSelf) {
+                    EMClient.getInstance().conferenceManager().updateLocalSurfaceView(localView.getSurfaceView());
+                } else {
+                    EMClient.getInstance().conferenceManager().updateRemoteSurfaceView(windowStream.getStreamId(),
+                            ((ConferenceMemberView) callConferenceViewGroup.getChildAt(1)).getSurfaceView());
+                }
+            }
+        }
+
+        windowStream = null;
+
+        // 防止activity在后台被start至前台导致window还存在
         CallFloatWindow.getInstance(getApplicationContext()).dismiss();
         DeskShareWindow.getInstance(getApplicationContext()).dismiss();
     }
@@ -152,9 +166,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void init() {
         activity = this;
-
-        DisplayMetrics dm = getResources().getDisplayMetrics();
-        screenWidth = dm.widthPixels;
 
         incomingCallView = (IncomingCallView) findViewById(R.id.incoming_call_view);
         callConferenceViewGroup = (EaseViewGroup) findViewById(R.id.surface_view_group);
@@ -242,9 +253,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.btn_invite:
-//                    selectUserToJoinConference();
-                    // TODO: for test
-                    addConferenceView(globalStream);
+                    selectUserToJoinConference();
                     break;
                 case R.id.btn_mic_switch:
                     voiceSwitch();
@@ -407,11 +416,11 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         conferenceMemberView.setAudioOff(stream.isAudioOff());
         conferenceMemberView.setVideoOff(stream.isVideoOff());
 
-        // 更新当前正在显示的悬浮窗.
-        if (CallFloatWindow.getInstance(getApplicationContext()).isShowing() && position == 0) {
-            int type = streamList.get(0).isVideoOff() ? 0 : 1;
-            CallFloatWindow.getInstance(getApplicationContext()).update(type);
+        if (position != 0) {
+            // 悬浮窗显示规则: 若有其他成员加入会议,则显示第一个加入会议的其他成员;若无,则显示自己.
+            return;
         }
+        CallFloatWindow.getInstance(getApplicationContext()).update(stream);
     }
 
     /**
@@ -828,7 +837,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     @Override
     public void onStreamAdded(final EMConferenceStream stream) {
-        globalStream = stream;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -846,7 +854,14 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             public void run() {
                 Toast.makeText(activity, stream.getUsername() + " stream removed!", Toast.LENGTH_SHORT).show();
                 if (streamList.contains(stream)) {
+                    int position = streamList.indexOf(stream);
                     removeConferenceView(stream);
+
+                    if (CallFloatWindow.getInstance(getApplicationContext()).isShowing()) { // 通话悬浮窗显示中...
+                        if (position == 0) { // 正在显示悬浮窗的成员退出聊天室
+                            showFloatWindow();
+                        }
+                    }
                 }
             }
         });
@@ -1037,17 +1052,17 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         if (screenShareSwitch.isActivated()) { // 已开启桌面共享,显示桌面共享window
             DeskShareWindow.getInstance(getApplicationContext()).show();
         } else { // 显示通话悬浮窗
-            int type;
-            String username;
-            if (streamList.size() > 0) { // 如果会议中有其他成员,则显示第一个成员
-                type = streamList.get(0).isVideoOff() ? 0 : 1;
-                username = streamList.get(0).getUsername();
-            } else { // 会议中无其他成员,显示自己信息
-                type = normalParam.isVideoOff() ? 0 : 1;
-                username = EMClient.getInstance().getCurrentUser();
-            }
+            CallFloatWindow.getInstance(getApplicationContext()).show();
 
-            CallFloatWindow.getInstance(getApplicationContext()).show(type, username);
+            if (streamList.size() > 0) { // 如果会议中有其他成员,则显示第一个成员
+                windowStream = streamList.get(0);
+            } else { // 会议中无其他成员,显示自己信息
+                windowStream = new EMConferenceStream();
+                windowStream.setUsername(EMClient.getInstance().getCurrentUser());
+                windowStream.setVideoOff(normalParam.isVideoOff());
+                windowStream.setAudioOff(normalParam.isAudioOff());
+            }
+            CallFloatWindow.getInstance(getApplicationContext()).update(windowStream);
         }
 
         ConferenceActivity.this.moveTaskToBack(false);

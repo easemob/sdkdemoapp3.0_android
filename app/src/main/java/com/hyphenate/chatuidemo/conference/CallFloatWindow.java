@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.media.EMCallSurfaceView;
@@ -30,6 +31,9 @@ import com.superrtc.sdk.VideoView;
 public class CallFloatWindow {
     private static final String TAG = "FloatWindow";
 
+    public static final int VOICE_CALL = 0;
+    public static final int VIDEO_CALL = 1;
+
     private Context context;
 
     private static CallFloatWindow instance;
@@ -39,7 +43,7 @@ public class CallFloatWindow {
 
     private View floatView;
     private ImageView avatarView;
-    private EMCallSurfaceView localView;
+    private EMCallSurfaceView surfaceView;
 
     private int screenWidth;
     private int floatViewWidth;
@@ -62,7 +66,7 @@ public class CallFloatWindow {
     /**
      * add float window
      */
-    public void show(int callType, String username) { // 0: voice call; 1: video call;
+    public void show() { // 0: voice call; 1: video call;
         if (floatView != null) {
             return;
         }
@@ -84,9 +88,6 @@ public class CallFloatWindow {
             }
         });
         avatarView = (ImageView) floatView.findViewById(R.id.iv_avatar);
-        EaseUserUtils.setUserAvatar(context, username, avatarView);
-
-        update(callType);
 
         floatView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,12 +143,26 @@ public class CallFloatWindow {
         });
     }
 
-    public void update(int callType) {
-        if (callType == 0) {
+    public void update(EMConferenceStream stream) {
+        if (!isShowing()) {
+            return;
+        }
+
+        if (stream.isVideoOff()) { // 视频未开启
             floatView.findViewById(R.id.layout_call_voice).setVisibility(View.VISIBLE);
             floatView.findViewById(R.id.layout_call_video).setVisibility(View.GONE);
-        } else {
-            setupVideoCallView();
+            EaseUserUtils.setUserAvatar(context, stream.getUsername(), avatarView);
+        } else { // 视频已开启
+            floatView.findViewById(R.id.layout_call_voice).setVisibility(View.GONE);
+            floatView.findViewById(R.id.layout_call_video).setVisibility(View.VISIBLE);
+            prepareSurfaceView();
+
+            boolean isSelf = stream.getUsername().equals(EMClient.getInstance().getCurrentUser());
+            if (isSelf) {
+                EMClient.getInstance().conferenceManager().updateLocalSurfaceView(surfaceView);
+            } else {
+                EMClient.getInstance().conferenceManager().updateRemoteSurfaceView(stream.getStreamId(), surfaceView);
+            }
         }
     }
 
@@ -160,12 +175,12 @@ public class CallFloatWindow {
      */
     public void dismiss() {
         Log.i(TAG, "dismiss: ");
-        if (localView != null) {
-            if (localView.getRenderer() != null) {
-                localView.getRenderer().dispose();
+        if (surfaceView != null) {
+            if (surfaceView.getRenderer() != null) {
+                surfaceView.getRenderer().dispose();
             }
-            localView.release();
-            localView = null;
+            surfaceView.release();
+            surfaceView = null;
         }
         if (windowManager != null && floatView != null) {
             windowManager.removeView(floatView);
@@ -176,24 +191,20 @@ public class CallFloatWindow {
     /**
      * set call surface view
      */
-    private void setupVideoCallView() {
-        floatView.findViewById(R.id.layout_call_voice).setVisibility(View.GONE);
-        floatView.findViewById(R.id.layout_call_video).setVisibility(View.VISIBLE);
-
+    private void prepareSurfaceView() {
         RelativeLayout surfaceLayout = (RelativeLayout) floatView.findViewById(R.id.layout_call_video);
 
         surfaceLayout.removeAllViews();
 
-        localView = new EMCallSurfaceView(context);
+        surfaceView = new EMCallSurfaceView(context);
         RelativeLayout.LayoutParams localParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
 
-        localView.setZOrderOnTop(false);
-        localView.setZOrderMediaOverlay(true);
-        surfaceLayout.addView(localView, localParams);
+        surfaceView.setZOrderOnTop(false);
+        surfaceView.setZOrderMediaOverlay(true);
+        surfaceLayout.addView(surfaceView, localParams);
 
-        localView.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFill);
-        EMClient.getInstance().conferenceManager().updateLocalSurfaceView(localView);
+        surfaceView.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFill);
     }
 
     private void smoothScrollToBorder() {
