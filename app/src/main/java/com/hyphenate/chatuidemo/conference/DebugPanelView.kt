@@ -95,6 +95,7 @@ class DebugPanelView : LinearLayout {
 
     private fun init() {
         LayoutInflater.from(context).inflate(R.layout.em_layout_debug_panel, this)
+        tv_version.text = "video debug panel version." + EMClient.VERSION
         btn_close.setOnClickListener(onClickListener)
         streamAdapter = StreamAdapter(context, streamList)
         list_stream.adapter = streamAdapter
