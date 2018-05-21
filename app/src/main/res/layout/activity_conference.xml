@@ -8,7 +8,7 @@
     android:fitsSystemWindows="false">
 
     <!--多人会议时显示成员画面控件容器-->
-    <com.hyphenate.chatuidemo.widget.EaseViewGroup
+    <com.hyphenate.chatuidemo.conference.MemberViewGroup
         android:id="@+id/surface_view_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

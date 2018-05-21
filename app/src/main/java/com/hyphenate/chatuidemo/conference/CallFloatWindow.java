@@ -31,9 +31,6 @@ import com.superrtc.sdk.VideoView;
 public class CallFloatWindow {
     private static final String TAG = "FloatWindow";
 
-    public static final int VOICE_CALL = 0;
-    public static final int VIDEO_CALL = 1;
-
     private Context context;
 
     private static CallFloatWindow instance;

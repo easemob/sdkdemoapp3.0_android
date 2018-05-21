@@ -30,7 +30,6 @@ import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.ui.BaseActivity;
-import com.hyphenate.chatuidemo.widget.EaseViewGroup;
 import com.hyphenate.util.EMLog;
 import com.superrtc.mediamanager.ScreenCaptureManager;
 import com.superrtc.sdk.VideoView;
@@ -73,7 +72,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     private ConferenceMemberView localView;
     private IncomingCallView incomingCallView;
-    private EaseViewGroup callConferenceViewGroup;
+    private MemberViewGroup callConferenceViewGroup;
 
     // ------ tools panel relevant start ------
     // tools panel的父view
@@ -168,7 +167,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         activity = this;
 
         incomingCallView = (IncomingCallView) findViewById(R.id.incoming_call_view);
-        callConferenceViewGroup = (EaseViewGroup) findViewById(R.id.surface_view_group);
+        callConferenceViewGroup = (MemberViewGroup) findViewById(R.id.surface_view_group);
 
         toolsPanelView = findViewById(R.id.layout_tools_panel);
         inviteBtn = (ImageButton) findViewById(R.id.btn_invite);
@@ -354,13 +353,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         }
     };
 
-    private EaseViewGroup.OnItemClickListener onItemClickListener = new EaseViewGroup.OnItemClickListener() {
+    private MemberViewGroup.OnItemClickListener onItemClickListener = new MemberViewGroup.OnItemClickListener() {
         @Override
         public void onItemClick(View v, int position) {
         }
     };
 
-    private EaseViewGroup.OnScreenModeChangeListener onScreenModeChangeListener = new EaseViewGroup.OnScreenModeChangeListener() {
+    private MemberViewGroup.OnScreenModeChangeListener onScreenModeChangeListener = new MemberViewGroup.OnScreenModeChangeListener() {
         @Override
         public void onScreenModeChange(boolean isFullScreenMode, @Nullable View fullScreenView) {
             if (isFullScreenMode) { // 全屏模式

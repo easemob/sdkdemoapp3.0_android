@@ -1,4 +1,4 @@
-package com.hyphenate.chatuidemo.widget;
+package com.hyphenate.chatuidemo.conference;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -22,7 +22,7 @@ import com.hyphenate.util.EMLog;
  * <p>
  * 自定义ViewGroup类，会根据子控件的宽度自动换行，
  */
-public class EaseViewGroup extends ViewGroup {
+public class MemberViewGroup extends ViewGroup {
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
@@ -55,17 +55,17 @@ public class EaseViewGroup extends ViewGroup {
     // Android系统认为touch事件为滑动事件的最小距离
     int touchSlop;
 
-    public EaseViewGroup(Context context) {
+    public MemberViewGroup(Context context) {
         super(context);
         init();
     }
 
-    public EaseViewGroup(Context context, AttributeSet attrs) {
+    public MemberViewGroup(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public EaseViewGroup(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MemberViewGroup(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
