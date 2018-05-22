@@ -28,7 +28,6 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dip"
             android:background="@drawable/em_call_btn_bg"
-            android:focusableInTouchMode="true"
             android:src="@drawable/em_close" />
     </RelativeLayout>
 

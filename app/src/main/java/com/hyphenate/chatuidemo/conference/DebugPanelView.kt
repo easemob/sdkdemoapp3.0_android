@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.AbsListView.CHOICE_MODE_SINGLE
 import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.LinearLayout
@@ -34,7 +35,6 @@ class DebugPanelView : LinearLayout {
     private var streamList: ArrayList<EMConferenceStream> = ArrayList()
     private var streamAdapter: StreamAdapter? = null
     private var currentStream: EMConferenceStream? = null
-    private var activatedView: View? = null
     private val onClickListener: View.OnClickListener by lazy {
         OnClickListener { v ->
             when (v) {
@@ -47,11 +47,9 @@ class DebugPanelView : LinearLayout {
     }
 
     private val onItemClickListener by lazy {
-        AdapterView.OnItemClickListener { _, v, i: Int, _ ->
+        AdapterView.OnItemClickListener { _, _, i: Int, _ ->
             val stream = streamList[i]
-            activatedView?.isActivated = false
-            v.isActivated = true
-            activatedView = v
+            list_stream.setItemChecked(i, true)
             showDebugInfo(stream)
         }
     }
@@ -76,13 +74,28 @@ class DebugPanelView : LinearLayout {
         onButtonClickListener = listener
     }
 
+    // list列表变化
     fun setStreamListAndNotify(streamList: List<EMConferenceStream>) {
         this.streamList.clear()
         this.streamList.addAll(streamList)
-        streamAdapter!!.notifyDataSetChanged()
-        currentStream = streamList[0]
+
         post {
-            list_stream.getChildAt(0)?.isActivated = true
+            streamAdapter!!.notifyDataSetChanged()
+
+            if (list_stream.checkedItemPosition >= streamList.size) {
+                // 有item被移除
+                val index: Int = streamList.indexOf(currentStream)
+                if (index > -1) { // 被移除的item不是之前选中的item
+                    list_stream.setItemChecked(index, true)
+                } else { // 被移除的item是之前选中的item
+                    currentStream = null
+                }
+            }
+
+            if (currentStream == null) { // 第一次初始化,默认选中第一个
+                currentStream = streamList[0]
+                list_stream.setItemChecked(0, true)
+            }
         }
     }
 
@@ -104,6 +117,7 @@ class DebugPanelView : LinearLayout {
         streamAdapter = StreamAdapter(context, streamList)
         list_stream.adapter = streamAdapter
         list_stream.onItemClickListener = onItemClickListener
+        list_stream.choiceMode = CHOICE_MODE_SINGLE
     }
 
     private fun showDebugInfo(stream: EMConferenceStream?) {
