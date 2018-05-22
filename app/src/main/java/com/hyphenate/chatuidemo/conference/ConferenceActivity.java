@@ -2,8 +2,10 @@ package com.hyphenate.chatuidemo.conference;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.os.Build;
@@ -12,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -158,6 +161,16 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         // 防止activity在后台被start至前台导致window还存在
         CallFloatWindow.getInstance(getApplicationContext()).dismiss();
         DeskShareWindow.getInstance(getApplicationContext()).dismiss();
+
+        // 注册home-key receiver
+        registerHomeKeyWatcher();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 注销home-key receiver
+        unregisterHomeKeyWatcher();
     }
 
     /**
@@ -215,9 +228,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         conferenceListener = this;
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        confId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_ID);
-        password = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_PASS);
-
         normalParam = new EMStreamParam();
         normalParam.setStreamType(EMConferenceStream.StreamType.NORMAL);
         normalParam.setVideoOff(true);
@@ -238,6 +248,9 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             incomingCallView.setVisibility(View.GONE);
             selectUserToJoinConference();
         } else {
+            confId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_ID);
+            password = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_PASS);
+
             initLocalConferenceView();
             String inviter = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_INVITER);
             incomingCallView.setInviteInfo(String.format(getString(R.string.tips_invite_to_join), inviter));
@@ -497,6 +510,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().joinConference(confId, password, new EMValueCallBack<EMConference>() {
             @Override
             public void onSuccess(EMConference value) {
+                addSelfToList();
                 conference = value;
                 startAudioTalkingMonitor();
                 publish();
@@ -570,10 +584,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     createAndJoinConference(new EMValueCallBack<EMConference>() {
                         @Override
                         public void onSuccess(EMConference value) {
-                            EMConferenceStream localStream = new EMConferenceStream();
-                            localStream.setUsername(EMClient.getInstance().getCurrentUser());
-                            localStream.setStreamId("local-stream");
-                            streamList.add(localStream);
+                            addSelfToList();
                             inviteUserToJoinConference(members);
                         }
 
@@ -582,6 +593,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
                         }
                     });
+                } else {
+                    inviteUserToJoinConference(members);
                 }
             }
         } else if (resultCode == RESULT_CANCELED) {
@@ -799,7 +812,11 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     @Override
     public void onBackPressed() {
-//        exitConference();
+        if (incomingCallView.getVisibility() == View.VISIBLE) { // 来电提醒界面
+            super.onBackPressed();
+            return;
+        }
+        // 已经在通话过程中
         showFloatWindow();
     }
 
@@ -1073,6 +1090,40 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
         ConferenceActivity.this.moveTaskToBack(false);
     }
+
+    private void addSelfToList() {
+        EMConferenceStream localStream = new EMConferenceStream();
+        localStream.setUsername(EMClient.getInstance().getCurrentUser());
+        localStream.setStreamId("local-stream");
+        streamList.add(localStream);
+    }
+
+    private void registerHomeKeyWatcher() {
+        registerReceiver(homeKeyWatcher, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+    }
+
+    private void unregisterHomeKeyWatcher() {
+        unregisterReceiver(homeKeyWatcher);
+    }
+
+    private BroadcastReceiver homeKeyWatcher = new BroadcastReceiver() {
+        private static final String SYSTEM_DIALOG_REASON_KEY = "reason";
+        private static final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            Log.i(TAG, "onReceive: ");
+            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
+                String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
+                Log.i(TAG, "onReceive, reason: " + reason);
+                if (SYSTEM_DIALOG_REASON_HOME_KEY.equals(reason)) {
+                    EMLog.i(TAG, "Home key clicked.");
+                    showFloatWindow();
+                }
+            }
+        }
+    };
 
     private class TimeHandler extends Handler {
         private final int MSG_TIMER = 0;
