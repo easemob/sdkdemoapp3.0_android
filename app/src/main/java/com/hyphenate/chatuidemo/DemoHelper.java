@@ -579,15 +579,7 @@ public class DemoHelper {
 
             @Override public void onReceiveInvite(String confId, String password, String extension) {
                 EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
-                if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
-                    return;
-                }
-                Intent conferenceIntent = new Intent(appContext, ConferenceActivity.class);
-                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_ID, confId);
-                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_PASS, password);
-                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
-                conferenceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                appContext.startActivity(conferenceIntent);
+                goConference(confId, password);
             }
         });
         //register incoming call receiver
@@ -599,6 +591,23 @@ public class DemoHelper {
         //register message event listener
         registerMessageListener();
         
+    }
+
+    /**
+     * 处理会议邀请
+     * @param confId 会议 id
+     * @param password 会议密码
+     */
+    public void goConference(String confId, String password) {
+        if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
+            return;
+        }
+        Intent conferenceIntent = new Intent(appContext, ConferenceActivity.class);
+        conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_ID, confId);
+        conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_PASS, password);
+        conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
+        conferenceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        appContext.startActivity(conferenceIntent);
     }
 
     private void initDbDao() {
@@ -1262,6 +1271,12 @@ public class DemoHelper {
 			public void onMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
                     EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+                    // 判断一下是否是会议邀请
+                    String confId = message.getStringAttribute(Constant.MSG_ATTR_CONF_ID, "");
+                    if(!"".equals(confId)){
+                        String password = message.getStringAttribute(Constant.MSG_ATTR_CONF_PASS, "");
+                        goConference(confId, password);
+                    }
                     // in background, do not refresh UI, notify it in notification bar
                     if(!easeUI.hasForegroundActivies()){
                         getNotifier().onNewMsg(message);

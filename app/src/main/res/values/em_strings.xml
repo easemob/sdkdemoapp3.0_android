@@ -35,6 +35,7 @@
     <string name="copy">Copy</string>
     <string name="forward">Forward</string>
     <string name="recall">Recall</string>
+    <string name="msg_conference_invite">Come to the conference</string>
     <string name="msg_recall_by_self">This message has been recalled by myself</string>
     <string name="msg_recall_by_user">This message has been recalled by %1$s</string>
     <string name="button_logout">Logout</string>

@@ -33,5 +33,8 @@ public class Constant extends EaseConstant{
 	public static final String EXTRA_CONFERENCE_PASS = "password";
 	public static final String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
 
+	public static final String MSG_ATTR_CONF_ID = "conferenceId";
+	public static final String MSG_ATTR_CONF_PASS = EXTRA_CONFERENCE_PASS;
+
 
 }

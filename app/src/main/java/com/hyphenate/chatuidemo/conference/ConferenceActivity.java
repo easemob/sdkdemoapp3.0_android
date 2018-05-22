@@ -16,11 +16,14 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConference;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.chat.EMConferenceStream;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMStreamParam;
 import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chatuidemo.Constant;
@@ -388,8 +391,15 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 });
             }
 
-            @Override public void onError(int error, String errorMsg) {
+            @Override public void onError(final int error, final String errorMsg) {
                 EMLog.e(TAG, "join conference failed error " + error + ", msg " + errorMsg);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(activity, "Join conference failed " + error + " " + errorMsg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                finish();
             }
         });
     }
@@ -424,24 +434,56 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     object.put("type", type);
                     object.put("creater", EMClient.getInstance().getCurrentUser());
                     for (int i = 0; i < members.length; i++) {
-                        EMClient.getInstance()
-                                .conferenceManager()
-                                .inviteUserToJoinConference(conference.getConferenceId(), conference.getPassword(), members[i],
-                                        object.toString(), new EMValueCallBack() {
-                                            @Override public void onSuccess(Object value) {
-                                                EMLog.e(TAG, "invite join conference success");
-                                            }
-
-                                            @Override public void onError(int error, String errorMsg) {
-                                                EMLog.e(TAG, "invite join conference failed " + error + ", " + errorMsg);
-                                            }
-                                        });
+                        //EMClient.getInstance()
+                        //        .conferenceManager()
+                        //        .inviteUserToJoinConference(conference.getConferenceId(), conference.getPassword(), members[i],
+                        //                object.toString(), new EMValueCallBack() {
+                        //                    @Override public void onSuccess(Object value) {
+                        //                        EMLog.e(TAG, "invite join conference success");
+                        //                    }
+                        //
+                        //                    @Override public void onError(int error, String errorMsg) {
+                        //                        EMLog.e(TAG, "invite join conference failed " + error + ", " + errorMsg);
+                        //                    }
+                        //                });
+                        // 通过消息的方式邀请对方加入
+                        sendInviteMessage(members[i]);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    /**
+     * 通过消息的形式邀请他人加入会议
+     * @param to 被邀请人
+     */
+    private void sendInviteMessage(String to) {
+        final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
+        final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_conference_invite), to);
+        message.setAttribute(Constant.MSG_ATTR_CONF_ID, conference.getConferenceId());
+        message.setAttribute(Constant.MSG_ATTR_CONF_PASS, conference.getPassword());
+        message.setMessageStatusCallback(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                EMLog.d(TAG, "Invite join conference success");
+                conversation.removeMessage(message.getMsgId());
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                EMLog.e(TAG, "Invite join conference error " + code + ", " + error);
+                conversation.removeMessage(message.getMsgId());
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
+        EMClient.getInstance().chatManager().sendMessage(message);
     }
 
     /**

@@ -35,6 +35,7 @@
     <string name="copy">复制</string>
     <string name="forward">转发</string>
     <string name="recall">撤回</string>
+    <string name="msg_conference_invite">快来加入会议</string>
     <string name="msg_recall_by_self">您撤回了一条消息</string>
     <string name="msg_recall_by_user">%1$s 撤回了一条消息</string>
     <string name="button_logout">退出登录</string>
