@@ -114,6 +114,12 @@
                 android:layout_height="match_parent"
                 android:background="@color/bg_tools_panel">
 
+                <com.hyphenate.chatuidemo.widget.EasePageIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center" />
+
                 <include
                     layout="@layout/em_layout_tools_panel"
                     android:layout_width="match_parent"

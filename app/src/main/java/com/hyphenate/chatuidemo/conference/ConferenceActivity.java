@@ -33,6 +33,7 @@ import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.ui.BaseActivity;
+import com.hyphenate.chatuidemo.widget.EasePageIndicator;
 import com.hyphenate.util.EMLog;
 import com.superrtc.mediamanager.ScreenCaptureManager;
 import com.superrtc.sdk.VideoView;
@@ -77,6 +78,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private IncomingCallView incomingCallView;
     private MemberViewGroup callConferenceViewGroup;
 
+    private EasePageIndicator pageIndicator;
     // ------ tools panel relevant start ------
     // tools panel的父view
     private View toolsPanelView;
@@ -198,6 +200,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         closeBtn = (ImageButton) findViewById(R.id.btn_close);
         zoominBtn = (ImageButton) findViewById(R.id.btn_zoomin);
 
+        pageIndicator = (EasePageIndicator) findViewById(R.id.indicator);
+
         debugPanelView = (DebugPanelView) findViewById(R.id.layout_debug_panel);
 
         membersLayout = findViewById(R.id.layout_members);
@@ -211,6 +215,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         incomingCallView.setOnActionListener(onActionListener);
         callConferenceViewGroup.setOnItemClickListener(onItemClickListener);
         callConferenceViewGroup.setOnScreenModeChangeListener(onScreenModeChangeListener);
+        callConferenceViewGroup.setOnPageStatusListener(onPageStatusListener);
         inviteBtn.setOnClickListener(listener);
         micSwitch.setOnClickListener(listener);
         speakerSwitch.setOnClickListener(listener);
@@ -405,6 +410,19 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 talkingLayout.setVisibility(View.GONE);
                 callTimeViewMain.setVisibility(View.GONE);
             }
+        }
+    };
+
+    private MemberViewGroup.OnPageStatusListener onPageStatusListener = new MemberViewGroup.OnPageStatusListener() {
+        @Override
+        public void onPageCountChange(int count) {
+            // 多于1页时显示indicator.
+            pageIndicator.setup(count > 1 ? count : 0);
+        }
+
+        @Override
+        public void onPageScroll(int page) {
+            pageIndicator.setItemChecked(page);
         }
     };
 

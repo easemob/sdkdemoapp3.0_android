@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Scroller;
 
-import com.hyphenate.chatuidemo.conference.ConferenceMemberView;
 import com.hyphenate.util.EMLog;
 
 /**
@@ -35,12 +34,19 @@ public class MemberViewGroup extends ViewGroup {
         void onScreenModeChange(boolean isFullScreenMode, @Nullable View fullScreenView);
     }
 
+    public interface OnPageStatusListener {
+        void onPageCountChange(int count);
+
+        void onPageScroll(int page);
+    }
+
     private static final String TAG = "EaseViewGroup1";
 
     private static final int MAX_SIZE_PER_PAGE = 9;
 
     private OnItemClickListener onItemClickListener;
     private OnScreenModeChangeListener onScreenModeChangeListener;
+    private OnPageStatusListener onPageStatusListener;
     //滚动计算辅助类
     private Scroller mScroller;
     private float mLastMotionX = 0;
@@ -48,8 +54,8 @@ public class MemberViewGroup extends ViewGroup {
     private int pageWidth = 0;
     private int screenHeight = 0;
     // current page index.
-    private int index = 0;
-    private int pageCount = 1;
+    private int pageIndex = 0;
+    private int pageCount = 0;
     private View fullScreenView;
 
     // Android系统认为touch事件为滑动事件的最小距离
@@ -100,16 +106,16 @@ public class MemberViewGroup extends ViewGroup {
             int viewBorder = pageWidth / 3;
             setViewParams(child, viewBorder);
         }
-        index = pageCount - 1;
+        int index = pageCount - 1;
         // Always scroll to the last page.
-        scrollTo(index * pageWidth, 0);
+        scrollTo(index, false);
     }
 
     @Override
     public void removeView(View view) {
         super.removeView(view);
         calculatePageCount();
-        index = index == pageCount ? --index : index;
+        int index = pageIndex == pageCount ? --pageIndex : pageIndex;
         if (isFullScreenMode()) {
             if (fullScreenView == view) {
                 // 全屏状态,并且当前全屏view被移除
@@ -119,7 +125,7 @@ public class MemberViewGroup extends ViewGroup {
             if (pageCount == 1) {
                 calculateChildrenParamsAndSet();
             }
-            scrollTo(index * pageWidth, 0);
+            scrollTo(index, false);
         }
     }
 
@@ -320,7 +326,7 @@ public class MemberViewGroup extends ViewGroup {
                 //重置手指位置
                 mLastMotionX = x;
 
-                if ((index == 0 && delt < 0) || (index == pageCount - 1 && delt > 0)) {
+                if ((pageIndex == 0 && delt < 0) || (pageIndex == pageCount - 1 && delt > 0)) {
                     delt /= 5;
                 }
 
@@ -340,23 +346,19 @@ public class MemberViewGroup extends ViewGroup {
                     }
 
                     if (Math.abs(delta) < pageWidth / 3) { // 滑动距离未超过1/3,恢复到当前页
-                        smoothScrollTo(index * pageWidth, 0);
+                        scrollTo(pageIndex, true);
                     } else { // 换页
+                        int index = pageIndex;
                         if (delta < 0) { // 滑动到上一页
-                            if (index == 0) { // 已经在第一页
-                                smoothScrollTo(index * pageWidth, 0);
-                            } else {
+                            if (index > 0) { // 已经在第一页
                                 index--;
-                                smoothScrollTo(index * pageWidth, 0);
                             }
                         } else { // 滑动到下一页
-                            if (index == pageCount - 1) { // 已经在最后一页
-                                smoothScrollTo(index * pageWidth, 0);
-                            } else {
+                            if (index < pageCount - 1) { // 已经在最后一页
                                 index++;
-                                smoothScrollTo(index * pageWidth, 0);
                             }
                         }
+                        scrollTo(index, true);
                     }
                 }
 
@@ -400,7 +402,7 @@ public class MemberViewGroup extends ViewGroup {
     }
 
     public int currentIndex() {
-        return index;
+        return pageIndex;
     }
 
     /**
@@ -412,6 +414,10 @@ public class MemberViewGroup extends ViewGroup {
 
     public void setOnScreenModeChangeListener(OnScreenModeChangeListener listener) {
         onScreenModeChangeListener = listener;
+    }
+
+    public void setOnPageStatusListener(OnPageStatusListener listener) {
+        onPageStatusListener = listener;
     }
 
     public void performClick(int x, int y) {
@@ -431,6 +437,20 @@ public class MemberViewGroup extends ViewGroup {
 
     public View getFullScreenView() {
         return fullScreenView;
+    }
+
+    private void scrollTo(int index, boolean smooth) {
+        if (!smooth) {
+            scrollTo(index * pageWidth, 0);
+        } else {
+            smoothScrollTo(index * pageWidth, 0);
+        }
+
+        if (onPageStatusListener != null && index != this.pageIndex) {
+            onPageStatusListener.onPageScroll(index);
+        }
+
+        this.pageIndex = index;
     }
 
     private void smoothScrollTo(int x, int y) {
@@ -463,11 +483,15 @@ public class MemberViewGroup extends ViewGroup {
     }
 
     private void calculatePageCount() {
-        pageCount = (getChildCount() - 1) / MAX_SIZE_PER_PAGE + 1;
+        int count = (getChildCount() - 1) / MAX_SIZE_PER_PAGE + 1;
+        if (pageCount != count && onPageStatusListener != null) {
+            onPageStatusListener.onPageCountChange(count);
+        }
+        pageCount = count;
     }
 
     private Pair<Integer, View> findTargetView(int x, int y) {
-        int start = index * MAX_SIZE_PER_PAGE;
+        int start = pageIndex * MAX_SIZE_PER_PAGE;
         int count = getChildCount() - start > MAX_SIZE_PER_PAGE ? MAX_SIZE_PER_PAGE : getChildCount() - start;
         View result;
         for (int i = start; i < start + count; i++) {
