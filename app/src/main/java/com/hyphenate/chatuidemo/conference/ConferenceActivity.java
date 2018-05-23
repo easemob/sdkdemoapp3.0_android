@@ -53,8 +53,8 @@ import java.util.TimeZone;
  * 多人音视频会议界面
  */
 public class ConferenceActivity extends BaseActivity implements EMConferenceListener {
-
     private final String TAG = this.getClass().getSimpleName();
+
     private final int REQUEST_CODE_INVITE = 1001;
 
     private ConferenceActivity activity;
@@ -68,6 +68,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private boolean isCreator = false;
     private String confId = "";
     private String password = "";
+    // 标识当前会议的创建方式
+    private String groupId = null;
 
     // 正在显示音视频Window的stream
     private static EMConferenceStream windowStream;
@@ -125,6 +127,29 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     // ------ full screen views end -------
 
     private TimeHandler timeHandler;
+
+    // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
+    // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
+    public static void startConferenceCall(Context context, String groupId) {
+        Intent i = new Intent(context, ConferenceActivity.class);
+        i.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, true);
+        i.putExtra(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
+
+    // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
+    // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
+    public static void receiveConferenceCall(Context context, String conferenceId, String password, String inviter, String groupId) {
+        Intent i = new Intent(context, ConferenceActivity.class);
+        i.putExtra(Constant.EXTRA_CONFERENCE_ID, conferenceId);
+        i.putExtra(Constant.EXTRA_CONFERENCE_PASS, password);
+        i.putExtra(Constant.EXTRA_CONFERENCE_INVITER, inviter);
+        i.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
+        i.putExtra(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,6 +273,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         speakerSwitch.setActivated(true);
         openSpeaker();
 
+        groupId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_GROUP_ID);
         isCreator = getIntent().getBooleanExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
         if (isCreator) {
             incomingCallView.setVisibility(View.GONE);
@@ -553,6 +579,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void selectUserToJoinConference() {
         Intent intent = new Intent(activity, ConferenceInviteActivity.class);
+        intent.putExtra(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
         activity.startActivityForResult(intent, REQUEST_CODE_INVITE);
     }
 
@@ -565,6 +592,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             }
             object.put("type", type);
             object.put(Constant.EXTRA_CONFERENCE_INVITER, EMClient.getInstance().getCurrentUser());
+            object.put(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
             for (int i = 0; i < contacts.length; i++) {
                 EMClient.getInstance()
                         .conferenceManager()

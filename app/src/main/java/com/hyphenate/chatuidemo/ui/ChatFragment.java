@@ -25,6 +25,7 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.domain.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.widget.EaseChatRecallPresenter;
@@ -54,6 +55,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int ITEM_FILE = 12;
     private static final int ITEM_VOICE_CALL = 13;
     private static final int ITEM_VIDEO_CALL = 14;
+    private static final int ITEM_CONFERENCE_CALL = 15;
 
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
@@ -134,6 +136,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if(chatType == Constant.CHATTYPE_SINGLE){
             inputMenu.registerExtendMenuItem(R.string.attach_voice_call, R.drawable.em_chat_voice_call_selector, ITEM_VOICE_CALL, extendMenuItemClickListener);
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL, extendMenuItemClickListener);
+        } else if (chatType == Constant.CHATTYPE_GROUP) { // 音视频会议
+            inputMenu.registerExtendMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, ITEM_CONFERENCE_CALL, extendMenuItemClickListener);
         }
     }
     
@@ -318,6 +322,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             break;
         case ITEM_VIDEO_CALL:
             startVideoCall();
+            break;
+        case ITEM_CONFERENCE_CALL:
+            ConferenceActivity.startConferenceCall(getActivity(), toChatUsername);
             break;
         default:
             break;

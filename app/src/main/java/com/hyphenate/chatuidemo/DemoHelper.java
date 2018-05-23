@@ -586,19 +586,15 @@ public class DemoHelper {
                     return;
                 }
                 String inviter = "";
+                String groupId = null;
                 try {
                     JSONObject jsonObj = new JSONObject(extension);
                     inviter = jsonObj.optString(Constant.EXTRA_CONFERENCE_INVITER);
+                    groupId = jsonObj.optString(Constant.EXTRA_CONFERENCE_GROUP_ID);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Intent conferenceIntent = new Intent(appContext, ConferenceActivity.class);
-                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_ID, confId);
-                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_PASS, password);
-                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_INVITER, inviter);
-                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
-                conferenceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                appContext.startActivity(conferenceIntent);
+                ConferenceActivity.receiveConferenceCall(appContext, confId, password, inviter, groupId);
             }
         });
         //register incoming call receiver
