@@ -322,13 +322,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     private IncomingCallView.OnActionListener onActionListener = new IncomingCallView.OnActionListener() {
         @Override
-        public void onPickupClick(@NotNull View v) {
+        public void onPickupClick(View v) {
             incomingCallView.setVisibility(View.GONE);
             joinConference();
         }
 
         @Override
-        public void onRejectClick(@NotNull View v) {
+        public void onRejectClick(View v) {
             finish();
         }
     };
@@ -366,7 +366,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     private DebugPanelView.OnButtonClickListener onButtonClickListener = new DebugPanelView.OnButtonClickListener() {
         @Override
-        public void onCloseClick(@NotNull View v) {
+        public void onCloseClick(View v) {
             EMClient.getInstance().conferenceManager().enableStatistics(false);
             openToolsPanel();
         }
