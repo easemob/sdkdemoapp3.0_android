@@ -29,6 +29,7 @@ public class ConferenceMemberView extends RelativeLayout {
     private boolean isVideoOff = true;
     private boolean isAudioOff = false;
     private boolean isDesktop = false;
+    private boolean isFullScreenMode = false;
     private String streamId;
 
 
@@ -69,6 +70,11 @@ public class ConferenceMemberView extends RelativeLayout {
             return;
         }
         isAudioOff = state;
+
+        if (isFullScreenMode) {
+            return;
+        }
+
         if (isAudioOff) {
             audioOffView.setVisibility(View.VISIBLE);
         } else {
@@ -102,6 +108,7 @@ public class ConferenceMemberView extends RelativeLayout {
             avatarView.setVisibility(View.GONE);
         }
     }
+
     /**
      * 更新说话状态
      */
@@ -109,9 +116,14 @@ public class ConferenceMemberView extends RelativeLayout {
         if (isDesktop) {
             return;
         }
+
+        if (isFullScreenMode) {
+            return;
+        }
+
         if (talking) {
             talkingView.setVisibility(VISIBLE);
-        }else{
+        } else {
             talkingView.setVisibility(GONE);
         }
     }
@@ -133,5 +145,30 @@ public class ConferenceMemberView extends RelativeLayout {
 
     public String getStreamId() {
         return streamId;
+    }
+
+    public void setFullScreen(boolean fullScreen) {
+        isFullScreenMode = fullScreen;
+
+        if (fullScreen) {
+            talkingView.setVisibility(GONE);
+            nameView.setVisibility(GONE);
+            audioOffView.setVisibility(GONE);
+            surfaceView.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFit);
+        } else {
+            nameView.setVisibility(VISIBLE);
+            if (isAudioOff) {
+                audioOffView.setVisibility(VISIBLE);
+            }
+            surfaceView.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFill);
+        }
+    }
+
+    public void setScaleMode(VideoView.EMCallViewScaleMode mode) {
+        surfaceView.setScaleMode(mode);
+    }
+
+    public VideoView.EMCallViewScaleMode getScaleMode() {
+        return surfaceView.getScaleMode();
     }
 }

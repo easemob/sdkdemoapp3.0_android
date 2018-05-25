@@ -24,6 +24,9 @@
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- 悬浮窗权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <!--bugly start-->
     <uses-permission android:name="android.permission.READ_LOGS" />
     <!--bugly end-->
@@ -205,14 +208,17 @@
             android:name=".conference.ConferenceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
+            android:taskAffinity=":call"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"/>
-        <!--邀请加入会议-->
+            android:theme="@style/nornal_style"/>
+        <!-- 会议成员邀请 -->
         <activity
-            android:name=".conference.ConferenceInviteJoinActivity"
+            android:name=".conference.ConferenceInviteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"/>
+            android:theme="@style/nornal_style"
+            android:windowSoftInputMode="adjustPan"/>
+
         <!-- 群聊简单信息 -->
         <activity
             android:name=".ui.GroupSimpleDetailActivity"

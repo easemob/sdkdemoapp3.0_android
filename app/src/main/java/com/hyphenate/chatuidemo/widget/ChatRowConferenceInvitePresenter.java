@@ -24,7 +24,7 @@ public class ChatRowConferenceInvitePresenter extends EaseChatRowPresenter {
 
         String confId = message.getStringAttribute(Constant.MSG_ATTR_CONF_ID, "");
         String confPassword = message.getStringAttribute(Constant.MSG_ATTR_CONF_PASS,"");
-        DemoHelper.getInstance().goConference(confId, confPassword);
+        DemoHelper.getInstance().goConference(confId, confPassword, message.getFrom());
     }
 
 }

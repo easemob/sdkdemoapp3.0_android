@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -63,6 +64,9 @@ import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -579,7 +583,9 @@ public class DemoHelper {
 
             @Override public void onReceiveInvite(String confId, String password, String extension) {
                 EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
-                goConference(confId, password);
+
+                goConference(confId, password, extension);
+
             }
         });
         //register incoming call receiver
@@ -598,13 +604,24 @@ public class DemoHelper {
      * @param confId 会议 id
      * @param password 会议密码
      */
-    public void goConference(String confId, String password) {
+    public void goConference(String confId, String password,String extension) {
         if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
             return;
+        }
+        String inviter = "";
+        try {
+            JSONObject jsonObj = new JSONObject(extension);
+            inviter = jsonObj.optString(Constant.EXTRA_CONFERENCE_INVITER);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (TextUtils.isEmpty(inviter)) {
+            inviter = extension;
         }
         Intent conferenceIntent = new Intent(appContext, ConferenceActivity.class);
         conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_ID, confId);
         conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_PASS, password);
+        conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_INVITER, inviter);
         conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
         conferenceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         appContext.startActivity(conferenceIntent);
@@ -1275,7 +1292,7 @@ public class DemoHelper {
                     String confId = message.getStringAttribute(Constant.MSG_ATTR_CONF_ID, "");
                     if(!"".equals(confId)){
                         String password = message.getStringAttribute(Constant.MSG_ATTR_CONF_PASS, "");
-                        goConference(confId, password);
+                        goConference(confId, password, message.getFrom());
                     }
                     // in background, do not refresh UI, notify it in notification bar
                     if(!easeUI.hasForegroundActivies()){
