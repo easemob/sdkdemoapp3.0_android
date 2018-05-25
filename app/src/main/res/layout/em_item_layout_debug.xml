@@ -7,11 +7,10 @@
     <TextView
         android:id="@+id/tv_username"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/adaptive_44dp"
         android:background="@drawable/em_debug_item_selector"
         android:gravity="center"
-        android:padding="10dip"
         android:textColor="#FFF"
-        android:textSize="18sp" />
+        android:textSize="@dimen/adaptive_18sp" />
 
 </LinearLayout>

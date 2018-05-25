@@ -148,7 +148,6 @@ public class CallFloatWindow {
         if (stream.isVideoOff()) { // 视频未开启
             floatView.findViewById(R.id.layout_call_voice).setVisibility(View.VISIBLE);
             floatView.findViewById(R.id.layout_call_video).setVisibility(View.GONE);
-            EaseUserUtils.setUserAvatar(context, stream.getUsername(), avatarView);
         } else { // 视频已开启
             floatView.findViewById(R.id.layout_call_voice).setVisibility(View.GONE);
             floatView.findViewById(R.id.layout_call_video).setVisibility(View.VISIBLE);

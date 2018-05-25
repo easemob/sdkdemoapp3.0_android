@@ -132,7 +132,7 @@ public class ConferenceMemberView extends RelativeLayout {
      * 设置当前 view 对应的 stream 的用户，主要用来语音通话时显示对方头像
      */
     public void setUsername(String username) {
-        EaseUserUtils.setUserAvatar(context, username, avatarView);
+        avatarView.setImageResource(R.drawable.em_call_video_default);
         nameView.setText(username);
     }
 
@@ -154,12 +154,12 @@ public class ConferenceMemberView extends RelativeLayout {
             talkingView.setVisibility(GONE);
             nameView.setVisibility(GONE);
             audioOffView.setVisibility(GONE);
-            surfaceView.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFit);
         } else {
             nameView.setVisibility(VISIBLE);
             if (isAudioOff) {
                 audioOffView.setVisibility(VISIBLE);
             }
+
             surfaceView.setScaleMode(VideoView.EMCallViewScaleMode.EMCallViewScaleModeAspectFill);
         }
     }

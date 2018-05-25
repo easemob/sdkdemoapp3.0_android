@@ -27,8 +27,8 @@
     </style>
 
     <style name="style_call_tools_panel_button">
-        <item name="android:layout_width">50dp</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">@dimen/adaptive_56dp</item>
+        <item name="android:layout_height">@dimen/adaptive_56dp</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:background">@drawable/em_call_btn_bg</item>
@@ -47,6 +47,6 @@
         <item name="android:ellipsize">end</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">#fff</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/adaptive_18sp</item>
     </style>
 </resources>

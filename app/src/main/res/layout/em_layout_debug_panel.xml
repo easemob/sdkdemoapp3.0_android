@@ -6,27 +6,24 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/adaptive_30dp"
         android:background="@color/bg_tools_panel">
 
         <TextView
             android:id="@+id/tv_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:paddingBottom="8dip"
-            android:paddingTop="8dip"
-            android:text="video debug panel version.3.4.0.1"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/adaptive_11dp"
             android:textColor="#fff"
-            android:textSize="16sp" />
+            android:textSize="@dimen/adaptive_18sp" />
 
         <ImageButton
             android:id="@+id/btn_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/adaptive_30dp"
+            android:layout_height="@dimen/adaptive_30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dip"
             android:background="@drawable/em_call_btn_bg"
             android:src="@drawable/em_close" />
     </RelativeLayout>

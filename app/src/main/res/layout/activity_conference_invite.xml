@@ -16,7 +16,8 @@
             android:layout_centerInParent="true"
             android:text="@string/Select_the_contact"
             android:textColor="#000"
-            android:textSize="20sp" />
+            android:textSize="@dimen/adaptive_18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/btn_cancel"
@@ -32,53 +33,32 @@
             android:onClick="onClick"
             android:padding="8dip"
             android:text="@string/cancel"
-            android:textColor="#000"
-            android:textSize="18sp" />
+            android:textColor="#1565C0"
+            android:textSize="@dimen/adaptive_18sp" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/btn_start"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/adaptive_52dp"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dip"
         android:background="@drawable/em_btn_bg_conference_start"
         android:clickable="true"
         android:gravity="center"
         android:onClick="onClick"
-        android:padding="12dip"
         android:text="@string/button_start_video_conference"
         android:textColor="#FFF"
-        android:textSize="16sp" />
+        android:textSize="@dimen/adaptive_18sp" />
 
-    <RelativeLayout
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btn_start"
-        android:layout_below="@+id/title_bar">
-
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:cacheColorHint="#00000000"
-            android:descendantFocusability="afterDescendants"
-            android:divider="@null"
-            android:fastScrollEnabled="true" />
-
-        <TextView
-            android:id="@+id/floating_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@drawable/em_show_head_toast_bg"
-            android:gravity="center"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:textColor="@android:color/white"
-            android:textSize="40sp"
-            android:visibility="invisible" />
-    </RelativeLayout>
+        android:layout_below="@+id/title_bar"
+        android:background="@android:color/white"
+        android:cacheColorHint="#00000000"
+        android:descendantFocusability="afterDescendants"
+        android:fastScrollEnabled="true" />
 
 </RelativeLayout>

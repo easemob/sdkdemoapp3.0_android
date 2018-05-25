@@ -6,26 +6,27 @@
 
     <LinearLayout
         android:id="@+id/layout_call_voice"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@android:color/transparent"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="10dip">
+        android:padding="20dip">
 
         <ImageView
             android:id="@+id/iv_avatar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:src="@drawable/em_call_video_default" />
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/layout_call_video"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@android:color/transparent"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="10dip"
+        android:padding="20dip"
         android:visibility="gone" />
 </RelativeLayout>
