@@ -31,7 +31,7 @@ public class Constant extends EaseConstant{
 
 	public static final String EXTRA_CONFERENCE_ID = "confId";
 	public static final String EXTRA_CONFERENCE_PASS = "password";
+	public static final String EXTRA_CONFERENCE_INVITER = "inviter";
 	public static final String EXTRA_CONFERENCE_IS_CREATOR = "is_creator";
-
 
 }

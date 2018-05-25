@@ -43,4 +43,13 @@
 	<color name="holo_orange_light">#ffffbb33</color>
 	<color name="holo_red_light">#ffff4444</color>
     <color name="holo_black">#ff111111</color>
+
+    <color name="bg_tools_panel">#2F2F2F</color>
+    <color name="color_transparent">#00000000</color>
+
+    <color name="em_blue">#1E88E5</color>
+    <color name="em_blue_pressed">#0000aF</color>
+
+    <color name="em_indicator_select">#9E9E9E</color>
+    <color name="em_indicator_normal">#1AFFFFFF</color>
 </resources>

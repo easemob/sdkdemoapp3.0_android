@@ -438,4 +438,10 @@
     <string name="check_result_logout_success">退出登录成功</string>
 
     <string name="title_verification_information">填写验证信息</string>
+
+    <string name="button_start_video_conference">开始视频会议 (%1$d)</string>
+    <string name="tips_invite_to_join">%1$s 邀请您加入视频 …</string>
+    <string name="tips_select_contacts_first">请先选择联系人 ~</string>
+
+    <string name="tips_desk_share">你正在共享当前桌面</string>
 </resources>

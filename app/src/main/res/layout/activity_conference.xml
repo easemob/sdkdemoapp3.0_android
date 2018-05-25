@@ -1,195 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:clipToPadding="false"
-    android:fitsSystemWindows="false"
-    android:background="@color/holo_black"
-    >
+    android:fitsSystemWindows="false">
 
-    <!--通话界面容器-->
-    <RelativeLayout
-        android:id="@+id/layout_surface_container"
+    <!--多人会议时显示成员画面控件容器-->
+    <com.hyphenate.chatuidemo.conference.MemberViewGroup
+        android:id="@+id/surface_view_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        >
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:animateLayoutChanges="true"
-            >
+        android:background="@color/holo_black" />
 
-            <!--多人会议时显示成员画面控件容器-->
-            <com.hyphenate.chatuidemo.widget.EaseViewGroup
-                android:id="@+id/surface_view_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                />
-        </ScrollView>
-    </RelativeLayout>
-
-    <!--控制按钮层布局-->
-    <RelativeLayout
-        android:id="@+id/layout_call_control"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        >
+        android:orientation="vertical">
 
-        <!--头部状态-->
+        <com.hyphenate.chatuidemo.widget.SquareRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/layout_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dip"
+                android:layout_marginRight="20dip"
+                android:layout_marginTop="20dip"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_members_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="#FFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_member_count_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:singleLine="true"
+                    android:textColor="#FFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_call_time_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_members"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dip"
+                android:layout_marginTop="10dip"
+                android:textColor="#FFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/layout_talking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_call_time_main"
+                android:layout_marginLeft="20dip"
+                android:layout_marginStart="20dip"
+                android:layout_marginTop="10dip"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/icon_talking"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dip"
+                    android:layout_toRightOf="@+id/tv_talker"
+                    android:background="@drawable/em_click_circle_green"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_volume_up_white_24dp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_talker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    android:textColor="#FFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </com.hyphenate.chatuidemo.widget.SquareRelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                >
+            android:layout_height="match_parent">
 
-                <!--通话时间-->
-                <TextView
-                    android:id="@+id/text_call_time"
-                    android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/layout_tools_panel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_tools_panel">
+
+                <com.hyphenate.chatuidemo.widget.EasePageIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:shadowColor="#89212121"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
-                    android:text="@string/app_name"
-                    android:textColor="#89ffffff"
-                    android:visibility="gone"
-                    />
-            </LinearLayout>
-            <!--邀请加入-->
-            <ImageButton
-                android:id="@+id/btn_invite_join"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/em_click_circle_transparent"
-                android:src="@drawable/em_add"
-                />
+                    android:gravity="center" />
+
+                <include
+                    layout="@layout/em_layout_tools_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <com.hyphenate.chatuidemo.conference.DebugPanelView
+                android:id="@+id/layout_debug_panel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
         </RelativeLayout>
+    </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layout_calling"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#61212121"
-            android:gravity="center"
-            android:orientation="vertical"
-            >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                >
-
-                <!--麦克风开关-->
-                <ImageButton
-                    android:id="@+id/btn_mic_switch"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/em_click_circle_transparent"
-                    android:src="@drawable/ic_mic_off_white_24dp"
-                    />
-
-                <!--扬声器开关-->
-                <ImageButton
-                    android:id="@+id/btn_speaker_switch"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/em_click_circle_transparent"
-                    android:src="@drawable/ic_volume_up_white_24dp"
-                    />
-
-                <!--摄像头开关-->
-                <ImageButton
-                    android:id="@+id/btn_camera_switch"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/em_click_circle_transparent"
-                    android:src="@drawable/ic_videocam_off_white_24dp"
-                    />
-
-                <!--桌面共享-->
-                <ImageButton
-                    android:id="@+id/btn_desktop_switch"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/em_click_circle_transparent"
-                    android:src="@drawable/ic_screen_share_white_24dp"
-                    />
-
-                <!--切换摄像头-->
-                <ImageButton
-                    android:id="@+id/btn_change_camera_switch"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_margin="8dp"
-                    android:background="@drawable/em_click_circle_transparent"
-                    android:src="@drawable/ic_camera_front_white_24dp"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                >
-
-                <!--拒绝接听-->
-                <ImageButton
-                    android:id="@+id/btn_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="24dp"
-                    android:src="@drawable/ic_call_end_white_24dp"
-                    android:background="@drawable/em_click_circle_red"
-                    android:padding="16dp"
-                    />
-
-                <!--结束通话-->
-                <ImageButton
-                    android:id="@+id/btn_exit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="24dp"
-                    android:src="@drawable/ic_call_end_white_24dp"
-                    android:background="@drawable/em_click_circle_red"
-                    android:padding="16dp"
-                    />
-
-                <!--接听通话-->
-                <ImageButton
-                    android:id="@+id/btn_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="24dp"
-                    android:src="@drawable/ic_call_white_24dp"
-                    android:background="@drawable/em_click_circle_green"
-                    android:padding="16dp"
-                    />
-
-            </LinearLayout>
-        </LinearLayout>
-    </RelativeLayout>
+    <com.hyphenate.chatuidemo.conference.IncomingCallView
+        android:id="@+id/incoming_call_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </RelativeLayout>

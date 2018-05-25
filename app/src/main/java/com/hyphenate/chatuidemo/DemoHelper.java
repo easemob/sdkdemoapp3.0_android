@@ -64,6 +64,9 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -582,9 +585,17 @@ public class DemoHelper {
                 if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
                     return;
                 }
+                String inviter = "";
+                try {
+                    JSONObject jsonObj = new JSONObject(extension);
+                    inviter = jsonObj.optString(Constant.EXTRA_CONFERENCE_INVITER);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Intent conferenceIntent = new Intent(appContext, ConferenceActivity.class);
                 conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_ID, confId);
                 conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_PASS, password);
+                conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_INVITER, inviter);
                 conferenceIntent.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
                 conferenceIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 appContext.startActivity(conferenceIntent);

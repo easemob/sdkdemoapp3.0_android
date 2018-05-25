@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_stream_id"
+        style="@style/style_debug_detail" />
+
+    <TextView
+        android:id="@+id/tv_username_debug"
+        style="@style/style_debug_detail" />
+
+    <TextView
+        android:id="@+id/tv_resolution"
+        style="@style/style_debug_detail" />
+
+    <TextView
+        android:id="@+id/tv_video_fps"
+        style="@style/style_debug_detail" />
+
+    <TextView
+        android:id="@+id/tv_video_bitrate"
+        style="@style/style_debug_detail" />
+
+    <TextView
+        android:id="@+id/tv_video_pack_loss"
+        style="@style/style_debug_detail" />
+
+    <TextView
+        android:id="@+id/tv_audio_bitrate"
+        style="@style/style_debug_detail" />
+
+    <TextView
+        android:id="@+id/tv_audio_pack_loss"
+        style="@style/style_debug_detail" />
+
+</LinearLayout>
