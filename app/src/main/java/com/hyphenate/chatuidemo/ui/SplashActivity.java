@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.util.EasyUtils;
 
 /**
@@ -55,7 +56,7 @@ public class SplashActivity extends BaseActivity {
 						}
 					}
 					String topActivityName = EasyUtils.getTopActivityName(EMClient.getInstance().getContext());
-					if (topActivityName != null && (topActivityName.equals(VideoCallActivity.class.getName()) || topActivityName.equals(VoiceCallActivity.class.getName()))) {
+					if (topActivityName != null && (topActivityName.equals(VideoCallActivity.class.getName()) || topActivityName.equals(VoiceCallActivity.class.getName()) || topActivityName.equals(ConferenceActivity.class.getName()))) {
 						// nop
 						// avoid main screen overlap Calling Activity
 					} else {

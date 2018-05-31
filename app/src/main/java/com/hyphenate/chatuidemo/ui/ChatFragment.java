@@ -28,6 +28,7 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.domain.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.domain.RobotUser;
+import com.hyphenate.chatuidemo.widget.ChatRowConferenceInvitePresenter;
 import com.hyphenate.chatuidemo.widget.EaseChatRecallPresenter;
 import com.hyphenate.chatuidemo.widget.EaseChatVoiceCallPresenter;
 import com.hyphenate.easeui.EaseConstant;
@@ -68,6 +69,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int MESSAGE_TYPE_RECV_VOICE_CALL = 2;
     private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
     private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
+    private static final int MESSAGE_TYPE_CONFERENCE_INVITE = 5;
     private static final int MESSAGE_TYPE_RECALL = 9;
 
     /**
@@ -386,7 +388,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         public int getCustomChatRowTypeCount() {
             //here the number is the message type in EMMessage::Type
         	//which is used to count the number of different chat row
-            return 11;
+            return 12;
         }
 
         @Override
@@ -402,6 +404,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                  //messagee recall
                 else if(message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)){
                     return MESSAGE_TYPE_RECALL;
+                } else if (!"".equals(message.getStringAttribute(Constant.MSG_ATTR_CONF_ID,""))) {
+                    return MESSAGE_TYPE_CONFERENCE_INVITE;
                 }
             }
             return 0;
@@ -420,6 +424,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 else if(message.getBooleanAttribute(Constant.MESSAGE_TYPE_RECALL, false)){
                     EaseChatRowPresenter presenter = new EaseChatRecallPresenter();
                     return presenter;
+                } else if (!"".equals(message.getStringAttribute(Constant.MSG_ATTR_CONF_ID,""))) {
+                    return new ChatRowConferenceInvitePresenter();
                 }
             }
             return null;

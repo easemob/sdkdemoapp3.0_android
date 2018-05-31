@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -582,19 +583,7 @@ public class DemoHelper {
 
             @Override public void onReceiveInvite(String confId, String password, String extension) {
                 EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
-                if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
-                    return;
-                }
-                String inviter = "";
-                String groupId = null;
-                try {
-                    JSONObject jsonObj = new JSONObject(extension);
-                    inviter = jsonObj.optString(Constant.EXTRA_CONFERENCE_INVITER);
-                    groupId = jsonObj.optString(Constant.EXTRA_CONFERENCE_GROUP_ID);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                ConferenceActivity.receiveConferenceCall(appContext, confId, password, inviter, groupId);
+                goConference(confId, password, extension);
             }
         });
         //register incoming call receiver
@@ -606,6 +595,32 @@ public class DemoHelper {
         //register message event listener
         registerMessageListener();
         
+    }
+
+    /**
+     * 处理会议邀请
+     * @param confId 会议 id
+     * @param password 会议密码
+     */
+    public void goConference(String confId, String password,String extension) {
+        if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
+            return;
+        }
+        String inviter = "";
+        String groupId = null;
+        try {
+            JSONObject jsonObj = new JSONObject(extension);
+            inviter = jsonObj.optString(Constant.EXTRA_CONFERENCE_INVITER);
+            groupId = jsonObj.optString(Constant.EXTRA_CONFERENCE_GROUP_ID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (TextUtils.isEmpty(inviter)) {
+            inviter = extension;
+        }
+
+        ConferenceActivity.receiveConferenceCall(appContext, confId, password, inviter, groupId);
     }
 
     private void initDbDao() {
@@ -1269,6 +1284,12 @@ public class DemoHelper {
 			public void onMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
                     EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+                    // 判断一下是否是会议邀请
+                    String confId = message.getStringAttribute(Constant.MSG_ATTR_CONF_ID, "");
+                    if(!"".equals(confId)){
+                        String password = message.getStringAttribute(Constant.MSG_ATTR_CONF_PASS, "");
+                        goConference(confId, password, message.getFrom());
+                    }
                     // in background, do not refresh UI, notify it in notification bar
                     if(!easeUI.hasForegroundActivies()){
                         getNotifier().onNewMsg(message);
