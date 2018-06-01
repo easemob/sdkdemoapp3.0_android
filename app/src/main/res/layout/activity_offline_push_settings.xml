@@ -41,9 +41,9 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="30dip"
+            android:layout_height="wrap_content"
             android:gravity="bottom|left"
-            android:paddingLeft="10dip"
+            android:padding="10dip"
             android:text="@string/push_no_disturb"
             android:textColor="@color/btn_gray_pressed" />
 
