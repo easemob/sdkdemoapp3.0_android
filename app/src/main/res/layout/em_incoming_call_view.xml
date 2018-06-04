@@ -9,10 +9,10 @@
         android:id="@+id/tv_inviter_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dip"
-        android:layout_marginTop="16dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginTop="20dip"
         android:textColor="#000"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
     <ImageView
         android:id="@+id/iv_call_anim"
@@ -26,9 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dip"
         android:orientation="horizontal"
-        android:padding="24dip"
         android:weightSum="2">
 
         <RelativeLayout
@@ -38,10 +37,11 @@
             <!--拒绝接听-->
             <ImageButton
                 android:id="@+id/btn_reject"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dip"
+                android:layout_height="60dip"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/em_call_btn_bg"
+                android:scaleType="fitCenter"
                 android:src="@drawable/em_call_hangup" />
         </RelativeLayout>
 
@@ -52,14 +52,13 @@
             <!--接听通话-->
             <ImageButton
                 android:id="@+id/btn_pickup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dip"
+                android:layout_height="60dip"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/em_call_btn_bg"
+                android:scaleType="fitCenter"
                 android:src="@drawable/em_call_pickup" />
         </RelativeLayout>
-
-
     </LinearLayout>
 
 </RelativeLayout>

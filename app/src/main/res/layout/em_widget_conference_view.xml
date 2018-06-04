@@ -18,37 +18,36 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:layout_margin="16dip">
+        android:layout_height="@dimen/adaptive_44dp"
+        android:background="@drawable/em_conference_member_cover">
 
         <TextView
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/adaptive_12dp"
             android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textSize="@dimen/adaptive_18sp" />
 
         <ImageView
             android:id="@+id/icon_mute"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/adaptive_40dp"
+            android:layout_height="@dimen/adaptive_40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/em_click_circle_red"
             android:padding="2dp"
-            android:src="@drawable/ic_mic_off_white_24dp"
+            android:src="@drawable/em_call_mute"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/icon_talking"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/adaptive_40dp"
+            android:layout_height="@dimen/adaptive_40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/em_click_circle_green"
             android:padding="2dp"
-            android:src="@drawable/ic_volume_up_white_24dp"
+            android:src="@drawable/em_call_sound_on"
             android:visibility="gone" />
     </RelativeLayout>
 </RelativeLayout>

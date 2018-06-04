@@ -5,18 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.hyphenate.chat.EMClient
+import com.hyphenate.chat.EMCursorResult
 import com.hyphenate.chatuidemo.Constant
 import com.hyphenate.chatuidemo.DemoHelper
 import com.hyphenate.chatuidemo.R
 import com.hyphenate.chatuidemo.ui.BaseActivity
-import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.utils.EaseUserUtils
+import com.hyphenate.exceptions.HyphenateException
+import com.hyphenate.util.EMLog
 
 /**
  * Created by zhangsong on 18-4-18.
@@ -35,7 +38,7 @@ class ConferenceInviteActivity : BaseActivity() {
     private var listView: ListView? = null
     private var contactAdapter: ContactsAdapter? = null
     // Kotlin List is a Read-only list.
-    private var contacts: ArrayList<KV<EaseUser, Int>> = ArrayList()
+    private var contacts: ArrayList<KV<String, Int>> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +105,7 @@ class ConferenceInviteActivity : BaseActivity() {
 
         contactAdapter = ContactsAdapter(this, contacts)
         contactAdapter!!.checkItemChangeCallback = object : ContactsAdapter.ICheckItemChangeCallback {
-            override fun onCheckedItemChanged(v: View, user: EaseUser, state: Int) {
+            override fun onCheckedItemChanged(v: View, username: String, state: Int) {
                 val count = getSelectMembers().size
                 startBtn!!.text = String.format(getString(R.string.button_start_video_conference), count)
             }
@@ -118,27 +121,58 @@ class ConferenceInviteActivity : BaseActivity() {
     }
 
     private fun initData() {
+        // Already in conference member list.
         val existMembers = EMClient.getInstance().conferenceManager().conferenceMemberList
-        // For test
-//        val existMembers = ArrayList<String>()
-//        existMembers?.add("js2")
 
-        DemoHelper.getInstance().contactList.values
-                .filter {
-                    ((it.username != Constant.NEW_FRIENDS_USERNAME)
-                            and (it.username != Constant.GROUP_USERNAME)
-                            and (it.username != Constant.CHAT_ROOM)
-                            and (it.username != Constant.CHAT_ROBOT))
-                }
-                .forEach {
-                    if (existMembers?.contains(it.username) == true) {
-                        contacts.add(KV(it, STATE_CHECKED_UNCHANGEABLE))
-                    } else {
-                        contacts.add(KV(it, STATE_UNCHECKED))
+        val groupId = intent.getStringExtra(Constant.EXTRA_CONFERENCE_GROUP_ID)
+        val contactList: ArrayList<String> = ArrayList()
+
+        Thread(Runnable {
+            if (TextUtils.isEmpty(groupId)) { // 获取当前账号的所有联系人
+                DemoHelper.getInstance().contactList.values
+                        .forEach {
+                            contactList.add(it.username)
+                        }
+            } else { // 根据Group-Id获取该群组中所有成员
+                contactList.add(EMClient.getInstance().groupManager().getGroupFromServer(groupId).owner)
+
+                var result: EMCursorResult<String>? = null
+                do {
+                    try {
+                        // page size set to 20 is convenient for testing, should be applied to big value
+                        result = EMClient.getInstance().groupManager().fetchGroupMembers(groupId,
+                                if (result != null) result.cursor else "",
+                                20)
+                    } catch (e: HyphenateException) {
+                        e.printStackTrace()
                     }
-                }
+                    EMLog.d(TAG, "fetchGroupMembers result.size:" + result?.data?.size)
+                    if (result != null) {
+                        contactList.addAll(result.data)
+                    }
+                } while (result!!.cursor != null && !result.cursor.isEmpty())
+            }
 
-        contactAdapter?.notifyDataSetChanged(contacts)
+            contactList.
+                    filter {
+                        ((it != Constant.NEW_FRIENDS_USERNAME)
+                                and (it != Constant.GROUP_USERNAME)
+                                and (it != Constant.CHAT_ROOM)
+                                and (it != Constant.CHAT_ROBOT)
+                                and (it != EMClient.getInstance().currentUser))
+                    }
+                    .forEach {
+                        if (existMembers?.contains(it) == true) {
+                            contacts.add(KV(it, STATE_CHECKED_UNCHANGEABLE))
+                        } else {
+                            contacts.add(KV(it, STATE_UNCHECKED))
+                        }
+                    }
+
+            runOnUiThread {
+                contactAdapter?.notifyDataSetChanged()
+            }
+        }).start()
     }
 
     private fun getSelectMembers(): Array<String> {
@@ -148,40 +182,28 @@ class ConferenceInviteActivity : BaseActivity() {
                     it.second == STATE_CHECKED
                 }
                 .forEach {
-                    results.add(it.first.username)
+                    results.add(it.first)
                 }
 
         return results.toArray(emptyArray())
     }
 
-    class ContactsAdapter(var context: Context, var list: ArrayList<KV<EaseUser, Int>>) : BaseAdapter() {
+    class ContactsAdapter(var context: Context, var contacts: ArrayList<KV<String, Int>>) : BaseAdapter() {
         interface ICheckItemChangeCallback {
-            fun onCheckedItemChanged(v: View, user: EaseUser, state: Int)
+            fun onCheckedItemChanged(v: View, username: String, state: Int)
         }
 
         private var contactFilter: ContactFilter? = null
-        private var contacts: ArrayList<KV<EaseUser, Int>> = ArrayList()
         var checkItemChangeCallback: ICheckItemChangeCallback? = null
 
         companion object {
             val TAG = "ContactsAdapter"
         }
 
-        init {
-            contacts.clear()
-            contacts.addAll(list)
-        }
-
-        fun notifyDataSetChanged(list: ArrayList<KV<EaseUser, Int>>) {
-            contacts.clear()
-            contacts.addAll(list)
-            super.notifyDataSetChanged()
-        }
-
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             var contentView: View? = convertView
 
-            var viewHolder: ViewHolder?
+            val viewHolder: ViewHolder?
             if (contentView != null) {
                 viewHolder = contentView.tag as ViewHolder?
             } else {
@@ -194,7 +216,7 @@ class ConferenceInviteActivity : BaseActivity() {
 
             // Handle viewHolder.
             val contact = contacts[position]
-            val username = contact.first.username
+            val username = contact.first
 
             EaseUserUtils.setUserAvatar(context, username, viewHolder.headerImage!!)
             EaseUserUtils.setUserNick(username, viewHolder.nameText!!)
@@ -247,7 +269,7 @@ class ConferenceInviteActivity : BaseActivity() {
             contactFilter?.filter(
                     constraint,
                     object : ContactFilter.IFilterCallback {
-                        override fun onFilter(filtered: List<KV<EaseUser, Int>>) {
+                        override fun onFilter(filtered: List<KV<String, Int>>) {
                             contacts.clear()
                             contacts.addAll(filtered)
                             if (filtered.isNotEmpty()) {
@@ -260,21 +282,19 @@ class ConferenceInviteActivity : BaseActivity() {
             )
         }
 
-        class ViewHolder(view: View) {
-            var contentView: View? = null
+        class ViewHolder(var view: View) {
             var headerImage: ImageView? = null
             var nameText: TextView? = null
             var checkBox: CheckBox? = null
 
             init {
-                contentView = view
                 headerImage = view.findViewById(R.id.head_icon) as ImageView?
                 nameText = view.findViewById(R.id.name) as TextView?
                 checkBox = view.findViewById(R.id.checkbox) as CheckBox?
             }
 
             fun reset() {
-                contentView?.setOnClickListener(null)
+                view.setOnClickListener(null)
                 nameText?.text = null
                 with(checkBox!!) {
                     setOnCheckedChangeListener(null)
@@ -283,18 +303,13 @@ class ConferenceInviteActivity : BaseActivity() {
             }
         }
 
-        class ContactFilter(list: List<KV<EaseUser, Int>>) : Filter() {
+        class ContactFilter(private val contacts: List<KV<String, Int>>) : Filter() {
             interface IFilterCallback {
-                fun onFilter(filtered: List<KV<EaseUser, Int>>)
+                fun onFilter(filtered: List<KV<String, Int>>)
             }
 
-            private val contacts: ArrayList<KV<EaseUser, Int>> = ArrayList()
             private var filterCallback: IFilterCallback? = null
 
-            init {
-                contacts.clear()
-                contacts.addAll(list)
-            }
 
             fun filter(constraint: CharSequence?, callback: IFilterCallback?) {
                 filterCallback = callback
@@ -310,10 +325,10 @@ class ConferenceInviteActivity : BaseActivity() {
                 } else {
                     val prefixString = prefix.toString()
                     val count = contacts.size
-                    val newValues = java.util.ArrayList<KV<EaseUser, Int>>()
+                    val newValues = java.util.ArrayList<KV<String, Int>>()
                     for (i in 0 until count) {
                         val user = contacts[i]
-                        val username = user.first.username
+                        val username = user.first
 
                         if (username.startsWith(prefixString)) {
                             newValues.add(user)
@@ -335,7 +350,7 @@ class ConferenceInviteActivity : BaseActivity() {
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                filterCallback?.onFilter(results?.values as List<KV<EaseUser, Int>>)
+                filterCallback?.onFilter(results!!.values as List<KV<String, Int>>)
             }
         }
     }

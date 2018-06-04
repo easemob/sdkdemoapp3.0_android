@@ -10,8 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_margin="12dip"
-        android:src="@drawable/em_icon_account" />
+        android:src="@drawable/em_desktop_share" />
 
     <TextView
         android:layout_width="wrap_content"

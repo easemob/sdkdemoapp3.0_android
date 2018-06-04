@@ -6,33 +6,32 @@
 
     <ImageView
         android:id="@+id/head_icon"
-        android:layout_width="50dip"
-        android:layout_height="50dip"
-        android:layout_marginBottom="8dip"
-        android:layout_marginLeft="16dip"
-        android:layout_marginRight="12dip"
-        android:layout_marginTop="8dip"
-        android:src="@drawable/ic_launcher" />
+        android:layout_width="@dimen/adaptive_44dp"
+        android:layout_height="@dimen/adaptive_62dp"
+        android:paddingBottom="@dimen/adaptive_9dp"
+        android:layout_marginLeft="@dimen/adaptive_12dp"
+        android:layout_marginRight="@dimen/adaptive_12dp"
+        android:paddingTop="@dimen/adaptive_9dp"
+        android:src="@drawable/em_call_video_default"/>
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/head_icon"
         android:layout_toLeftOf="@+id/checkbox"
+        android:layout_toRightOf="@+id/head_icon"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="JASON"
         android:textColor="#000"
-        android:textSize="20sp" />
+        android:textSize="@dimen/adaptive_18sp" />
 
     <CheckBox
         android:id="@+id/checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/adaptive_40dp"
+        android:layout_height="@dimen/adaptive_40dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="16dip" />
+        android:layout_marginRight="@dimen/adaptive_12dp" />
 
 </RelativeLayout>

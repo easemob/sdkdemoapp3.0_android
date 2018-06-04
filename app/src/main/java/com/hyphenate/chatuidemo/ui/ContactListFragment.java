@@ -196,8 +196,8 @@ public class ContactListFragment extends EaseContactListFragment {
                 //进入Robot列表页面
                 startActivity(new Intent(getActivity(), RobotsActivity.class));
                 break;
-            case R.id.conference_item:
-                startActivity(new Intent(getActivity(), ConferenceActivity.class).putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, true));
+            case R.id.conference_item: // 创建音视频会议
+                ConferenceActivity.startConferenceCall(getActivity(), null);
                 break;
             default:
                 break;

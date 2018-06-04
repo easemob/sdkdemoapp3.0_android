@@ -62,13 +62,13 @@ class EasePageIndicator : LinearLayout {
 
     private fun createIndicator(): View {
         val indicator = View(context)
-        var lp = ViewGroup.LayoutParams(DisplayUtils.dp2px(context, 12f), DisplayUtils.dp2px(context, 6f))
+        var lp = ViewGroup.LayoutParams(DisplayUtils.dp2px(context, 16f), DisplayUtils.dp2px(context, 4f))
         indicator.layoutParams = lp
         indicator.background = context.resources.getDrawable(R.drawable.em_indicator_selector)
         addView(indicator)
         lp = indicator.layoutParams as MarginLayoutParams
-        val margin = DisplayUtils.dp2px(context, 4f)
-        lp.setMargins(margin, margin, margin, margin)
+        val margin = DisplayUtils.dp2px(context, 5f)
+        lp.setMargins(margin, 0, margin, 0)
         indicator.requestLayout()
         return indicator
     }

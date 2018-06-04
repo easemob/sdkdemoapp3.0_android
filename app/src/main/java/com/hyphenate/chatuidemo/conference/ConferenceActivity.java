@@ -54,8 +54,8 @@ import java.util.TimeZone;
  * 多人音视频会议界面
  */
 public class ConferenceActivity extends BaseActivity implements EMConferenceListener {
-
     private final String TAG = this.getClass().getSimpleName();
+
     private final int REQUEST_CODE_INVITE = 1001;
 
     private ConferenceActivity activity;
@@ -69,6 +69,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private boolean isCreator = false;
     private String confId = "";
     private String password = "";
+    // 标识当前会议的创建方式
+    private String groupId = null;
 
     // 正在显示音视频Window的stream
     private static EMConferenceStream windowStream;
@@ -116,6 +118,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private DebugPanelView debugPanelView;
 
     // ------ full screen views start -------
+    private View stateCoverMain;
     private View membersLayout;
     private TextView membersTVMain;
     private TextView memberCountTVMain;
@@ -126,6 +129,29 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     // ------ full screen views end -------
 
     private TimeHandler timeHandler;
+
+    // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
+    // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
+    public static void startConferenceCall(Context context, String groupId) {
+        Intent i = new Intent(context, ConferenceActivity.class);
+        i.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, true);
+        i.putExtra(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
+
+    // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
+    // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
+    public static void receiveConferenceCall(Context context, String conferenceId, String password, String inviter, String groupId) {
+        Intent i = new Intent(context, ConferenceActivity.class);
+        i.putExtra(Constant.EXTRA_CONFERENCE_ID, conferenceId);
+        i.putExtra(Constant.EXTRA_CONFERENCE_PASS, password);
+        i.putExtra(Constant.EXTRA_CONFERENCE_INVITER, inviter);
+        i.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
+        i.putExtra(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +212,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         callConferenceViewGroup = (MemberViewGroup) findViewById(R.id.surface_view_group);
 
         toolsPanelView = findViewById(R.id.layout_tools_panel);
+
         inviteBtn = (ImageButton) findViewById(R.id.btn_invite);
         membersTV = (TextView) findViewById(R.id.tv_members);
         memberCountTV = (TextView) findViewById(R.id.tv_member_count);
@@ -205,6 +232,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
         debugPanelView = (DebugPanelView) findViewById(R.id.layout_debug_panel);
 
+        stateCoverMain = findViewById(R.id.state_cover_main);
         membersLayout = findViewById(R.id.layout_members);
         membersTVMain = (TextView) findViewById(R.id.tv_members_main);
         memberCountTVMain = (TextView) findViewById(R.id.tv_member_count_main);
@@ -249,6 +277,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         speakerSwitch.setActivated(true);
         openSpeaker();
 
+        groupId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_GROUP_ID);
         isCreator = getIntent().getBooleanExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
         if (isCreator) {
             incomingCallView.setVisibility(View.GONE);
@@ -388,6 +417,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 memberCountTV.setVisibility(View.INVISIBLE);
                 callTimeView.setVisibility(View.INVISIBLE);
 
+                stateCoverMain.setVisibility(View.VISIBLE);
                 membersLayout.setVisibility(View.VISIBLE);
                 talkingLayout.setVisibility(View.VISIBLE);
                 callTimeViewMain.setVisibility(View.VISIBLE);
@@ -407,6 +437,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 zoominBtn.setVisibility(View.GONE);
 
                 // invisible the full-screen mode views.
+                stateCoverMain.setVisibility(View.GONE);
                 membersLayout.setVisibility(View.GONE);
                 talkingLayout.setVisibility(View.GONE);
                 callTimeViewMain.setVisibility(View.GONE);
@@ -447,8 +478,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         conferenceMemberView.setAudioOff(stream.isAudioOff());
         conferenceMemberView.setVideoOff(stream.isVideoOff());
 
-        if (position != 0) {
-            // 悬浮窗显示规则: 若有其他成员加入会议,则显示第一个加入会议的其他成员;若无,则显示自己.
+        // 悬浮窗显示规则: 若有其他成员加入会议,则显示第一个加入会议的其他成员;若无,则显示自己.
+        if (position != 1) {
             return;
         }
         CallFloatWindow.getInstance(getApplicationContext()).update(stream);
@@ -467,8 +498,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 } else {
                     talkingImage.setVisibility(View.VISIBLE);
                     String lastStreamId = speakers.get(speakers.size() - 1);
+                    EMLog.i("currSpeakers", "currSpeakers: " + lastStreamId);
                     String speaker = null;
                     for (EMConferenceStream stream : streamList) {
+                        EMLog.i("currSpeakers", "stream: " + stream.getStreamId());
                         if (stream.getStreamId().equals(lastStreamId)) {
                             speaker = stream.getUsername();
                             break;
@@ -529,7 +562,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().joinConference(confId, password, new EMValueCallBack<EMConference>() {
             @Override
             public void onSuccess(EMConference value) {
-                addSelfToList();
                 conference = value;
                 startAudioTalkingMonitor();
                 publish();
@@ -560,6 +592,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void selectUserToJoinConference() {
         Intent intent = new Intent(activity, ConferenceInviteActivity.class);
+        intent.putExtra(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
         activity.startActivityForResult(intent, REQUEST_CODE_INVITE);
     }
 
@@ -572,6 +605,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             }
             object.put("type", type);
             object.put(Constant.EXTRA_CONFERENCE_INVITER, EMClient.getInstance().getCurrentUser());
+            object.put(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
             for (int i = 0; i < contacts.length; i++) {
                 //EMClient.getInstance()
                 //        .conferenceManager()
@@ -611,7 +645,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     createAndJoinConference(new EMValueCallBack<EMConference>() {
                         @Override
                         public void onSuccess(EMConference value) {
-                            addSelfToList();
                             inviteUserToJoinConference(members);
                         }
 
@@ -693,11 +726,16 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 开始推自己的数据
      */
     private void publish() {
+        addSelfToList();
+
         EMClient.getInstance().conferenceManager().publish(normalParam, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
                 conference.setPubStreamId(value, EMConferenceStream.StreamType.NORMAL);
                 localView.setStreamId(value);
+
+                streamList.get(0).setStreamId(value);
+                debugPanelView.setStreamListAndNotify(streamList);
             }
 
             @Override
@@ -920,6 +958,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 Toast.makeText(activity, stream.getUsername() + " stream add!", Toast.LENGTH_SHORT)
                         .show();
                 addConferenceView(stream);
+
+                if (CallFloatWindow.getInstance(getApplicationContext()).isShowing()) { // 通话悬浮窗显示中...
+                    int position = streamList.indexOf(stream);
+                    if (position == 1) { // 会议中加入第一个成员,需要把正在显示的悬浮窗从自己更新到这个第一个加入会议的成员.
+                        showFloatWindow();
+                    }
+                }
             }
         });
     }
