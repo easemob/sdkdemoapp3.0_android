@@ -1,7 +1,6 @@
 package com.hyphenate.chatuidemo;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -1278,8 +1277,6 @@ public class DemoHelper {
      */
     protected void registerMessageListener() {
     	messageListener = new EMMessageListener() {
-            private BroadcastReceiver broadCastReceiver = null;
-
 			@Override
 			public void onMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
@@ -1292,7 +1289,7 @@ public class DemoHelper {
                     }
                     // in background, do not refresh UI, notify it in notification bar
                     if(!easeUI.hasForegroundActivies()){
-                        getNotifier().onNewMsg(message);
+                        getNotifier().notify(message);
                     }
                 }
 			}
