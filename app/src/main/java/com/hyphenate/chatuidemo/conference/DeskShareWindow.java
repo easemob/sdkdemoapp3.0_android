@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
 
@@ -55,7 +56,7 @@ public class DeskShareWindow {
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.format = PixelFormat.TRANSPARENT;
-        layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        layoutParams.type = EaseCompat.getSupportedWindowType();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
 
         floatView = LayoutInflater.from(context).inflate(R.layout.em_widget_desk_share_window, null);
