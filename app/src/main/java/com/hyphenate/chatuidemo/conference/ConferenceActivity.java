@@ -599,30 +599,11 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private void inviteUserToJoinConference(String[] contacts) {
         try {
             JSONObject object = new JSONObject();
-            int type = 0;
-            if (!cameraSwitch.isActivated()) {
-                type = 1;
-            }
-            object.put("type", type);
             object.put(Constant.EXTRA_CONFERENCE_INVITER, EMClient.getInstance().getCurrentUser());
             object.put(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
             for (int i = 0; i < contacts.length; i++) {
-                //EMClient.getInstance()
-                //        .conferenceManager()
-                //        .inviteUserToJoinConference(conference.getConferenceId(), conference.getPassword(), contacts[i],
-                //                object.toString(), new EMValueCallBack() {
-                //                    @Override
-                //                    public void onSuccess(Object value) {
-                //                        EMLog.e(TAG, "invite join conference success");
-                //                    }
-                //
-                //                    @Override
-                //                    public void onError(int error, String errorMsg) {
-                //                        EMLog.e(TAG, "invite join conference failed " + error + ", " + errorMsg);
-                //                    }
-                //                });
                 // 通过消息的方式邀请对方加入
-                sendInviteMessage(contacts[i]);
+                sendInviteMessage(contacts[i], object.toString());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -668,11 +649,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 通过消息的形式邀请他人加入会议
      * @param to 被邀请人
      */
-    private void sendInviteMessage(String to) {
+    private void sendInviteMessage(String to, String extension) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
         final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_conference_invite), to);
         message.setAttribute(Constant.MSG_ATTR_CONF_ID, conference.getConferenceId());
         message.setAttribute(Constant.MSG_ATTR_CONF_PASS, conference.getPassword());
+        // 扩展字段对于音视频会议不是必须的,只是增加了额外用于显示或者判断音视频会议类型的信息.
+        message.setAttribute(Constant.MSG_ATTR_EXTENSION, extension);
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {

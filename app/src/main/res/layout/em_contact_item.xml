@@ -11,8 +11,7 @@
         android:paddingBottom="@dimen/adaptive_9dp"
         android:layout_marginLeft="@dimen/adaptive_12dp"
         android:layout_marginRight="@dimen/adaptive_12dp"
-        android:paddingTop="@dimen/adaptive_9dp"
-        android:src="@drawable/em_call_video_default"/>
+        android:paddingTop="@dimen/adaptive_9dp"/>
 
     <TextView
         android:id="@+id/name"

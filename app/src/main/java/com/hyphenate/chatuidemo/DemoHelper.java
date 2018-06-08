@@ -602,7 +602,7 @@ public class DemoHelper {
      * @param confId 会议 id
      * @param password 会议密码
      */
-    public void goConference(String confId, String password,String extension) {
+    public void goConference(String confId, String password, String extension) {
         if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
             return;
         }
@@ -614,10 +614,6 @@ public class DemoHelper {
             groupId = jsonObj.optString(Constant.EXTRA_CONFERENCE_GROUP_ID);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-
-        if (TextUtils.isEmpty(inviter)) {
-            inviter = extension;
         }
 
         ConferenceActivity.receiveConferenceCall(appContext, confId, password, inviter, groupId);
@@ -1288,7 +1284,8 @@ public class DemoHelper {
                     String confId = message.getStringAttribute(Constant.MSG_ATTR_CONF_ID, "");
                     if(!"".equals(confId)){
                         String password = message.getStringAttribute(Constant.MSG_ATTR_CONF_PASS, "");
-                        goConference(confId, password, message.getFrom());
+                        String extension = message.getStringAttribute(Constant.MSG_ATTR_EXTENSION, "");
+                        goConference(confId, password, extension);
                     }
                     // in background, do not refresh UI, notify it in notification bar
                     if(!easeUI.hasForegroundActivies()){

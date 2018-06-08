@@ -153,23 +153,25 @@ class ConferenceInviteActivity : BaseActivity() {
                 } while (result!!.cursor != null && !result.cursor.isEmpty())
             }
 
-            contactList.
-                    filter {
-                        ((it != Constant.NEW_FRIENDS_USERNAME)
-                                and (it != Constant.GROUP_USERNAME)
-                                and (it != Constant.CHAT_ROOM)
-                                and (it != Constant.CHAT_ROBOT)
-                                and (it != EMClient.getInstance().currentUser))
-                    }
-                    .forEach {
-                        if (existMembers?.contains(it) == true) {
-                            contacts.add(KV(it, STATE_CHECKED_UNCHANGEABLE))
-                        } else {
-                            contacts.add(KV(it, STATE_UNCHECKED))
-                        }
-                    }
-
             runOnUiThread {
+                contactList.
+                        filter {
+                            ((it != Constant.NEW_FRIENDS_USERNAME)
+                                    and (it != Constant.GROUP_USERNAME)
+                                    and (it != Constant.CHAT_ROOM)
+                                    and (it != Constant.CHAT_ROBOT)
+                                    and (it != EMClient.getInstance().currentUser))
+                        }
+                        .forEach {
+                            if (existMembers?.contains(it) == true) {
+                                contacts.add(KV(it, STATE_CHECKED_UNCHANGEABLE))
+                            } else {
+                                contacts.add(KV(it, STATE_UNCHECKED))
+                            }
+                        }
+
+                // 将对contacts变量的处理和contactAdapter#notifyDataSetChanged()放在同一线程,否则有几率出现以下错误:
+                // IllegalStateException: The content of the adapter has changed but ListView did not receive a notification.
                 contactAdapter?.notifyDataSetChanged()
             }
         }).start()
