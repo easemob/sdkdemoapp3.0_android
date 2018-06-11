@@ -61,7 +61,9 @@ public class HMSPushHelper {
     }
 
     /**
-     * 连接华为移动服务
+     * 连接华为移动服务，并获取华为推送
+     * 注册华为推送 token 通用错误码列表
+     * http://developer.huawei.com/consumer/cn/service/hms/catalog/huaweipush_agent.html?page=hmssdk_huaweipush_api_reference_errorcode
      */
     public void getHMSToken(Activity activity){
         if (isUseHMSPush) {
@@ -70,24 +72,13 @@ public class HMSPushHelper {
                 public void onConnect(int rst) {
                     EMLog.d("HWHMSPush", "huawei hms push connect result code:" + rst);
                     if (rst == HMSAgent.AgentResultCode.HMSAGENT_SUCCESS) {
-                        getHMSPushToken();
+                        HMSAgent.Push.getToken(new GetTokenHandler() {
+                            @Override
+                            public void onResult(int rst) {
+                                EMLog.d("HWHMSPush", "get huawei hms push token result code:" + rst);
+                            }
+                        });
                     }
-                }
-            });
-        }
-    }
-
-    /**
-     * 获取华为推送
-     * 注册华为推送 token 通用错误码列表
-     * http://developer.huawei.com/consumer/cn/service/hms/catalog/huaweipush_agent.html?page=hmssdk_huaweipush_api_reference_errorcode
-     */
-    private void getHMSPushToken(){
-        if (isUseHMSPush) {
-            HMSAgent.Push.getToken(new GetTokenHandler() {
-                @Override
-                public void onResult(int rst) {
-                    EMLog.d("HWHMSPush", "get huawei hms push token result code:" + rst);
                 }
             });
         }

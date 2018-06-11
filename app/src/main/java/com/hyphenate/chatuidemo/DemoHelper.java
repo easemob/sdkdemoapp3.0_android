@@ -222,9 +222,7 @@ public class DemoHelper {
         //you need apply & set your own id if you want to use Mi push notification
         options.setMipushConfig("2882303761517426801", "5381742660801");
         // 设置是否使用 fcm，有些华为设备本身带有 google 服务，
-        if (demoModel.isUseFCM()) {
-            options.setUseFCM(demoModel.isUseFCM());
-        }
+        options.setUseFCM(demoModel.isUseFCM());
 
         //set custom servers, commonly used in private deployment
         if(demoModel.isCustomServerEnable() && demoModel.getRestServer() != null && demoModel.getIMServer() != null) {
