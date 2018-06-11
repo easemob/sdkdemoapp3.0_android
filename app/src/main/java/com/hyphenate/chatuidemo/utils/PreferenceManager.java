@@ -63,6 +63,8 @@ public class PreferenceManager {
 	private static String SHARED_KEY_CALL_FRONT_CAMERA_RESOLUTION = "SHARED_KEY_FRONT_CAMERA_RESOLUTIOIN";
 	private static String SHARED_KEY_CALL_FIX_SAMPLE_RATE = "SHARED_KEY_CALL_FIX_SAMPLE_RATE";
 
+	private static String SHARED_KEY_PUSH_USE_FCM = "shared_key_push_use_fcm";
+
 	@SuppressLint("CommitPrefEdits")
 	private PreferenceManager(Context cxt) {
 		mSharedPreferences = cxt.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -411,6 +413,15 @@ public class PreferenceManager {
 	public void setCallFixedVideoResolution(boolean enable) {
 		editor.putBoolean(SHARED_KEY_CALL_FIX_SAMPLE_RATE, enable);
 		editor.apply();
+	}
+
+	public void setUseFCM(boolean useFCM) {
+		editor.putBoolean(SHARED_KEY_PUSH_USE_FCM, useFCM);
+		editor.apply();
+	}
+
+	public boolean isUseFCM() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_PUSH_USE_FCM, false);
 	}
 
 }

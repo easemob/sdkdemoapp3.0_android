@@ -10,7 +10,10 @@ import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMPushConfigs;
+import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.DemoModel;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.widget.EaseSwitchButton;
 import com.hyphenate.easeui.widget.EaseTitleBar;
 import com.hyphenate.exceptions.HyphenateException;
 
@@ -20,9 +23,11 @@ import com.hyphenate.exceptions.HyphenateException;
 
 public class OfflinePushSettingsActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener{
     private CheckBox noDisturbOn, noDisturbOff, noDisturbInNight;
+    private EaseSwitchButton useFCMSwitch;
     private Status status = Status.OFF;
 
     EMPushConfigs mPushConfigs;
+    DemoModel settingsModel;
 
     @Override
     protected void onCreate(Bundle arg0) {
@@ -33,6 +38,7 @@ public class OfflinePushSettingsActivity extends BaseActivity implements Compoun
         noDisturbOn = (CheckBox) findViewById(R.id.cb_no_disturb_on);
         noDisturbOff = (CheckBox) findViewById(R.id.cb_no_disturb_off);
         noDisturbInNight = (CheckBox) findViewById(R.id.cb_no_disturb_only_night);
+        useFCMSwitch = (EaseSwitchButton) findViewById(R.id.switch_use_fcm);
         Button saveButton = (Button) findViewById(R.id.btn_save);
 
         noDisturbOn.setOnCheckedChangeListener(this);
@@ -76,6 +82,27 @@ public class OfflinePushSettingsActivity extends BaseActivity implements Compoun
                         }
                     }
                 }).start();
+            }
+        });
+
+        settingsModel = DemoHelper.getInstance().getModel();
+        if (settingsModel.isUseFCM()) {
+            useFCMSwitch.openSwitch();
+        } else {
+            useFCMSwitch.closeSwitch();
+        }
+        useFCMSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (EMClient.getInstance().getOptions().isUseFCM()) {
+                    useFCMSwitch.closeSwitch();
+                    settingsModel.setUseFCM(false);
+                    EMClient.getInstance().getOptions().setUseFCM(false);
+                } else {
+                    useFCMSwitch.openSwitch();
+                    settingsModel.setUseFCM(true);
+                    EMClient.getInstance().getOptions().setUseFCM(true);
+                }
             }
         });
 
