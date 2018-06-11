@@ -36,10 +36,11 @@ public class DemoApplication extends Application {
         applicationContext = this;
         instance = this;
 
-        // 初始化华为 HMS 推送服务
-		HMSPushHelper.getInstance().initHMSAgent(instance);
 		//init demo helper
         DemoHelper.getInstance().init(applicationContext);
+
+		// 初始化华为 HMS 推送服务
+		HMSPushHelper.getInstance().initHMSAgent(instance);
 	}
 
 	public static DemoApplication getInstance() {

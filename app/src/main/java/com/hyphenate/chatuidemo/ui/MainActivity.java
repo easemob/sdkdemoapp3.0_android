@@ -144,8 +144,7 @@ public class MainActivity extends BaseActivity {
         registerInternalDebugReceiver();
 
 		// 获取华为 HMS 推送 token
-		HMSPushHelper.getInstance().connectHMS(this);
-		HMSPushHelper.getInstance().getHMSPushToken();
+		HMSPushHelper.getInstance().getHMSToken(this);
 	}
 
 	EMClientListener clientListener = new EMClientListener() {

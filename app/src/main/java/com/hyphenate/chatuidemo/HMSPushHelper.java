@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.huawei.android.hms.agent.HMSAgent;
 import com.huawei.android.hms.agent.common.handler.ConnectHandler;
 import com.huawei.android.hms.agent.push.handler.GetTokenHandler;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.EMLog;
 
 import java.lang.reflect.Method;
@@ -35,6 +36,9 @@ public class HMSPushHelper {
      * 初始化华为 HMS 推送服务
      */
     public void initHMSAgent(Application application){
+        if (EMClient.getInstance().isUseFCM()) {
+            return;
+        }
         try {
             if(Class.forName("com.huawei.hms.support.api.push.HuaweiPush") != null){
                 Class<?> classType = Class.forName("android.os.SystemProperties");
@@ -57,30 +61,24 @@ public class HMSPushHelper {
     }
 
     /**
-     * 连接华为移动服务
+     * 连接华为移动服务，并获取华为推送
+     * 注册华为推送 token 通用错误码列表
+     * http://developer.huawei.com/consumer/cn/service/hms/catalog/huaweipush_agent.html?page=hmssdk_huaweipush_api_reference_errorcode
      */
-    public void connectHMS(Activity activity){
+    public void getHMSToken(Activity activity){
         if (isUseHMSPush) {
             HMSAgent.connect(activity, new ConnectHandler() {
                 @Override
                 public void onConnect(int rst) {
                     EMLog.d("HWHMSPush", "huawei hms push connect result code:" + rst);
-                }
-            });
-        }
-    }
-
-    /**
-     * 获取华为推送
-     * 注册华为推送 token 通用错误码列表
-     * http://developer.huawei.com/consumer/cn/service/hms/catalog/huaweipush_agent.html?page=hmssdk_huaweipush_api_reference_errorcode
-     */
-    public void getHMSPushToken(){
-        if (isUseHMSPush) {
-            HMSAgent.Push.getToken(new GetTokenHandler() {
-                @Override
-                public void onResult(int rst) {
-                    EMLog.d("HWHMSPush", "get huawei hms push token result code:" + rst);
+                    if (rst == HMSAgent.AgentResultCode.HMSAGENT_SUCCESS) {
+                        HMSAgent.Push.getToken(new GetTokenHandler() {
+                            @Override
+                            public void onResult(int rst) {
+                                EMLog.d("HWHMSPush", "get huawei hms push token result code:" + rst);
+                            }
+                        });
+                    }
                 }
             });
         }

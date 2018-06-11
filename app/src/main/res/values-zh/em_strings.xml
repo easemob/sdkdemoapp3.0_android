@@ -86,6 +86,7 @@
     <string name="chatset">聊天设置</string>
     <string name="yangshengqi">使用扬声器播放语音</string>
     <string name="push_settings">消息推送设置</string>
+    <string name="push_use_fcm">消息推送使用 FCM</string>
     <string name="book_black">通讯录黑名单</string>
     <string name="set_custom_appkey">自定义App key</string>
     <string name="set_custom_server">自定义server</string>
