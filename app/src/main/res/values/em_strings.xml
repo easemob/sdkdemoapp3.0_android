@@ -448,4 +448,6 @@
     <string name="tips_select_contacts_first">Select contacts first ~</string>
 
     <string name="tips_desk_share">You\'re sharing screen</string>
+
+    <string name="alert_window_permission_denied">This app don\'t be granted ALERT_WINDOW permission :(</string>
 </resources>

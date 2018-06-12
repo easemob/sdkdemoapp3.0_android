@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -57,6 +59,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private final String TAG = this.getClass().getSimpleName();
 
     private final int REQUEST_CODE_INVITE = 1001;
+    private final int REQUEST_CODE_OVERLAY_PERMISSION = 1002;
 
     private ConferenceActivity activity;
     private EMConferenceListener conferenceListener;
@@ -170,8 +173,14 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // NOTE: 下方逻辑必须放在当前方法中,放到onStart()或onResume()中当在Android 6.0以上设备中显示悬浮窗时会有问题
+
+        // 当前Activity的launch mode为SingleTask,且有独立的activity任务栈,start当前activity时如果当前activity已经存在
+        // 于当前activity所需的任务栈中,则当前activity#onCreate()方法不会被调用,Activity#onNewIntent()会被调用.
+        // 当前Activity启动其他activity,若其他activity#finish()又回到当前activity,则onNewIntent()不会被调用.
+
         if (windowStream != null) {
             // 从window状态进入activity.
             if (!windowStream.isVideoOff()) {
@@ -190,7 +199,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         // 防止activity在后台被start至前台导致window还存在
         CallFloatWindow.getInstance(getApplicationContext()).dismiss();
         DeskShareWindow.getInstance(getApplicationContext()).dismiss();
+    }
 
+    @Override
+    protected void onResume() {
+        EMLog.i(TAG, "onResume: ");
+        super.onResume();
         // 注册home-key receiver
         registerHomeKeyWatcher();
     }
@@ -613,6 +627,17 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        EMLog.i(TAG, "onActivityResult: " + requestCode + ", result code: " + resultCode);
+        if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Result of window permission request, resultCode = RESULT_CANCELED
+            if (Settings.canDrawOverlays(activity)) {
+                doShowFloatWindow();
+            } else {
+                Toast.makeText(activity, getString(R.string.alert_window_permission_denied), Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+
         if (resultCode == RESULT_OK) {
             if (requestCode == ScreenCaptureManager.RECORD_REQUEST_CODE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -1157,6 +1182,26 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     private void showFloatWindow() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(activity)) {
+                doShowFloatWindow();
+            } else { // To reqire the window permission.
+                try {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                    // Add this to open the management GUI specific to this app.
+                    intent.setData(Uri.parse("package:" + activity.getPackageName()));
+                    activity.startActivityForResult(intent, REQUEST_CODE_OVERLAY_PERMISSION);
+                    // Handle the permission require result in #onActivityResult();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            doShowFloatWindow();
+        }
+    }
+
+    private void doShowFloatWindow() {
         if (screenShareSwitch.isActivated()) { // 已开启桌面共享,显示桌面共享window
             DeskShareWindow.getInstance(getApplicationContext()).show();
         } else { // 显示通话悬浮窗

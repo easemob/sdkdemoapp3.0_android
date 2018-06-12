@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
@@ -72,7 +73,7 @@ public class CallFloatWindow {
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         layoutParams.format = PixelFormat.TRANSPARENT;
-        layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        layoutParams.type = EaseCompat.getSupportedWindowType();
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
 
         floatView = LayoutInflater.from(context).inflate(R.layout.em_widget_call_float_window, null);

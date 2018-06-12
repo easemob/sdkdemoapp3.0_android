@@ -33,6 +33,10 @@ public class StartServiceReceiver extends BroadcastReceiver{
 		EMLog.d("boot", "start IM service on boot");
 		Intent startServiceIntent=new Intent(context, EMChatService.class);
 		startServiceIntent.putExtra("reason", "boot");
-		context.startService(startServiceIntent);
+		try {
+			context.startService(startServiceIntent);
+		} catch (Exception e) {
+			EMLog.d("EMMonitorReceiver", "exception in start service, e: " + e.getMessage());
+		}
 	}
 }

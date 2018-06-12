@@ -446,4 +446,6 @@
     <string name="tips_select_contacts_first">请先选择联系人 ~</string>
 
     <string name="tips_desk_share">你正在共享当前桌面</string>
+
+    <string name="alert_window_permission_denied">当前App未被授予悬浮窗权限 :(</string>
 </resources>

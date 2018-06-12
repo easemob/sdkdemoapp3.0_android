@@ -222,9 +222,9 @@ public class MainActivity extends BaseActivity {
 		@Override
 		public void onMessageReceived(List<EMMessage> messages) {
 			// notify new message
-		    for (EMMessage message : messages) {
-		        DemoHelper.getInstance().getNotifier().onNewMsg(message);
-		    }
+			for (EMMessage message: messages) {
+				DemoHelper.getInstance().getNotifier().vibrateAndPlayTone(message);
+			}
 			refreshUIWithMessage();
 		}
 		
@@ -439,13 +439,13 @@ public class MainActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onStop() {
+	protected void onPause() {
+		super.onPause();
+
 		EMClient.getInstance().chatManager().removeMessageListener(messageListener);
 		EMClient.getInstance().removeClientListener(clientListener);
 		DemoHelper sdkHelper = DemoHelper.getInstance();
 		sdkHelper.popActivity(this);
-
-		super.onStop();
 	}
 
 	@Override
