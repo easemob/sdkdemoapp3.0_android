@@ -36,7 +36,7 @@ public class HMSPushHelper {
      * 初始化华为 HMS 推送服务
      */
     public void initHMSAgent(Application application){
-        if (EMClient.getInstance().isUseFCM()) {
+        if (EMClient.getInstance().isFCMAvailable()) {
             return;
         }
         try {

@@ -421,7 +421,7 @@ public class PreferenceManager {
 	}
 
 	public boolean isUseFCM() {
-		return mSharedPreferences.getBoolean(SHARED_KEY_PUSH_USE_FCM, false);
+		return mSharedPreferences.getBoolean(SHARED_KEY_PUSH_USE_FCM, true);
 	}
 
 }
