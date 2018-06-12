@@ -315,6 +315,14 @@ public class DemoModel {
         return PreferenceManager.getInstance().getCustomAppkey();
     }
 
+    public void setUseFCM(boolean useFCM) {
+        PreferenceManager.getInstance().setUseFCM(useFCM);
+    }
+
+    public boolean isUseFCM() {
+        return PreferenceManager.getInstance().isUseFCM();
+    }
+
     enum Key{
         VibrateAndPlayToneOn,
         VibrateOn,
