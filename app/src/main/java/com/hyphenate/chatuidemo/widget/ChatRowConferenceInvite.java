@@ -31,7 +31,7 @@ public class ChatRowConferenceInvite extends EaseChatRow {
     @Override
     protected void onSetUpView() {
         EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
-        contentvView.setText(getContext().getString(R.string.msg_conference_invite) + "-" + message.getStringAttribute(Constant.MSG_ATTR_CONF_ID, ""));
+        contentvView.setText(txtBody.getMessage());
     }
 
     @Override

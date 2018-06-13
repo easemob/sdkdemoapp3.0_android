@@ -676,7 +676,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void sendInviteMessage(String to, String extension) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
-        final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_conference_invite), to);
+        final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_conference_invite) +" - "+ conference.getConferenceId(), to);
         message.setAttribute(Constant.MSG_ATTR_CONF_ID, conference.getConferenceId());
         message.setAttribute(Constant.MSG_ATTR_CONF_PASS, conference.getPassword());
         // 扩展字段对于音视频会议不是必须的,只是增加了额外用于显示或者判断音视频会议类型的信息.
