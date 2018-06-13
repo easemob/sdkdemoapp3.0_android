@@ -190,16 +190,21 @@ class ConferenceInviteActivity : BaseActivity() {
         return results.toArray(emptyArray())
     }
 
-    class ContactsAdapter(var context: Context, var contacts: ArrayList<KV<String, Int>>) : BaseAdapter() {
+    class ContactsAdapter(var context: Context, private var contacts: ArrayList<KV<String, Int>>) : BaseAdapter() {
         interface ICheckItemChangeCallback {
             fun onCheckedItemChanged(v: View, username: String, state: Int)
         }
 
-        private var contactFilter: ContactFilter? = null
         var checkItemChangeCallback: ICheckItemChangeCallback? = null
+        private var contactFilter: ContactFilter? = null
+        private val filteredContacts = ArrayList<KV<String, Int>>()
 
         companion object {
             val TAG = "ContactsAdapter"
+        }
+
+        init {
+            filteredContacts.addAll(contacts)
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -217,7 +222,7 @@ class ConferenceInviteActivity : BaseActivity() {
             viewHolder!!.reset()
 
             // Handle viewHolder.
-            val contact = contacts[position]
+            val contact = filteredContacts[position]
             val username = contact.first
 
             EaseUserUtils.setUserAvatar(context, username, viewHolder.headerImage!!)
@@ -252,7 +257,7 @@ class ConferenceInviteActivity : BaseActivity() {
         }
 
         override fun getItem(position: Int): Any {
-            return contacts[position]
+            return filteredContacts[position]
         }
 
         override fun getItemId(position: Int): Long {
@@ -260,7 +265,17 @@ class ConferenceInviteActivity : BaseActivity() {
         }
 
         override fun getCount(): Int {
-            return contacts.size
+            return filteredContacts.size
+        }
+
+        override fun notifyDataSetChanged() {
+            filteredContacts.clear()
+            filteredContacts.addAll(contacts)
+            notifyActual()
+        }
+
+        private fun notifyActual() {
+            super.notifyDataSetChanged()
         }
 
         fun filter(constraint: CharSequence?) {
@@ -272,10 +287,10 @@ class ConferenceInviteActivity : BaseActivity() {
                     constraint,
                     object : ContactFilter.IFilterCallback {
                         override fun onFilter(filtered: List<KV<String, Int>>) {
-                            contacts.clear()
-                            contacts.addAll(filtered)
+                            filteredContacts.clear()
+                            filteredContacts.addAll(filtered)
                             if (filtered.isNotEmpty()) {
-                                notifyDataSetChanged()
+                                notifyActual()
                             } else {
                                 notifyDataSetInvalidated()
                             }
@@ -352,7 +367,8 @@ class ConferenceInviteActivity : BaseActivity() {
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                filterCallback?.onFilter(results!!.values as List<KV<String, Int>>)
+                val result = if (results!!.values != null) results!!.values as List<KV<String, Int>> else emptyList()
+                filterCallback?.onFilter(result)
             }
         }
     }
