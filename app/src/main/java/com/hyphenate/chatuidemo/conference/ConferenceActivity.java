@@ -1026,14 +1026,16 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     @Override
-    public void onPassiveLeave(final int error, final String message) {
+    public void onPassiveLeave(final int error, final String message) { // 当前用户被踢出会议
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(activity, "Passive exit " + error + ", message" + message, Toast.LENGTH_SHORT).show();
-                // 当前用户被踢出会议,如果显示了悬浮窗,隐藏
+                // 隐藏悬浮窗
                 CallFloatWindow.getInstance(getApplicationContext()).dismiss();
                 DeskShareWindow.getInstance(getApplicationContext()).dismiss();
+                // 退出当前界面
+                finish();
             }
         });
     }

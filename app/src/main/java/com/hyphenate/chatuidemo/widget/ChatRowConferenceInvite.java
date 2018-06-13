@@ -3,12 +3,14 @@ package com.hyphenate.chatuidemo.widget;
 import android.content.Context;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRow;
 
-public class ChatRowConferenceInvite extends EaseChatRow{
+public class ChatRowConferenceInvite extends EaseChatRow {
 
     private TextView contentvView;
 
@@ -29,7 +31,7 @@ public class ChatRowConferenceInvite extends EaseChatRow{
     @Override
     protected void onSetUpView() {
         EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
-        contentvView.setText(R.string.msg_conference_invite);
+        contentvView.setText(getContext().getString(R.string.msg_conference_invite) + "-" + message.getStringAttribute(Constant.MSG_ATTR_CONF_ID, ""));
     }
 
     @Override
