@@ -24,6 +24,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
+import com.hyphenate.chatuidemo.DemoModel;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.domain.EmojiconExampleGroupData;
@@ -81,6 +82,11 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState,
                 DemoHelper.getInstance().getModel().isMsgRoaming() && (chatType != EaseConstant.CHATTYPE_CHATROOM));
+    }
+
+    @Override
+    protected boolean turnOnTyping() {
+        return DemoHelper.getInstance().getModel().isShowMsgTyping();
     }
 
     @Override
