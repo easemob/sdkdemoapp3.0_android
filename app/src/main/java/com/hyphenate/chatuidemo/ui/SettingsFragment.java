@@ -101,6 +101,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	private LinearLayout   ll_call_option;
 	private LinearLayout   ll_multi_device;
 	private RelativeLayout rl_mail_log;
+	// show "during typing" layout
+	private RelativeLayout rl_msg_typing;
 
 	/**
 	 * Diagnose
@@ -124,6 +126,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	private EaseSwitchButton customServerSwitch;
 	private EaseSwitchButton customAppkeySwitch;
 	private EaseSwitchButton switch_msg_Roaming;
+    // show "during typing" switcher
+    private EaseSwitchButton switch_msg_typing;
     private DemoModel settingsModel;
     private EMOptions chatOptions;
 	private EditText edit_custom_appkey;
@@ -158,6 +162,8 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		ll_multi_device = (LinearLayout) getView().findViewById(R.id.ll_multi_device_management);
 
 		rl_mail_log = (RelativeLayout) getView().findViewById(R.id.rl_mail_log);
+
+		rl_msg_typing = getView().findViewById(R.id.rl_msg_typing);
 		
 		notifySwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_notification);
 		soundSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_sound);
@@ -170,6 +176,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		switch_auto_accept_group_invitation = (EaseSwitchButton) getView().findViewById(R.id.switch_auto_accept_group_invitation);
 		switch_adaptive_video_encode = (EaseSwitchButton) getView().findViewById(R.id.switch_adaptive_video_encode);
 		switch_msg_Roaming = (EaseSwitchButton) getView().findViewById(R.id.switch_msg_roaming);
+		switch_msg_typing = getView().findViewById(R.id.switch_msg_typing);
 
 		logoutBtn = (Button) getView().findViewById(R.id.btn_logout);
 		if(!TextUtils.isEmpty(EMClient.getInstance().getCurrentUser())){
@@ -214,6 +221,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		ll_multi_device.setOnClickListener(this);
 		rl_mail_log.setOnClickListener(this);
 		rl_msg_roaming.setOnClickListener(this);
+		rl_msg_typing.setOnClickListener(this);
 
 		// Add by zhangsong for service check.
 		getView().findViewById(R.id.ll_service_check).setOnClickListener(this);
@@ -302,6 +310,12 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			switch_msg_Roaming.openSwitch();
 		} else {
 			switch_msg_Roaming.closeSwitch();
+		}
+
+		if (settingsModel.isShowMsgTyping()) {
+			switch_msg_typing.openSwitch();
+		} else {
+			switch_msg_typing.closeSwitch();
 		}
 
 		edit_custom_appkey.setEnabled(settingsModel.isCustomAppkeyEnabled());
@@ -496,6 +510,15 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 				break;
 			case R.id.ll_service_check:
 				startActivity(new Intent(getActivity(), ServiceCheckActivity.class));
+				break;
+			case R.id.rl_msg_typing:
+				if (switch_msg_typing.isSwitchOpen()) {
+					switch_msg_typing.closeSwitch();
+					settingsModel.showMsgTyping(false);
+				} else {
+					switch_msg_typing.openSwitch();
+					settingsModel.showMsgTyping(true);
+				}
 				break;
 			default:
 				break;

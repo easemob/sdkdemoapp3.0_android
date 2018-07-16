@@ -54,6 +54,7 @@ public class PreferenceManager {
 	private static String SHARED_KEY_ENABLE_CUSTOM_APPKEY = "SHARED_KEY_ENABLE_CUSTOM_APPKEY";
 	private static String SHARED_KEY_CUSTOM_APPKEY = "SHARED_KEY_CUSTOM_APPKEY";
 	private static String SHARED_KEY_MSG_ROAMING = "SHARED_KEY_MSG_ROAMING";
+	private static String SHARED_KEY_SHOW_MSG_TYPING = "SHARED_KEY_SHOW_MSG_TYPING";
 
 	private static String SHARED_KEY_CALL_MIN_VIDEO_KBPS = "SHARED_KEY_CALL_MIN_VIDEO_KBPS";
 	private static String SHARED_KEY_CALL_MAX_VIDEO_KBPS = "SHARED_KEY_CALL_Max_VIDEO_KBPS";
@@ -310,6 +311,15 @@ public class PreferenceManager {
 
 	public void setMsgRoaming(boolean isRoaming) {
 		editor.putBoolean(SHARED_KEY_MSG_ROAMING, isRoaming);
+		editor.apply();
+	}
+
+	public boolean isShowMsgTyping() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_SHOW_MSG_TYPING, false);
+	}
+
+	public void showMsgTyping(boolean show) {
+		editor.putBoolean(SHARED_KEY_SHOW_MSG_TYPING, show);
 		editor.apply();
 	}
 

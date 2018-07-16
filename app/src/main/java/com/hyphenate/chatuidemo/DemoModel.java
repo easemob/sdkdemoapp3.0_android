@@ -311,6 +311,14 @@ public class DemoModel {
         PreferenceManager.getInstance().setMsgRoaming(roaming);
     }
 
+    public boolean isShowMsgTyping() {
+        return PreferenceManager.getInstance().isShowMsgTyping();
+    }
+
+    public void showMsgTyping(boolean show) {
+        PreferenceManager.getInstance().showMsgTyping(show);
+    }
+
     public String getCutomAppkey() {
         return PreferenceManager.getInstance().getCustomAppkey();
     }
