@@ -41,6 +41,7 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.DemoModel;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
+import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.easeui.widget.EaseSwitchButton;
 import com.hyphenate.util.EMLog;
 
@@ -611,7 +612,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 
 				intent.setType("application/octet-stream");
 				ArrayList<Uri> uris = new ArrayList<>();
-				uris.add(Uri.fromFile(temp));
+				uris.add(EaseCompat.getUriForFile(getContext(), temp));
 				intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,uris);
 				startActivity(intent);
 			} catch (final Exception e) {
