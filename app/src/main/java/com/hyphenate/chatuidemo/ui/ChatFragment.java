@@ -27,9 +27,11 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.DemoModel;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.conference.ConferenceActivity;
+import com.hyphenate.chatuidemo.conference.LiveActivity;
 import com.hyphenate.chatuidemo.domain.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.domain.RobotUser;
 import com.hyphenate.chatuidemo.widget.ChatRowConferenceInvitePresenter;
+import com.hyphenate.chatuidemo.widget.ChatRowLivePresenter;
 import com.hyphenate.chatuidemo.widget.EaseChatRecallPresenter;
 import com.hyphenate.chatuidemo.widget.EaseChatVoiceCallPresenter;
 import com.hyphenate.easeui.EaseConstant;
@@ -58,6 +60,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int ITEM_VOICE_CALL = 13;
     private static final int ITEM_VIDEO_CALL = 14;
     private static final int ITEM_CONFERENCE_CALL = 15;
+    private static final int ITEM_LIVE = 16;
 
     private static final int REQUEST_CODE_SELECT_VIDEO = 11;
     private static final int REQUEST_CODE_SELECT_FILE = 12;
@@ -71,6 +74,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
     private static final int MESSAGE_TYPE_SENT_VIDEO_CALL = 3;
     private static final int MESSAGE_TYPE_RECV_VIDEO_CALL = 4;
     private static final int MESSAGE_TYPE_CONFERENCE_INVITE = 5;
+    private static final int MESSAGE_TYPE_LIVE_INVITE = 6;
     private static final int MESSAGE_TYPE_RECALL = 9;
 
     /**
@@ -146,6 +150,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             inputMenu.registerExtendMenuItem(R.string.attach_video_call, R.drawable.em_chat_video_call_selector, ITEM_VIDEO_CALL, extendMenuItemClickListener);
         } else if (chatType == Constant.CHATTYPE_GROUP) { // 音视频会议
             inputMenu.registerExtendMenuItem(R.string.voice_and_video_conference, R.drawable.em_chat_video_call_selector, ITEM_CONFERENCE_CALL, extendMenuItemClickListener);
+            inputMenu.registerExtendMenuItem(R.string.title_live, R.drawable.em_chat_video_call_selector, ITEM_LIVE, extendMenuItemClickListener);
         }
     }
     
@@ -334,6 +339,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         case ITEM_CONFERENCE_CALL:
             ConferenceActivity.startConferenceCall(getActivity(), toChatUsername);
             break;
+        case ITEM_LIVE:
+            LiveActivity.startLive(getContext(), toChatUsername);
+            break;
         default:
             break;
         }
@@ -432,6 +440,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     return presenter;
                 } else if (!"".equals(message.getStringAttribute(Constant.MSG_ATTR_CONF_ID,""))) {
                     return new ChatRowConferenceInvitePresenter();
+                } else if ("invite".equals(message.getStringAttribute("em_conference_op", ""))) {
+                    return new ChatRowLivePresenter();
                 }
             }
             return null;

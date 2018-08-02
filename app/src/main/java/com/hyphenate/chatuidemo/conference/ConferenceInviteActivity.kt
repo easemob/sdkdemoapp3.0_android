@@ -20,6 +20,7 @@ import com.hyphenate.chatuidemo.ui.BaseActivity
 import com.hyphenate.easeui.utils.EaseUserUtils
 import com.hyphenate.exceptions.HyphenateException
 import com.hyphenate.util.EMLog
+import com.superrtc.mediamanager.EMediaEntities
 
 /**
  * Created by zhangsong on 18-4-18.
@@ -39,6 +40,7 @@ class ConferenceInviteActivity : BaseActivity() {
     private var contactAdapter: ContactsAdapter? = null
     // Kotlin List is a Read-only list.
     private var contacts: ArrayList<KV<String, Int>> = ArrayList()
+    private lateinit var existMembers: List<EMediaEntities.EMediaMember>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,7 +124,7 @@ class ConferenceInviteActivity : BaseActivity() {
 
     private fun initData() {
         // Already in conference member list.
-        val existMembers = EMClient.getInstance().conferenceManager().conferenceMemberList
+        existMembers = EMClient.getInstance().conferenceManager().conferenceMemberList
 
         val groupId = intent.getStringExtra(Constant.EXTRA_CONFERENCE_GROUP_ID)
         val contactList: ArrayList<String> = ArrayList()
@@ -163,7 +165,7 @@ class ConferenceInviteActivity : BaseActivity() {
                                     and (it != EMClient.getInstance().currentUser))
                         }
                         .forEach {
-                            if (existMembers?.contains(it) == true) {
+                            if (memberContains(it) != null) {
                                 contacts.add(KV(it, STATE_CHECKED_UNCHANGEABLE))
                             } else {
                                 contacts.add(KV(it, STATE_UNCHECKED))
@@ -188,6 +190,15 @@ class ConferenceInviteActivity : BaseActivity() {
                 }
 
         return results.toArray(emptyArray())
+    }
+
+    private fun memberContains(name: String): EMediaEntities.EMediaMember? {
+        for (item in existMembers) {
+            if (item.memberName == name) {
+                return item
+            }
+        }
+        return null
     }
 
     class ContactsAdapter(var context: Context, private var contacts: ArrayList<KV<String, Int>>) : BaseAdapter() {
