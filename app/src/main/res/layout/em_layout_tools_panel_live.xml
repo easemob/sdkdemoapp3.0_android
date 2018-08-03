@@ -77,6 +77,11 @@
                 android:id="@+id/btn_change_camera_switch"
                 style="@style/style_call_tools_panel_button"
                 android:src="@drawable/em_call_camera_toggle" />
+
+            <ImageView
+                android:id="@+id/btn_change_camera_switch_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
@@ -85,6 +90,11 @@
                 android:id="@+id/btn_mic_switch"
                 style="@style/style_call_tools_panel_button"
                 android:src="@drawable/em_call_mic" />
+
+            <ImageView
+                android:id="@+id/btn_mic_switch_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
@@ -93,6 +103,11 @@
                 android:id="@+id/btn_camera_switch"
                 style="@style/style_call_tools_panel_button"
                 android:src="@drawable/em_call_video" />
+
+            <ImageView
+                android:id="@+id/btn_camera_switch_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
@@ -119,8 +134,12 @@
             <ImageButton
                 android:id="@+id/btn_desk_share"
                 style="@style/style_call_tools_panel_button"
-                android:src="@drawable/em_call_desk_share"
-                android:background="#3f3f3f" />
+                android:src="@drawable/em_call_desk_share" />
+
+            <ImageView
+                android:id="@+id/btn_desk_share_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
@@ -128,16 +147,26 @@
             <ImageButton
                 android:id="@+id/btn_debug"
                 style="@style/style_call_tools_panel_button"
-                android:src="@drawable/em_call_debug"
-                android:background="#3f3f3f" />
+                android:src="@drawable/em_call_debug" />
+
+            <ImageView
+                android:id="@+id/btn_debug_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
         </RelativeLayout>
 
         <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
 
             <ImageButton
-                android:id="@+id/btn_invite"
+                android:id="@+id/btn_request_connect"
                 style="@style/style_call_tools_panel_button"
-                android:src="@drawable/em_call_invite" />
+                android:src="@drawable/em_call_request_connect" />
+
+            <ImageView
+                android:id="@+id/btn_request_connect_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F"
+                android:visibility="gone" />
         </RelativeLayout>
     </LinearLayout>
 
