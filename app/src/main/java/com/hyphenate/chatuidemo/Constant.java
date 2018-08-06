@@ -39,4 +39,14 @@ public class Constant extends EaseConstant{
 	public static final String MSG_ATTR_CONF_PASS = EXTRA_CONFERENCE_PASS;
 	public static final String MSG_ATTR_EXTENSION = "msg_extension";
 
+	public static final String EM_CONFERENCE_OP = "em_conference_op";
+	public static final String EM_CONFERENCE_ID = "em_conference_id";
+	public static final String EM_CONFERENCE_PASSWORD = "em_conference_password";
+	public static final String EM_CONFERENCE_TYPE = "em_conference_type";
+	public static final String EM_MEMBER_NAME = "em_member_name";
+
+	public static final String OP_INVITE = "invite";
+	public static final String OP_REQUEST_TOBE_SPEAKER = "request_tobe_speaker";
+	public static final String OP_REQUEST_TOBE_AUDIENCE = "request_tobe_audience";
+
 }

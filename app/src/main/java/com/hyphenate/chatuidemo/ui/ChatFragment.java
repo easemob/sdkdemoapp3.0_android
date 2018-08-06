@@ -440,7 +440,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     return presenter;
                 } else if (!"".equals(message.getStringAttribute(Constant.MSG_ATTR_CONF_ID,""))) {
                     return new ChatRowConferenceInvitePresenter();
-                } else if ("invite".equals(message.getStringAttribute("em_conference_op", ""))) {
+                } else if (Constant.OP_INVITE.equals(message.getStringAttribute(Constant.EM_CONFERENCE_OP, ""))) {
                     return new ChatRowLivePresenter();
                 }
             }

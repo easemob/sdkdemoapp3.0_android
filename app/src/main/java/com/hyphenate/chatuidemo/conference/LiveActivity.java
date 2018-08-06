@@ -260,9 +260,9 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                     if (currentRole == EMConferenceManager.EMConferenceRole.Admin) return;
 
                     if (currentRole == EMConferenceManager.EMConferenceRole.Audience) { // 申请上麦
-                        sendRequestMessage(inviter, "request_tobe_speaker");
+                        sendRequestMessage(inviter, Constant.OP_REQUEST_TOBE_SPEAKER);
                     } else if (currentRole == EMConferenceManager.EMConferenceRole.Talker) { // 申请下麦
-                        sendRequestMessage(inviter, "request_tobe_audience");
+                        sendRequestMessage(inviter, Constant.OP_REQUEST_TOBE_AUDIENCE);
                     }
                     break;
                 case R.id.btn_mic_switch:
@@ -532,10 +532,10 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
     private void sendInviteMessage(String to, boolean isGroupChat) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
         final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_live_invite) + " - " + conference.getConferenceId(), to);
-        message.setAttribute("em_conference_op", "invite");
-        message.setAttribute("em_conference_id", conference.getConferenceId());
-        message.setAttribute("em_conference_password", conference.getPassword());
-        message.setAttribute("em_conference_type", conference.getConferenceType().code);
+        message.setAttribute(Constant.EM_CONFERENCE_OP, Constant.OP_INVITE);
+        message.setAttribute(Constant.EM_CONFERENCE_ID, conference.getConferenceId());
+        message.setAttribute(Constant.EM_CONFERENCE_PASSWORD, conference.getPassword());
+        message.setAttribute(Constant.EM_CONFERENCE_TYPE, conference.getConferenceType().code);
         if (isGroupChat) {
             message.setChatType(EMMessage.ChatType.GroupChat);
         }
@@ -564,9 +564,11 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
 
     private void sendRequestMessage(String to, String op) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
-        final EMMessage message = EMMessage.createTxtSendMessage(" ", to);
-        message.setAttribute("em_conference_op", op);
-        message.setAttribute("em_member_name", EasyUtils.getMediaRequestUid(EMClient.getInstance().getOptions().getAppKey(), EMClient.getInstance().getCurrentUser()));
+        final EMMessage message = EMMessage.createTxtSendMessage(EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_talker), to);
+        message.setAttribute(Constant.EM_CONFERENCE_OP, op);
+        message.setAttribute(Constant.EM_CONFERENCE_ID, conference.getConferenceId());
+        message.setAttribute(Constant.EM_CONFERENCE_PASSWORD, conference.getPassword());
+        message.setAttribute(Constant.EM_MEMBER_NAME, EasyUtils.getMediaRequestUid(EMClient.getInstance().getOptions().getAppKey(), EMClient.getInstance().getCurrentUser()));
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -1037,13 +1039,13 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
             @Override
             public void onMessageReceived(List<EMMessage> messages) {
                 for (EMMessage msg : messages) {
-                    String op = msg.getStringAttribute("em_conference_op", "");
-                    if ("request_tobe_speaker".equals(op)) {
+                    String op = msg.getStringAttribute(Constant.EM_CONFERENCE_OP, "");
+                    if (Constant.OP_REQUEST_TOBE_SPEAKER.equals(op)) {
                         // 把该申请上线消息从会话中删除
                         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(msg.getFrom(), EMConversation.EMConversationType.Chat, true);
                         conversation.removeMessage(msg.getMsgId());
 
-                        final String jid = msg.getStringAttribute("em_member_name", "");
+                        final String jid = msg.getStringAttribute(Constant.EM_MEMBER_NAME, "");
                         final String content = EasyUtils.useridFromJid(jid) + " " + getString(R.string.alert_request_tobe_talker);
 
                         runOnUiThread(new Runnable() {
@@ -1083,12 +1085,12 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                                 }
                             }
                         });
-                    } else if ("request_tobe_audience".equals(op)) {
+                    } else if (Constant.OP_REQUEST_TOBE_AUDIENCE.equals(op)) {
                         // 把该申请下线消息从会话中删除
                         EMConversation conversation = EMClient.getInstance().chatManager().getConversation(msg.getFrom(), EMConversation.EMConversationType.Chat, true);
                         conversation.removeMessage(msg.getMsgId());
 
-                        String jid = msg.getStringAttribute("em_member_name", "");
+                        String jid = msg.getStringAttribute(Constant.EM_MEMBER_NAME, "");
                         // changeRole.
                         EMClient.getInstance().conferenceManager().grantRole(""
                                 , new EMConferenceMember(jid, null, null)
