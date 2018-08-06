@@ -23,12 +23,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConference;
 import com.hyphenate.chat.EMConferenceManager;
+import com.hyphenate.chat.EMConferenceMember;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -41,7 +43,6 @@ import com.hyphenate.chatuidemo.ui.BaseActivity;
 import com.hyphenate.chatuidemo.widget.EasePageIndicator;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
-import com.superrtc.mediamanager.EMediaEntities;
 import com.superrtc.mediamanager.ScreenCaptureManager;
 import com.superrtc.sdk.VideoView;
 
@@ -941,7 +942,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
 
     @Override
-    public void onMemberJoined(final EMediaEntities.EMediaMember member) {
+    public void onMemberJoined(final EMConferenceMember member) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -952,7 +953,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     @Override
-    public void onMemberExited(final EMediaEntities.EMediaMember member) {
+    public void onMemberExited(final EMConferenceMember member) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -1147,7 +1148,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     private void updateConferenceMembers() {
-        List<EMediaEntities.EMediaMember> members = EMClient.getInstance().conferenceManager().getConferenceMemberList();
+        List<EMConferenceMember> members = EMClient.getInstance().conferenceManager().getConferenceMemberList();
         String count = members.size() > 0 ? "(" + members.size() + ")" : "";
         String membersStr = getMembersStr(members);
 
@@ -1158,7 +1159,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         memberCountTVMain.setText(count);
     }
 
-    private String getMembersStr(List<EMediaEntities.EMediaMember> members) {
+    private String getMembersStr(List<EMConferenceMember> members) {
         String result = "";
         for (int i = 0; i < members.size(); i++) {
             if (i == 0) {

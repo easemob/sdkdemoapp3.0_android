@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -22,6 +23,8 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConferenceManager;
+import com.hyphenate.chat.EMConferenceMember;
+import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
@@ -31,8 +34,6 @@ import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.EMConferenceListener;
-import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.conference.LiveActivity;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
@@ -64,7 +65,6 @@ import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
-import com.superrtc.mediamanager.EMediaEntities;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -526,12 +526,12 @@ public class DemoHelper {
             callReceiver = new CallReceiver();
         }
         EMClient.getInstance().conferenceManager().addConferenceListener(new EMConferenceListener() {
-            @Override public void onMemberJoined(EMediaEntities.EMediaMember member) {
+            @Override public void onMemberJoined(EMConferenceMember member) {
                 EMLog.i(TAG, String.format("member joined username: %s, member: %d", member.memberName,
                         EMClient.getInstance().conferenceManager().getConferenceMemberList().size()));
             }
 
-            @Override public void onMemberExited(EMediaEntities.EMediaMember member) {
+            @Override public void onMemberExited(EMConferenceMember member) {
                 EMLog.i(TAG, String.format("member exited username: %s, member size: %d", member.memberName,
                         EMClient.getInstance().conferenceManager().getConferenceMemberList().size()));
             }

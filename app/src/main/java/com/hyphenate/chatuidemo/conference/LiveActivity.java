@@ -22,6 +22,7 @@ import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConference;
 import com.hyphenate.chat.EMConferenceManager;
+import com.hyphenate.chat.EMConferenceMember;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -36,14 +37,12 @@ import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
-import com.superrtc.mediamanager.EMediaEntities;
 import com.superrtc.mediamanager.ScreenCaptureManager;
 import com.superrtc.sdk.VideoView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.TimeZone;
@@ -567,7 +566,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
         final EMMessage message = EMMessage.createTxtSendMessage(" ", to);
         message.setAttribute("em_conference_op", op);
-        message.setAttribute("em_member_name", EasyUtils.generateJid(EMClient.getInstance().getOptions().getAppKey(), EMClient.getInstance().getCurrentUser()));
+        message.setAttribute("em_member_name", EasyUtils.getMediaRequestUid(EMClient.getInstance().getOptions().getAppKey(), EMClient.getInstance().getCurrentUser()));
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -825,18 +824,17 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
      */
 
     @Override
-    public void onMemberJoined(final EMediaEntities.EMediaMember member) {
+    public void onMemberJoined(final EMConferenceMember member) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(activity, member.memberName + " joined conference!", Toast.LENGTH_SHORT).show();
-                updateConferenceMembers();
             }
         });
     }
 
     @Override
-    public void onMemberExited(final EMediaEntities.EMediaMember member) {
+    public void onMemberExited(final EMConferenceMember member) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -845,8 +843,6 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 if (EMClient.getInstance().getCurrentUser().equals(member.memberName)) {
                     videoConnectBtn.setImageResource(R.drawable.em_call_request_connect);
                 }
-
-                updateConferenceMembers();
             }
         });
     }
@@ -983,31 +979,6 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
         }
     }
 
-    private void updateConferenceMembers() {
-        List<EMediaEntities.EMediaMember> members = EMClient.getInstance().conferenceManager().getConferenceMemberList();
-        String count = members.size() > 0 ? "(" + members.size() + ")" : "";
-        String membersStr = getMembersStr(members);
-
-        membersTV.setText(membersStr);
-        memberCountTV.setText(count);
-
-        membersTVMain.setText(membersStr);
-        memberCountTVMain.setText(count);
-    }
-
-    private String getMembersStr(List<EMediaEntities.EMediaMember> members) {
-        String result = "";
-        for (int i = 0; i < members.size(); i++) {
-            if (i == 0) {
-                result += EasyUtils.useridFromJid(members.get(i).memberName);
-                continue;
-            }
-
-            result += ", " + members.get(i);
-        }
-        return result;
-    }
-
     private void setIcons(EMConferenceManager.EMConferenceRole role) {
         if (role== EMConferenceManager.EMConferenceRole.Audience) {
             changeCameraSwitchCover.setVisibility(View.VISIBLE);
@@ -1077,7 +1048,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                                         EMLog.i(TAG, "onOk");
                                         // changeRole.
                                         EMClient.getInstance().conferenceManager().grantRole(""
-                                                , new EMediaEntities.EMediaMember(jid, null, null)
+                                                , new EMConferenceMember(jid, null, null)
                                                 , EMConferenceManager.EMConferenceRole.Talker, new EMValueCallBack<String>() {
                                                     @Override
                                                     public void onSuccess(String value) {
@@ -1106,7 +1077,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                         String jid = msg.getStringAttribute("em_member_name", "");
                         // changeRole.
                         EMClient.getInstance().conferenceManager().grantRole(""
-                                , new EMediaEntities.EMediaMember(jid, null, null)
+                                , new EMConferenceMember(jid, null, null)
                                 , EMConferenceManager.EMConferenceRole.Audience, new EMValueCallBack<String>() {
                                     @Override
                                     public void onSuccess(String value) {

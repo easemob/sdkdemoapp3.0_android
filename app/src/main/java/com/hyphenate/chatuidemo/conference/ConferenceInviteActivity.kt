@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.hyphenate.chat.EMClient
+import com.hyphenate.chat.EMConferenceMember
 import com.hyphenate.chat.EMCursorResult
 import com.hyphenate.chatuidemo.Constant
 import com.hyphenate.chatuidemo.DemoHelper
@@ -40,7 +41,7 @@ class ConferenceInviteActivity : BaseActivity() {
     private var contactAdapter: ContactsAdapter? = null
     // Kotlin List is a Read-only list.
     private var contacts: ArrayList<KV<String, Int>> = ArrayList()
-    private lateinit var existMembers: List<EMediaEntities.EMediaMember>
+    private lateinit var existMembers: List<EMConferenceMember>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -192,7 +193,7 @@ class ConferenceInviteActivity : BaseActivity() {
         return results.toArray(emptyArray())
     }
 
-    private fun memberContains(name: String): EMediaEntities.EMediaMember? {
+    private fun memberContains(name: String): EMConferenceMember? {
         for (item in existMembers) {
             if (item.memberName == name) {
                 return item
