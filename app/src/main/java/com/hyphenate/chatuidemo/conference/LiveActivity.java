@@ -620,18 +620,19 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
      * 开始推自己的数据
      */
     private void publish() {
-        initLocalConferenceView();
-
-        setIcons(EMConferenceManager.EMConferenceRole.Talker);
-
         EMLog.i(TAG, "publish start, params: " + normalParam.toString());
+
+        initLocalConferenceView();
+        setIcons(EMConferenceManager.EMConferenceRole.Talker);
+        // 确保streamList中的stream跟viewGroup中的view位置对应。
+        addOrUpdateStreamList(null, "local-stream");
 
         EMClient.getInstance().conferenceManager().publish(normalParam, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
                 conference.setPubStreamId(value, EMConferenceStream.StreamType.NORMAL);
                 localView.setStreamId(value);
-                addSelfToList(value);
+                addOrUpdateStreamList("local-stream", value);
             }
 
             @Override
@@ -1011,11 +1012,24 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
         }
     }
 
-    private void addSelfToList(String streamId) {
-        EMConferenceStream localStream = new EMConferenceStream();
-        localStream.setUsername(EMClient.getInstance().getCurrentUser());
-        localStream.setStreamId(streamId);
-        streamList.add(localStream);
+    private void addOrUpdateStreamList(String originStreamId, String targetStreamId) {
+        EMConferenceStream localStream = null;
+        if (originStreamId != null) {
+            for (EMConferenceStream stream : streamList) {
+                if (originStreamId.equals(stream.getStreamId())) {
+                    localStream = stream;
+                    break;
+                }
+            }
+            if (localStream != null) {
+                localStream.setStreamId(targetStreamId);
+            }
+        } else {
+            localStream = new EMConferenceStream();
+            localStream.setUsername(EMClient.getInstance().getCurrentUser());
+            localStream.setStreamId(targetStreamId);
+            streamList.add(localStream);
+        }
     }
 
     protected void registerMessageListener() {
