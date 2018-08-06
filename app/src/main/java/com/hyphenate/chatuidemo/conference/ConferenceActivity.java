@@ -15,6 +15,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -65,6 +67,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private EMConferenceListener conferenceListener;
 
     private AudioManager audioManager;
+    private CallPhoneReceiver phoneReceiver;
 
     private EMConference conference;
     private EMStreamParam normalParam;
@@ -331,6 +334,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     break;
                 case R.id.btn_desk_share:
                     if (screenShareSwitch.isActivated()) {
+                        if (TextUtils.isEmpty(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))) {
+                            Toast.makeText(activity, R.string.desk_share_err, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         screenShareSwitch.setActivated(false);
                         unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP));
                     } else {
@@ -539,6 +546,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             public void onSuccess(final EMConference value) {
                 EMLog.e(TAG, "create and join conference success");
                 conference = value;
+                registerPhoneStateListener();
                 startAudioTalkingMonitor();
                 publish();
                 timeHandler.startTime();
@@ -577,6 +585,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             @Override
             public void onSuccess(EMConference value) {
                 conference = value;
+                registerPhoneStateListener();
                 startAudioTalkingMonitor();
                 publish();
                 timeHandler.startTime();
@@ -796,6 +805,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             if (!TextUtils.isEmpty(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))
                     && publishId.equals(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))) {
                 ScreenCaptureManager.getInstance().stop();
+                conference.setPubStreamId(null, EMConferenceStream.StreamType.DESKTOP);
             }
         }
         EMClient.getInstance().conferenceManager().unpublish(publishId, new EMValueCallBack<String>() {
@@ -928,6 +938,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     protected void onDestroy() {
         EMClient.getInstance().conferenceManager().removeConferenceListener(conferenceListener);
         DemoHelper.getInstance().popActivity(activity);
+        unregisterPhoneStateListener();
         super.onDestroy();
     }
 
@@ -1286,6 +1297,28 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 return;
             }
             super.handleMessage(msg);
+        }
+    }
+
+    /**
+     * 注册手机通话监听
+     */
+    private void registerPhoneStateListener() {
+        if (phoneReceiver == null) {
+            phoneReceiver = new CallPhoneReceiver();
+            IntentFilter phoneFilter = new IntentFilter();
+            phoneFilter.addAction("android.intent.action.PHONE_STATE");
+            registerReceiver(phoneReceiver, phoneFilter);
+        }
+    }
+
+    /**
+     * 取消注册手机通话监听
+     */
+    private void unregisterPhoneStateListener() {
+        if (phoneReceiver != null) {
+            unregisterReceiver(phoneReceiver);
+            phoneReceiver = null;
         }
     }
 }
