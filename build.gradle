@@ -17,6 +17,7 @@ buildscript {
     }
 }
 
+
 allprojects {
     repositories {
         jcenter()
@@ -41,6 +42,9 @@ ext{
     }
     if(!project.hasProperty('sdkVersion')){
         sdkVersion = '3.2.3'
+    }
+    if(!project.hasProperty('isTravis')) {
+        isTravis = false
     }
 }
 
