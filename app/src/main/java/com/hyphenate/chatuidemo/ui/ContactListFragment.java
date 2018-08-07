@@ -70,7 +70,6 @@ public class ContactListFragment extends EaseContactListFragment {
         headerView.findViewById(R.id.chat_room_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.robot_item).setOnClickListener(clickListener);
         headerView.findViewById(R.id.conference_item).setOnClickListener(clickListener);
-        headerView.findViewById(R.id.live_item).setOnClickListener(clickListener);
         listView.addHeaderView(headerView);
         //add loading view
         loadingView = LayoutInflater.from(getActivity()).inflate(R.layout.em_layout_loading_data, null);
@@ -199,9 +198,6 @@ public class ContactListFragment extends EaseContactListFragment {
                 break;
             case R.id.conference_item: // 创建音视频会议
                 ConferenceActivity.startConferenceCall(getActivity(), null);
-                break;
-            case R.id.live_item:
-                LiveActivity.startLive(getActivity(), null);
                 break;
             default:
                 break;

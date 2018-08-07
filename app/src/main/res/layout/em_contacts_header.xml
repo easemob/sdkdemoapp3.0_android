@@ -40,11 +40,4 @@
         app:contactItemImage="@drawable/em_chat_video_call_normal"
         app:contactItemName="@string/voice_and_video_conference" />
 
-    <com.hyphenate.chatuidemo.widget.ContactItemView
-        android:id="@+id/live_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:contactItemImage="@drawable/em_chat_video_call_normal"
-        app:contactItemName="@string/title_live" />
-
 </LinearLayout>
