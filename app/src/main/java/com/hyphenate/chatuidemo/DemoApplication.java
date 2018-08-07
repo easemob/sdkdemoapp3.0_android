@@ -39,7 +39,7 @@ public class DemoApplication extends Application {
 		//init demo helper
         DemoHelper.getInstance().init(applicationContext);
 
-		// 初始化华为 HMS 推送服务
+		// 初始化华为 HMS 推送服务, 需要在SDK初始化后执行
 		HMSPushHelper.getInstance().initHMSAgent(instance);
 	}
 
