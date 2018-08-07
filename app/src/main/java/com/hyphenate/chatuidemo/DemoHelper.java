@@ -8,11 +8,11 @@ import android.content.IntentFilter;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -22,6 +22,9 @@ import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConferenceManager;
+import com.hyphenate.chat.EMConferenceMember;
+import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.ChatType;
@@ -31,9 +34,8 @@ import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.EMConferenceListener;
-import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chatuidemo.conference.ConferenceActivity;
+import com.hyphenate.chatuidemo.conference.LiveActivity;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.chatuidemo.db.InviteMessgeDao;
 import com.hyphenate.chatuidemo.db.UserDao;
@@ -305,13 +307,6 @@ public class DemoHelper {
 
         // Offline call push
         EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
-
-        // 设置会议模式
-        if (PreferenceManager.getInstance().isLargeConferenceMode()) {
-            EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.LARGE);
-        }else{
-            EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.NORMAL);
-        }
     }
 
     protected void setEaseUIProviders() {
@@ -524,13 +519,13 @@ public class DemoHelper {
             callReceiver = new CallReceiver();
         }
         EMClient.getInstance().conferenceManager().addConferenceListener(new EMConferenceListener() {
-            @Override public void onMemberJoined(String username) {
-                EMLog.i(TAG, String.format("member joined username: %s, member: %d", username,
+            @Override public void onMemberJoined(EMConferenceMember member) {
+                EMLog.i(TAG, String.format("member joined username: %s, member: %d", member.memberName,
                         EMClient.getInstance().conferenceManager().getConferenceMemberList().size()));
             }
 
-            @Override public void onMemberExited(String username) {
-                EMLog.i(TAG, String.format("member exited username: %s, member size: %d", username,
+            @Override public void onMemberExited(EMConferenceMember member) {
+                EMLog.i(TAG, String.format("member exited username: %s, member size: %d", member.memberName,
                         EMClient.getInstance().conferenceManager().getConferenceMemberList().size()));
             }
 
@@ -584,6 +579,10 @@ public class DemoHelper {
                 EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
                 goConference(confId, password, extension);
             }
+
+            @Override
+            public void onRoleChanged(EMConferenceManager.EMConferenceRole role) {
+            }
         });
         //register incoming call receiver
         appContext.registerReceiver(callReceiver, callFilter);    
@@ -602,7 +601,7 @@ public class DemoHelper {
      * @param password 会议密码
      */
     public void goConference(String confId, String password, String extension) {
-        if(easeUI.hasForegroundActivies() && easeUI.getTopActivity().getClass().getSimpleName().equals("ConferenceActivity")) {
+        if(isDuringMediaCommunication()) {
             return;
         }
         String inviter = "";
@@ -618,9 +617,25 @@ public class DemoHelper {
         ConferenceActivity.receiveConferenceCall(appContext, confId, password, inviter, groupId);
     }
 
+    public void goLive(String confId, String password, String inviter) {
+        if(isDuringMediaCommunication()) {
+            return;
+        }
+
+        LiveActivity.watch(appContext, confId, password, inviter);
+    }
+
     private void initDbDao() {
         inviteMessgeDao = new InviteMessgeDao(appContext);
         userDao = new UserDao(appContext);
+    }
+
+    private boolean isDuringMediaCommunication() {
+        String topClassName = easeUI.getTopActivity().getClass().getSimpleName();
+        if (easeUI.hasForegroundActivies() && ("LiveActivity".equals(topClassName) || "ConferenceActivity".equals(topClassName))) {
+            return true;
+        }
+        return false;
     }
     
     /**

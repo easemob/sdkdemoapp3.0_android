@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="184">
+
+    <RelativeLayout
+        android:id="@+id/first"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/adaptive_24dp"
+        android:layout_marginLeft="@dimen/adaptive_24dp"
+        android:layout_marginRight="@dimen/adaptive_24dp"
+        android:layout_weight="0"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/tv_call_time">
+
+            <LinearLayout
+                android:id="@+id/layout_members"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginRight="15dip"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/tv_members"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="#FFF"
+                    android:textSize="@dimen/adaptive_18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_member_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:singleLine="true"
+                    android:textColor="#FFF"
+                    android:textSize="@dimen/adaptive_18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_call_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="#FFF"
+            android:textSize="@dimen/adaptive_18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/adaptive_8dp"
+        android:layout_marginRight="@dimen/adaptive_8dp"
+        android:layout_weight="56"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="4">
+        <!--切换摄像头-->
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_change_camera_switch"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_camera_toggle" />
+
+            <ImageView
+                android:id="@+id/btn_change_camera_switch_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+            <!--麦克风开关-->
+            <ImageButton
+                android:id="@+id/btn_mic_switch"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_mic" />
+
+            <ImageView
+                android:id="@+id/btn_mic_switch_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_camera_switch"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_video" />
+
+            <ImageView
+                android:id="@+id/btn_camera_switch_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_speaker_switch"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_speaker" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/adaptive_8dp"
+        android:layout_marginRight="@dimen/adaptive_8dp"
+        android:layout_weight="56"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_desk_share"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_desk_share" />
+
+            <ImageView
+                android:id="@+id/btn_desk_share_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_debug"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_debug" />
+
+            <ImageView
+                android:id="@+id/btn_debug_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F" />
+        </RelativeLayout>
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_request_connect"
+                style="@style/style_call_tools_panel_button"
+                android:src="@drawable/em_call_request_connect" />
+
+            <ImageView
+                android:id="@+id/btn_request_connect_cover"
+                style="@style/style_call_tools_panel_button"
+                android:background="#CC2F2F2F"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/adaptive_72dp"
+        android:layout_marginLeft="@dimen/adaptive_8dp"
+        android:layout_marginRight="@dimen/adaptive_8dp"
+        android:layout_weight="72"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <RelativeLayout style="@style/style_call_tools_panel_button_wrapper">
+
+            <ImageButton
+                android:id="@+id/btn_scale_mode"
+                style="@style/style_call_tools_panel_button"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/em_call_scale_fill"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
+
+            <ImageButton
+                android:id="@+id/btn_hangup"
+                android:layout_width="@dimen/adaptive_72dp"
+                android:layout_height="@dimen/adaptive_72dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/em_call_btn_bg"
+                android:scaleType="fitCenter"
+                android:src="@drawable/em_call_hangup" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

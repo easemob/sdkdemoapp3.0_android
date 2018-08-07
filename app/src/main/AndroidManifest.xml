@@ -62,6 +62,13 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" />
 
+        <activity
+            android:name=".conference.LiveActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/horizontal_slide"
+            android:windowSoftInputMode="adjustPan" />
+
         <!-- 开屏页 -->
         <activity
             android:name=".ui.SplashActivity"

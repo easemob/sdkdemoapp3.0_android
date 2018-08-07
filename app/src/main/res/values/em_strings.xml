@@ -450,4 +450,8 @@
     <string name="tips_desk_share">You\'re sharing screen</string>
 
     <string name="alert_window_permission_denied">This app don\'t be granted ALERT_WINDOW permission :(</string>
+
+    <string name="title_live">Live</string>
+    <string name="msg_live_invite">Come to live</string>
+    <string name="alert_request_tobe_talker">Request to be talker &#8230;</string>
 </resources>

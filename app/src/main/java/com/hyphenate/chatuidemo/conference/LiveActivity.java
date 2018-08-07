@@ -1,22 +1,13 @@
 package com.hyphenate.chatuidemo.conference;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.media.AudioManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -26,6 +17,7 @@ import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConferenceListener;
+import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConference;
@@ -41,51 +33,38 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.ui.BaseActivity;
 import com.hyphenate.chatuidemo.widget.EasePageIndicator;
+import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 import com.superrtc.mediamanager.ScreenCaptureManager;
 import com.superrtc.sdk.VideoView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.TimeZone;
 
 /**
  * Created by lzan13 on 2017/8/15.
- * 多人音视频会议界面
+ * 直播界面
  */
-public class ConferenceActivity extends BaseActivity implements EMConferenceListener {
+public class LiveActivity extends BaseActivity implements EMConferenceListener {
     private final String TAG = this.getClass().getSimpleName();
 
-    private final int REQUEST_CODE_INVITE = 1001;
-    private final int REQUEST_CODE_OVERLAY_PERMISSION = 1002;
-
-    private ConferenceActivity activity;
+    private LiveActivity activity;
     private EMConferenceListener conferenceListener;
 
     private AudioManager audioManager;
 
     private EMConference conference;
     private EMStreamParam normalParam;
-    private EMStreamParam desktopParam;
-    private boolean isCreator = false;
     private String confId = "";
     private String password = "";
-    // 标识当前会议的创建方式
-    private String groupId = null;
-
-    // 正在显示音视频Window的stream
-    private static EMConferenceStream windowStream;
-
-    private List<EMConferenceStream> streamList = new ArrayList<>();
 
     private ConferenceMemberView localView;
-    private IncomingCallView incomingCallView;
     private MemberViewGroup callConferenceViewGroup;
 
     private EasePageIndicator pageIndicator;
@@ -100,29 +79,27 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private TextView callTimeView;
     // 麦克风开关
     private ImageButton micSwitch;
+    private ImageView micSwitchCover;
     // 摄像头开关
     private ImageButton cameraSwitch;
+    private ImageView cameraSwitchCover;
     // 话筒开关
     private ImageButton speakerSwitch;
     // 屏幕分享开关
     private ImageButton screenShareSwitch;
     // 前后摄像头切换
     private ImageButton changeCameraSwitch;
+    private ImageView changeCameraSwitchCover;
     // 挂断按钮
     private ImageButton hangupBtn;
     // 显示debug信息按钮
     private ImageButton debugBtn;
-    // 邀请其他成员加入的按钮
-    private ImageButton inviteBtn;
+    // 申请视频连麦按钮
+    private ImageButton videoConnectBtn;
+    private ImageView videoConnectBtnCover;
     // 全屏模式下改变视频显示模式的按钮,只在全屏模式下显示
     private ImageButton scaleModeBtn;
-    // 显示悬浮窗的按钮
-    private ImageButton closeBtn;
-    // 退出全屏模式的按钮,只在全屏模式下显示
-    private ImageButton zoominBtn;
     // ------ tools panel relevant end ------
-
-    private DebugPanelView debugPanelView;
 
     // ------ full screen views start -------
     private View stateCoverMain;
@@ -137,10 +114,18 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     private TimeHandler timeHandler;
 
+    private List<EMConferenceStream> streamList = new ArrayList<>();
+
+    private String inviter;
+    // 如果该值不为null，则证明为群组入口的直播
+    private String groupId;
+    // 标识当前用户角色
+    private EMConferenceManager.EMConferenceRole currentRole;
+
     // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
     // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
-    public static void startConferenceCall(Context context, String groupId) {
-        Intent i = new Intent(context, ConferenceActivity.class);
+    public static void startLive(Context context, String groupId) {
+        Intent i = new Intent(context, LiveActivity.class);
         i.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, true);
         i.putExtra(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -149,13 +134,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
     // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
-    public static void receiveConferenceCall(Context context, String conferenceId, String password, String inviter, String groupId) {
-        Intent i = new Intent(context, ConferenceActivity.class);
+    public static void watch(Context context, String conferenceId, String password, String inviter) {
+        Intent i = new Intent(context, LiveActivity.class);
         i.putExtra(Constant.EXTRA_CONFERENCE_ID, conferenceId);
         i.putExtra(Constant.EXTRA_CONFERENCE_PASS, password);
         i.putExtra(Constant.EXTRA_CONFERENCE_INVITER, inviter);
         i.putExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
-        i.putExtra(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
     }
@@ -163,7 +147,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_conference);
+        setContentView(R.layout.activity_live);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
@@ -174,50 +158,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
         EMClient.getInstance().conferenceManager().addConferenceListener(conferenceListener);
         DemoHelper.getInstance().pushActivity(activity);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        // NOTE: 下方逻辑必须放在当前方法中,放到onStart()或onResume()中当在Android 6.0以上设备中显示悬浮窗时会有问题
-
-        // 当前Activity的launch mode为SingleTask,且有独立的activity任务栈,start当前activity时如果当前activity已经存在
-        // 于当前activity所需的任务栈中,则当前activity#onCreate()方法不会被调用,Activity#onNewIntent()会被调用.
-        // 当前Activity启动其他activity,若其他activity#finish()又回到当前activity,则onNewIntent()不会被调用.
-
-        if (windowStream != null) {
-            // 从window状态进入activity.
-            if (!windowStream.isVideoOff()) {
-                boolean isSelf = windowStream.getUsername().equals(EMClient.getInstance().getCurrentUser());
-                if (isSelf) {
-                    EMClient.getInstance().conferenceManager().updateLocalSurfaceView(localView.getSurfaceView());
-                } else {
-                    EMClient.getInstance().conferenceManager().updateRemoteSurfaceView(windowStream.getStreamId(),
-                            ((ConferenceMemberView) callConferenceViewGroup.getChildAt(1)).getSurfaceView());
-                }
-            }
-        }
-
-        windowStream = null;
-
-        // 防止activity在后台被start至前台导致window还存在
-        CallFloatWindow.getInstance(getApplicationContext()).dismiss();
-        DeskShareWindow.getInstance(getApplicationContext()).dismiss();
-    }
-
-    @Override
-    protected void onResume() {
-        EMLog.i(TAG, "onResume: ");
-        super.onResume();
-        // 注册home-key receiver
-        registerHomeKeyWatcher();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // 注销home-key receiver
-        unregisterHomeKeyWatcher();
+        registerMessageListener();
     }
 
     /**
@@ -226,44 +167,42 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private void init() {
         activity = this;
 
-        incomingCallView = (IncomingCallView) findViewById(R.id.incoming_call_view);
-        callConferenceViewGroup = (MemberViewGroup) findViewById(R.id.surface_view_group);
+        callConferenceViewGroup = findViewById(R.id.surface_view_group);
 
         toolsPanelView = findViewById(R.id.layout_tools_panel);
 
-        inviteBtn = (ImageButton) findViewById(R.id.btn_invite);
-        membersTV = (TextView) findViewById(R.id.tv_members);
-        memberCountTV = (TextView) findViewById(R.id.tv_member_count);
-        callTimeView = (TextView) findViewById(R.id.tv_call_time);
-        micSwitch = (ImageButton) findViewById(R.id.btn_mic_switch);
-        cameraSwitch = (ImageButton) findViewById(R.id.btn_camera_switch);
-        speakerSwitch = (ImageButton) findViewById(R.id.btn_speaker_switch);
-        screenShareSwitch = (ImageButton) findViewById(R.id.btn_desk_share);
-        changeCameraSwitch = (ImageButton) findViewById(R.id.btn_change_camera_switch);
-        hangupBtn = (ImageButton) findViewById(R.id.btn_hangup);
-        debugBtn = (ImageButton) findViewById(R.id.btn_debug);
-        scaleModeBtn = (ImageButton) findViewById(R.id.btn_scale_mode);
-        closeBtn = (ImageButton) findViewById(R.id.btn_close);
-        zoominBtn = (ImageButton) findViewById(R.id.btn_zoomin);
+        videoConnectBtn = findViewById(R.id.btn_request_connect);
+        videoConnectBtnCover = findViewById(R.id.btn_request_connect_cover);
+        membersTV = findViewById(R.id.tv_members);
+        memberCountTV = findViewById(R.id.tv_member_count);
+        callTimeView = findViewById(R.id.tv_call_time);
+        micSwitch = findViewById(R.id.btn_mic_switch);
+        micSwitchCover = findViewById(R.id.btn_mic_switch_cover);
+        cameraSwitch = findViewById(R.id.btn_camera_switch);
+        cameraSwitchCover = findViewById(R.id.btn_camera_switch_cover);
+        speakerSwitch = findViewById(R.id.btn_speaker_switch);
+        screenShareSwitch = findViewById(R.id.btn_desk_share);
+        changeCameraSwitch = findViewById(R.id.btn_change_camera_switch);
+        changeCameraSwitchCover = findViewById(R.id.btn_change_camera_switch_cover);
+        hangupBtn = findViewById(R.id.btn_hangup);
+        debugBtn = findViewById(R.id.btn_debug);
+        scaleModeBtn = findViewById(R.id.btn_scale_mode);
 
-        pageIndicator = (EasePageIndicator) findViewById(R.id.indicator);
-
-        debugPanelView = (DebugPanelView) findViewById(R.id.layout_debug_panel);
+        pageIndicator = findViewById(R.id.indicator);
 
         stateCoverMain = findViewById(R.id.state_cover_main);
         membersLayout = findViewById(R.id.layout_members);
-        membersTVMain = (TextView) findViewById(R.id.tv_members_main);
-        memberCountTVMain = (TextView) findViewById(R.id.tv_member_count_main);
-        callTimeViewMain = (TextView) findViewById(R.id.tv_call_time_main);
+        membersTVMain = findViewById(R.id.tv_members_main);
+        memberCountTVMain = findViewById(R.id.tv_member_count_main);
+        callTimeViewMain = findViewById(R.id.tv_call_time_main);
         talkingLayout = findViewById(R.id.layout_talking);
-        talkingImage = (ImageView) findViewById(R.id.icon_talking);
-        talkerTV = (TextView) findViewById(R.id.tv_talker);
+        talkingImage = findViewById(R.id.icon_talking);
+        talkerTV = findViewById(R.id.tv_talker);
 
-        incomingCallView.setOnActionListener(onActionListener);
         callConferenceViewGroup.setOnItemClickListener(onItemClickListener);
         callConferenceViewGroup.setOnScreenModeChangeListener(onScreenModeChangeListener);
         callConferenceViewGroup.setOnPageStatusListener(onPageStatusListener);
-        inviteBtn.setOnClickListener(listener);
+        videoConnectBtn.setOnClickListener(listener);
         micSwitch.setOnClickListener(listener);
         speakerSwitch.setOnClickListener(listener);
         cameraSwitch.setOnClickListener(listener);
@@ -272,42 +211,42 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         hangupBtn.setOnClickListener(listener);
         debugBtn.setOnClickListener(listener);
         scaleModeBtn.setOnClickListener(listener);
-        closeBtn.setOnClickListener(listener);
-        zoominBtn.setOnClickListener(listener);
-
-        debugPanelView.setOnButtonClickListener(onButtonClickListener);
 
         conferenceListener = this;
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         normalParam = new EMStreamParam();
         normalParam.setStreamType(EMConferenceStream.StreamType.NORMAL);
-        normalParam.setVideoOff(true);
+        normalParam.setVideoOff(false);
         normalParam.setAudioOff(false);
-
-        desktopParam = new EMStreamParam();
-        desktopParam.setAudioOff(true);
-        desktopParam.setVideoOff(true);
-        desktopParam.setStreamType(EMConferenceStream.StreamType.DESKTOP);
 
         micSwitch.setActivated(normalParam.isAudioOff());
         cameraSwitch.setActivated(normalParam.isVideoOff());
         speakerSwitch.setActivated(true);
         openSpeaker();
 
+        boolean isCreator = getIntent().getBooleanExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
         groupId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_GROUP_ID);
-        isCreator = getIntent().getBooleanExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
         if (isCreator) {
-            incomingCallView.setVisibility(View.GONE);
-            selectUserToJoinConference();
+            // 开始直播
+            createAndJoinConference(new EMValueCallBack<EMConference>() {
+                @Override
+                public void onSuccess(EMConference value) {
+                    // invite audiences.
+                    inviteUserToJoinConference();
+                }
+
+                @Override
+                public void onError(int error, String errorMsg) {
+                }
+            });
+
         } else {
             confId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_ID);
             password = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_PASS);
+            inviter = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_INVITER);
 
-            initLocalConferenceView();
-            String inviter = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_INVITER);
-            incomingCallView.setInviteInfo(String.format(getString(R.string.tips_invite_to_join), inviter));
-            incomingCallView.setVisibility(View.VISIBLE);
+            joinConference();
         }
 
         timeHandler = new TimeHandler();
@@ -317,30 +256,25 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
-                case R.id.btn_invite:
-                    selectUserToJoinConference();
+                case R.id.btn_request_connect: // 申请视频连麦
+                    if (currentRole == EMConferenceManager.EMConferenceRole.Admin) return;
+
+                    if (currentRole == EMConferenceManager.EMConferenceRole.Audience) { // 申请上麦
+                        sendRequestMessage(inviter, Constant.OP_REQUEST_TOBE_SPEAKER);
+                    } else if (currentRole == EMConferenceManager.EMConferenceRole.Talker) { // 申请下麦
+                        sendRequestMessage(inviter, Constant.OP_REQUEST_TOBE_AUDIENCE);
+                    }
                     break;
                 case R.id.btn_mic_switch:
                     voiceSwitch();
                     break;
                 case R.id.btn_speaker_switch:
-                    if (speakerSwitch.isActivated()) {
-                        closeSpeaker();
-                    } else {
-                        openSpeaker();
-                    }
+                    speakerSwitch();
                     break;
                 case R.id.btn_camera_switch:
                     videoSwitch();
                     break;
                 case R.id.btn_desk_share:
-                    if (screenShareSwitch.isActivated()) {
-                        screenShareSwitch.setActivated(false);
-                        unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP));
-                    } else {
-                        screenShareSwitch.setActivated(true);
-                        publishDesktop();
-                    }
                     break;
                 case R.id.btn_change_camera_switch:
                     changeCamera();
@@ -349,34 +283,11 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     exitConference();
                     break;
                 case R.id.btn_debug:
-                    EMLog.i(TAG, "Button debug clicked!!!");
-                    EMClient.getInstance().conferenceManager().enableStatistics(true);
-                    openDebugPanel();
                     break;
                 case R.id.btn_scale_mode: // 全屏状态下切换视频scale mode
                     changeFullScreenScaleMode();
                     break;
-                case R.id.btn_close: // 显示悬浮框
-                    showFloatWindow();
-                    break;
-                case R.id.btn_zoomin:
-                    // exit full screen mode.
-                    callConferenceViewGroup.performClick(100, 100);
-                    break;
             }
-        }
-    };
-
-    private IncomingCallView.OnActionListener onActionListener = new IncomingCallView.OnActionListener() {
-        @Override
-        public void onPickupClick(View v) {
-            incomingCallView.setVisibility(View.GONE);
-            joinConference();
-        }
-
-        @Override
-        public void onRejectClick(View v) {
-            finish();
         }
     };
 
@@ -397,7 +308,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 添加一个展示远端画面的 view
      */
     private void addConferenceView(EMConferenceStream stream) {
-        EMLog.d(TAG, "add conference view -start- " + stream.getMemberName());
+        EMLog.d(TAG, "add conference view -start- " + stream.toString());
         streamList.add(stream);
         final ConferenceMemberView memberView = new ConferenceMemberView(activity);
         callConferenceViewGroup.addView(memberView);
@@ -408,83 +319,20 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         memberView.setDesktop(stream.getStreamType() == EMConferenceStream.StreamType.DESKTOP);
         subscribe(stream, memberView);
         EMLog.d(TAG, "add conference view -end-" + stream.getMemberName());
-        debugPanelView.setStreamListAndNotify(streamList);
     }
-
-    private DebugPanelView.OnButtonClickListener onButtonClickListener = new DebugPanelView.OnButtonClickListener() {
-        @Override
-        public void onCloseClick(View v) {
-            EMClient.getInstance().conferenceManager().enableStatistics(false);
-            openToolsPanel();
-        }
-    };
-
-    private MemberViewGroup.OnItemClickListener onItemClickListener = new MemberViewGroup.OnItemClickListener() {
-        @Override
-        public void onItemClick(View v, int position) {
-        }
-    };
-
-    private MemberViewGroup.OnScreenModeChangeListener onScreenModeChangeListener = new MemberViewGroup.OnScreenModeChangeListener() {
-        @Override
-        public void onScreenModeChange(boolean isFullScreenMode, @Nullable View fullScreenView) {
-            if (isFullScreenMode) { // 全屏模式
-                toolsPanelView.setBackgroundColor(getResources().getColor(R.color.color_transparent));
-
-                membersTV.setVisibility(View.INVISIBLE);
-                memberCountTV.setVisibility(View.INVISIBLE);
-                callTimeView.setVisibility(View.INVISIBLE);
-
-                stateCoverMain.setVisibility(View.VISIBLE);
-                membersLayout.setVisibility(View.VISIBLE);
-                talkingLayout.setVisibility(View.VISIBLE);
-                callTimeViewMain.setVisibility(View.VISIBLE);
-
-                scaleModeBtn.setVisibility(View.VISIBLE);
-                closeBtn.setVisibility(View.GONE);
-                zoominBtn.setVisibility(View.VISIBLE);
-            } else { // 非全屏模式
-                toolsPanelView.setBackgroundColor(getResources().getColor(R.color.bg_tools_panel));
-
-                membersTV.setVisibility(View.VISIBLE);
-                memberCountTV.setVisibility(View.VISIBLE);
-                callTimeView.setVisibility(View.VISIBLE);
-
-                scaleModeBtn.setVisibility(View.INVISIBLE);
-                closeBtn.setVisibility(View.VISIBLE);
-                zoominBtn.setVisibility(View.GONE);
-
-                // invisible the full-screen mode views.
-                stateCoverMain.setVisibility(View.GONE);
-                membersLayout.setVisibility(View.GONE);
-                talkingLayout.setVisibility(View.GONE);
-                callTimeViewMain.setVisibility(View.GONE);
-            }
-        }
-    };
-
-    private MemberViewGroup.OnPageStatusListener onPageStatusListener = new MemberViewGroup.OnPageStatusListener() {
-        @Override
-        public void onPageCountChange(int count) {
-            // 多于1页时显示indicator.
-            pageIndicator.setup(count > 1 ? count : 0);
-        }
-
-        @Override
-        public void onPageScroll(int page) {
-            pageIndicator.setItemChecked(page);
-        }
-    };
 
     /**
      * 移除指定位置的 View，移除时如果已经订阅需要取消订阅
      */
     private void removeConferenceView(EMConferenceStream stream) {
         int index = streamList.indexOf(stream);
-        final ConferenceMemberView memberView = (ConferenceMemberView) callConferenceViewGroup.getChildAt(index);
+        ConferenceMemberView memberView = (ConferenceMemberView) callConferenceViewGroup.getChildAt(index);
         streamList.remove(stream);
         callConferenceViewGroup.removeView(memberView);
-        debugPanelView.setStreamListAndNotify(streamList);
+    }
+
+    private boolean isPublishing() {
+        return localView != null;
     }
 
     /**
@@ -495,12 +343,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         ConferenceMemberView conferenceMemberView = (ConferenceMemberView) callConferenceViewGroup.getChildAt(position);
         conferenceMemberView.setAudioOff(stream.isAudioOff());
         conferenceMemberView.setVideoOff(stream.isVideoOff());
-
-        // 悬浮窗显示规则: 若有其他成员加入会议,则显示第一个加入会议的其他成员;若无,则显示自己.
-        if (position != 1) {
-            return;
-        }
-        CallFloatWindow.getInstance(getApplicationContext()).update(stream);
     }
 
     /**
@@ -534,43 +376,100 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         }
     }
 
+    private MemberViewGroup.OnItemClickListener onItemClickListener = new MemberViewGroup.OnItemClickListener() {
+        @Override
+        public void onItemClick(View v, int position) {
+        }
+    };
+
+    private MemberViewGroup.OnScreenModeChangeListener onScreenModeChangeListener = new MemberViewGroup.OnScreenModeChangeListener() {
+        @Override
+        public void onScreenModeChange(boolean isFullScreenMode, @Nullable View fullScreenView) {
+            if (isFullScreenMode) { // 全屏模式
+                toolsPanelView.setBackgroundColor(getResources().getColor(R.color.color_transparent));
+
+                membersTV.setVisibility(View.INVISIBLE);
+                memberCountTV.setVisibility(View.INVISIBLE);
+                callTimeView.setVisibility(View.INVISIBLE);
+
+                stateCoverMain.setVisibility(View.VISIBLE);
+                membersLayout.setVisibility(View.VISIBLE);
+                talkingLayout.setVisibility(View.VISIBLE);
+                callTimeViewMain.setVisibility(View.VISIBLE);
+
+                scaleModeBtn.setVisibility(View.VISIBLE);
+            } else { // 非全屏模式
+                toolsPanelView.setBackgroundColor(getResources().getColor(R.color.bg_tools_panel));
+
+                membersTV.setVisibility(View.VISIBLE);
+                memberCountTV.setVisibility(View.VISIBLE);
+                callTimeView.setVisibility(View.VISIBLE);
+
+                scaleModeBtn.setVisibility(View.INVISIBLE);
+
+                // invisible the full-screen mode views.
+                stateCoverMain.setVisibility(View.GONE);
+                membersLayout.setVisibility(View.GONE);
+                talkingLayout.setVisibility(View.GONE);
+                callTimeViewMain.setVisibility(View.GONE);
+            }
+        }
+    };
+
+    private MemberViewGroup.OnPageStatusListener onPageStatusListener = new MemberViewGroup.OnPageStatusListener() {
+        @Override
+        public void onPageCountChange(int count) {
+            // 多于1页时显示indicator.
+            pageIndicator.setup(count > 1 ? count : 0);
+        }
+
+        @Override
+        public void onPageScroll(int page) {
+            pageIndicator.setItemChecked(page);
+        }
+    };
+
     /**
      * 作为创建者创建并加入会议
      */
     private void createAndJoinConference(final EMValueCallBack<EMConference> callBack) {
-        EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.SmallCommunication,
-                password, new EMValueCallBack<EMConference>() {
-            @Override
-            public void onSuccess(final EMConference value) {
-                EMLog.e(TAG, "create and join conference success");
-                conference = value;
-                startAudioTalkingMonitor();
-                publish();
-                timeHandler.startTime();
-                runOnUiThread(new Runnable() {
+        EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LiveStream,
+                "", new EMValueCallBack<EMConference>() {
                     @Override
-                    public void run() {
-                        Toast.makeText(activity, "Create and join conference success", Toast.LENGTH_SHORT).show();
-                        if (callBack != null) {
-                            callBack.onSuccess(value);
-                        }
-                    }
-                });
-            }
+                    public void onSuccess(final EMConference value) {
+                        EMLog.e(TAG, "create and join conference success" + value.toString());
+                        currentRole = value.getConferenceRole();
+                        conference = value;
+                        startAudioTalkingMonitor();
+                        timeHandler.startTime();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                publish();
+                                // 申请连麦、下麦按钮对于管理员不能点击
+                                videoConnectBtnCover.setVisibility(View.VISIBLE);
 
-            @Override
-            public void onError(final int error, final String errorMsg) {
-                EMLog.e(TAG, "Create and join conference failed error " + error + ", msg " + errorMsg);
-                runOnUiThread(new Runnable() {
+                                Toast.makeText(activity, "Create and join conference success", Toast.LENGTH_SHORT).show();
+                                if (callBack != null) {
+                                    callBack.onSuccess(value);
+                                }
+                            }
+                        });
+                    }
+
                     @Override
-                    public void run() {
-                        if (callBack != null) {
-                            callBack.onError(error, errorMsg);
-                        }
+                    public void onError(final int error, final String errorMsg) {
+                        EMLog.e(TAG, "Create and join conference failed error " + error + ", msg " + errorMsg);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (callBack != null) {
+                                    callBack.onError(error, errorMsg);
+                                }
+                            }
+                        });
                     }
                 });
-            }
-        });
     }
 
     /**
@@ -580,20 +479,27 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         hangupBtn.setVisibility(View.VISIBLE);
         EMClient.getInstance().conferenceManager().joinConference(confId, password, new EMValueCallBack<EMConference>() {
             @Override
-            public void onSuccess(EMConference value) {
+            public void onSuccess(final EMConference value) {
+                EMLog.e(TAG, "join conference success" + value.toString());
+                currentRole = value.getConferenceRole();
                 conference = value;
-                startAudioTalkingMonitor();
-                publish();
                 timeHandler.startTime();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(activity, "Join conference success", Toast.LENGTH_SHORT).show();
+                        // 加入会议的成员身份为主播
+                        if (value.getConferenceRole() == EMConferenceManager.EMConferenceRole.Talker) {
+                            publish();
+                            // 设置连麦按钮为‘申请下麦’
+                            videoConnectBtn.setImageResource(R.drawable.em_call_request_disconnect);
+                        }
                     }
                 });
             }
 
-            @Override public void onError(final int error, final String errorMsg) {
+            @Override
+            public void onError(final int error, final String errorMsg) {
                 EMLog.e(TAG, "join conference failed error " + error + ", msg " + errorMsg);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -606,86 +512,63 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         });
     }
 
-    /**
-     * 邀请他人加入会议
-     */
-    private void selectUserToJoinConference() {
-        Intent intent = new Intent(activity, ConferenceInviteActivity.class);
-        intent.putExtra(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
-        activity.startActivityForResult(intent, REQUEST_CODE_INVITE);
-    }
-
-    private void inviteUserToJoinConference(String[] contacts) {
-        try {
-            JSONObject object = new JSONObject();
-            object.put(Constant.EXTRA_CONFERENCE_INVITER, EMClient.getInstance().getCurrentUser());
-            object.put(Constant.EXTRA_CONFERENCE_GROUP_ID, groupId);
-            for (int i = 0; i < contacts.length; i++) {
+    private void inviteUserToJoinConference() {
+        if (TextUtils.isEmpty(groupId)) { // 联系人界面入口直播，邀请全部联系人
+            Collection<EaseUser> contacts = DemoHelper.getInstance().getContactList().values();
+            for (EaseUser contact : contacts) {
                 // 通过消息的方式邀请对方加入
-                sendInviteMessage(contacts[i], object.toString());
+                sendInviteMessage(contact.getUsername(), false);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        EMLog.i(TAG, "onActivityResult: " + requestCode + ", result code: " + resultCode);
-        if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // Result of window permission request, resultCode = RESULT_CANCELED
-            if (Settings.canDrawOverlays(activity)) {
-                doShowFloatWindow();
-            } else {
-                Toast.makeText(activity, getString(R.string.alert_window_permission_denied), Toast.LENGTH_SHORT).show();
-            }
-            return;
-        }
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == ScreenCaptureManager.RECORD_REQUEST_CODE) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ScreenCaptureManager.getInstance().start(resultCode, data);
-                }
-            } else if (requestCode == REQUEST_CODE_INVITE) {
-                final String[] members = data.getStringArrayExtra("members");
-                if (isCreator && conference == null) {
-                    initLocalConferenceView();
-
-                    createAndJoinConference(new EMValueCallBack<EMConference>() {
-                        @Override
-                        public void onSuccess(EMConference value) {
-                            inviteUserToJoinConference(members);
-                        }
-
-                        @Override
-                        public void onError(int error, String errorMsg) {
-
-                        }
-                    });
-                } else {
-                    inviteUserToJoinConference(members);
-                }
-            }
-        } else if (resultCode == RESULT_CANCELED) {
-            // 只有第一次创建会议时,若选择取消需要finish当前activity.
-            boolean needFinish = (isCreator && conference == null);
-            if (needFinish) finish();
+        } else { // 群组界面入口直播，发送一条群消息
+            sendInviteMessage(groupId, true);
         }
     }
 
     /**
      * 通过消息的形式邀请他人加入会议
+     *
      * @param to 被邀请人
      */
-    private void sendInviteMessage(String to, String extension) {
+    private void sendInviteMessage(String to, boolean isGroupChat) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
-        final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_conference_invite) +" - "+ conference.getConferenceId(), to);
-        message.setAttribute(Constant.MSG_ATTR_CONF_ID, conference.getConferenceId());
-        message.setAttribute(Constant.MSG_ATTR_CONF_PASS, conference.getPassword());
+        final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_live_invite) + " - " + conference.getConferenceId(), to);
+        message.setAttribute(Constant.EM_CONFERENCE_OP, Constant.OP_INVITE);
+        message.setAttribute(Constant.EM_CONFERENCE_ID, conference.getConferenceId());
+        message.setAttribute(Constant.EM_CONFERENCE_PASSWORD, conference.getPassword());
+        message.setAttribute(Constant.EM_CONFERENCE_TYPE, conference.getConferenceType().code);
+        if (isGroupChat) {
+            message.setChatType(EMMessage.ChatType.GroupChat);
+        }
         // 扩展字段对于音视频会议不是必须的,只是增加了额外用于显示或者判断音视频会议类型的信息.
-        message.setAttribute(Constant.MSG_ATTR_EXTENSION, extension);
+//        message.setAttribute(Constant.MSG_ATTR_EXTENSION, extension);
+        message.setMessageStatusCallback(new EMCallBack() {
+            @Override
+            public void onSuccess() {
+                EMLog.d(TAG, "Invite join conference success");
+                conversation.removeMessage(message.getMsgId());
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                EMLog.e(TAG, "Invite join conference error " + code + ", " + error);
+                conversation.removeMessage(message.getMsgId());
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+
+            }
+        });
+        EMClient.getInstance().chatManager().sendMessage(message);
+    }
+
+    private void sendRequestMessage(String to, String op) {
+        final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
+        final EMMessage message = EMMessage.createTxtSendMessage(EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_talker), to);
+        message.setAttribute(Constant.EM_CONFERENCE_OP, op);
+        message.setAttribute(Constant.EM_CONFERENCE_ID, conference.getConferenceId());
+        message.setAttribute(Constant.EM_CONFERENCE_PASSWORD, conference.getPassword());
+        message.setAttribute(Constant.EM_MEMBER_NAME, EasyUtils.getMediaRequestUid(EMClient.getInstance().getOptions().getAppKey(), EMClient.getInstance().getCurrentUser()));
         message.setMessageStatusCallback(new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -739,16 +622,19 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 开始推自己的数据
      */
     private void publish() {
-        addSelfToList();
+        EMLog.i(TAG, "publish start, params: " + normalParam.toString());
+
+        initLocalConferenceView();
+        setIcons(EMConferenceManager.EMConferenceRole.Talker);
+        // 确保streamList中的stream跟viewGroup中的view位置对应。
+        addOrUpdateStreamList(null, "local-stream");
 
         EMClient.getInstance().conferenceManager().publish(normalParam, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
                 conference.setPubStreamId(value, EMConferenceStream.StreamType.NORMAL);
                 localView.setStreamId(value);
-
-                streamList.get(0).setStreamId(value);
-                debugPanelView.setStreamListAndNotify(streamList);
+                addOrUpdateStreamList("local-stream", value);
             }
 
             @Override
@@ -758,45 +644,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         });
     }
 
-
-    private void startScreenCapture() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.IDLE) {
-                ScreenCaptureManager.getInstance().init(activity);
-                ScreenCaptureManager.getInstance().setScreenCaptureCallback(new ScreenCaptureManager.ScreenCaptureCallback() {
-                    @Override
-                    public void onBitmap(Bitmap bitmap) {
-                        EMClient.getInstance().conferenceManager().inputExternalVideoData(bitmap);
-                    }
-                });
-            }
-        }
-    }
-
-    public void publishDesktop() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            desktopParam.setShareView(null);
-        } else {
-            desktopParam.setShareView(activity.getWindow().getDecorView());
-        }
-        EMClient.getInstance().conferenceManager().publish(desktopParam, new EMValueCallBack<String>() {
-            @Override
-            public void onSuccess(String value) {
-                conference.setPubStreamId(value, EMConferenceStream.StreamType.DESKTOP);
-                startScreenCapture();
-            }
-
-            @Override
-            public void onError(int error, String errorMsg) {
-
-            }
-        });
-    }
-
     /**
      * 停止推自己的数据
      */
-    private void unpublish(String publishId) {
+    private void unpublish(final String publishId) {
         if (ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.RUNNING) {
             if (!TextUtils.isEmpty(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))
                     && publishId.equals(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))) {
@@ -806,6 +657,28 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().unpublish(publishId, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
+                EMConferenceStream target = null;
+                for (EMConferenceStream stream : streamList) {
+                    if (stream.getStreamId().equals(publishId)) {
+                        target = stream;
+                        break;
+                    }
+                }
+
+                final EMConferenceStream finalTarget = target;
+                if (target != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // remove local view
+                            removeConferenceView(finalTarget);
+                            // set icons to audience state.
+                            setIcons(EMConferenceManager.EMConferenceRole.Audience);
+                        }
+                    });
+                }
+
+                localView = null;
             }
 
             @Override
@@ -885,6 +758,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 语音开关
      */
     private void voiceSwitch() {
+        if (!isPublishing()) return;
+
         if (normalParam.isAudioOff()) {
             normalParam.setAudioOff(false);
             EMClient.getInstance().conferenceManager().openVoiceTransfer();
@@ -897,9 +772,22 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     /**
+     * 扬声器开关
+     */
+    private void speakerSwitch() {
+        if (speakerSwitch.isActivated()) {
+            closeSpeaker();
+        } else {
+            openSpeaker();
+        }
+    }
+
+    /**
      * 视频开关
      */
     private void videoSwitch() {
+        if (!isPublishing()) return;
+
         if (normalParam.isVideoOff()) {
             normalParam.setVideoOff(false);
             EMClient.getInstance().conferenceManager().openVideoTransfer();
@@ -915,17 +803,14 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 切换摄像头
      */
     private void changeCamera() {
+        if (!isPublishing()) return;
+
         EMClient.getInstance().conferenceManager().switchCamera();
     }
 
     @Override
     public void onBackPressed() {
-        if (incomingCallView.getVisibility() == View.VISIBLE) { // 来电提醒界面
-            super.onBackPressed();
-            return;
-        }
-        // 已经在通话过程中
-        showFloatWindow();
+        super.onBackPressed();
     }
 
 
@@ -947,7 +832,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             @Override
             public void run() {
                 Toast.makeText(activity, member.memberName + " joined conference!", Toast.LENGTH_SHORT).show();
-                updateConferenceMembers();
             }
         });
     }
@@ -958,7 +842,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             @Override
             public void run() {
                 Toast.makeText(activity, member.memberName + " removed conference!", Toast.LENGTH_SHORT).show();
-                updateConferenceMembers();
+
+                if (EMClient.getInstance().getCurrentUser().equals(member.memberName)) {
+                    videoConnectBtn.setImageResource(R.drawable.em_call_request_connect);
+                }
             }
         });
     }
@@ -971,13 +858,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 Toast.makeText(activity, stream.getUsername() + " stream add!", Toast.LENGTH_SHORT)
                         .show();
                 addConferenceView(stream);
-
-                if (CallFloatWindow.getInstance(getApplicationContext()).isShowing()) { // 通话悬浮窗显示中...
-                    int position = streamList.indexOf(stream);
-                    if (position == 1) { // 会议中加入第一个成员,需要把正在显示的悬浮窗从自己更新到这个第一个加入会议的成员.
-                        showFloatWindow();
-                    }
-                }
             }
         });
     }
@@ -989,19 +869,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             public void run() {
                 Toast.makeText(activity, stream.getUsername() + " stream removed!", Toast.LENGTH_SHORT).show();
                 if (streamList.contains(stream)) {
-                    int position = streamList.indexOf(stream);
                     removeConferenceView(stream);
-
-                    if (CallFloatWindow.getInstance(getApplicationContext()).isShowing()) { // 通话悬浮窗显示中...
-                        if (position == 1) { // 正在显示悬浮窗的成员退出聊天室
-                            showFloatWindow();
-                        }
-                    }
                 }
             }
         });
     }
 
+    //
     @Override
     public void onStreamUpdate(final EMConferenceStream stream) {
         runOnUiThread(new Runnable() {
@@ -1019,10 +893,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             @Override
             public void run() {
                 Toast.makeText(activity, "Passive exit " + error + ", message" + message, Toast.LENGTH_SHORT).show();
-                // 隐藏悬浮窗
-                CallFloatWindow.getInstance(getApplicationContext()).dismiss();
-                DeskShareWindow.getInstance(getApplicationContext()).dismiss();
-                // 退出当前界面
                 finish();
             }
         });
@@ -1041,7 +911,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     @Override
     public void onStreamStatistics(EMStreamStatistics statistics) {
         EMLog.i(TAG, "onStreamStatistics" + statistics.toString());
-        debugPanelView.onStreamStatisticsChange(statistics);
     }
 
     @Override
@@ -1057,9 +926,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 }
             }
         });
-
-        streamList.get(0).setStreamId(streamId);
-        debugPanelView.setStreamListAndNotify(streamList);
     }
 
     @Override
@@ -1091,85 +957,41 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     @Override
     public void onRoleChanged(EMConferenceManager.EMConferenceRole role) {
-    }
+        EMLog.i(TAG, "onRoleChanged, role: " + role);
+        currentRole = role;
 
-    private void openDebugPanel() {
-        Animator animator = ObjectAnimator.ofFloat(toolsPanelView, "translationY", 0, toolsPanelView.getHeight());
-        animator.setDuration(300).start();
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                toolsPanelView.setVisibility(View.GONE);
-
-                debugPanelView.setVisibility(View.VISIBLE);
-                Animator animator = ObjectAnimator.ofFloat(debugPanelView, "translationY", debugPanelView.getHeight(), 0);
-                animator.setDuration(150).start();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-        });
-    }
-
-    private void openToolsPanel() {
-        Animator animator = ObjectAnimator.ofFloat(debugPanelView, "translationY", 0, debugPanelView.getHeight());
-        animator.setDuration(300).start();
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                debugPanelView.setVisibility(View.GONE);
-
-                toolsPanelView.setVisibility(View.VISIBLE);
-                Animator animator = ObjectAnimator.ofFloat(toolsPanelView, "translationY", toolsPanelView.getHeight(), 0);
-                animator.setDuration(150).start();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-            }
-        });
-    }
-
-    private void updateConferenceMembers() {
-        List<EMConferenceMember> members = EMClient.getInstance().conferenceManager().getConferenceMemberList();
-        String count = members.size() > 0 ? "(" + members.size() + ")" : "";
-        String membersStr = getMembersStr(members);
-
-        membersTV.setText(membersStr);
-        memberCountTV.setText(count);
-
-        membersTVMain.setText(membersStr);
-        memberCountTVMain.setText(count);
-    }
-
-    private String getMembersStr(List<EMConferenceMember> members) {
-        String result = "";
-        for (int i = 0; i < members.size(); i++) {
-            if (i == 0) {
-                result += EasyUtils.useridFromJid(members.get(i).memberName);
-                continue;
-            }
-
-            result += ", " + members.get(i);
+        if (role == EMConferenceManager.EMConferenceRole.Talker) {
+            // 管理员把当前用户角色更改为主播或管理员。
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    EMLog.i(TAG, "onRoleChanged, start publish, params: " + normalParam.toString());
+                    publish();
+                    videoConnectBtn.setImageResource(R.drawable.em_call_request_disconnect);
+                }
+            });
+        } else if (role == EMConferenceManager.EMConferenceRole.Audience) {
+            // 下麦
+            unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.NORMAL));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    videoConnectBtn.setImageResource(R.drawable.em_call_request_connect);
+                }
+            });
         }
-        return result;
+    }
+
+    private void setIcons(EMConferenceManager.EMConferenceRole role) {
+        if (role== EMConferenceManager.EMConferenceRole.Audience) {
+            changeCameraSwitchCover.setVisibility(View.VISIBLE);
+            cameraSwitchCover.setVisibility(View.VISIBLE);
+            micSwitchCover.setVisibility(View.VISIBLE);
+        } else {
+            changeCameraSwitchCover.setVisibility(View.GONE);
+            cameraSwitchCover.setVisibility(View.GONE);
+            micSwitchCover.setVisibility(View.GONE);
+        }
     }
 
     private void updateConferenceTime(String time) {
@@ -1192,79 +1014,124 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         }
     }
 
-    private void showFloatWindow() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (Settings.canDrawOverlays(activity)) {
-                doShowFloatWindow();
-            } else { // To reqire the window permission.
-                try {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                    // Add this to open the management GUI specific to this app.
-                    intent.setData(Uri.parse("package:" + activity.getPackageName()));
-                    activity.startActivityForResult(intent, REQUEST_CODE_OVERLAY_PERMISSION);
-                    // Handle the permission require result in #onActivityResult();
-                } catch (Exception e) {
-                    e.printStackTrace();
+    private void addOrUpdateStreamList(String originStreamId, String targetStreamId) {
+        EMConferenceStream localStream = null;
+        if (originStreamId != null) {
+            for (EMConferenceStream stream : streamList) {
+                if (originStreamId.equals(stream.getStreamId())) {
+                    localStream = stream;
+                    break;
                 }
+            }
+            if (localStream != null) {
+                localStream.setStreamId(targetStreamId);
             }
         } else {
-            doShowFloatWindow();
+            localStream = new EMConferenceStream();
+            localStream.setUsername(EMClient.getInstance().getCurrentUser());
+            localStream.setStreamId(targetStreamId);
+            streamList.add(localStream);
         }
     }
 
-    private void doShowFloatWindow() {
-        if (screenShareSwitch.isActivated()) { // 已开启桌面共享,显示桌面共享window
-            DeskShareWindow.getInstance(getApplicationContext()).show();
-        } else { // 显示通话悬浮窗
-            CallFloatWindow.getInstance(getApplicationContext()).show();
+    protected void registerMessageListener() {
+        EMMessageListener messageListener = new EMMessageListener() {
+            @Override
+            public void onMessageReceived(List<EMMessage> messages) {
+                for (EMMessage msg : messages) {
+                    String op = msg.getStringAttribute(Constant.EM_CONFERENCE_OP, "");
+                    if (Constant.OP_REQUEST_TOBE_SPEAKER.equals(op)) {
+                        // 把该申请上线消息从会话中删除
+                        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(msg.getFrom(), EMConversation.EMConversationType.Chat, true);
+                        conversation.removeMessage(msg.getMsgId());
 
-            if (streamList.size() > 1) { // 如果会议中有其他成员,则显示第一个成员
-                windowStream = streamList.get(1);
-            } else { // 会议中无其他成员,显示自己信息
-                windowStream = new EMConferenceStream();
-                windowStream.setUsername(EMClient.getInstance().getCurrentUser());
-                windowStream.setVideoOff(normalParam.isVideoOff());
-                windowStream.setAudioOff(normalParam.isAudioOff());
-            }
-            CallFloatWindow.getInstance(getApplicationContext()).update(windowStream);
-        }
+                        final String jid = msg.getStringAttribute(Constant.EM_MEMBER_NAME, "");
+                        final String content = EasyUtils.useridFromJid(jid) + " " + getString(R.string.alert_request_tobe_talker);
 
-        ConferenceActivity.this.moveTaskToBack(false);
-    }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                EaseAlertDialog dialog = new EaseAlertDialog(LiveActivity.this, getString(R.string.prompt), content, null, null, true) {
+                                    @Override
+                                    public void onCancel(View view) {
+                                        super.onCancel(view);
+                                        EMLog.i(TAG, "onCancel");
+                                    }
 
-    private void addSelfToList() {
-        EMConferenceStream localStream = new EMConferenceStream();
-        localStream.setUsername(EMClient.getInstance().getCurrentUser());
-        localStream.setStreamId("local-stream");
-        streamList.add(localStream);
-    }
+                                    @Override
+                                    public void onOk(View view) {
+                                        super.onOk(view);
+                                        EMLog.i(TAG, "onOk");
+                                        // changeRole.
+                                        EMClient.getInstance().conferenceManager().grantRole(""
+                                                , new EMConferenceMember(jid, null, null)
+                                                , EMConferenceManager.EMConferenceRole.Talker, new EMValueCallBack<String>() {
+                                                    @Override
+                                                    public void onSuccess(String value) {
+                                                        EMLog.i(TAG, "changeRole success, result: " + value);
+                                                    }
 
-    private void registerHomeKeyWatcher() {
-        registerReceiver(homeKeyWatcher, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-    }
+                                                    @Override
+                                                    public void onError(int error, String errorMsg) {
+                                                        EMLog.i(TAG, "changeRole failed, error: " + error + " - " + errorMsg);
+                                                    }
+                                                });
+                                    }
+                                };
+                                if (!LiveActivity.this.isFinishing()) {
+                                    dialog.show();
+                                } else {
+                                    EMLog.i(TAG, "activity is finishing when dialog want to show.");
+                                }
+                            }
+                        });
+                    } else if (Constant.OP_REQUEST_TOBE_AUDIENCE.equals(op)) {
+                        // 把该申请下线消息从会话中删除
+                        EMConversation conversation = EMClient.getInstance().chatManager().getConversation(msg.getFrom(), EMConversation.EMConversationType.Chat, true);
+                        conversation.removeMessage(msg.getMsgId());
 
-    private void unregisterHomeKeyWatcher() {
-        unregisterReceiver(homeKeyWatcher);
-    }
+                        String jid = msg.getStringAttribute(Constant.EM_MEMBER_NAME, "");
+                        // changeRole.
+                        EMClient.getInstance().conferenceManager().grantRole(""
+                                , new EMConferenceMember(jid, null, null)
+                                , EMConferenceManager.EMConferenceRole.Audience, new EMValueCallBack<String>() {
+                                    @Override
+                                    public void onSuccess(String value) {
+                                        EMLog.i(TAG, "changeRole success, result: " + value);
+                                    }
 
-    private BroadcastReceiver homeKeyWatcher = new BroadcastReceiver() {
-        private static final String SYSTEM_DIALOG_REASON_KEY = "reason";
-        private static final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            Log.i(TAG, "onReceive: ");
-            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
-                String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
-                Log.i(TAG, "onReceive, reason: " + reason);
-                if (SYSTEM_DIALOG_REASON_HOME_KEY.equals(reason)) {
-                    EMLog.i(TAG, "Home key clicked.");
-                    showFloatWindow();
+                                    @Override
+                                    public void onError(int error, String errorMsg) {
+                                        EMLog.i(TAG, "changeRole failed, error: " + error + " - " + errorMsg);
+                                    }
+                                });
+                    }
                 }
             }
-        }
-    };
+
+            @Override
+            public void onCmdMessageReceived(List<EMMessage> messages) {
+            }
+
+            @Override
+            public void onMessageRead(List<EMMessage> messages) {
+            }
+
+            @Override
+            public void onMessageDelivered(List<EMMessage> message) {
+            }
+
+            @Override
+            public void onMessageRecalled(List<EMMessage> messages) {
+            }
+
+            @Override
+            public void onMessageChanged(EMMessage message, Object change) {
+            }
+        };
+
+        EMClient.getInstance().chatManager().addMessageListener(messageListener);
+    }
 
     private class TimeHandler extends Handler {
         private final int MSG_TIMER = 0;
