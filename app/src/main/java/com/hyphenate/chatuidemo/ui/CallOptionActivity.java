@@ -120,14 +120,6 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
         } else {
             swOfflineCallPush.closeSwitch();
         }
-
-        findViewById(R.id.rl_switch_offline_conference_mode).setOnClickListener(this);
-        EaseSwitchButton swOfflineConferenceMode = (EaseSwitchButton)findViewById(R.id.switch_offline_conference_mode);
-        if (PreferenceManager.getInstance().isLargeConferenceMode()) {
-            swOfflineConferenceMode.openSwitch();
-        } else {
-            swOfflineConferenceMode.closeSwitch();
-        }
     }
 
     void initCameraResolutionSpinner(final int cameraId, final int spinnerId) {
@@ -326,18 +318,6 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                     EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(true);
                     swOfflineCallPush.openSwitch();
                     PreferenceManager.getInstance().setPushCall(true);
-                }
-                break;
-            case R.id.rl_switch_offline_conference_mode:
-                EaseSwitchButton swOfflineConferenceMode = (EaseSwitchButton)findViewById(R.id.switch_offline_conference_mode);
-                if (swOfflineConferenceMode.isSwitchOpen()) {
-                    EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.NORMAL);
-                    swOfflineConferenceMode.closeSwitch();
-                    PreferenceManager.getInstance().setLargeConferenceMode(false);
-                } else {
-                    EMClient.getInstance().conferenceManager().setConferenceMode(EMConferenceListener.ConferenceMode.LARGE);
-                    swOfflineConferenceMode.openSwitch();
-                    PreferenceManager.getInstance().setLargeConferenceMode(true);
                 }
                 break;
             default:

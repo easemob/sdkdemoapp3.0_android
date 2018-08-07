@@ -191,15 +191,6 @@ public class PreferenceManager {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_OFFLINE_PUSH_CALL, false);
 	}
 
-	public void setLargeConferenceMode(boolean value) {
-		editor.putBoolean(SHARED_KEY_SETTING_OFFLINE_LARGE_CONFERENCE_MODE, value);
-		editor.apply();
-	}
-
-	public boolean isLargeConferenceMode() {
-		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_OFFLINE_LARGE_CONFERENCE_MODE, true);
-	}
-
 	public void setGroupsSynced(boolean synced){
 	    editor.putBoolean(SHARED_KEY_SETTING_GROUPS_SYNCED, synced);
         editor.apply();
