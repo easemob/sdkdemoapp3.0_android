@@ -599,18 +599,34 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
     private void exitConference() {
         stopAudioTalkingMonitor();
         timeHandler.stopTime();
-        EMClient.getInstance().conferenceManager().exitConference(new EMValueCallBack() {
-            @Override
-            public void onSuccess(Object value) {
-                finish();
-            }
+        if (currentRole == EMConferenceManager.EMConferenceRole.Admin) { // 管理员退出时销毁会议
+            EMClient.getInstance().conferenceManager().destroyConference(new EMValueCallBack() {
+                @Override
+                public void onSuccess(Object value) {
+                    EMLog.i(TAG, "destroyConference success");
+                    finish();
+                }
 
-            @Override
-            public void onError(int error, String errorMsg) {
-                EMLog.e(TAG, "exit conference failed " + error + ", " + errorMsg);
-                finish();
-            }
-        });
+                @Override
+                public void onError(int error, String errorMsg) {
+                    EMLog.e(TAG, "destroyConference failed " + error + ", " + errorMsg);
+                    finish();
+                }
+            });
+        } else {
+            EMClient.getInstance().conferenceManager().exitConference(new EMValueCallBack() {
+                @Override
+                public void onSuccess(Object value) {
+                    finish();
+                }
+
+                @Override
+                public void onError(int error, String errorMsg) {
+                    EMLog.e(TAG, "exit conference failed " + error + ", " + errorMsg);
+                    finish();
+                }
+            });
+        }
     }
 
     private void startAudioTalkingMonitor() {
@@ -1066,7 +1082,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                                         super.onOk(view);
                                         EMLog.i(TAG, "onOk");
                                         // changeRole.
-                                        EMClient.getInstance().conferenceManager().grantRole(""
+                                        EMClient.getInstance().conferenceManager().grantRole(conference.getConferenceId()
                                                 , new EMConferenceMember(jid, null, null)
                                                 , EMConferenceManager.EMConferenceRole.Talker, new EMValueCallBack<String>() {
                                                     @Override
@@ -1095,7 +1111,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
 
                         String jid = msg.getStringAttribute(Constant.EM_MEMBER_NAME, "");
                         // changeRole.
-                        EMClient.getInstance().conferenceManager().grantRole(""
+                        EMClient.getInstance().conferenceManager().grantRole(conference.getConferenceId()
                                 , new EMConferenceMember(jid, null, null)
                                 , EMConferenceManager.EMConferenceRole.Audience, new EMValueCallBack<String>() {
                                     @Override
