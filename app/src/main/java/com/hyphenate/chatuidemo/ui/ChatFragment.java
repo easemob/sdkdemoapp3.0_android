@@ -402,7 +402,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         public int getCustomChatRowTypeCount() {
             //here the number is the message type in EMMessage::Type
         	//which is used to count the number of different chat row
-            return 12;
+            return 14;
         }
 
         @Override
@@ -420,6 +420,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                     return MESSAGE_TYPE_RECALL;
                 } else if (!"".equals(message.getStringAttribute(Constant.MSG_ATTR_CONF_ID,""))) {
                     return MESSAGE_TYPE_CONFERENCE_INVITE;
+                } else if (Constant.OP_INVITE.equals(message.getStringAttribute(Constant.EM_CONFERENCE_OP, ""))) {
+                    return MESSAGE_TYPE_LIVE_INVITE;
                 }
             }
             return 0;
