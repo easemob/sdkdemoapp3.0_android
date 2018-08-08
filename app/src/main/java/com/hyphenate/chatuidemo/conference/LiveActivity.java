@@ -260,9 +260,11 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                     if (currentRole == EMConferenceManager.EMConferenceRole.Admin) return;
 
                     if (currentRole == EMConferenceManager.EMConferenceRole.Audience) { // 申请上麦
-                        sendRequestMessage(inviter, Constant.OP_REQUEST_TOBE_SPEAKER);
+                        String content = EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_talker);
+                        sendRequestMessage(content, inviter, Constant.OP_REQUEST_TOBE_SPEAKER);
                     } else if (currentRole == EMConferenceManager.EMConferenceRole.Talker) { // 申请下麦
-                        sendRequestMessage(inviter, Constant.OP_REQUEST_TOBE_AUDIENCE);
+                        String content = EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_audience);
+                        sendRequestMessage(content, inviter, Constant.OP_REQUEST_TOBE_AUDIENCE);
                     }
                     break;
                 case R.id.btn_mic_switch:
@@ -531,7 +533,8 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
      */
     private void sendInviteMessage(String to, boolean isGroupChat) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
-        final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_live_invite) + " - " + conference.getConferenceId(), to);
+        final EMMessage message = EMMessage.createTxtSendMessage(String.format(getString(R.string.msg_live_invite),
+                EMClient.getInstance().getCurrentUser(), conference.getConferenceId()), to);
         message.setAttribute(Constant.EM_CONFERENCE_OP, Constant.OP_INVITE);
         message.setAttribute(Constant.EM_CONFERENCE_ID, conference.getConferenceId());
         message.setAttribute(Constant.EM_CONFERENCE_PASSWORD, conference.getPassword());
@@ -562,9 +565,9 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
         EMClient.getInstance().chatManager().sendMessage(message);
     }
 
-    private void sendRequestMessage(String to, String op) {
+    private void sendRequestMessage(String content, String to, String op) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
-        final EMMessage message = EMMessage.createTxtSendMessage(EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_talker), to);
+        final EMMessage message = EMMessage.createTxtSendMessage(content, to);
         message.setAttribute(Constant.EM_CONFERENCE_OP, op);
         message.setAttribute(Constant.EM_CONFERENCE_ID, conference.getConferenceId());
         message.setAttribute(Constant.EM_CONFERENCE_PASSWORD, conference.getPassword());
@@ -983,7 +986,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
     }
 
     private void setIcons(EMConferenceManager.EMConferenceRole role) {
-        if (role== EMConferenceManager.EMConferenceRole.Audience) {
+        if (role == EMConferenceManager.EMConferenceRole.Audience) {
             changeCameraSwitchCover.setVisibility(View.VISIBLE);
             cameraSwitchCover.setVisibility(View.VISIBLE);
             micSwitchCover.setVisibility(View.VISIBLE);
