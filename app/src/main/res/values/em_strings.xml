@@ -451,8 +451,8 @@
 
     <string name="alert_window_permission_denied">This app don\'t be granted ALERT_WINDOW permission :(</string>
 
-    <string name="title_live">Live</string>
-    <string name="msg_live_invite">%1$s invite you to watch the live - %2$s</string>
+    <string name="title_live">Interactive Video</string>
+    <string name="msg_live_invite">%1$s invite you to join the interactive video - %2$s</string>
     <string name="alert_request_tobe_talker">Request to be talker &#8230;</string>
     <string name="alert_request_tobe_audience">Request to be audience &#8230;</string>
 </resources>
