@@ -54,6 +54,9 @@ import java.util.TimeZone;
 public class LiveActivity extends BaseActivity implements EMConferenceListener {
     private final String TAG = this.getClass().getSimpleName();
 
+    private static final int STATE_AUDIENCE = 0;
+    private static final int STATE_TALKER = 1;
+
     private LiveActivity activity;
     private EMConferenceListener conferenceListener;
 
@@ -121,6 +124,8 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
     private String groupId;
     // 标识当前用户角色
     private EMConferenceManager.EMConferenceRole currentRole;
+    // 标识当前上麦按钮状态
+    private int btnState = STATE_AUDIENCE;
 
     // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
     // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
@@ -259,12 +264,23 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 case R.id.btn_request_connect: // 申请视频连麦
                     if (currentRole == EMConferenceManager.EMConferenceRole.Admin) return;
 
-                    if (currentRole == EMConferenceManager.EMConferenceRole.Audience) { // 申请上麦
-                        String content = EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_talker);
-                        sendRequestMessage(content, inviter, Constant.OP_REQUEST_TOBE_SPEAKER);
-                    } else if (currentRole == EMConferenceManager.EMConferenceRole.Talker) { // 申请下麦
-                        String content = EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_audience);
-                        sendRequestMessage(content, inviter, Constant.OP_REQUEST_TOBE_AUDIENCE);
+                    if (btnState == STATE_AUDIENCE) { // 当前按钮状态是观众，需要变成主播
+                        if (currentRole == EMConferenceManager.EMConferenceRole.Audience) { // 发送消息，申请上麦
+                            String content = EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_talker);
+                            sendRequestMessage(content, inviter, Constant.OP_REQUEST_TOBE_SPEAKER);
+                        } else { // 已经是主播，直接推流
+                            publish();
+                            setRequestBtnState(STATE_TALKER);
+                        }
+                    } else if (btnState == STATE_TALKER) { // 当前按钮状态是主播，需要下麦
+                        if (currentRole == EMConferenceManager.EMConferenceRole.Talker) { // 申请下麦
+                            // 下麦
+                            unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.NORMAL));
+                            setRequestBtnState(STATE_AUDIENCE);
+                            // 请求管理员改变自己角色
+                            String content = EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_audience);
+                            sendRequestMessage(content, inviter, Constant.OP_REQUEST_TOBE_AUDIENCE);
+                        }
                     }
                     break;
                 case R.id.btn_mic_switch:
@@ -494,7 +510,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                         if (value.getConferenceRole() == EMConferenceManager.EMConferenceRole.Talker) {
                             publish();
                             // 设置连麦按钮为‘申请下麦’
-                            videoConnectBtn.setImageResource(R.drawable.em_call_request_disconnect);
+                            setRequestBtnState(STATE_TALKER);
                         }
                     }
                 });
@@ -863,7 +879,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 Toast.makeText(activity, member.memberName + " removed conference!", Toast.LENGTH_SHORT).show();
 
                 if (EMClient.getInstance().getCurrentUser().equals(member.memberName)) {
-                    videoConnectBtn.setImageResource(R.drawable.em_call_request_connect);
+                    setRequestBtnState(STATE_AUDIENCE);
                 }
             }
         });
@@ -986,18 +1002,27 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 public void run() {
                     EMLog.i(TAG, "onRoleChanged, start publish, params: " + normalParam.toString());
                     publish();
-                    videoConnectBtn.setImageResource(R.drawable.em_call_request_disconnect);
+                    setRequestBtnState(STATE_TALKER);
                 }
             });
         } else if (role == EMConferenceManager.EMConferenceRole.Audience) {
-            // 下麦
-            unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.NORMAL));
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    videoConnectBtn.setImageResource(R.drawable.em_call_request_connect);
+                    // 下麦
+                    unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.NORMAL));
+                    setRequestBtnState(STATE_AUDIENCE);
                 }
             });
+        }
+    }
+
+    private void setRequestBtnState(int state) {
+        btnState = state;
+        if (state == STATE_AUDIENCE) {
+            videoConnectBtn.setImageResource(R.drawable.em_call_request_connect);
+        } else if (state == STATE_TALKER) {
+            videoConnectBtn.setImageResource(R.drawable.em_call_request_disconnect);
         }
     }
 
