@@ -54,6 +54,9 @@ import java.util.TimeZone;
 public class LiveActivity extends BaseActivity implements EMConferenceListener {
     private final String TAG = this.getClass().getSimpleName();
 
+    private static final int STATE_AUDIENCE = 0;
+    private static final int STATE_TALKER = 1;
+
     private LiveActivity activity;
     private EMConferenceListener conferenceListener;
 
@@ -121,6 +124,8 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
     private String groupId;
     // 标识当前用户角色
     private EMConferenceManager.EMConferenceRole currentRole;
+    // 标识当前上麦按钮状态
+    private int btnState = STATE_AUDIENCE;
 
     // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
     // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
@@ -259,10 +264,23 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 case R.id.btn_request_connect: // 申请视频连麦
                     if (currentRole == EMConferenceManager.EMConferenceRole.Admin) return;
 
-                    if (currentRole == EMConferenceManager.EMConferenceRole.Audience) { // 申请上麦
-                        sendRequestMessage(inviter, Constant.OP_REQUEST_TOBE_SPEAKER);
-                    } else if (currentRole == EMConferenceManager.EMConferenceRole.Talker) { // 申请下麦
-                        sendRequestMessage(inviter, Constant.OP_REQUEST_TOBE_AUDIENCE);
+                    if (btnState == STATE_AUDIENCE) { // 当前按钮状态是观众，需要变成主播
+                        if (currentRole == EMConferenceManager.EMConferenceRole.Audience) { // 发送消息，申请上麦
+                            String content = EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_talker);
+                            sendRequestMessage(content, inviter, Constant.OP_REQUEST_TOBE_SPEAKER);
+                        } else { // 已经是主播，直接推流
+                            publish();
+                            setRequestBtnState(STATE_TALKER);
+                        }
+                    } else if (btnState == STATE_TALKER) { // 当前按钮状态是主播，需要下麦
+                        if (currentRole == EMConferenceManager.EMConferenceRole.Talker) { // 申请下麦
+                            // 下麦
+                            unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.NORMAL));
+                            setRequestBtnState(STATE_AUDIENCE);
+                            // 请求管理员改变自己角色
+                            String content = EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_audience);
+                            sendRequestMessage(content, inviter, Constant.OP_REQUEST_TOBE_AUDIENCE);
+                        }
                     }
                     break;
                 case R.id.btn_mic_switch:
@@ -492,7 +510,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                         if (value.getConferenceRole() == EMConferenceManager.EMConferenceRole.Talker) {
                             publish();
                             // 设置连麦按钮为‘申请下麦’
-                            videoConnectBtn.setImageResource(R.drawable.em_call_request_disconnect);
+                            setRequestBtnState(STATE_TALKER);
                         }
                     }
                 });
@@ -531,7 +549,8 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
      */
     private void sendInviteMessage(String to, boolean isGroupChat) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
-        final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_live_invite) + " - " + conference.getConferenceId(), to);
+        final EMMessage message = EMMessage.createTxtSendMessage(String.format(getString(R.string.msg_live_invite),
+                EMClient.getInstance().getCurrentUser(), conference.getConferenceId()), to);
         message.setAttribute(Constant.EM_CONFERENCE_OP, Constant.OP_INVITE);
         message.setAttribute(Constant.EM_CONFERENCE_ID, conference.getConferenceId());
         message.setAttribute(Constant.EM_CONFERENCE_PASSWORD, conference.getPassword());
@@ -562,9 +581,9 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
         EMClient.getInstance().chatManager().sendMessage(message);
     }
 
-    private void sendRequestMessage(String to, String op) {
+    private void sendRequestMessage(String content, String to, String op) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
-        final EMMessage message = EMMessage.createTxtSendMessage(EMClient.getInstance().getCurrentUser() + " " + getString(R.string.alert_request_tobe_talker), to);
+        final EMMessage message = EMMessage.createTxtSendMessage(content, to);
         message.setAttribute(Constant.EM_CONFERENCE_OP, op);
         message.setAttribute(Constant.EM_CONFERENCE_ID, conference.getConferenceId());
         message.setAttribute(Constant.EM_CONFERENCE_PASSWORD, conference.getPassword());
@@ -596,18 +615,34 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
     private void exitConference() {
         stopAudioTalkingMonitor();
         timeHandler.stopTime();
-        EMClient.getInstance().conferenceManager().exitConference(new EMValueCallBack() {
-            @Override
-            public void onSuccess(Object value) {
-                finish();
-            }
+        if (currentRole == EMConferenceManager.EMConferenceRole.Admin) { // 管理员退出时销毁会议
+            EMClient.getInstance().conferenceManager().destroyConference(new EMValueCallBack() {
+                @Override
+                public void onSuccess(Object value) {
+                    EMLog.i(TAG, "destroyConference success");
+                    finish();
+                }
 
-            @Override
-            public void onError(int error, String errorMsg) {
-                EMLog.e(TAG, "exit conference failed " + error + ", " + errorMsg);
-                finish();
-            }
-        });
+                @Override
+                public void onError(int error, String errorMsg) {
+                    EMLog.e(TAG, "destroyConference failed " + error + ", " + errorMsg);
+                    finish();
+                }
+            });
+        } else {
+            EMClient.getInstance().conferenceManager().exitConference(new EMValueCallBack() {
+                @Override
+                public void onSuccess(Object value) {
+                    finish();
+                }
+
+                @Override
+                public void onError(int error, String errorMsg) {
+                    EMLog.e(TAG, "exit conference failed " + error + ", " + errorMsg);
+                    finish();
+                }
+            });
+        }
     }
 
     private void startAudioTalkingMonitor() {
@@ -844,7 +879,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 Toast.makeText(activity, member.memberName + " removed conference!", Toast.LENGTH_SHORT).show();
 
                 if (EMClient.getInstance().getCurrentUser().equals(member.memberName)) {
-                    videoConnectBtn.setImageResource(R.drawable.em_call_request_connect);
+                    setRequestBtnState(STATE_AUDIENCE);
                 }
             }
         });
@@ -967,23 +1002,32 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 public void run() {
                     EMLog.i(TAG, "onRoleChanged, start publish, params: " + normalParam.toString());
                     publish();
-                    videoConnectBtn.setImageResource(R.drawable.em_call_request_disconnect);
+                    setRequestBtnState(STATE_TALKER);
                 }
             });
         } else if (role == EMConferenceManager.EMConferenceRole.Audience) {
-            // 下麦
-            unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.NORMAL));
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    videoConnectBtn.setImageResource(R.drawable.em_call_request_connect);
+                    // 下麦
+                    unpublish(conference.getPubStreamId(EMConferenceStream.StreamType.NORMAL));
+                    setRequestBtnState(STATE_AUDIENCE);
                 }
             });
         }
     }
 
+    private void setRequestBtnState(int state) {
+        btnState = state;
+        if (state == STATE_AUDIENCE) {
+            videoConnectBtn.setImageResource(R.drawable.em_call_request_connect);
+        } else if (state == STATE_TALKER) {
+            videoConnectBtn.setImageResource(R.drawable.em_call_request_disconnect);
+        }
+    }
+
     private void setIcons(EMConferenceManager.EMConferenceRole role) {
-        if (role== EMConferenceManager.EMConferenceRole.Audience) {
+        if (role == EMConferenceManager.EMConferenceRole.Audience) {
             changeCameraSwitchCover.setVisibility(View.VISIBLE);
             cameraSwitchCover.setVisibility(View.VISIBLE);
             micSwitchCover.setVisibility(View.VISIBLE);
@@ -1063,7 +1107,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                                         super.onOk(view);
                                         EMLog.i(TAG, "onOk");
                                         // changeRole.
-                                        EMClient.getInstance().conferenceManager().grantRole(""
+                                        EMClient.getInstance().conferenceManager().grantRole(conference.getConferenceId()
                                                 , new EMConferenceMember(jid, null, null)
                                                 , EMConferenceManager.EMConferenceRole.Talker, new EMValueCallBack<String>() {
                                                     @Override
@@ -1092,7 +1136,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
 
                         String jid = msg.getStringAttribute(Constant.EM_MEMBER_NAME, "");
                         // changeRole.
-                        EMClient.getInstance().conferenceManager().grantRole(""
+                        EMClient.getInstance().conferenceManager().grantRole(conference.getConferenceId()
                                 , new EMConferenceMember(jid, null, null)
                                 , EMConferenceManager.EMConferenceRole.Audience, new EMValueCallBack<String>() {
                                     @Override

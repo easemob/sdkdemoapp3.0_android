@@ -449,7 +449,8 @@
 
     <string name="alert_window_permission_denied">当前App未被授予悬浮窗权限 :(</string>
 
-    <string name="title_live">直播</string>
-    <string name="msg_live_invite">快来观看直播</string>
+    <string name="title_live">互动视频</string>
+    <string name="msg_live_invite">%1$s 邀请你参与互动视频 - %2$s</string>
     <string name="alert_request_tobe_talker">请求连麦 &#8230;</string>
+    <string name="alert_request_tobe_audience">请求下麦 &#8230;</string>
 </resources>

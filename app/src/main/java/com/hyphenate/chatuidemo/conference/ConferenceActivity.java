@@ -538,7 +538,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 作为创建者创建并加入会议
      */
     private void createAndJoinConference(final EMValueCallBack<EMConference> callBack) {
-        EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.SmallCommunication,
+        EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LargeCommunication,
                 password, new EMValueCallBack<EMConference>() {
             @Override
             public void onSuccess(final EMConference value) {
