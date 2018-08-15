@@ -17,6 +17,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.hyphenate.easeui.EaseUI;
+
 public class DemoApplication extends Application {
 
 	public static Context applicationContext;
@@ -39,8 +41,11 @@ public class DemoApplication extends Application {
 		//init demo helper
         DemoHelper.getInstance().init(applicationContext);
 
-		// 初始化华为 HMS 推送服务, 需要在SDK初始化后执行
-		HMSPushHelper.getInstance().initHMSAgent(instance);
+        // 请确保环信SDK相关方法运行在主进程，子进程不会初始化环信SDK（该逻辑在EaseUI.java中）
+        if (EaseUI.getInstance().isMainProcess(this)) {
+			// 初始化华为 HMS 推送服务, 需要在SDK初始化后执行
+			HMSPushHelper.getInstance().initHMSAgent(instance);
+		}
 	}
 
 	public static DemoApplication getInstance() {
