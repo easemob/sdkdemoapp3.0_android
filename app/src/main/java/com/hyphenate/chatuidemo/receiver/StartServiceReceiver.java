@@ -19,8 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * @deprecated instead of use {@link EMReceiver}
- *
+ * start service if user enabled start from boot.
  */
 public class StartServiceReceiver extends BroadcastReceiver{
 
