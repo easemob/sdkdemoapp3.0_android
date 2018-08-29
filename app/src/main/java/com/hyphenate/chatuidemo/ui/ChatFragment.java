@@ -353,15 +353,10 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
      * select file
      */
     protected void selectFileFromLocal() {
-        Intent intent = null;
-        if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
-            intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
 
-        } else {
-            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        }
         startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
     }
     
