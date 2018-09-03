@@ -20,6 +20,7 @@ import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +38,7 @@ import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.utils.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
@@ -44,7 +46,7 @@ import java.util.UUID;
 
 /**
  * 语音通话页面
- * 
+ *
  */
 public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	private LinearLayout comingBtnContainer;
@@ -56,7 +58,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 
 	private boolean isMuteState;
 	private boolean isHandsfreeState;
-	
+
 	private TextView callStateTextView;
 	private boolean endCallTriggerByMe = false;
 	private Chronometer chronometer;
@@ -73,7 +75,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         	return;
         }
 		setContentView(R.layout.em_activity_voice_call);
-		
+
 		DemoHelper.getInstance().isVoiceCalling = true;
 		callType = 0;
 
@@ -138,16 +140,16 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 	 */
 	void addCallStateListener() {
 	    callStateListener = new EMCallStateChangeListener() {
-            
+
             @Override
             public void onCallStateChanged(CallState callState, final CallError error) {
                 // Message msg = handler.obtainMessage();
                 EMLog.d("EMCallManager", "onCallStateChanged:" + callState);
                 switch (callState) {
-                
+
                 case CONNECTING:
                     runOnUiThread(new Runnable() {
-                        
+
                         @Override
                         public void run() {
                             callStateTextView.setText(st1);
@@ -189,6 +191,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             callStateTextView.setText(str4);
                             callingState = CallingState.NORMAL;
                             startMonitor();
+                            // Start to watch the phone call state.
+                            PhoneStateManager.get(VoiceCallActivity.this).addStateCallback(phoneStateCallback);
                         }
                     });
                     break;
@@ -239,6 +243,10 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                         public void run() {
                                             Log.d("AAA", "CALL DISCONNETED");
                                             removeCallStateListener();
+
+                                            // Stop to watch the phone call state.
+                                            PhoneStateManager.get(VoiceCallActivity.this).removeStateCallback(phoneStateCallback);
+
                                             saveCallRecord();
                                             Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                             animation.setDuration(800);
@@ -259,15 +267,15 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                             String st3 = getResources().getString(R.string.Connection_failure);
                             String st4 = getResources().getString(R.string.The_other_party_is_not_online);
                             String st5 = getResources().getString(R.string.The_other_is_on_the_phone_please);
-                            
+
                             String st6 = getResources().getString(R.string.The_other_party_did_not_answer_new);
                             String st7 = getResources().getString(R.string.hang_up);
                             String st8 = getResources().getString(R.string.The_other_is_hang_up);
-                            
+
                             String st9 = getResources().getString(R.string.did_not_answer);
                             String st10 = getResources().getString(R.string.Has_been_cancelled);
                             String st11 = getResources().getString(R.string.hang_up);
-                            
+
                             if (fError == CallError.REJECTED) {
                                 callingState = CallingState.BEREFUSED;
                                 callStateTextView.setText(st2);
@@ -326,10 +334,40 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         };
 		EMClient.getInstance().callManager().addCallStateChangeListener(callStateListener);
 	}
-	
+
     void removeCallStateListener() {
         EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
     }
+
+    PhoneStateManager.PhoneStateCallback phoneStateCallback = new PhoneStateManager.PhoneStateCallback() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:   // 电话响铃
+                    break;
+                case TelephonyManager.CALL_STATE_IDLE:      // 电话挂断
+                    // resume current voice conference.
+                    if (!isMuteState) {
+                        try {
+                            EMClient.getInstance().callManager().resumeVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:   // 来电接通 或者 去电，去电接通  但是没法区分
+                    // pause current voice conference.
+                    if (!isMuteState) {
+                        try {
+                            EMClient.getInstance().callManager().pauseVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+            }
+        }
+    };
 
 	@Override
 	public void onClick(View v) {
@@ -392,7 +430,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
 			break;
 		}
 	}
-	
+
     @Override
     protected void onDestroy() {
         DemoHelper.getInstance().isVoiceCalling = false;

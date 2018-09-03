@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,6 +45,7 @@ import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.utils.PhoneStateManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
@@ -320,6 +322,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 //                            recordBtn.setVisibility(View.VISIBLE);
                             callingState = CallingState.NORMAL;
                             startMonitor();
+                            // Start to watch the phone call state.
+                            PhoneStateManager.get(VideoCallActivity.this).addStateCallback(phoneStateCallback);
                         }
 
                     });
@@ -389,6 +393,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                 @Override
                                 public void run() {
                                     removeCallStateListener();
+
+                                    // Stop to watch the phone call state.
+                                    PhoneStateManager.get(VideoCallActivity.this).removeStateCallback(phoneStateCallback);
+
                                     saveCallRecord();
                                     Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                     animation.setDuration(1200);
@@ -478,6 +486,46 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     void removeCallStateListener() {
         EMClient.getInstance().callManager().removeCallStateChangeListener(callStateListener);
     }
+
+    PhoneStateManager.PhoneStateCallback phoneStateCallback = new PhoneStateManager.PhoneStateCallback() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:   // 电话响铃
+                    break;
+                case TelephonyManager.CALL_STATE_IDLE:      // 电话挂断
+                    // resume current voice conference.
+                    if (!isMuteState) {
+                        try {
+                            EMClient.getInstance().callManager().resumeVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    try {
+                        EMClient.getInstance().callManager().resumeVideoTransfer();
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:   // 来电接通 或者 去电，去电接通  但是没法区分
+                    // pause current voice conference.
+                    if (!isMuteState) {
+                        try {
+                            EMClient.getInstance().callManager().pauseVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    try {
+                        EMClient.getInstance().callManager().pauseVideoTransfer();
+                    } catch (HyphenateException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
