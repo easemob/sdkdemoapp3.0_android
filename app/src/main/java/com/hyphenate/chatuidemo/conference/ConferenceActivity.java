@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -40,7 +41,10 @@ import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.ui.BaseActivity;
+import com.hyphenate.chatuidemo.ui.VideoCallActivity;
+import com.hyphenate.chatuidemo.utils.PhoneStateManager;
 import com.hyphenate.chatuidemo.widget.EasePageIndicator;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 import com.superrtc.mediamanager.ScreenCaptureManager;
@@ -540,37 +544,37 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private void createAndJoinConference(final EMValueCallBack<EMConference> callBack) {
         EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LargeCommunication,
                 password, new EMValueCallBack<EMConference>() {
-            @Override
-            public void onSuccess(final EMConference value) {
-                EMLog.e(TAG, "create and join conference success");
-                conference = value;
-                startAudioTalkingMonitor();
-                publish();
-                timeHandler.startTime();
-                runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        Toast.makeText(activity, "Create and join conference success", Toast.LENGTH_SHORT).show();
-                        if (callBack != null) {
-                            callBack.onSuccess(value);
-                        }
+                    public void onSuccess(final EMConference value) {
+                        EMLog.e(TAG, "create and join conference success");
+                        conference = value;
+                        startAudioTalkingMonitor();
+                        publish();
+                        timeHandler.startTime();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(activity, "Create and join conference success", Toast.LENGTH_SHORT).show();
+                                if (callBack != null) {
+                                    callBack.onSuccess(value);
+                                }
+                            }
+                        });
                     }
-                });
-            }
 
-            @Override
-            public void onError(final int error, final String errorMsg) {
-                EMLog.e(TAG, "Create and join conference failed error " + error + ", msg " + errorMsg);
-                runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        if (callBack != null) {
-                            callBack.onError(error, errorMsg);
-                        }
+                    public void onError(final int error, final String errorMsg) {
+                        EMLog.e(TAG, "Create and join conference failed error " + error + ", msg " + errorMsg);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (callBack != null) {
+                                    callBack.onError(error, errorMsg);
+                                }
+                            }
+                        });
                     }
                 });
-            }
-        });
     }
 
     /**
@@ -593,7 +597,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 });
             }
 
-            @Override public void onError(final int error, final String errorMsg) {
+            @Override
+            public void onError(final int error, final String errorMsg) {
                 EMLog.e(TAG, "join conference failed error " + error + ", msg " + errorMsg);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -677,11 +682,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     /**
      * 通过消息的形式邀请他人加入会议
+     *
      * @param to 被邀请人
      */
     private void sendInviteMessage(String to, String extension) {
         final EMConversation conversation = EMClient.getInstance().chatManager().getConversation(to, EMConversation.EMConversationType.Chat, true);
-        final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_conference_invite) +" - "+ conference.getConferenceId(), to);
+        final EMMessage message = EMMessage.createTxtSendMessage(getString(R.string.msg_conference_invite) + " - " + conference.getConferenceId(), to);
         message.setAttribute(Constant.MSG_ATTR_CONF_ID, conference.getConferenceId());
         message.setAttribute(Constant.MSG_ATTR_CONF_PASS, conference.getPassword());
         // 扩展字段对于音视频会议不是必须的,只是增加了额外用于显示或者判断音视频会议类型的信息.
@@ -713,6 +719,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private void exitConference() {
         stopAudioTalkingMonitor();
         timeHandler.stopTime();
+
+        // Stop to watch the phone call state.
+        PhoneStateManager.get(ConferenceActivity.this).removeStateCallback(phoneStateCallback);
+
         EMClient.getInstance().conferenceManager().exitConference(new EMValueCallBack() {
             @Override
             public void onSuccess(Object value) {
@@ -749,6 +759,9 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
                 streamList.get(0).setStreamId(value);
                 debugPanelView.setStreamListAndNotify(streamList);
+
+                // Start to watch the phone call state.
+                PhoneStateManager.get(ConferenceActivity.this).addStateCallback(phoneStateCallback);
             }
 
             @Override
@@ -917,6 +930,51 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private void changeCamera() {
         EMClient.getInstance().conferenceManager().switchCamera();
     }
+
+    // 当前设备通话状态监听器
+    PhoneStateManager.PhoneStateCallback phoneStateCallback = new PhoneStateManager.PhoneStateCallback() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:   // 电话响铃
+                    break;
+                case TelephonyManager.CALL_STATE_IDLE:      // 电话挂断
+                    // resume current voice conference.
+                    if (!normalParam.isAudioOff()) {
+                        try {
+                            EMClient.getInstance().callManager().resumeVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (!normalParam.isVideoOff()) {
+                        try {
+                            EMClient.getInstance().callManager().resumeVideoTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:   // 来电接通 或者 去电，去电接通  但是没法区分
+                    // pause current voice conference.
+                    if (!normalParam.isAudioOff()) {
+                        try {
+                            EMClient.getInstance().callManager().pauseVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (!normalParam.isVideoOff()) {
+                        try {
+                            EMClient.getInstance().callManager().pauseVideoTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onBackPressed() {

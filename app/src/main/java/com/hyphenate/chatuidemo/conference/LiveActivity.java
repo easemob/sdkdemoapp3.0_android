@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
@@ -32,9 +33,11 @@ import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.ui.BaseActivity;
+import com.hyphenate.chatuidemo.utils.PhoneStateManager;
 import com.hyphenate.chatuidemo.widget.EasePageIndicator;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.widget.EaseAlertDialog;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 import com.superrtc.mediamanager.ScreenCaptureManager;
@@ -615,6 +618,10 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
     private void exitConference() {
         stopAudioTalkingMonitor();
         timeHandler.stopTime();
+
+        // Stop to watch the phone call state.
+        PhoneStateManager.get(LiveActivity.this).removeStateCallback(phoneStateCallback);
+
         if (currentRole == EMConferenceManager.EMConferenceRole.Admin) { // 管理员退出时销毁会议
             EMClient.getInstance().conferenceManager().destroyConference(new EMValueCallBack() {
                 @Override
@@ -670,6 +677,9 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 conference.setPubStreamId(value, EMConferenceStream.StreamType.NORMAL);
                 localView.setStreamId(value);
                 addOrUpdateStreamList("local-stream", value);
+
+                // Start to watch the phone call state.
+                PhoneStateManager.get(LiveActivity.this).addStateCallback(phoneStateCallback);
             }
 
             @Override
@@ -842,6 +852,51 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
 
         EMClient.getInstance().conferenceManager().switchCamera();
     }
+
+    // 当前设备通话状态监听器
+    PhoneStateManager.PhoneStateCallback phoneStateCallback = new PhoneStateManager.PhoneStateCallback() {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            switch (state) {
+                case TelephonyManager.CALL_STATE_RINGING:   // 电话响铃
+                    break;
+                case TelephonyManager.CALL_STATE_IDLE:      // 电话挂断
+                    // resume current voice conference.
+                    if (!normalParam.isAudioOff()) {
+                        try {
+                            EMClient.getInstance().callManager().resumeVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (!normalParam.isVideoOff()) {
+                        try {
+                            EMClient.getInstance().callManager().resumeVideoTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                case TelephonyManager.CALL_STATE_OFFHOOK:   // 来电接通 或者 去电，去电接通  但是没法区分
+                    // pause current voice conference.
+                    if (!normalParam.isAudioOff()) {
+                        try {
+                            EMClient.getInstance().callManager().pauseVoiceTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (!normalParam.isVideoOff()) {
+                        try {
+                            EMClient.getInstance().callManager().pauseVideoTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onBackPressed() {
