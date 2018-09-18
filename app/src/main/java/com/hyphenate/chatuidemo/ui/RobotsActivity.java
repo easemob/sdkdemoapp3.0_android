@@ -124,7 +124,7 @@ public class RobotsActivity extends BaseActivity {
 						Map<String, RobotUser> mMap = new HashMap<String, RobotUser>();
 						for (EMContact item : value) {
 							RobotUser user = new RobotUser(item.getUsername());
-							user.setNick(item.getNick());
+							user.setNickname(item.getNickname());
 							user.setInitialLetter("#");
 							mMap.put(item.getUsername(), user);
 						}
@@ -184,7 +184,7 @@ public class RobotsActivity extends BaseActivity {
 			if (convertView == null) {
 				convertView = inflater.inflate(R.layout.em_row_robots, parent, false);
 			}
-			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position).getNick());
+			((TextView) convertView.findViewById(R.id.name)).setText(getItem(position).getNickname());
 			return convertView;
 		}
 

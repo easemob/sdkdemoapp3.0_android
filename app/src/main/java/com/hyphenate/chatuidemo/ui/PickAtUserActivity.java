@@ -82,7 +82,7 @@ public class PickAtUserActivity extends BaseActivity{
             @Override
             public int compare(EaseUser lhs, EaseUser rhs) {
                 if(lhs.getInitialLetter().equals(rhs.getInitialLetter())){
-                    return lhs.getNick().compareTo(rhs.getNick());
+                    return lhs.getNickname().compareTo(rhs.getNickname());
                 }else{
                     if("#".equals(lhs.getInitialLetter())){
                         return 1;

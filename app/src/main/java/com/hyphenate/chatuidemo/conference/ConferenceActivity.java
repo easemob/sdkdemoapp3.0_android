@@ -41,7 +41,6 @@ import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.ui.BaseActivity;
-import com.hyphenate.chatuidemo.ui.VideoCallActivity;
 import com.hyphenate.chatuidemo.utils.PhoneStateManager;
 import com.hyphenate.chatuidemo.widget.EasePageIndicator;
 import com.hyphenate.exceptions.HyphenateException;

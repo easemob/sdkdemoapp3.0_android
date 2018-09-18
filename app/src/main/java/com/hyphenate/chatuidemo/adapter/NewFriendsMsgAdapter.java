@@ -270,7 +270,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 						public void run() {
 							pd.dismiss();
 							buttonAgree.setText(str2);
-							buttonAgree.setBackgroundDrawable(null);
+							buttonAgree.setBackground(null);
 							buttonAgree.setEnabled(false);
 							
 							buttonRefuse.setVisibility(View.INVISIBLE);
@@ -329,7 +329,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
                         public void run() {
                             pd.dismiss();
                             buttonRefuse.setText(str2);
-                            buttonRefuse.setBackgroundDrawable(null);
+                            buttonRefuse.setBackground(null);
                             buttonRefuse.setEnabled(false);
 
                             buttonAgree.setVisibility(View.INVISIBLE);

@@ -88,7 +88,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		setContentView(R.layout.em_recorder_activity);
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
+		mWakeLock = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 				CLASS_LABEL);
 		mWakeLock.acquire();
 		initViews();
@@ -105,7 +105,6 @@ public class RecorderVideoActivity extends BaseActivity implements
 		btnStop.setOnClickListener(this);
 		mSurfaceHolder = mVideoView.getHolder();
 		mSurfaceHolder.addCallback(this);
-		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		chronometer = (Chronometer) findViewById(R.id.chronometer);
 	}
 
@@ -121,7 +120,7 @@ public class RecorderVideoActivity extends BaseActivity implements
 		if (mWakeLock == null) {
 			// keep screen on
 			PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-			mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
+			mWakeLock = pm.newWakeLock(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
 					CLASS_LABEL);
 			mWakeLock.acquire();
 		}
@@ -139,7 +138,6 @@ public class RecorderVideoActivity extends BaseActivity implements
 			mCamera.lock();
 			mSurfaceHolder = mVideoView.getHolder();
 			mSurfaceHolder.addCallback(this);
-			mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 			mCamera.setDisplayOrientation(90);
 
 		} catch (RuntimeException ex) {

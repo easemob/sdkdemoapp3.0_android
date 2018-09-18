@@ -108,7 +108,7 @@ public class ParseManager {
 						if (parseFile != null) {
 							user.setAvatar(parseFile.getUrl());
 						}
-						user.setNick(pObject.getString(CONFIG_NICK));
+						user.setNickname(pObject.getString(CONFIG_NICK));
 						EaseCommonUtils.setUserInitialLetter(user);
 						mList.add(user);
 					}
@@ -164,13 +164,13 @@ public class ParseManager {
 					if(callback!=null){
 					    EaseUser user = DemoHelper.getInstance().getContactList().get(username);
 						if(user!=null){
-							user.setNick(nick);
+							user.setNickname(nick);
 							if (pFile != null && pFile.getUrl() != null) {
 								user.setAvatar(pFile.getUrl());
 							}
 						}else{
 						    user = new EaseUser(username);
-						    user.setNick(nick);
+						    user.setNickname(nick);
 						    if (pFile != null && pFile.getUrl() != null) {
                                 user.setAvatar(pFile.getUrl());
                             }

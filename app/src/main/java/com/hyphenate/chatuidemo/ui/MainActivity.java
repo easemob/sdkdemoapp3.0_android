@@ -425,7 +425,7 @@ public class MainActivity extends BaseActivity {
 	 * @return
 	 */
 	public int getUnreadMsgCountTotal() {
-		return EMClient.getInstance().chatManager().getUnreadMsgsCount();
+		return EMClient.getInstance().chatManager().getUnreadMessageCount();
 	}
 
 	private InviteMessgeDao inviteMessgeDao;

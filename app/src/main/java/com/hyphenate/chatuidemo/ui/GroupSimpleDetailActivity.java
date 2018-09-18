@@ -115,7 +115,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 			public void run() {
 				try {
 					//if group is membersOnly，you need apply to join
-					if(group.isMembersOnly()){
+					if(group.isMemberOnly()){
 					    EMClient.getInstance().groupManager().applyJoinToGroup(groupid, reason);
 					}else{
 					    EMClient.getInstance().groupManager().joinGroup(groupid);
@@ -123,7 +123,7 @@ public class GroupSimpleDetailActivity extends BaseActivity {
 					runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							if(group.isMembersOnly())
+							if(group.isMemberOnly())
 								Toast.makeText(GroupSimpleDetailActivity.this, st3, Toast.LENGTH_SHORT).show();
 							else
 								Toast.makeText(GroupSimpleDetailActivity.this, st4, Toast.LENGTH_SHORT).show();

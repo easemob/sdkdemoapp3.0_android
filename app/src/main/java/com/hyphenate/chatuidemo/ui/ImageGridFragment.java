@@ -136,13 +136,8 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 										"onCreateView - numColumns set to "
 												+ numColumns);
 							}
-							if (Utils.hasJellyBean()) {
-								mGridView.getViewTreeObserver()
-										.removeOnGlobalLayoutListener(this);
-							} else {
-								mGridView.getViewTreeObserver()
-										.removeGlobalOnLayoutListener(this);
-							}
+							mGridView.getViewTreeObserver()
+									.removeOnGlobalLayoutListener(this);
 						}
 					}
 				});
