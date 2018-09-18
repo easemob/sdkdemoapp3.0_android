@@ -414,9 +414,9 @@ public class DemoHelper {
                 EaseUser user = getUserInfo(message.getFrom());
                 if(user != null){
                     if(EaseAtMessageHelper.get().isAtMeMsg(message)){
-                        return String.format(appContext.getString(R.string.at_your_in_group), user.getNick());
+                        return String.format(appContext.getString(R.string.at_your_in_group), user.getNickname());
                     }
-                    return user.getNick() + ": " + ticker;
+                    return user.getNickname() + ": " + ticker;
                 }else{
                     if(EaseAtMessageHelper.get().isAtMeMsg(message)){
                         return String.format(appContext.getString(R.string.at_your_in_group), message.getFrom());

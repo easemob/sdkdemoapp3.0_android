@@ -35,7 +35,7 @@ public class ForwardMessageActivity extends PickContactNoCheckboxActivity {
 	@Override
 	protected void onListItemClick(int position) {
 		selectUser = contactAdapter.getItem(position);
-		new EaseAlertDialog(this, null, getString(R.string.confirm_forward_to, selectUser.getNick()), null, new AlertDialogUser() {
+		new EaseAlertDialog(this, null, getString(R.string.confirm_forward_to, selectUser.getNickname()), null, new AlertDialogUser() {
             @Override
             public void onResult(boolean confirmed, Bundle bundle) {
                 if (confirmed) {

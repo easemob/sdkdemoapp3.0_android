@@ -126,7 +126,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 				    if(isFinishing()){
 				        return;
 				    }
-					tvNickName.setText(user.getNick());
+					tvNickName.setText(user.getNickname());
 					if(!TextUtils.isEmpty(user.getAvatar())){
 						 Glide.with(UserProfileActivity.this).load(user.getAvatar()).placeholder(R.drawable.em_default_avatar).into(headAvatar);
 					}else{
