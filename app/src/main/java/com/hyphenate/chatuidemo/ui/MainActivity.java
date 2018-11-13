@@ -143,6 +143,11 @@ public class MainActivity extends BaseActivity {
 		    contactListFragment = (ContactListFragment) getSupportFragmentManager().getFragment(savedInstanceState, ContactListFragment.class.getSimpleName());
             settingFragment = (SettingsFragment) getSupportFragmentManager().getFragment(savedInstanceState, SettingsFragment.class.getSimpleName());
             fragments = new Fragment[]{conversationListFragment, contactListFragment, settingFragment};
+            getSupportFragmentManager().beginTransaction()
+                    .show(conversationListFragment)
+                    .hide(contactListFragment)
+                    .hide(settingFragment)
+                    .commit();
         } else {
             conversationListFragment = new ConversationListFragment();
             contactListFragment = new ContactListFragment();
@@ -158,7 +163,7 @@ public class MainActivity extends BaseActivity {
 
 		//register broadcast receiver to receive the change of group from DemoHelper
 		registerBroadcastReceiver();
-		
+
 		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 		EMClient.getInstance().addClientListener(clientListener);
 		EMClient.getInstance().addMultiDeviceListener(new MyMultiDeviceListener());
@@ -199,6 +204,7 @@ public class MainActivity extends BaseActivity {
 	 * init views
 	 */
 	private void initView() {
+	    EMLog.d(TAG, "initView");
 		unreadLabel = (TextView) findViewById(R.id.unread_msg_number);
 		unreadAddressLable = (TextView) findViewById(R.id.unread_address_number);
 		mTabs = new Button[3];
@@ -479,7 +485,9 @@ public class MainActivity extends BaseActivity {
 		//save fragments
         FragmentManager fm = getSupportFragmentManager();
         for (Fragment f : fragments) {
-            fm.putFragment(outState, f.getClass().getSimpleName(), f);
+            if (f.isAdded()) {
+                fm.putFragment(outState, f.getClass().getSimpleName(), f);
+            }
         }
 
 		super.onSaveInstanceState(outState);
