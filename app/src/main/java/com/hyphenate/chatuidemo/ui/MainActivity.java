@@ -24,9 +24,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.os.PowerManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
@@ -73,6 +75,7 @@ public class MainActivity extends BaseActivity {
 
 	private Button[] mTabs;
 	private ContactListFragment contactListFragment;
+    private SettingsFragment settingFragment;
 	private Fragment[] fragments;
 	private int index;
 	private int currentTabIndex;
@@ -80,7 +83,7 @@ public class MainActivity extends BaseActivity {
 	public boolean isConflict = false;
 	// user account was removed
 	private boolean isCurrentAccountRemoved = false;
-	
+
 
 	/**
 	 * check if current user account was remove
@@ -133,18 +136,28 @@ public class MainActivity extends BaseActivity {
 
 		inviteMessgeDao = new InviteMessgeDao(this);
 		UserDao userDao = new UserDao(this);
-		conversationListFragment = new ConversationListFragment();
-		contactListFragment = new ContactListFragment();
-		SettingsFragment settingFragment = new SettingsFragment();
-		fragments = new Fragment[] { conversationListFragment, contactListFragment, settingFragment};
 
-		getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, conversationListFragment)
-				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
-				.commit();
+		if (savedInstanceState != null) {
+		    EMLog.d(TAG, "get fragments from saveInstanceState");
+		    conversationListFragment = (ConversationListFragment) getSupportFragmentManager().getFragment(savedInstanceState, ConversationListFragment.class.getSimpleName());
+		    contactListFragment = (ContactListFragment) getSupportFragmentManager().getFragment(savedInstanceState, ContactListFragment.class.getSimpleName());
+            settingFragment = (SettingsFragment) getSupportFragmentManager().getFragment(savedInstanceState, SettingsFragment.class.getSimpleName());
+            fragments = new Fragment[]{conversationListFragment, contactListFragment, settingFragment};
+        } else {
+            conversationListFragment = new ConversationListFragment();
+            contactListFragment = new ContactListFragment();
+            settingFragment = new SettingsFragment();
+            fragments = new Fragment[]{conversationListFragment, contactListFragment, settingFragment};
+
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, conversationListFragment)
+                    .add(R.id.fragment_container, contactListFragment).hide(contactListFragment)
+                    .add(R.id.fragment_container, settingFragment).hide(settingFragment)
+                    .show(conversationListFragment)
+                    .commit();
+        }
 
 		//register broadcast receiver to receive the change of group from DemoHelper
 		registerBroadcastReceiver();
-		
 		
 		EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
 		EMClient.getInstance().addClientListener(clientListener);
@@ -166,7 +179,8 @@ public class MainActivity extends BaseActivity {
 		}
 	};
 
-	@TargetApi(23)
+
+    @TargetApi(23)
 	private void requestPermissions() {
 		PermissionsManager.getInstance().requestAllManifestPermissionsIfNecessary(this, new PermissionsResultAction() {
 			@Override
@@ -197,7 +211,7 @@ public class MainActivity extends BaseActivity {
 
 	/**
 	 * on tab clicked
-	 * 
+	 *
 	 * @param view
 	 */
 	public void onTabClicked(View view) {
@@ -227,7 +241,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	EMMessageListener messageListener = new EMMessageListener() {
-		
+
 		@Override
 		public void onMessageReceived(List<EMMessage> messages) {
 			// notify new message
@@ -236,16 +250,16 @@ public class MainActivity extends BaseActivity {
 			}
 			refreshUIWithMessage();
 		}
-		
+
 		@Override
 		public void onCmdMessageReceived(List<EMMessage> messages) {
 			refreshUIWithMessage();
 		}
-		
+
 		@Override
 		public void onMessageRead(List<EMMessage> messages) {
 		}
-		
+
 		@Override
 		public void onMessageDelivered(List<EMMessage> message) {
 		}
@@ -278,7 +292,7 @@ public class MainActivity extends BaseActivity {
 	public void back(View view) {
 		super.back(view);
 	}
-	
+
 	private void registerBroadcastReceiver() {
         broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
@@ -310,7 +324,7 @@ public class MainActivity extends BaseActivity {
 	         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
-	
+
 	public class MyContactListener implements EMContactListener {
         @Override
         public void onContactAdded(String username) {}
@@ -355,15 +369,15 @@ public class MainActivity extends BaseActivity {
 			}
 		}
 	}
-	
+
 	private void unregisterBroadcastReceiver(){
 	    broadcastManager.unregisterReceiver(broadcastReceiver);
 	}
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();		
-		
+		super.onDestroy();
+
 		if (exceptionBuilder != null) {
 		    exceptionBuilder.create().dismiss();
 		    exceptionBuilder = null;
@@ -375,7 +389,7 @@ public class MainActivity extends BaseActivity {
             unregisterReceiver(internalDebugReceiver);
         } catch (Exception e) {
         }
-		
+
 	}
 
 	/**
@@ -392,7 +406,7 @@ public class MainActivity extends BaseActivity {
 	}
 
 	/**
-	 * update the total unread count 
+	 * update the total unread count
 	 */
 	public void updateUnreadAddressLable() {
 		runOnUiThread(new Runnable() {
@@ -410,7 +424,7 @@ public class MainActivity extends BaseActivity {
 
 	/**
 	 * get unread event notification count, including application, accepted, etc
-	 * 
+	 *
 	 * @return
 	 */
 	public int getUnreadAddressCountTotal() {
@@ -421,7 +435,7 @@ public class MainActivity extends BaseActivity {
 
 	/**
 	 * get unread message count
-	 * 
+	 *
 	 * @return
 	 */
 	public int getUnreadMsgCountTotal() {
@@ -433,7 +447,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		if (!isConflict && !isCurrentAccountRemoved) {
 			updateUnreadLabel();
 			updateUnreadAddressLable();
@@ -461,10 +475,17 @@ public class MainActivity extends BaseActivity {
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putBoolean("isConflict", isConflict);
 		outState.putBoolean(Constant.ACCOUNT_REMOVED, isCurrentAccountRemoved);
+
+		//save fragments
+        FragmentManager fm = getSupportFragmentManager();
+        for (Fragment f : fragments) {
+            fm.putFragment(outState, f.getClass().getSimpleName(), f);
+        }
+
 		super.onSaveInstanceState(outState);
 	}
 
-	@Override
+    @Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			moveTaskToBack(false);
@@ -503,7 +524,7 @@ public class MainActivity extends BaseActivity {
 				if (exceptionBuilder == null)
 				    exceptionBuilder = new android.app.AlertDialog.Builder(MainActivity.this);
 				    exceptionBuilder.setTitle(st);
-				    exceptionBuilder.setMessage(getExceptionMessageId(exceptionType));	
+				    exceptionBuilder.setMessage(getExceptionMessageId(exceptionType));
 				    exceptionBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
 					@Override
@@ -546,7 +567,7 @@ public class MainActivity extends BaseActivity {
 		super.onNewIntent(intent);
 		showExceptionDialogFromIntent(intent);
 	}
-	
+
 	/**
 	 * debug purpose only, you can ignore this
 	 */
@@ -579,7 +600,7 @@ public class MainActivity extends BaseActivity {
         registerReceiver(internalDebugReceiver, filter);
     }
 
-	@Override 
+	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
 			@NonNull int[] grantResults) {
 		PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
