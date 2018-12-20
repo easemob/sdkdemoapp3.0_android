@@ -30,7 +30,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chatuidemo.R;
-import com.hyphenate.util.FileUtils;
+import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.TextFormater;
 
@@ -212,7 +212,7 @@ public class SharedFilesActivity extends BaseActivity {
 
     private void openFile(File file){
         if(file != null && file.exists()){
-            FileUtils.openFile(file, this);
+            EaseCompat.openFile(file, this);
         }
     }
 
