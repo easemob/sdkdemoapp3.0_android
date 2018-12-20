@@ -1219,12 +1219,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private String getMembersStr(List<EMConferenceMember> members) {
         String result = "";
         for (int i = 0; i < members.size(); i++) {
-            if (i == 0) {
-                result += EasyUtils.useridFromJid(members.get(i).memberName);
-                continue;
+            result += EasyUtils.useridFromJid(members.get(i).memberName);
+            if (i < members.size() - 1) {
+                result += ", ";
             }
-
-            result += ", " + members.get(i);
         }
         return result;
     }
