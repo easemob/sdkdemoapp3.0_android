@@ -21,7 +21,7 @@ import com.hyphenate.chatuidemo.ui.BaseActivity
 import com.hyphenate.easeui.utils.EaseUserUtils
 import com.hyphenate.exceptions.HyphenateException
 import com.hyphenate.util.EMLog
-import com.superrtc.mediamanager.EMediaEntities
+import com.hyphenate.util.EasyUtils
 
 /**
  * Created by zhangsong on 18-4-18.
@@ -195,7 +195,7 @@ class ConferenceInviteActivity : BaseActivity() {
 
     private fun memberContains(name: String): EMConferenceMember? {
         for (item in existMembers) {
-            if (item.memberName == name) {
+            if (EasyUtils.useridFromJid(item.memberName) == name) {
                 return item
             }
         }
