@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
     buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "com.hyphenate.chatuidemo"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 28
         multiDexEnabled true
         ndk {
             abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86'
