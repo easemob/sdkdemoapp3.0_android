@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hyphenate.chatuidemo"
-    android:versionCode="54"
-    android:versionName="3.5.2">
+    android:versionCode="55"
+    android:versionName="3.5.3">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
