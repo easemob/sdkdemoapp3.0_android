@@ -179,10 +179,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan" />
-        <!-- 自定义的contextmenu -->
+        <!-- 自定义的contextmenu, 注意该Activity不能设置orientation，否则在Android 8.0设备上会报
+        java.lang.IllegalStateException: Only fullscreen opaque activities can request orientation -->
         <activity
             android:name=".ui.ContextMenuActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" />
         <!-- 显示下载大图页面 -->
         <activity
