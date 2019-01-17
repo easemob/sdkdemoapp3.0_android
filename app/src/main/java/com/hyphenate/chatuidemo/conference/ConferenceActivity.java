@@ -939,14 +939,14 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:      // 电话挂断
                     // resume current voice conference.
-                    if (!normalParam.isAudioOff()) {
+                    if (normalParam.isAudioOff()) {
                         try {
                             EMClient.getInstance().callManager().resumeVoiceTransfer();
                         } catch (HyphenateException e) {
                             e.printStackTrace();
                         }
                     }
-                    if (!normalParam.isVideoOff()) {
+                    if (normalParam.isVideoOff()) {
                         try {
                             EMClient.getInstance().callManager().resumeVideoTransfer();
                         } catch (HyphenateException e) {

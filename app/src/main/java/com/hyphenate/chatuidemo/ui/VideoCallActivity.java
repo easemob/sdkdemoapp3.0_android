@@ -495,17 +495,17 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:      // 电话挂断
                     // resume current voice conference.
-                    if (!isMuteState) {
+                    if (isMuteState) {
                         try {
                             EMClient.getInstance().callManager().resumeVoiceTransfer();
                         } catch (HyphenateException e) {
                             e.printStackTrace();
                         }
-                    }
-                    try {
-                        EMClient.getInstance().callManager().resumeVideoTransfer();
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
+                        try {
+                            EMClient.getInstance().callManager().resumeVideoTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case TelephonyManager.CALL_STATE_OFFHOOK:   // 来电接通 或者 去电，去电接通  但是没法区分
@@ -516,11 +516,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                         } catch (HyphenateException e) {
                             e.printStackTrace();
                         }
-                    }
-                    try {
-                        EMClient.getInstance().callManager().pauseVideoTransfer();
-                    } catch (HyphenateException e) {
-                        e.printStackTrace();
+                        try {
+                            EMClient.getInstance().callManager().pauseVideoTransfer();
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
             }

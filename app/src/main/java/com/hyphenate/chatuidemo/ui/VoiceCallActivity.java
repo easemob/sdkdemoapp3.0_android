@@ -347,7 +347,7 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:      // 电话挂断
                     // resume current voice conference.
-                    if (!isMuteState) {
+                    if (isMuteState) {
                         try {
                             EMClient.getInstance().callManager().resumeVoiceTransfer();
                         } catch (HyphenateException e) {

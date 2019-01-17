@@ -16,7 +16,6 @@ public class PhoneStateManager {
 
     private static PhoneStateManager INSTANCE = null;
 
-    private Context appContext;
     private TelephonyManager telephonyManager;
     private List<PhoneStateCallback> stateCallbacks = null;
 
@@ -52,9 +51,9 @@ public class PhoneStateManager {
     }
 
     private PhoneStateManager(Context context) {
-        appContext = context.getApplicationContext();
+        Context appContext = context.getApplicationContext();
 
-        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager = (TelephonyManager) appContext.getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager != null) {
             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
