@@ -991,6 +991,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().removeConferenceListener(conferenceListener);
         DemoHelper.getInstance().popActivity(activity);
         super.onDestroy();
+        audioManager.setMode(AudioManager.MODE_NORMAL);
+        audioManager.setMicrophoneMute(false);
     }
 
     /**
