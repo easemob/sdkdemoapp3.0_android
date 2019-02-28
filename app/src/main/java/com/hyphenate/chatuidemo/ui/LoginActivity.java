@@ -34,7 +34,6 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
-import com.hyphenate.chatuidemo.HMSPushHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -150,7 +149,7 @@ public class LoginActivity extends BaseActivity {
 
         // reset current user name before login
         DemoHelper.getInstance().setCurrentUserName(currentUsername);
-        
+
 		final long start = System.currentTimeMillis();
 		// call login method
 		Log.d(TAG, "EMClient.getInstance().login");

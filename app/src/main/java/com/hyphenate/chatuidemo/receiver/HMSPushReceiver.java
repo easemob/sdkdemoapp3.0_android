@@ -23,10 +23,10 @@ public class HMSPushReceiver extends PushReceiver{
 
     @Override
     public void onToken(Context context, String token, Bundle extras){
-        //没有失败回调，假定token失败时token为null
         if(token != null && !token.equals("")){
+            //没有失败回调，假定token失败时token为null
             EMLog.d("HWHMSPush", "register huawei hms push token success token:" + token);
-            EMClient.getInstance().sendHMSPushTokenToServer("10492024", token);
+            EMClient.getInstance().sendHMSPushTokenToServer(token);
         }else{
             EMLog.e("HWHMSPush", "register huawei hms push token fail!");
         }

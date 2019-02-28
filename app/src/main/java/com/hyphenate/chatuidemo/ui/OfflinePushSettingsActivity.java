@@ -94,7 +94,7 @@ public class OfflinePushSettingsActivity extends BaseActivity implements Compoun
         useFCMSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (EMClient.getInstance().getOptions().isUseFCM()) {
+                if (useFCMSwitch.isSwitchOpen()) {
                     useFCMSwitch.closeSwitch();
                     settingsModel.setUseFCM(false);
                     EMClient.getInstance().getOptions().setUseFCM(false);
