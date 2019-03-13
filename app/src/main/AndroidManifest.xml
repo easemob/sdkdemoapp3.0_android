@@ -248,7 +248,7 @@
             android:name=".conference.ConferenceActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
         <!-- 直播模式 -->
