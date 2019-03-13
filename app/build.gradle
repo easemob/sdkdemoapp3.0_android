@@ -44,6 +44,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.1'
 
     // Google firebase cloud messaging
+    implementation 'com.google.android.gms:play-services-base:11.4.0'
     implementation 'com.google.firebase:firebase-messaging:11.4.0'
 
     // bugly start
@@ -53,6 +54,9 @@ dependencies {
 
     implementation project(':hmspush')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    // meizu push
+    implementation 'com.meizu.flyme.internet:push-internal:3.7.0@aar' //配置集成sdk
 }
 
 // ADD THIS AT THE BOTTOM

@@ -20,13 +20,13 @@
         <!-- 接入HMSSDK 需要注册的provider，authorities 一定不能与其他应用一样，所以这边 com.hyphenate.chatuidemo 要替换上您应用的包名-->
         <provider
             android:name="com.huawei.hms.update.provider.UpdateProvider"
-            android:authorities="com.hyphenate.chatuidemo.hms.update.provider"
+            android:authorities="${applicationId}.hms.update.provider"
             android:exported="false"
             android:grantUriPermissions="true" />
         <!-- 接入HMSSDK 需要注册的provider，authorities 一定不能与其他应用一样，所以这边 com.hyphenate.chatuidemo 要替换上您应用的包名-->
         <provider
             android:name="com.huawei.updatesdk.fileprovider.UpdateSdkFileProvider"
-            android:authorities="com.hyphenate.chatuidemo.updateSdk.fileProvider"
+            android:authorities="${applicationId}.updateSdk.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true"/>
         <!-- 使用 HMSAgent 代码接入HMSSDK 需要注册的activity-->
