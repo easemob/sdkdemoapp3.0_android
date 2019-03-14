@@ -38,6 +38,8 @@
    public void *(android.view.View);
 }
 
+-keep public class * extends android.app.Service
+
 # For enumeration classes, see http://proguard.sourceforge.net/manual/examples.html#enumerations
 -keepclassmembers enum * {
     public static **[] values();
@@ -83,12 +85,8 @@
 -dontwarn com.vivo.push.**
 -keep class com.vivo.push.**{*; }
 -keep class com.vivo.vms.**{*; }
--keep class com.hyphenate.push.platform.vivo.EMVivoMsgReceiver{*;}
 
-# mi push
--keep com.hyphenate.push.platform.mi.EMMiMsgReceiver {*;}
-
-# oppo push
--keep public class * extends android.app.Service
+# 环信 push
+-keep class com.hyphenate.push.*** {*;}
 
 
