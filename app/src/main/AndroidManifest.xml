@@ -165,7 +165,6 @@
         <!-- 退出群组提示框 -->
         <activity
             android:name=".ui.ExitGroupDialog"
-            android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyleBottom" />
         <!-- 群组选人 -->
         <activity
