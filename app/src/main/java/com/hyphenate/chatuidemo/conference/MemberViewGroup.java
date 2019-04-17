@@ -540,8 +540,8 @@ public class MemberViewGroup extends ViewGroup {
                 lp.width = pageWidth;
                 lp.height = screenHeight;
             } else {
-                lp.width = 0;
-                lp.height = 0;
+                lp.width = 1;
+                lp.height = 1;
             }
             child.setLayoutParams(lp);
         }
