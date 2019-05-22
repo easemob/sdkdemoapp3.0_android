@@ -451,10 +451,9 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
         monitor = true;
         EMCallSession callSession = EMClient.getInstance().callManager().getCurrentCallSession();
         final boolean isRecord = callSession.isRecordOnServer();
-        final boolean isMerge = callSession.isMergeStream();
         final String serverRecordId = callSession.getServerRecordId();
 
-        EMLog.e(TAG, "server record: " + isRecord + " merge stream? " + isMerge);
+        EMLog.e(TAG, "server record: " + isRecord );
         if (isRecord) {
             EMLog.e(TAG, "server record id: " + serverRecordId);
         }
@@ -466,7 +465,6 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                         String status = getApplicationContext().getString(EMClient.getInstance().callManager().isDirectCall()
                                 ? R.string.direct_call : R.string.relay_call);
                         status += " record? " + isRecord;
-                        status += " merge? " + isMerge;
                         status += " id: " + serverRecordId;
 
                         ((TextView)findViewById(R.id.tv_is_p2p)).setText(status);

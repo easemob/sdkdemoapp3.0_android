@@ -682,14 +682,13 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         monitor = true;
         EMCallSession callSession = EMClient.getInstance().callManager().getCurrentCallSession();
         final boolean isRecord = callSession.isRecordOnServer();
-        final boolean isMerge = callSession.isMergeStream();
         final String serverRecordId = callSession.getServerRecordId();
 
-        EMLog.e(TAG, "server record: " + isRecord + " merge stream? " + isMerge);
+        EMLog.e(TAG, "server record: " + isRecord);
         if (isRecord) {
             EMLog.e(TAG, "server record id: " + serverRecordId);
         }
-        final String recordString = " record? " + isRecord + " merge? " + isMerge + " id: " + serverRecordId;
+        final String recordString = " record? " + isRecord + " id: " + serverRecordId;
         new Thread(new Runnable() {
             public void run() {
                 while(monitor){
