@@ -38,6 +38,8 @@ public class PreferenceManager {
 	private static String SHARED_KEY_SETTING_AUTO_ACCEPT_GROUP_INVITATION = "shared_key_setting_auto_accept_group_invitation";
     private static String SHARED_KEY_SETTING_ADAPTIVE_VIDEO_ENCODE = "shared_key_setting_adaptive_video_encode";
 	private static String SHARED_KEY_SETTING_OFFLINE_PUSH_CALL = "shared_key_setting_offline_push_call";
+	private static String SHARED_KEY_SETTING_RECORD_ON_SERVER = "shared_key_setting_record_on_server";
+	private static String SHARED_KEY_SETTING_MERGE_STREAM = "shared_key_setting_merge_stream";
 	private static String SHARED_KEY_SETTING_OFFLINE_LARGE_CONFERENCE_MODE = "shared_key_setting_offline_large_conference_mode";
 
 	private static String SHARED_KEY_SETTING_GROUPS_SYNCED = "SHARED_KEY_SETTING_GROUPS_SYNCED";
@@ -189,6 +191,24 @@ public class PreferenceManager {
 
 	public boolean isPushCall() {
 		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_OFFLINE_PUSH_CALL, false);
+	}
+
+	public void setRecordOnServer(boolean value) {
+		editor.putBoolean(SHARED_KEY_SETTING_RECORD_ON_SERVER, value);
+		editor.apply();
+	}
+
+	public boolean isRecordOnServer() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_RECORD_ON_SERVER, false);
+	}
+
+	public void setMergeStream(boolean value) {
+		editor.putBoolean(SHARED_KEY_SETTING_MERGE_STREAM, value);
+		editor.apply();
+	}
+
+	public boolean isMergeStream() {
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_MERGE_STREAM, false);
 	}
 
 	public void setGroupsSynced(boolean synced){

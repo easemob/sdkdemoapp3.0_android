@@ -22,6 +22,7 @@ import com.hyphenate.EMMultiDeviceListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMConferenceAttribute;
 import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMConferenceMember;
 import com.hyphenate.chat.EMConferenceStream;
@@ -178,9 +179,9 @@ public class DemoHelper {
 	public void init(Context context) {
 	    demoModel = new DemoModel(context);
 	    EMOptions options = initChatOptions(context);
-//        options.setRestServer("118.193.28.212:31080");
-//        options.setIMServer("118.193.28.212");
-//        options.setImPort(31097);
+//        options.setRestServer("a1-hsb.easemob.com");
+//        options.setIMServer("39.107.54.56");
+//        options.setImPort(6717);
 
 	    //use default options if options is null
 		if (EaseUI.getInstance().init(context, options)) {
@@ -590,6 +591,11 @@ public class DemoHelper {
 
             @Override
             public void onRoleChanged(EMConferenceManager.EMConferenceRole role) {
+            }
+
+            @Override
+            public void onAttributesUpdated(EMConferenceAttribute[] attributes) {
+
             }
         });
         //register incoming call receiver

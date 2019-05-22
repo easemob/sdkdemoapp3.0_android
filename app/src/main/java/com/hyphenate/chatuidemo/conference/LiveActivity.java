@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -22,6 +23,7 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConference;
+import com.hyphenate.chat.EMConferenceAttribute;
 import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMConferenceMember;
 import com.hyphenate.chat.EMConferenceStream;
@@ -1072,6 +1074,11 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 }
             });
         }
+    }
+
+    @Override
+    public void onAttributesUpdated(EMConferenceAttribute[] attributes) {
+
     }
 
     private void setRequestBtnState(int state) {

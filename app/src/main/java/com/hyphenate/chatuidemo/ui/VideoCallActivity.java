@@ -40,6 +40,7 @@ import android.widget.Toast;
 import android.text.format.DateFormat;
 
 import com.hyphenate.chat.EMCallManager.EMCameraDataProcessor;
+import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
@@ -679,6 +680,16 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
      */
     void startMonitor(){
         monitor = true;
+        EMCallSession callSession = EMClient.getInstance().callManager().getCurrentCallSession();
+        final boolean isRecord = callSession.isRecordOnServer();
+        final boolean isMerge = callSession.isMergeStream();
+        final String serverRecordId = callSession.getServerRecordId();
+
+        EMLog.e(TAG, "server record: " + isRecord + " merge stream? " + isMerge);
+        if (isRecord) {
+            EMLog.e(TAG, "server record id: " + serverRecordId);
+        }
+        final String recordString = " record? " + isRecord + " merge? " + isMerge + " id: " + serverRecordId;
         new Thread(new Runnable() {
             public void run() {
                 while(monitor){
@@ -689,7 +700,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     + "\nFramerate：" + callHelper.getVideoFrameRate()
                                     + "\nLost：" + callHelper.getVideoLostRate()
                                     + "\nLocalBitrate：" + callHelper.getLocalBitrate()
-                                    + "\nRemoteBitrate：" + callHelper.getRemoteBitrate());
+                                    + "\nRemoteBitrate：" + callHelper.getRemoteBitrate()
+                                    + "\n" + recordString);
 
                             ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
                                     ? R.string.direct_call : R.string.relay_call);
