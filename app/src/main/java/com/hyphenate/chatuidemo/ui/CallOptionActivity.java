@@ -120,6 +120,26 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
         } else {
             swOfflineCallPush.closeSwitch();
         }
+
+        // record on server
+        RelativeLayout rlSwitchRecordOnServer = (RelativeLayout)findViewById(R.id.rl_switch_record_on_server);
+        rlSwitchRecordOnServer.setOnClickListener(this);
+        EaseSwitchButton swRecordOnServer = (EaseSwitchButton)findViewById(R.id.switch_record_on_server);
+        if (PreferenceManager.getInstance().isRecordOnServer()) {
+            swRecordOnServer.openSwitch();
+        } else {
+            swRecordOnServer.closeSwitch();
+        }
+
+        // merge stream
+        RelativeLayout rlSwitchMergeStream = (RelativeLayout)findViewById(R.id.rl_switch_merge_stream);
+        rlSwitchMergeStream.setOnClickListener(this);
+        EaseSwitchButton swMergeStream = (EaseSwitchButton)findViewById(R.id.switch_merge_stream);
+        if (PreferenceManager.getInstance().isMergeStream()) {
+            swMergeStream.openSwitch();
+        } else {
+            swMergeStream.closeSwitch();
+        }
     }
 
     void initCameraResolutionSpinner(final int cameraId, final int spinnerId) {
@@ -318,6 +338,26 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                     EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(true);
                     swOfflineCallPush.openSwitch();
                     PreferenceManager.getInstance().setPushCall(true);
+                }
+                break;
+            case R.id.rl_switch_record_on_server:
+                EaseSwitchButton swRecordOnServer = (EaseSwitchButton)findViewById(R.id.switch_record_on_server);
+                if (swRecordOnServer.isSwitchOpen()) {
+                    swRecordOnServer.closeSwitch();
+                    PreferenceManager.getInstance().setRecordOnServer(false);
+                } else {
+                    swRecordOnServer.openSwitch();
+                    PreferenceManager.getInstance().setRecordOnServer(true);
+                }
+                break;
+            case R.id.rl_switch_merge_stream:
+                EaseSwitchButton swMergeStream = (EaseSwitchButton)findViewById(R.id.switch_merge_stream);
+                if (swMergeStream.isSwitchOpen()) {
+                    swMergeStream.closeSwitch();
+                    PreferenceManager.getInstance().setMergeStream(false);
+                } else {
+                    swMergeStream.openSwitch();
+                    PreferenceManager.getInstance().setMergeStream(true);
                 }
                 break;
             default:

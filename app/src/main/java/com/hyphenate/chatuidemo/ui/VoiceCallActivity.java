@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -448,12 +449,25 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
      */
     void startMonitor(){
         monitor = true;
+        EMCallSession callSession = EMClient.getInstance().callManager().getCurrentCallSession();
+        final boolean isRecord = callSession.isRecordOnServer();
+        final String serverRecordId = callSession.getServerRecordId();
+
+        EMLog.e(TAG, "server record: " + isRecord );
+        if (isRecord) {
+            EMLog.e(TAG, "server record id: " + serverRecordId);
+        }
+
         new Thread(new Runnable() {
             public void run() {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
+                        String status = getApplicationContext().getString(EMClient.getInstance().callManager().isDirectCall()
                                 ? R.string.direct_call : R.string.relay_call);
+                        status += " record? " + isRecord;
+                        status += " id: " + serverRecordId;
+
+                        ((TextView)findViewById(R.id.tv_is_p2p)).setText(status);
                     }
                 });
                 while(monitor){

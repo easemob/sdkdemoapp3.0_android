@@ -22,6 +22,7 @@ import com.hyphenate.chat.EMMessage.Status;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 
@@ -155,10 +156,12 @@ public class CallActivity extends BaseActivity {
             case MSG_CALL_MAKE_VIDEO:
             case MSG_CALL_MAKE_VOICE:
                 try {
+                    boolean record = PreferenceManager.getInstance().isRecordOnServer();
+                    boolean merge = PreferenceManager.getInstance().isMergeStream();
                     if (msg.what == MSG_CALL_MAKE_VIDEO) {
-                        EMClient.getInstance().callManager().makeVideoCall(username);
+                        EMClient.getInstance().callManager().makeVideoCall(username, "", record, merge);
                     } else { 
-                        EMClient.getInstance().callManager().makeVoiceCall(username);
+                        EMClient.getInstance().callManager().makeVoiceCall(username, "", record, merge);
                     }
                 } catch (final EMServiceNotReadyException e) {
                     e.printStackTrace();
