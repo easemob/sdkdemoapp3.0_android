@@ -95,22 +95,7 @@
             android:text="@string/switch_camera"
             android:layout_below="@id/btn_record_video"
             />
-        <Button
-            android:id="@+id/btn_capture_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/capture_image"
-            android:layout_below="@id/btn_switch_camera"
-            />
-        <SeekBar
-            android:id="@+id/seekbar_y_detal"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/btn_capture_image"
-            android:max="200"
-            android:progress="100"
-            />
-        <!--     <Button 
+        <!--     <Button
             android:layout_marginTop="3dp"
             android:id="@+id/btn_toggle_video_stream"
             android:layout_width="wrap_content"

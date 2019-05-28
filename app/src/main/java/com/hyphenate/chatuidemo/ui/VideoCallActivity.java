@@ -13,17 +13,14 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
-import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -34,16 +31,13 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.text.format.DateFormat;
 
-import com.hyphenate.chat.EMCallManager.EMCameraDataProcessor;
 import com.hyphenate.chat.EMCallSession;
-import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.PhoneStateManager;
@@ -52,9 +46,6 @@ import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
 import com.superrtc.sdk.VideoView;
 
-import java.io.File;
-
-import java.util.Date;
 import java.util.UUID;
 
 
@@ -91,35 +82,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private Handler uiHandler;
 
     private boolean isInCalling;
-    boolean isRecording = false;
 //    private Button recordBtn;
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
-
-    private BrightnessDataProcess dataProcessor = new BrightnessDataProcess();
-
-    // dynamic adjust brightness
-    class BrightnessDataProcess implements EMCameraDataProcessor {
-        byte yDelta = 0;
-        synchronized void setYDelta(byte yDelta) {
-            Log.d("VideoCallActivity", "brigntness uDelta:" + yDelta);
-            this.yDelta = yDelta;
-        }
-
-        // data size is width*height*2
-        // the first width*height is Y, second part is UV
-        // the storage layout detailed please refer 2.x demo CameraHelper.onPreviewFrame
-        @Override
-        public synchronized void onProcessData(byte[] data, Camera camera, final int width, final int height, final int rotateAngel) {
-            int wh = width * height;
-            for (int i = 0; i < wh; i++) {
-                int d = (data[i] & 0xFF) + yDelta;
-                d = d < 16 ? 16 : d;
-                d = d > 235 ? 235 : d;
-                data[i] = (byte)d;
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,10 +122,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         bottomContainer = (LinearLayout) findViewById(R.id.ll_bottom_container);
         monitorTextView = (TextView) findViewById(R.id.tv_call_monitor);
         netwrokStatusVeiw = (TextView) findViewById(R.id.tv_network_status);
-//        recordBtn = (Button) findViewById(R.id.btn_record_video);
         Button switchCameraBtn = (Button) findViewById(R.id.btn_switch_camera);
-        Button captureImageBtn = (Button) findViewById(R.id.btn_capture_image);
-        SeekBar YDeltaSeekBar = (SeekBar) findViewById(R.id.seekbar_y_detal);
 
         refuseBtn.setOnClickListener(this);
         answerBtn.setOnClickListener(this);
@@ -168,11 +130,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         muteImage.setOnClickListener(this);
         handsFreeImage.setOnClickListener(this);
         rootContainer.setOnClickListener(this);
-//        recordBtn.setOnClickListener(this);
         switchCameraBtn.setOnClickListener(this);
-        captureImageBtn.setOnClickListener(this);
-
-        YDeltaSeekBar.setOnSeekBarChangeListener(new YDeltaSeekBarListener());
 
         msgid = UUID.randomUUID().toString();
         isInComingCall = getIntent().getBooleanExtra("isComingCall", false);
@@ -231,24 +189,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
         // get instance of call helper, should be called after setSurfaceView was called
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
-
-        EMClient.getInstance().callManager().setCameraDataProcessor(dataProcessor);
-    }
-
-    class YDeltaSeekBarListener implements SeekBar.OnSeekBarChangeListener {
-
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            dataProcessor.setYDelta((byte)(20.0f * (progress - 50) / 50.0f));
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-        }
     }
 
     /**
@@ -563,9 +503,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             chronometer.stop();
             endCallTriggerByMe = true;
             callStateTextView.setText(getResources().getString(R.string.hanging_up));
-            if(isRecording){
-                callHelper.stopVideoRecord();
-            }
             EMLog.d(TAG, "btn_hangup_call");
             handler.sendEmptyMessage(MSG_CALL_END);
             break;
@@ -636,19 +573,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         case R.id.btn_switch_camera: //switch camera
             handler.sendEmptyMessage(MSG_CALL_SWITCH_CAMERA);
             break;
-        case R.id.btn_capture_image:
-            DateFormat df = new DateFormat();
-            Date d = new Date();
-            File storage = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            final String filename = storage.getAbsolutePath() + "/" + df.format("MM-dd-yy--h-mm-ss", d) + ".jpg";
-            EMClient.getInstance().callManager().getVideoCallHelper().takePicture(filename);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(VideoCallActivity.this, "saved image to:" + filename, Toast.LENGTH_SHORT).show();
-                }
-            });
-            break;
         default:
             break;
         }
@@ -658,10 +582,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     protected void onDestroy() {
         DemoHelper.getInstance().isVideoCalling = false;
         stopMonitor();
-        if(isRecording){
-            callHelper.stopVideoRecord();
-            isRecording = false;
-        }
         localSurface.getRenderer().dispose();
         localSurface = null;
         oppositeSurface.getRenderer().dispose();
