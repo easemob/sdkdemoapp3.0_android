@@ -423,6 +423,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             String s8 = getResources().getString(R.string.did_not_answer);
                             String s9 = getResources().getString(R.string.Has_been_cancelled);
                             String s10 = getResources().getString(R.string.Refused);
+                            String st12 = "service not enable";
+                            String st13 = "service arrearages";
+                            String st14 = "service forbidden";
 
                             if (fError == CallError.REJECTED) {
                                 callingState = CallingState.BEREFUSED;
@@ -441,6 +444,15 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                             }else if (fError == CallError.ERROR_LOCAL_SDK_VERSION_OUTDATED || fError == CallError.ERROR_REMOTE_SDK_VERSION_OUTDATED){
                                 callingState = CallingState.VERSION_NOT_SAME;
                                 callStateTextView.setText(R.string.call_version_inconsistent);
+                            } else if(fError == CallError.ERROR_SERVICE_NOT_ENABLE) {
+                                callingState = CallingState.SERVICE_NOT_ENABLE;
+                                callStateTextView.setText(st12);
+                            } else if(fError == CallError.ERROR_SERVICE_ARREARAGES) {
+                                callingState = CallingState.SERVICE_ARREARAGES;
+                                callStateTextView.setText(st13);
+                            } else if(fError == CallError.ERROR_SERVICE_FORBIDDEN) {
+                                callingState = CallingState.SERVICE_NOT_ENABLE;
+                                callStateTextView.setText(st14);
                             } else {
                                 if (isRefused) {
                                     callingState = CallingState.REFUSED;
