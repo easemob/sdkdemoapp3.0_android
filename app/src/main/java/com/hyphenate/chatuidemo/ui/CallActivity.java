@@ -343,6 +343,9 @@ public class CallActivity extends BaseActivity {
         String st6 = getResources().getString(R.string.The_other_party_did_not_answer);
         String st7 = getResources().getString(R.string.did_not_answer);
         String st8 = getResources().getString(R.string.Has_been_cancelled);
+        String st12 = "service not enable";
+        String st13 = "service arrearages";
+        String st14 = "service forbidden";
         switch (callingState) {
         case NORMAL:
             txtBody = new EMTextMessageBody(st1 + callDruationText);
@@ -368,6 +371,13 @@ public class CallActivity extends BaseActivity {
         case VERSION_NOT_SAME:
             txtBody = new EMTextMessageBody(getString(R.string.call_version_inconsistent));
             break;
+        case SERVICE_ARREARAGES:
+            txtBody = new EMTextMessageBody(st13);
+            break;
+        case SERVICE_NOT_ENABLE:
+            txtBody = new EMTextMessageBody(st12);
+            break;
+
         default:
             txtBody = new EMTextMessageBody(st8);
             break;
@@ -388,6 +398,6 @@ public class CallActivity extends BaseActivity {
     }
 
     enum CallingState {
-        CANCELLED, NORMAL, REFUSED, BEREFUSED, UNANSWERED, OFFLINE, NO_RESPONSE, BUSY, VERSION_NOT_SAME
+        CANCELLED, NORMAL, REFUSED, BEREFUSED, UNANSWERED, OFFLINE, NO_RESPONSE, BUSY, VERSION_NOT_SAME, SERVICE_ARREARAGES, SERVICE_NOT_ENABLE
     }
 }

@@ -571,6 +571,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                Toast.makeText(activity, "Create and join conference failed error " + error + ", msg: " + errorMsg,  Toast.LENGTH_LONG).show();
                                 if (callBack != null) {
                                     callBack.onError(error, errorMsg);
                                 }
