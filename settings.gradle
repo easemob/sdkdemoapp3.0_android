@@ -7,3 +7,5 @@ project(':easeui').projectDir = new File('../easeui/easeui')
 //内部使用, 引入emclient-linux工程源码, release时需要把下面两行注释掉
 //include ':hyphenatechatsdknative'
 //project(':hyphenatechatsdknative').projectDir = new File('../emclient-linux/hyphenatechatsdknative')
+//include ':relinker'
+//project(':relinker').projectDir = new File('../emclient-android/relinker')

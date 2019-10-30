@@ -26,5 +26,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // 华为 HMS push sdk
+    api 'com.huawei.android.hms:base:2.6.0.301'
     api 'com.huawei.android.hms:push:2.6.0.301'
 }

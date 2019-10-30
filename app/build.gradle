@@ -54,7 +54,7 @@ dependencies {
     implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
     // bugly end
     implementation project(':hmspush')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // meizu push
     implementation 'com.meizu.flyme.internet:push-internal:3.7.0@aar'//配置集成sdk
 
