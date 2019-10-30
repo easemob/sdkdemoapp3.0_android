@@ -824,12 +824,13 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			dialog.setTitle("group");
 			dialog.setContentView(R.layout.em_chatroom_member_menu);
 
-			int ids[] = { R.id.menu_item_add_admin,
+			int ids[] = {
+					R.id.menu_item_transfer_owner,
+					R.id.menu_item_add_admin,
 					R.id.menu_item_rm_admin,
 					R.id.menu_item_remove_member,
 					R.id.menu_item_add_to_blacklist,
 					R.id.menu_item_remove_from_blacklist,
-					R.id.menu_item_transfer_owner,
 					R.id.menu_item_mute,
 					R.id.menu_item_unmute};
 
@@ -1085,7 +1086,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						dialog.show();
 
 						boolean[] normalVisibilities = {
-								false,      //R.id.menu_item_transfer_owner,
+								true,      //R.id.menu_item_transfer_owner,
 								isCurrentOwner(group) ? true : false,       //R.id.menu_item_add_admin,
 								false,      //R.id.menu_item_rm_admin,
 								true,       //R.id.menu_item_remove_member,
