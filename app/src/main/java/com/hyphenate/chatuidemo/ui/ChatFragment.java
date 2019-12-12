@@ -18,9 +18,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
+import com.hyphenate.chat.EMCallOptions;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMOptions;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
@@ -30,6 +32,7 @@ import com.hyphenate.chatuidemo.conference.ConferenceActivity;
 import com.hyphenate.chatuidemo.conference.LiveActivity;
 import com.hyphenate.chatuidemo.domain.EmojiconExampleGroupData;
 import com.hyphenate.chatuidemo.domain.RobotUser;
+import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.chatuidemo.widget.ChatRowConferenceInvitePresenter;
 import com.hyphenate.chatuidemo.widget.ChatRowLivePresenter;
 import com.hyphenate.chatuidemo.widget.EaseChatRecallPresenter;
@@ -367,6 +370,14 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if (!EMClient.getInstance().isConnected()) {
             Toast.makeText(getActivity(), R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
         } else {
+
+            //音频数据传输初始化
+            boolean flag = PreferenceManager.getInstance().isExternalAudioInputResolution();
+            int sampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
+            EMLog.e("callOption startExternalAudio", String.valueOf(flag)+"  "+Integer.toString(sampleRate));
+            EMClient.getInstance().callManager().getCallOptions().startExternalAudio(flag,sampleRate,1);
+
+            EMLog.i(TAG, "Intent to the ding-msg send activity.");
             startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
                     .putExtra("isComingCall", false));
             // voiceCallBtn.setEnabled(false);
@@ -381,6 +392,13 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if (!EMClient.getInstance().isConnected())
             Toast.makeText(getActivity(), R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
         else {
+
+            //音频数据传输初始化
+            boolean flag = PreferenceManager.getInstance().isExternalAudioInputResolution();
+            int sampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
+            EMLog.e("callOption startExternalAudio", String.valueOf(flag)+"  "+Integer.toString(sampleRate));
+            EMClient.getInstance().callManager().getCallOptions().startExternalAudio(flag,sampleRate,1);
+
             startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
                     .putExtra("isComingCall", false));
             // videoCallBtn.setEnabled(false);

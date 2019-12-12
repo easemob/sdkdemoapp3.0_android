@@ -17,6 +17,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.easeui.widget.EaseSwitchButton;
+import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +101,15 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
         initCameraResolutionSpinner(Camera.CameraInfo.CAMERA_FACING_BACK, R.id.spinner_video_resolution_back);
         initCameraResolutionSpinner(Camera.CameraInfo.CAMERA_FACING_FRONT, R.id.spinner_video_resolution_front);
 
+        // external audioInput
+        RelativeLayout rlSwitcheExternalAudioInput = (RelativeLayout)findViewById(R.id.rl_switch_external_audioInput_resolution);
+        rlSwitcheExternalAudioInput.setOnClickListener(this);
+        EaseSwitchButton swOnExternalAudioInput = (EaseSwitchButton)findViewById(R.id.switch_external_audioInput_resolution);
+        if (PreferenceManager.getInstance().isExternalAudioInputResolution()) {
+            swOnExternalAudioInput.openSwitch();
+        } else {
+            swOnExternalAudioInput.closeSwitch();
+        }
 
         // fixed sample rate
         RelativeLayout rlSwitchSampleRate = (RelativeLayout)findViewById(R.id.rl_switch_fix_video_resolution);
@@ -282,6 +292,8 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                          String data = audioSampleRate.substring(0, audioSampleRate.length() - 2);
                          int hz = new Integer(data).intValue();
                          EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(hz);
+
+                         EMLog.e("callOption startExternalAudio setAudioSampleRate: ",Integer.toString(hz));
                          PreferenceManager.getInstance().setCallAudioSampleRate(hz);
                      } catch (Exception e) {
                          e.printStackTrace();
@@ -360,6 +372,15 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                     PreferenceManager.getInstance().setMergeStream(true);
                 }
                 break;
+            case R.id.rl_switch_external_audioInput_resolution:
+                 EaseSwitchButton swExternalAudioInputResolution = (EaseSwitchButton)findViewById(R.id.switch_external_audioInput_resolution);
+                 if(swExternalAudioInputResolution.isSwitchOpen()) {
+                     swExternalAudioInputResolution.closeSwitch();
+                     PreferenceManager.getInstance().setExternalAudioInputResolution(false);
+                 }else {
+                     swExternalAudioInputResolution.openSwitch();
+                     PreferenceManager.getInstance().setExternalAudioInputResolution(true);
+                 }
             default:
                 break;
         }

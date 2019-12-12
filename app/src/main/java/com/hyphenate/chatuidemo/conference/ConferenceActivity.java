@@ -545,6 +545,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private void createAndJoinConference(final EMValueCallBack<EMConference> callBack) {
         boolean record = PreferenceManager.getInstance().isRecordOnServer();
         boolean merge = PreferenceManager.getInstance().isMergeStream();
+
+        //音频数据传输初始化
+        boolean flag = PreferenceManager.getInstance().isExternalAudioInputResolution();
+        int sampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
+        EMLog.e("callOption startExternalAudio", String.valueOf(flag)+"  "+Integer.toString(sampleRate));
+        EMClient.getInstance().callManager().getCallOptions().startExternalAudio(flag,sampleRate,1);
+
         EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LargeCommunication,
                 password, record, merge, new EMValueCallBack<EMConference>() {
                     @Override
@@ -585,6 +592,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 作为成员直接根据 confId 和 password 加入会议
      */
     private void joinConference() {
+
+        //音频数据传输初始化
+        boolean flag = PreferenceManager.getInstance().isExternalAudioInputResolution();
+        int sampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
+        EMLog.e("callOption startExternalAudio", String.valueOf(flag)+"  "+Integer.toString(sampleRate));
+        EMClient.getInstance().callManager().getCallOptions().startExternalAudio(flag,sampleRate,1);
+
         hangupBtn.setVisibility(View.VISIBLE);
         EMClient.getInstance().conferenceManager().joinConference(confId, password, new EMValueCallBack<EMConference>() {
             @Override
