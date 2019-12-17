@@ -191,13 +191,6 @@ public class CallActivity extends BaseActivity {
                     ringtone.stop();
                 if (isInComingCall) {
                     try {
-
-                        //音频数据传输初始化
-                        boolean flag = PreferenceManager.getInstance().isExternalAudioInputResolution();
-                        int sampleRate =PreferenceManager.getInstance().getCallAudioSampleRate();
-                        EMLog.e("callOption startExternalAudio", String.valueOf(flag)+"  "+Integer.toString(sampleRate));
-                        EMClient.getInstance().callManager().getCallOptions().startExternalAudio(flag,sampleRate,1);
-
                         EMClient.getInstance().callManager().answerCall();
                         isAnswered = true;
                         // meizu MX5 4G, hasDataConnection(context) return status is incorrect
