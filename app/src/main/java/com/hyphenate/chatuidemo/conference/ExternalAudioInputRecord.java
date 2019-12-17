@@ -168,7 +168,7 @@ public class ExternalAudioInputRecord {
             releaseAudioResources();
             return -1;
         }
-        Log.e(TAG, "open mic success");
+        Log.d(TAG, "open mic success");
         return framesPerBuffer;
     }
 
