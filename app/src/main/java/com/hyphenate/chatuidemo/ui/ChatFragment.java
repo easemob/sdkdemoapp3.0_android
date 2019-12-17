@@ -370,13 +370,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if (!EMClient.getInstance().isConnected()) {
             Toast.makeText(getActivity(), R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
         } else {
-
-            //音频数据传输初始化
-            boolean flag = PreferenceManager.getInstance().isExternalAudioInputResolution();
-            int sampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
-            EMLog.e("callOption startExternalAudio", String.valueOf(flag)+"  "+Integer.toString(sampleRate));
-            EMClient.getInstance().callManager().getCallOptions().startExternalAudio(flag,sampleRate,1);
-
             EMLog.i(TAG, "Intent to the ding-msg send activity.");
             startActivity(new Intent(getActivity(), VoiceCallActivity.class).putExtra("username", toChatUsername)
                     .putExtra("isComingCall", false));
@@ -392,13 +385,6 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         if (!EMClient.getInstance().isConnected())
             Toast.makeText(getActivity(), R.string.not_connect_to_server, Toast.LENGTH_SHORT).show();
         else {
-
-            //音频数据传输初始化
-            boolean flag = PreferenceManager.getInstance().isExternalAudioInputResolution();
-            int sampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
-            EMLog.e("callOption startExternalAudio", String.valueOf(flag)+"  "+Integer.toString(sampleRate));
-            EMClient.getInstance().callManager().getCallOptions().startExternalAudio(flag,sampleRate,1);
-
             startActivity(new Intent(getActivity(), VideoCallActivity.class).putExtra("username", toChatUsername)
                     .putExtra("isComingCall", false));
             // videoCallBtn.setEnabled(false);
