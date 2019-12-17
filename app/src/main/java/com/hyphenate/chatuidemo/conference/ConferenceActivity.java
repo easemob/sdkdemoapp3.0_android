@@ -546,12 +546,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         boolean record = PreferenceManager.getInstance().isRecordOnServer();
         boolean merge = PreferenceManager.getInstance().isMergeStream();
 
-        //音频数据传输初始化
-        boolean flag = PreferenceManager.getInstance().isExternalAudioInputResolution();
-        int sampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
-        EMLog.e("callOption startExternalAudio", String.valueOf(flag)+"  "+Integer.toString(sampleRate));
-        EMClient.getInstance().callManager().getCallOptions().startExternalAudio(flag,sampleRate,1);
-
         EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LargeCommunication,
                 password, record, merge, new EMValueCallBack<EMConference>() {
                     @Override
@@ -592,13 +586,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      * 作为成员直接根据 confId 和 password 加入会议
      */
     private void joinConference() {
-
-        //音频数据传输初始化
-        boolean flag = PreferenceManager.getInstance().isExternalAudioInputResolution();
-        int sampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
-        EMLog.e("callOption startExternalAudio", String.valueOf(flag)+"  "+Integer.toString(sampleRate));
-        EMClient.getInstance().callManager().getCallOptions().startExternalAudio(flag,sampleRate,1);
-
         hangupBtn.setVisibility(View.VISIBLE);
         EMClient.getInstance().conferenceManager().joinConference(confId, password, new EMValueCallBack<EMConference>() {
             @Override
@@ -744,9 +731,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().exitConference(new EMValueCallBack() {
             @Override
             public void onSuccess(Object value) {
+                //如果启动外部音频输入 停止音频录制
+                if(PreferenceManager.getInstance().isExternalAudioInputResolution()){
+                    ExternalAudioInputRecord.getInstance().stopRecording();
+                }
                 finish();
             }
-
             @Override
             public void onError(int error, String errorMsg) {
                 EMLog.e(TAG, "exit conference failed " + error + ", " + errorMsg);
@@ -768,10 +758,14 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void publish() {
         addSelfToList();
-
         EMClient.getInstance().conferenceManager().publish(normalParam, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
+
+                //如果启动外部音频输入 ，启动音频录制
+                if(PreferenceManager.getInstance().isExternalAudioInputResolution()){
+                    ExternalAudioInputRecord.getInstance().startRecording();
+                }
                 conference.setPubStreamId(value, EMConferenceStream.StreamType.NORMAL);
                 localView.setStreamId(value);
 
@@ -837,8 +831,11 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().unpublish(publishId, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
+                //如果启动外部音频输入 停止音频录制
+                if(PreferenceManager.getInstance().isExternalAudioInputResolution()){
+                    ExternalAudioInputRecord.getInstance().stopRecording();
+                }
             }
-
             @Override
             public void onError(int error, String errorMsg) {
                 EMLog.e(TAG, "unpublish failed: error=" + error + ", msg=" + errorMsg);
