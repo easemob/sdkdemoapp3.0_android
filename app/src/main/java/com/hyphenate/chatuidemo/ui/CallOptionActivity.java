@@ -4,6 +4,7 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -291,10 +292,10 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                      try {
                          String data = audioSampleRate.substring(0, audioSampleRate.length() - 2);
                          int hz = new Integer(data).intValue();
-                         EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(hz);
-
-                         EMLog.e("callOption startExternalAudio setAudioSampleRate: ",Integer.toString(hz));
                          PreferenceManager.getInstance().setCallAudioSampleRate(hz);
+
+                         boolean externalAudioflag  = PreferenceManager.getInstance().isExternalAudioInputResolution();
+                         EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(externalAudioflag,hz,1);
                      } catch (Exception e) {
                          e.printStackTrace();
                      }
@@ -377,9 +378,15 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                  if(swExternalAudioInputResolution.isSwitchOpen()) {
                      swExternalAudioInputResolution.closeSwitch();
                      PreferenceManager.getInstance().setExternalAudioInputResolution(false);
+
+                     int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
+                     EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(false,hz,1);
                  }else {
                      swExternalAudioInputResolution.openSwitch();
                      PreferenceManager.getInstance().setExternalAudioInputResolution(true);
+
+                     int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
+                     EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(true,hz,1);
                  }
             default:
                 break;
