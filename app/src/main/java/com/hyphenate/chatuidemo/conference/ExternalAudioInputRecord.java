@@ -34,8 +34,6 @@ public class ExternalAudioInputRecord {
 
     public static final int audioSource = MediaRecorder.AudioSource.VOICE_COMMUNICATION;
 
-    public static boolean use2channels = false; //only for some special devices
-
     private ByteBuffer byteBuffer;
 
     private AudioRecord audioRecord;
@@ -126,24 +124,9 @@ public class ExternalAudioInputRecord {
         }
         Log.d(TAG, "byteBuffer.capacity: " + byteBuffer.capacity());
         emptyBytes = new byte[byteBuffer.capacity()];
-        // Rather than passing the ByteBuffer with every callback (requiring
-        // the potentially expensive GetDirectBufferAddress) we simply have the
-        // the native class cache the address to the memory once.
-        //nativeCacheDirectBufferAddress(nativeAudioRecord, byteBuffer);
-
-        // Get the minimum buffer size required for the successful creation of
-        // an AudioRecord object, in byte units.
-        // Note that this size doesn't guarantee a smooth recording under load.
-        final int channelConfig;
-        if (use2channels) {
-            channelConfig = channelCountToConfiguration(2);
-            Log.e(TAG, "using stereo and 16k sample rate for some special devices");
-        } else {
-            channelConfig = channelCountToConfiguration(channels);
-        }
 
         int minBufferSize =
-                AudioRecord.getMinBufferSize(sampleRate, channelConfig, AudioFormat.ENCODING_PCM_16BIT);
+                AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
         if (minBufferSize == AudioRecord.ERROR || minBufferSize == AudioRecord.ERROR_BAD_VALUE) {
             Log.e(TAG, "AudioRecord.getMinBufferSize failed: " + minBufferSize);
             return -1;
@@ -156,7 +139,7 @@ public class ExternalAudioInputRecord {
         int bufferSizeInBytes = Math.max(BUFFER_SIZE_FACTOR * minBufferSize, byteBuffer.capacity());
         Log.d(TAG, "bufferSizeInBytes: " + bufferSizeInBytes);
         try {
-            audioRecord = new AudioRecord(audioSource, sampleRate, channelConfig,
+            audioRecord = new AudioRecord(audioSource, sampleRate, AudioFormat.CHANNEL_IN_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, bufferSizeInBytes);
         } catch (IllegalArgumentException e) {
             Log.d(TAG, "AudioRecord ctor error: " + e.getMessage());
@@ -228,9 +211,6 @@ public class ExternalAudioInputRecord {
         if (!condition) {
             throw new AssertionError("Expected condition to be true");
         }
-    }
-    private int channelCountToConfiguration(int channels) {
-        return (channels == 1 ? AudioFormat.CHANNEL_IN_MONO : AudioFormat.CHANNEL_IN_STEREO);
     }
 
     private boolean joinUninterruptibly(Thread thread, long timeoutMs) {
