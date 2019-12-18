@@ -114,7 +114,9 @@ public class ExternalAudioInputRecord {
     public int initRecording() {
         int channels = 1; //外部输入音频目前只支持单声道
         int sampleRate = PreferenceManager.getInstance().getCallAudioSampleRate();
-
+        if(sampleRate == -1){ //默认采样率为16000
+            sampleRate = 16000;
+        }
         final int bytesPerFrame = channels * (BITS_PER_SAMPLE / 8);
         final int framesPerBuffer = sampleRate / BUFFERS_PER_SECOND;
         byteBuffer = ByteBuffer.allocateDirect(bytesPerFrame * framesPerBuffer);
