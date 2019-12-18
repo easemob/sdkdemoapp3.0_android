@@ -389,7 +389,7 @@ public class PreferenceManager {
 	 * @return
 	 */
 	public int getCallAudioSampleRate() {
-		return mSharedPreferences.getInt(SHARED_KEY_CALL_AUDIO_SAMPLE_RATE, -1);
+		return mSharedPreferences.getInt(SHARED_KEY_CALL_AUDIO_SAMPLE_RATE, 16000);
 	}
 
 	public void setCallAudioSampleRate(int audioSampleRate) {
