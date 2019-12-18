@@ -377,7 +377,6 @@ public class CallActivity extends BaseActivity {
         case SERVICE_NOT_ENABLE:
             txtBody = new EMTextMessageBody(st12);
             break;
-
         default:
             txtBody = new EMTextMessageBody(st8);
             break;

@@ -5,10 +5,11 @@ buildscript {
     ext.kotlin_version = '1.2.71'
     repositories {
         jcenter()
-        maven {
+        /*maven {
             url 'https://maven.google.com/'
             name 'Google'
-        }
+        }*/
+        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
@@ -18,6 +19,9 @@ buildscript {
         // Google Firebase cloud messaging
         classpath 'com.google.gms:google-services:3.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        //implementation "com.android.support:support-core-utils:28.0.0-alpha1"
+
     }
 }
 
@@ -26,10 +30,14 @@ allprojects {
     repositories {
         jcenter()
         maven { url 'http://developer.huawei.com/repo'}
-        maven {
+        /*maven {
             url 'https://maven.google.com/'
             name 'Google'
+        }*/
+        maven{
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
         }
+        google()
     }
 }
 

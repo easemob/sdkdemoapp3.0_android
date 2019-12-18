@@ -4,6 +4,7 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,6 +18,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.easeui.widget.EaseSwitchButton;
+import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +102,15 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
         initCameraResolutionSpinner(Camera.CameraInfo.CAMERA_FACING_BACK, R.id.spinner_video_resolution_back);
         initCameraResolutionSpinner(Camera.CameraInfo.CAMERA_FACING_FRONT, R.id.spinner_video_resolution_front);
 
+        // external audioInput
+        RelativeLayout rlSwitcheExternalAudioInput = (RelativeLayout)findViewById(R.id.rl_switch_external_audioInput_resolution);
+        rlSwitcheExternalAudioInput.setOnClickListener(this);
+        EaseSwitchButton swOnExternalAudioInput = (EaseSwitchButton)findViewById(R.id.switch_external_audioInput_resolution);
+        if (PreferenceManager.getInstance().isExternalAudioInputResolution()) {
+            swOnExternalAudioInput.openSwitch();
+        } else {
+            swOnExternalAudioInput.closeSwitch();
+        }
 
         // fixed sample rate
         RelativeLayout rlSwitchSampleRate = (RelativeLayout)findViewById(R.id.rl_switch_fix_video_resolution);
@@ -281,8 +292,10 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                      try {
                          String data = audioSampleRate.substring(0, audioSampleRate.length() - 2);
                          int hz = new Integer(data).intValue();
-                         EMClient.getInstance().callManager().getCallOptions().setAudioSampleRate(hz);
                          PreferenceManager.getInstance().setCallAudioSampleRate(hz);
+
+                         boolean externalAudioflag  = PreferenceManager.getInstance().isExternalAudioInputResolution();
+                         EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(externalAudioflag,hz,1);
                      } catch (Exception e) {
                          e.printStackTrace();
                      }
@@ -360,6 +373,26 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                     PreferenceManager.getInstance().setMergeStream(true);
                 }
                 break;
+            case R.id.rl_switch_external_audioInput_resolution:
+                 EaseSwitchButton swExternalAudioInputResolution = (EaseSwitchButton)findViewById(R.id.switch_external_audioInput_resolution);
+                 if(swExternalAudioInputResolution.isSwitchOpen()) {
+                     swExternalAudioInputResolution.closeSwitch();
+                     PreferenceManager.getInstance().setExternalAudioInputResolution(false);
+                     int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
+                     if(hz == -1){
+                         hz = 16000;
+                     }
+                     EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(false,hz,1);
+                 }else {
+                     swExternalAudioInputResolution.openSwitch();
+                     PreferenceManager.getInstance().setExternalAudioInputResolution(true);
+
+                     int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
+                     if(hz == -1){
+                         hz = 16000;
+                     }
+                     EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(true,hz,1);
+                 }
             default:
                 break;
         }

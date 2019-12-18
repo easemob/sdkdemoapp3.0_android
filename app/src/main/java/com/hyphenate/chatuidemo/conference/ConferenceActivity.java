@@ -545,6 +545,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     private void createAndJoinConference(final EMValueCallBack<EMConference> callBack) {
         boolean record = PreferenceManager.getInstance().isRecordOnServer();
         boolean merge = PreferenceManager.getInstance().isMergeStream();
+
         EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LargeCommunication,
                 password, record, merge, new EMValueCallBack<EMConference>() {
                     @Override
@@ -730,9 +731,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().exitConference(new EMValueCallBack() {
             @Override
             public void onSuccess(Object value) {
+                //如果启动外部音频输入 停止音频录制
+                if(PreferenceManager.getInstance().isExternalAudioInputResolution()){
+                    ExternalAudioInputRecord.getInstance().stopRecording();
+                }
                 finish();
             }
-
             @Override
             public void onError(int error, String errorMsg) {
                 EMLog.e(TAG, "exit conference failed " + error + ", " + errorMsg);
@@ -754,10 +758,14 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void publish() {
         addSelfToList();
-
         EMClient.getInstance().conferenceManager().publish(normalParam, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
+
+                //如果启动外部音频输入 ，启动音频录制
+                if(PreferenceManager.getInstance().isExternalAudioInputResolution()){
+                    ExternalAudioInputRecord.getInstance().startRecording();
+                }
                 conference.setPubStreamId(value, EMConferenceStream.StreamType.NORMAL);
                 localView.setStreamId(value);
 
@@ -823,8 +831,11 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         EMClient.getInstance().conferenceManager().unpublish(publishId, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
+                //如果启动外部音频输入 停止音频录制
+                if(PreferenceManager.getInstance().isExternalAudioInputResolution()){
+                    ExternalAudioInputRecord.getInstance().stopRecording();
+                }
             }
-
             @Override
             public void onError(int error, String errorMsg) {
                 EMLog.e(TAG, "unpublish failed: error=" + error + ", msg=" + errorMsg);
