@@ -378,14 +378,19 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                  if(swExternalAudioInputResolution.isSwitchOpen()) {
                      swExternalAudioInputResolution.closeSwitch();
                      PreferenceManager.getInstance().setExternalAudioInputResolution(false);
-
                      int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
+                     if(hz == -1){
+                         hz = 16000;
+                     }
                      EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(false,hz,1);
                  }else {
                      swExternalAudioInputResolution.openSwitch();
                      PreferenceManager.getInstance().setExternalAudioInputResolution(true);
 
                      int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
+                     if(hz == -1){
+                         hz = 16000;
+                     }
                      EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(true,hz,1);
                  }
             default:
