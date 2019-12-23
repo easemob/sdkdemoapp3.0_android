@@ -83,9 +83,9 @@ public class ExternalAudioInputRecord {
                         int ret = EMClient.getInstance().conferenceManager().inputExternalAudioData(byteBuffer.array(), byteBuffer.capacity());
                         if(ret != 0){
                             if(ret == -1){
-                                Log.d(TAG, "Buffer is Full , dataSize:"+ byteBuffer.capacity());
-                            }else if(ret == -2){
                                 Log.d(TAG, "Buffer is not Full, add data fail ,dataSize:"+ byteBuffer.capacity());
+                            }else if(ret == -2){
+                                Log.d(TAG, "Buffer is Full , dataSize:"+ byteBuffer.capacity());
                             }
                         }
                     }
