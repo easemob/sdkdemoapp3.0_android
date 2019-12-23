@@ -173,14 +173,6 @@ public class MainActivity extends BaseActivity {
 
 		// 获取华为 HMS 推送 token
 		HMSPushHelper.getInstance().getHMSToken(this);
-
-		int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
-		if(hz == -1){
-			hz = 16000;
-		}
-		boolean isExternalAudio = PreferenceManager.getInstance().isExternalAudioInputResolution();
-		EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(isExternalAudio,hz,1);
-
 	}
 
 	EMClientListener clientListener = new EMClientListener() {
