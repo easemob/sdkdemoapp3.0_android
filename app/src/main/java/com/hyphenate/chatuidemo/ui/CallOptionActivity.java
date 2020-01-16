@@ -112,6 +112,16 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
             swOnExternalAudioInput.closeSwitch();
         }
 
+        //watermark
+        RelativeLayout rlSwitcheWatermark = (RelativeLayout)findViewById(R.id.rl_switch_water_mark);
+        rlSwitcheWatermark.setOnClickListener(this);
+        EaseSwitchButton swOnWatermark = (EaseSwitchButton)findViewById(R.id.switch_water_mark);
+        if (PreferenceManager.getInstance().isWatermarkResolution()) {
+            swOnWatermark.openSwitch();
+        } else {
+            swOnWatermark.closeSwitch();
+        }
+
         // fixed sample rate
         RelativeLayout rlSwitchSampleRate = (RelativeLayout)findViewById(R.id.rl_switch_fix_video_resolution);
         rlSwitchSampleRate.setOnClickListener(this);
@@ -393,6 +403,15 @@ public class CallOptionActivity extends BaseActivity implements View.OnClickList
                      }
                      EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(true,hz,1);
                  }
+            case R.id.rl_switch_water_mark:
+                 EaseSwitchButton swWater_mark = (EaseSwitchButton)findViewById(R.id.switch_water_mark);
+                if (swWater_mark.isSwitchOpen()) {
+                    swWater_mark.closeSwitch();
+                    PreferenceManager.getInstance().setWatermarkResolution(false);
+                } else {
+                    swWater_mark.openSwitch();
+                    PreferenceManager.getInstance().setWatermarkResolution(true);
+                }
             default:
                 break;
         }

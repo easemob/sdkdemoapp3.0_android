@@ -13,6 +13,8 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
@@ -41,11 +43,13 @@ import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.PhoneStateManager;
+import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
 import com.superrtc.sdk.VideoView;
 
+import java.io.InputStream;
 import java.util.UUID;
 
 
@@ -85,6 +89,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 //    private Button recordBtn;
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
+    private Bitmap watermarkbitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +142,14 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         username = getIntent().getStringExtra("username");
 
         nickTextView.setText(username);
+
+        //获取水印图片
+        try {
+                InputStream in  = this.getResources().getAssets().open("watermark.png");
+                watermarkbitmap = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+        }
 
         // local surfaceview
         localSurface = (EMCallSurfaceView) findViewById(R.id.local_surface);
@@ -238,6 +251,12 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 case ACCEPTED: // call is accepted
                     surfaceState = 0;
                     handler.removeCallbacks(timeoutHangup);
+
+
+                    //推流时设置水印图片
+                    if(PreferenceManager.getInstance().isWatermarkResolution()){
+                        EMClient.getInstance().callManager().setWaterMark(watermarkbitmap, 75, 25, 2, 8, 8);
+                    }
                     runOnUiThread(new Runnable() {
 
                         @Override

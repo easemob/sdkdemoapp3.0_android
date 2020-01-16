@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -54,6 +55,7 @@ import com.superrtc.sdk.VideoView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -141,6 +143,9 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     // ------ full screen views end -------
 
     private TimeHandler timeHandler;
+
+    //水印显示bitmap
+    private Bitmap watermarkbitmap;
 
     // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
     // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
@@ -316,6 +321,14 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         }
 
         timeHandler = new TimeHandler();
+
+        //获取水印图片
+        try {
+                InputStream in  = this.getResources().getAssets().open("watermark.png");
+                watermarkbitmap = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+        }
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
@@ -758,6 +771,11 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void publish() {
         addSelfToList();
+
+        //推流时设置水印图片
+        if(PreferenceManager.getInstance().isWatermarkResolution()){
+            EMClient.getInstance().conferenceManager().setWaterMark(watermarkbitmap, 75, 25, 2, 8, 8);
+        }
         EMClient.getInstance().conferenceManager().publish(normalParam, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
@@ -782,7 +800,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             }
         });
     }
-
 
     private void startScreenCapture() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
