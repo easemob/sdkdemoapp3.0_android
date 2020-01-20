@@ -47,6 +47,8 @@ import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.watermark.WaterMark;
+import com.hyphenate.watermark.WaterMarkPosition;
 import com.superrtc.sdk.VideoView;
 
 import java.io.InputStream;
@@ -90,6 +92,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
     private Bitmap watermarkbitmap;
+    private WaterMark watermark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,11 +147,14 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         nickTextView.setText(username);
 
         //获取水印图片
-        try {
-                InputStream in  = this.getResources().getAssets().open("watermark.png");
+        if(PreferenceManager.getInstance().isWatermarkResolution()) {
+            try {
+                InputStream in = this.getResources().getAssets().open("watermark.png");
                 watermarkbitmap = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+            watermark = new WaterMark(watermarkbitmap, 75, 25, WaterMarkPosition.TOP_RIGHT, 8, 8);
         }
 
         // local surfaceview
@@ -255,7 +261,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
                     //推流时设置水印图片
                     if(PreferenceManager.getInstance().isWatermarkResolution()){
-                        EMClient.getInstance().callManager().setWaterMark(watermarkbitmap, 75, 25, 2, 8, 8);
+                        EMClient.getInstance().callManager().setWaterMark(watermark);
                     }
                     runOnUiThread(new Runnable() {
 
