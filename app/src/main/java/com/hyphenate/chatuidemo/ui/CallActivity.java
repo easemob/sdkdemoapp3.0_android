@@ -2,6 +2,8 @@ package com.hyphenate.chatuidemo.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.SoundPool;
@@ -25,6 +27,10 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
+import com.hyphenate.watermark.WaterMarkOption;
+import com.hyphenate.watermark.WaterMarkPosition;
+
+import java.io.InputStream;
 
 @SuppressLint("Registered")
 public class CallActivity extends BaseActivity {
@@ -52,6 +58,9 @@ public class CallActivity extends BaseActivity {
     protected int streamID = -1;
     
     EMCallManager.EMCallPushProvider pushProvider;
+
+    private Bitmap watermarkbitmap;
+    private WaterMarkOption watermark;
     
     /**
      * 0：voice call，1：video call
@@ -107,6 +116,17 @@ public class CallActivity extends BaseActivity {
         };
         
         EMClient.getInstance().callManager().setPushProvider(pushProvider);
+
+        if(PreferenceManager.getInstance().isWatermarkResolution()) {
+            try {
+                InputStream in = this.getResources().getAssets().open("watermark.png");
+                watermarkbitmap = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            watermark = new WaterMarkOption(watermarkbitmap, 75, 25, WaterMarkPosition.TOP_RIGHT, 8, 8);
+        }
+
     }
     
     @Override
@@ -156,9 +176,14 @@ public class CallActivity extends BaseActivity {
             case MSG_CALL_MAKE_VIDEO:
             case MSG_CALL_MAKE_VOICE:
                 try {
+
                     boolean record = PreferenceManager.getInstance().isRecordOnServer();
                     boolean merge = PreferenceManager.getInstance().isMergeStream();
                     if (msg.what == MSG_CALL_MAKE_VIDEO) {
+                        //推流时设置水印图片
+                        if(PreferenceManager.getInstance().isWatermarkResolution()){
+                            EMClient.getInstance().callManager().setWaterMark(watermark);
+                        }
                         EMClient.getInstance().callManager().makeVideoCall(username, "", record, merge);
                     } else { 
                         EMClient.getInstance().callManager().makeVoiceCall(username, "", record, merge);

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -48,12 +49,15 @@ import com.hyphenate.chatuidemo.widget.EasePageIndicator;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
+import com.hyphenate.watermark.WaterMarkOption;
+import com.hyphenate.watermark.WaterMarkPosition;
 import com.superrtc.mediamanager.ScreenCaptureManager;
 import com.superrtc.sdk.VideoView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -141,6 +145,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     // ------ full screen views end -------
 
     private TimeHandler timeHandler;
+
+    //水印显示bitmap
+    private Bitmap watermarkbitmap;
+    private WaterMarkOption watermark;
 
     // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
     // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
@@ -316,6 +324,17 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         }
 
         timeHandler = new TimeHandler();
+
+        //水印初始化
+        if(PreferenceManager.getInstance().isWatermarkResolution()) {
+            try {
+                InputStream in = this.getResources().getAssets().open("watermark.png");
+                watermarkbitmap = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            watermark = new WaterMarkOption(watermarkbitmap, 75, 25, WaterMarkPosition.TOP_RIGHT, 8, 8);
+        }
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
@@ -758,6 +777,12 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
      */
     private void publish() {
         addSelfToList();
+
+        //推流时设置水印图片
+        if(PreferenceManager.getInstance().isWatermarkResolution()){
+            //推流时设置水印图片
+            EMClient.getInstance().conferenceManager().setWaterMark(watermark);
+        }
         EMClient.getInstance().conferenceManager().publish(normalParam, new EMValueCallBack<String>() {
             @Override
             public void onSuccess(String value) {
@@ -782,7 +807,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             }
         });
     }
-
 
     private void startScreenCapture() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
