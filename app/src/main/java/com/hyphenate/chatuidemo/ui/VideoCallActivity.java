@@ -47,7 +47,7 @@ import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.media.EMCallSurfaceView;
 import com.hyphenate.util.EMLog;
-import com.hyphenate.watermark.WaterMark;
+import com.hyphenate.watermark.WaterMarkOption;
 import com.hyphenate.watermark.WaterMarkPosition;
 import com.superrtc.sdk.VideoView;
 
@@ -92,7 +92,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
     private Bitmap watermarkbitmap;
-    private WaterMark watermark;
+    private WaterMarkOption watermark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +154,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            watermark = new WaterMark(watermarkbitmap, 75, 25, WaterMarkPosition.TOP_RIGHT, 8, 8);
+            watermark = new WaterMarkOption(watermarkbitmap, 75, 25, WaterMarkPosition.TOP_RIGHT, 8, 8);
         }
 
         // local surfaceview

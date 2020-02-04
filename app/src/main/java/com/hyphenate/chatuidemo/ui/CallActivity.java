@@ -27,9 +27,8 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
-import com.hyphenate.watermark.WaterMark;
+import com.hyphenate.watermark.WaterMarkOption;
 import com.hyphenate.watermark.WaterMarkPosition;
-import com.superrtc.watermark.Watermark;
 
 import java.io.InputStream;
 
@@ -61,7 +60,7 @@ public class CallActivity extends BaseActivity {
     EMCallManager.EMCallPushProvider pushProvider;
 
     private Bitmap watermarkbitmap;
-    private WaterMark watermark;
+    private WaterMarkOption watermark;
     
     /**
      * 0：voice call，1：video call
@@ -125,7 +124,7 @@ public class CallActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            watermark = new WaterMark(watermarkbitmap, 75, 25, WaterMarkPosition.TOP_RIGHT, 8, 8);
+            watermark = new WaterMarkOption(watermarkbitmap, 75, 25, WaterMarkPosition.TOP_RIGHT, 8, 8);
         }
 
     }
