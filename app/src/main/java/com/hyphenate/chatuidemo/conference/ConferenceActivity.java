@@ -39,6 +39,8 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMStreamParam;
 import com.hyphenate.chat.EMStreamStatistics;
+import com.hyphenate.chat.EMWaterMarkOption;
+import com.hyphenate.chat.EMWaterMarkPosition;
 import com.hyphenate.chatuidemo.Constant;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
@@ -49,8 +51,6 @@ import com.hyphenate.chatuidemo.widget.EasePageIndicator;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
-import com.hyphenate.watermark.WaterMarkOption;
-import com.hyphenate.watermark.WaterMarkPosition;
 import com.superrtc.mediamanager.ScreenCaptureManager;
 import com.superrtc.sdk.VideoView;
 
@@ -148,7 +148,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     //水印显示bitmap
     private Bitmap watermarkbitmap;
-    private WaterMarkOption watermark;
+    private EMWaterMarkOption watermark;
 
     // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
     // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
@@ -333,7 +333,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            watermark = new WaterMarkOption(watermarkbitmap, 75, 25, WaterMarkPosition.TOP_RIGHT, 8, 8);
+            watermark = new EMWaterMarkOption(watermarkbitmap, 75, 25, EMWaterMarkPosition.TOP_RIGHT, 8, 8);
         }
     }
 
