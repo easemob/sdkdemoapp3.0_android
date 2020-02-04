@@ -316,6 +316,14 @@ public class DemoHelper {
 
         // Offline call push
         EMClient.getInstance().callManager().getCallOptions().setIsSendPushIfOffline(getModel().isPushCall());
+
+        //init externalAudio
+        int hz = PreferenceManager.getInstance().getCallAudioSampleRate();
+        if(hz == -1){
+            hz = 16000;
+        }
+        boolean isExternalAudio = PreferenceManager.getInstance().isExternalAudioInputResolution();
+        EMClient.getInstance().callManager().getCallOptions().setExternalAudioParam(isExternalAudio,hz,1);
     }
 
     protected void setEaseUIProviders() {
