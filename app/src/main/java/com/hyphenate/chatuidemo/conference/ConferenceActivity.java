@@ -287,7 +287,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
         normalParam = new EMStreamParam();
         normalParam.setStreamType(EMConferenceStream.StreamType.NORMAL);
-        normalParam.setVideoOff(true);
+        normalParam.setVideoOff(false);
         normalParam.setAudioOff(false);
 
         desktopParam = new EMStreamParam();
@@ -547,7 +547,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         boolean merge = PreferenceManager.getInstance().isMergeStream();
 
         EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LargeCommunication,
-                password, record, merge, new EMValueCallBack<EMConference>() {
+                password, true, record, merge, new EMValueCallBack<EMConference>() {
                     @Override
                     public void onSuccess(final EMConference value) {
                         EMLog.e(TAG, "create and join conference success");

@@ -457,7 +457,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
      */
     private void createAndJoinConference(final EMValueCallBack<EMConference> callBack) {
         EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LiveStream,
-                "", new EMValueCallBack<EMConference>() {
+                "", true, false, false, new EMValueCallBack<EMConference>() {
                     @Override
                     public void onSuccess(final EMConference value) {
                         EMLog.e(TAG, "create and join conference success" + value.toString());
