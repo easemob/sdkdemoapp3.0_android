@@ -37,6 +37,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
@@ -44,6 +46,7 @@ import com.hyphenate.chat.EMCursorResult;
 import com.hyphenate.chat.EMGroup;
 import com.hyphenate.chat.EMMucSharedFile;
 import com.hyphenate.chat.EMPushConfigs;
+import com.hyphenate.chat.EMWhiteboard;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.ui.EaseGroupListener;
 import com.hyphenate.easeui.utils.EaseUserUtils;
@@ -859,7 +862,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 											break;
 										case R.id.menu_item_add_to_blacklist:
 											EMClient.getInstance().groupManager().blockUser(groupId, operationUserId);
-											break;
+                                            break;
 										case R.id.menu_item_remove_from_blacklist:
 											EMClient.getInstance().groupManager().unblockUser(groupId, operationUserId);
 											break;
@@ -1304,7 +1307,22 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		    updateGroup();
 	    }
 
-	    @Override
+        @Override
+        public void onWhiteListAdded(String groupId, List<String> whitelist) {
+            updateGroup();
+        }
+
+        @Override
+        public void onWhiteListRemoved(String groupId, List<String> whitelist) {
+            updateGroup();
+        }
+
+        @Override
+        public void onAllMemberMuteStateChanged(String groupId, boolean isMuted) {
+            updateGroup();
+        }
+
+        @Override
 	    public void onAdminAdded(String groupId, String administrator) {
 		    updateGroup();
 	    }

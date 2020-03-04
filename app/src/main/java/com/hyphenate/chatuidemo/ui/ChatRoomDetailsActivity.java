@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMChatRoomChangeListener;
+import com.hyphenate.EMValueCallBack;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -47,6 +48,7 @@ import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.easeui.widget.EaseAlertDialog.AlertDialogUser;
 import com.hyphenate.easeui.widget.EaseExpandGridView;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -641,19 +643,19 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
                                             List<String> list = new ArrayList<String>();
                                             list.add(operationUserId);
                                             EMClient.getInstance().chatroomManager().removeChatRoomMembers(roomId, list);
-                                        }
+									}
                                         break;
 									case R.id.menu_item_add_to_blacklist: {
 											List<String> list = new ArrayList<String>();
 											list.add(operationUserId);
 											EMClient.getInstance().chatroomManager().blockChatroomMembers(roomId, list);
-										}
+									}
 										break;
 									case R.id.menu_item_remove_from_blacklist: {
 											List<String> list1 = new ArrayList<String>();
 											list1.add(operationUserId);
 											EMClient.getInstance().chatroomManager().unblockChatRoomMembers(roomId, list1);
-										}
+									}
 										break;
 									case R.id.menu_item_mute:
 										List<String> muteMembers = new ArrayList<String>();
@@ -902,6 +904,54 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
                         Toast.makeText(ChatRoomDetailsActivity.this, "onMuteListRemoved: " + sb.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
+				refreshMembersAdapter();
+			}
+		}
+
+		@Override
+		public void onWhiteListAdded(String chatRoomId, List<String> whitelist) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+				final StringBuilder sb = new StringBuilder();
+				for (String mute : whitelist) {
+					sb.append(mute + " ");
+				}
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(ChatRoomDetailsActivity.this, "onWhiteListAdded: " + sb.toString(), Toast.LENGTH_SHORT).show();
+					}
+				});
+				refreshMembersAdapter();
+			}
+		}
+
+		@Override
+		public void onWhiteListRemoved(String chatRoomId, List<String> whitelist) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+				final StringBuilder sb = new StringBuilder();
+				for (String mute : whitelist) {
+					sb.append(mute + " ");
+				}
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(ChatRoomDetailsActivity.this, "onWhiteListRemoved: " + sb.toString(), Toast.LENGTH_SHORT).show();
+					}
+				});
+				refreshMembersAdapter();
+			}
+		}
+
+		@Override
+		public void onAllMemberMuteStateChanged(String chatRoomId, boolean isMuted) {
+			if (chatRoomId.equals(ChatRoomDetailsActivity.this.roomId)) {
+
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(ChatRoomDetailsActivity.this, "onAllMemberMuteStateChanged: " + isMuted, Toast.LENGTH_SHORT).show();
+					}
+				});
 				refreshMembersAdapter();
 			}
 		}
