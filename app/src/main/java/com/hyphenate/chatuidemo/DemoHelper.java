@@ -853,6 +853,28 @@ public class DemoHelper {
             showToast("onMuterListRemoved: " + sb.toString());
         }
 
+        @Override
+        public void onWhiteListAdded(String groupId, List<String> whitelist) {
+            StringBuilder sb = new StringBuilder();
+            for (String member : whitelist) {
+                sb.append(member).append(",");
+            }
+            showToast("onWhiteListAdded: " + sb.toString());
+        }
+
+        @Override
+        public void onWhiteListRemoved(String groupId, List<String> whitelist) {
+            StringBuilder sb = new StringBuilder();
+            for (String member : whitelist) {
+                sb.append(member).append(",");
+            }
+            showToast("onWhiteListRemoved: " + sb.toString());
+        }
+
+        @Override
+        public void onAllMemberMuteStateChanged(String groupId, boolean isMuted) {
+            showToast("onAllMemberMuteStateChanged: " + isMuted);
+        }
 
         @Override
         public void onAdminAdded(String groupId, String administrator) {
@@ -1314,6 +1336,7 @@ public class DemoHelper {
 			public void onMessageReceived(List<EMMessage> messages) {
 			    for (EMMessage message : messages) {
                     EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+                    EMLog.d(TAG, "onMessageReceived: " + message.getType());
                     // 判断一下是否是会议邀请
                     String confId = message.getStringAttribute(Constant.MSG_ATTR_CONF_ID, "");
                     if(!"".equals(confId)){
