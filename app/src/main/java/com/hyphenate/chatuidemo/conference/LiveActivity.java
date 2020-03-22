@@ -178,7 +178,6 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
         activity = this;
 
         callConferenceViewGroup = findViewById(R.id.surface_view_group);
-
         toolsPanelView = findViewById(R.id.layout_tools_panel);
 
         videoConnectBtn = findViewById(R.id.btn_request_connect);
@@ -245,7 +244,6 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                     // invite audiences.
                     inviteUserToJoinConference();
                 }
-
                 @Override
                 public void onError(int error, String errorMsg) {
                 }
@@ -652,6 +650,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                 }
             });
         }
+
     }
 
     private void startAudioTalkingMonitor() {
@@ -1076,6 +1075,27 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
         }
     }
 
+
+    @Override
+    public void onAdminAdd(String memName){
+
+    }
+
+    @Override
+    public void onAdminRemove(String memName){
+
+    }
+
+    @Override
+    public void onPubStreamFailed(int error, String message){
+
+    }
+
+    @Override
+    public void onUpdateStreamFailed(int error, String message){
+
+    }
+
     @Override
     public void onAttributesUpdated(EMConferenceAttribute[] attributes) {
 
@@ -1172,7 +1192,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                                         EMLog.i(TAG, "onOk");
                                         // changeRole.
                                         EMClient.getInstance().conferenceManager().grantRole(conference.getConferenceId()
-                                                , new EMConferenceMember(jid, null, null)
+                                                , new EMConferenceMember(jid, null, null,null)
                                                 , EMConferenceManager.EMConferenceRole.Talker, new EMValueCallBack<String>() {
                                                     @Override
                                                     public void onSuccess(String value) {
@@ -1201,7 +1221,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
                         String jid = msg.getStringAttribute(Constant.EM_MEMBER_NAME, "");
                         // changeRole.
                         EMClient.getInstance().conferenceManager().grantRole(conference.getConferenceId()
-                                , new EMConferenceMember(jid, null, null)
+                                , new EMConferenceMember(jid, null, null,null)
                                 , EMConferenceManager.EMConferenceRole.Audience, new EMValueCallBack<String>() {
                                     @Override
                                     public void onSuccess(String value) {

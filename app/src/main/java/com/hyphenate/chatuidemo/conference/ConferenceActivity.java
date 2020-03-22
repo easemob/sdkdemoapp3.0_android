@@ -1193,6 +1193,26 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     }
 
     @Override
+    public void onAdminAdd(String memName){
+
+    }
+
+    @Override
+    public void onAdminRemove(String memName){
+
+    }
+
+    @Override
+    public void onPubStreamFailed(int error, String message){
+
+    }
+
+    @Override
+    public void onUpdateStreamFailed(int error, String message){
+
+    }
+
+    @Override
     public void onAttributesUpdated(EMConferenceAttribute[] attributes) {
 
     }

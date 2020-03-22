@@ -598,6 +598,26 @@ public class DemoHelper {
             }
 
             @Override
+            public void onAdminAdd(String memName){
+
+            }
+
+            @Override
+            public void onAdminRemove(String memName){
+
+            }
+
+            @Override
+            public void onPubStreamFailed(int error, String message){
+
+            }
+
+            @Override
+            public void onUpdateStreamFailed(int error, String message){
+
+            }
+
+            @Override
             public void onRoleChanged(EMConferenceManager.EMConferenceRole role) {
             }
 
