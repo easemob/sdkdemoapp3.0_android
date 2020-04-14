@@ -17,6 +17,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.hyphenate.chatuidemo.ui.UserActivityLifecycleCallbacks;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
@@ -29,6 +30,7 @@ public class DemoApplication extends Application {
 	private static DemoApplication instance;
 	// login user name
 	public final String PREF_USERNAME = "username";
+	private UserActivityLifecycleCallbacks mLifecycleCallbacks = new UserActivityLifecycleCallbacks();
 
 	/**
 	 * nickname for current user, the nickname instead of ID be shown when user receive notification from APNs
@@ -42,6 +44,7 @@ public class DemoApplication extends Application {
         applicationContext = this;
         instance = this;
 
+		registerActivityLifecycleCallbacks();
 		//init demo helper
         DemoHelper.getInstance().init(applicationContext);
 
@@ -68,5 +71,13 @@ public class DemoApplication extends Application {
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
 		MultiDex.install(this);
+	}
+
+	private void registerActivityLifecycleCallbacks() {
+		this.registerActivityLifecycleCallbacks(mLifecycleCallbacks);
+	}
+
+	public UserActivityLifecycleCallbacks getLifecycleCallbacks() {
+		return mLifecycleCallbacks;
 	}
 }

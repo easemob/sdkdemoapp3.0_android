@@ -15,8 +15,16 @@
 package com.hyphenate.chatuidemo.ui;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
+
+import com.hyphenate.chatuidemo.DemoApplication;
+import com.hyphenate.chatuidemo.conference.CallFloatWindow;
+import com.hyphenate.chatuidemo.conference.ConferenceActivity;
+import com.hyphenate.chatuidemo.conference.ConferenceInviteActivity;
 import com.hyphenate.easeui.ui.EaseBaseActivity;
+
+import java.util.List;
 
 @SuppressLint("Registered")
 public class BaseActivity extends EaseBaseActivity {
@@ -29,11 +37,40 @@ public class BaseActivity extends EaseBaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        checkIfConferenceExit();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    /**
+     * 将此方法放置在基类，用于检查是否有正在进行的音视频会议
+     */
+    private void checkIfConferenceExit() {
+        // 如果当前的activity是否是ConferenceActivity
+        if(this instanceof ConferenceActivity || this instanceof ConferenceInviteActivity) {
+            return;
+        }
+        UserActivityLifecycleCallbacks lifecycleCallbacks = DemoApplication.getInstance().getLifecycleCallbacks();
+        if(lifecycleCallbacks == null) {
+            return;
+        }
+        List<Activity> activityList = lifecycleCallbacks.getActivityList();
+        if(activityList != null && activityList.size() > 0) {
+            for (Activity activity : activityList) {
+                if(activity instanceof ConferenceActivity) {
+                    //如果没有显示悬浮框，则启动ConferenceActivity
+                    if(activity.isFinishing()) {
+                        return;
+                    }
+                    if(!CallFloatWindow.getInstance(DemoApplication.getInstance()).isShowing()) {
+                        ConferenceActivity.startConferenceCall(this, null);
+                    }
+                }
+            }
+        }
     }
 
 }
