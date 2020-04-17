@@ -581,7 +581,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         boolean record = PreferenceManager.getInstance().isRecordOnServer();
         boolean merge = PreferenceManager.getInstance().isMergeStream();
 
-        EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LargeCommunication,
+        EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.SmallCommunication,
                 password, true, record, merge, new EMValueCallBack<EMConference>() {
                     @Override
                     public void onSuccess(final EMConference value) {
