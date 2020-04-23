@@ -11,6 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.heytap.mcssdk.PushManager;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
@@ -66,6 +67,8 @@ import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.push.EMPushConfig;
+import com.hyphenate.push.EMPushHelper;
+import com.hyphenate.push.EMPushType;
 import com.hyphenate.util.EMLog;
 
 import org.json.JSONException;
@@ -1868,4 +1871,14 @@ public class DemoHelper {
         easeUI.popActivity(activity);
     }
 
+    /**
+     * 展示通知设置页面
+     */
+    public void showNotificationPermissionDialog() {
+        EMPushType pushType = EMPushHelper.getInstance().getPushType();
+        // oppo
+        if(pushType == EMPushType.OPPOPUSH && PushManager.isSupportPush(appContext)) {
+            PushManager.getInstance().requestNotificationPermission();
+        }
+    }
 }
