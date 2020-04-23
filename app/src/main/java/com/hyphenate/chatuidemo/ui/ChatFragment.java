@@ -235,8 +235,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 if (data != null) {
                     Uri uri = data.getData();
                     if (uri != null) {
-                        sendFileMessage(uri);
-                        //sendFileByUri(uri);
+                        sendFileByUri(uri);
                     }
                 }
                 break;
