@@ -1,4 +1,4 @@
-include ':app', ':easeui', ':hmspush'
+include ':app', ':easeui'
 project(':easeui').projectDir = new File('../easeui/easeui')
 
 //内部使用，demo直接依赖aar，不需要依赖下面的module, release时需要把下面的include相关的两行注释掉

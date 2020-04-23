@@ -42,6 +42,7 @@ import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chat.EMWaterMarkOption;
 import com.hyphenate.chat.EMWaterMarkPosition;
 import com.hyphenate.chatuidemo.Constant;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.ui.BaseActivity;
@@ -149,6 +150,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     //水印显示bitmap
     private Bitmap watermarkbitmap;
     private EMWaterMarkOption watermark;
+    //用于防止多次打开请求悬浮框页面
+    private boolean requestOverlayPermission;
 
     // 如果groupId不为null,则表示呼叫类型为群组呼叫,显示的联系人只能是该群组中成员
     // 若groupId为null,则表示呼叫类型为联系人呼叫,显示的联系人为当前账号所有好友.
@@ -183,10 +186,18 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                 | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        checkSaveInstanceState(savedInstanceState);
         init();
 
         EMClient.getInstance().conferenceManager().addConferenceListener(conferenceListener);
         DemoHelper.getInstance().pushActivity(activity);
+    }
+
+    private void checkSaveInstanceState(Bundle bundle) {
+        if(bundle != null) {
+            confId = bundle.getString(Constant.EXTRA_CONFERENCE_ID);
+            password = bundle.getString(Constant.EXTRA_CONFERENCE_PASS);
+        }
     }
 
     @Override
@@ -308,19 +319,24 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         speakerSwitch.setActivated(true);
         openSpeaker();
 
-        groupId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_GROUP_ID);
-        isCreator = getIntent().getBooleanExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
-        if (isCreator) {
-            incomingCallView.setVisibility(View.GONE);
-            selectUserToJoinConference();
-        } else {
-            confId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_ID);
-            password = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_PASS);
-
+        if(!TextUtils.isEmpty(confId)) {
             initLocalConferenceView();
-            String inviter = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_INVITER);
-            incomingCallView.setInviteInfo(String.format(getString(R.string.tips_invite_to_join), inviter));
-            incomingCallView.setVisibility(View.VISIBLE);
+            joinConference();
+        }else {
+            groupId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_GROUP_ID);
+            isCreator = getIntent().getBooleanExtra(Constant.EXTRA_CONFERENCE_IS_CREATOR, false);
+            if (isCreator) {
+                incomingCallView.setVisibility(View.GONE);
+                selectUserToJoinConference();
+            } else {
+                confId = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_ID);
+                password = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_PASS);
+
+                initLocalConferenceView();
+                String inviter = getIntent().getStringExtra(Constant.EXTRA_CONFERENCE_INVITER);
+                incomingCallView.setInviteInfo(String.format(getString(R.string.tips_invite_to_join), inviter));
+                incomingCallView.setVisibility(View.VISIBLE);
+            }
         }
 
         timeHandler = new TimeHandler();
@@ -565,7 +581,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         boolean record = PreferenceManager.getInstance().isRecordOnServer();
         boolean merge = PreferenceManager.getInstance().isMergeStream();
 
-        EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.LargeCommunication,
+        EMClient.getInstance().conferenceManager().createAndJoinConference(EMConferenceManager.EMConferenceType.SmallCommunication,
                 password, true, record, merge, new EMValueCallBack<EMConference>() {
                     @Override
                     public void onSuccess(final EMConference value) {
@@ -663,6 +679,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         super.onActivityResult(requestCode, resultCode, data);
         EMLog.i(TAG, "onActivityResult: " + requestCode + ", result code: " + resultCode);
         if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestOverlayPermission = false;
             // Result of window permission request, resultCode = RESULT_CANCELED
             if (Settings.canDrawOverlays(activity)) {
                 doShowFloatWindow();
@@ -1016,6 +1033,17 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
     };
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // 保留非正常退出的会议相关信息
+        if(conference != null) {
+            outState.putString(Constant.EXTRA_CONFERENCE_ID, conference.getConferenceId());
+            outState.putString(Constant.EXTRA_CONFERENCE_PASS, conference.getPassword());
+        }
+
+    }
+
+    @Override
     public void onBackPressed() {
         if (incomingCallView.getVisibility() == View.VISIBLE) { // 来电提醒界面
             super.onBackPressed();
@@ -1025,6 +1053,14 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         showFloatWindow();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // 用于判断app是否进入后台
+        if(!isFinishing() && !DemoApplication.getInstance().getLifecycleCallbacks().isOnForeground()) {
+            showFloatWindow();
+        }
+    }
 
     @Override
     protected void onDestroy() {
@@ -1299,14 +1335,17 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             if (Settings.canDrawOverlays(activity)) {
                 doShowFloatWindow();
             } else { // To reqire the window permission.
-                try {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                    // Add this to open the management GUI specific to this app.
-                    intent.setData(Uri.parse("package:" + activity.getPackageName()));
-                    activity.startActivityForResult(intent, REQUEST_CODE_OVERLAY_PERMISSION);
-                    // Handle the permission require result in #onActivityResult();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if(!requestOverlayPermission) {
+                    try {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                        // Add this to open the management GUI specific to this app.
+                        intent.setData(Uri.parse("package:" + activity.getPackageName()));
+                        activity.startActivityForResult(intent, REQUEST_CODE_OVERLAY_PERMISSION);
+                        requestOverlayPermission = true;
+                        // Handle the permission require result in #onActivityResult();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         } else {
