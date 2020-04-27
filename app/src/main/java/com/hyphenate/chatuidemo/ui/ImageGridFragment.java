@@ -1,5 +1,7 @@
 package com.hyphenate.chatuidemo.ui;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,11 +11,13 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -329,36 +333,52 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(resultCode==Activity.RESULT_OK)
 		{
-			if(requestCode==100)
-			{
-				Uri uri=data.getParcelableExtra("uri");
-				String[] projects = new String[] { MediaStore.Video.Media.DATA,
-						MediaStore.Video.Media.DURATION };
-				Cursor cursor = getActivity().getContentResolver().query(
-						uri, projects, null,
-						null, null);
-				int duration=0;
-				String filePath=null;
-				
-				if (cursor.moveToFirst()) {
-					// path：MediaStore.Audio.Media.DATA
-					filePath = cursor.getString(cursor
-							.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-					// duration：MediaStore.Audio.Media.DURATION
-					duration = cursor
-							.getInt(cursor
-									.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
-					EMLog.d(TAG, "duration:"+duration);
+			if(requestCode==100) {
+				Uri uri = data.getParcelableExtra("uri");
+				if(uri != null) {
+					String[] projects = new String[] { MediaStore.Video.Media.DATA,
+							MediaStore.Video.Media.DURATION };
+					Cursor cursor = getActivity().getContentResolver().query(
+							uri, projects, null,
+							null, null);
+					int duration=0;
+					String filePath=null;
+
+					if (cursor.moveToFirst()) {
+						// path：MediaStore.Audio.Media.DATA
+						filePath = cursor.getString(cursor
+								.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+						// duration：MediaStore.Audio.Media.DURATION
+						duration = cursor
+								.getInt(cursor
+										.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
+						EMLog.d(TAG, "duration:"+duration);
+					}
+					if(cursor!=null)
+					{
+						cursor.close();
+						cursor=null;
+					}
+
+					getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+
+				}else {
+					String path = data.getStringExtra("path");
+					int duration=0;
+					if(!TextUtils.isEmpty(path) && new File(path).exists()) {
+						File file = new File(path);
+						MediaPlayer player = new MediaPlayer();
+						try {
+							player.setDataSource(file.getPath());
+							player.prepare();
+							duration = player.getDuration();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", path).putExtra("dur", duration));
 				}
-				if(cursor!=null)
-                {
-                	cursor.close();
-                	cursor=null;
-                }
-				 
-				getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
 				getActivity().finish();
-				
 			}
 		}	
 	}

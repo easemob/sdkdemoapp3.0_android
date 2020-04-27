@@ -9,6 +9,8 @@ android {
 
     defaultConfig {
         applicationId "com.hyphenate.chatuidemo"
+        //测试oppo离线消息，需修改包名如下，如果配置了FCM推送，同时替换google-services.json 中的 package_name 字段
+        //applicationId "com.hyphenate.chatuidemo.push"
         minSdkVersion 17
         targetSdkVersion 28
         multiDexEnabled true
@@ -44,7 +46,7 @@ android {
 
 dependencies {
     implementation project(':easeui')
-    implementation fileTree(include: '*.jar', dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.parse:parse-android:1.13.1'
     implementation 'com.android.support:multidex:1.0.1'
     // Google firebase cloud messaging

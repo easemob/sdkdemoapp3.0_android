@@ -455,4 +455,7 @@
     <string name="msg_live_invite">%1$s invite you to join the interactive video - %2$s</string>
     <string name="alert_request_tobe_talker">Request to be talker &#8230;</string>
     <string name="alert_request_tobe_audience">Request to be audience &#8230;</string>
+
+    <string name="alert_request_video">%1$s sent a video request</string>
+    <string name="alert_request_voice">%1$s sent a voice request</string>
 </resources>
