@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -468,7 +469,11 @@ public class RecorderVideoActivity extends BaseActivity implements
     						EMLog.d(TAG, "scanner completed");
     						msc.disconnect();
     						progressDialog.dismiss();
-    						setResult(RESULT_OK, getIntent().putExtra("uri", uri));
+    						if(uri == null) {
+								setResult(RESULT_OK, getIntent().putExtra("path", path));
+    						}else {
+								setResult(RESULT_OK, getIntent().putExtra("uri", uri));
+							}
     						finish();
     					}
     

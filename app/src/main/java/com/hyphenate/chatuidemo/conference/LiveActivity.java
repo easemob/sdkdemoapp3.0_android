@@ -498,7 +498,7 @@ public class LiveActivity extends BaseActivity implements EMConferenceListener {
      */
     private void joinConference() {
         hangupBtn.setVisibility(View.VISIBLE);
-        EMClient.getInstance().conferenceManager().joinConference(confId, password, new EMValueCallBack<EMConference>() {
+        EMClient.getInstance().conferenceManager().joinConference(confId, password,new EMValueCallBack<EMConference>() {
             @Override
             public void onSuccess(final EMConference value) {
                 EMLog.e(TAG, "join conference success" + value.toString());
