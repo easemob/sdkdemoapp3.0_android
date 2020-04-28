@@ -1,11 +1,13 @@
 package com.hyphenate.chatuidemo.conference;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -16,6 +18,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -810,7 +814,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     private void startScreenCapture() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.IDLE) {
+            ScreenCaptureManager.State state = ScreenCaptureManager.getInstance().state;
+            if(ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.IDLE) {
                 ScreenCaptureManager.getInstance().init(activity);
                 ScreenCaptureManager.getInstance().setScreenCaptureCallback(new ScreenCaptureManager.ScreenCaptureCallback() {
                     @Override
@@ -1190,26 +1195,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     @Override
     public void onRoleChanged(EMConferenceManager.EMConferenceRole role) {
-    }
-
-    @Override
-    public void onAdminAdd(String memName){
-
-    }
-
-    @Override
-    public void onAdminRemove(String memName){
-
-    }
-
-    @Override
-    public void onPubStreamFailed(int error, String message){
-
-    }
-
-    @Override
-    public void onUpdateStreamFailed(int error, String message){
-
     }
 
     @Override

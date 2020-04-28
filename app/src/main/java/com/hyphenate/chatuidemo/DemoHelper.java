@@ -218,6 +218,8 @@ public class DemoHelper {
         // set if you need delivery ack
         options.setRequireDeliveryAck(false);
 
+        options.setUseRtcConfig(true);
+
         // 设置是否使用 fcm，有些华为设备本身带有 google 服务，
         options.setUseFCM(demoModel.isUseFCM());
 
@@ -595,26 +597,6 @@ public class DemoHelper {
             @Override public void onReceiveInvite(String confId, String password, String extension) {
                 EMLog.i(TAG, String.format("Receive conference invite confId: %s, password: %s, extension: %s", confId, password, extension));
                 goConference(confId, password, extension);
-            }
-
-            @Override
-            public void onAdminAdd(String memName){
-
-            }
-
-            @Override
-            public void onAdminRemove(String memName){
-
-            }
-
-            @Override
-            public void onPubStreamFailed(int error, String message){
-
-            }
-
-            @Override
-            public void onUpdateStreamFailed(int error, String message){
-
             }
 
             @Override
