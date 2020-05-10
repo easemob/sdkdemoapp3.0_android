@@ -5,11 +5,14 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +55,7 @@ import com.hyphenate.util.PathUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -219,15 +223,33 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 if (data != null) {
                     int duration = data.getIntExtra("dur", 0);
                     String videoPath = data.getStringExtra("path");
-                    File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
-                    try {
-                        FileOutputStream fos = new FileOutputStream(file);
-                        Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
-                        ThumbBitmap.compress(CompressFormat.JPEG, 100, fos);
-                        fos.close();
-                        sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    String uriString = data.getStringExtra("uri");
+                    if(!TextUtils.isEmpty(videoPath)) {
+                        File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis());
+                        try {
+                            FileOutputStream fos = new FileOutputStream(file);
+                            Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+                            ThumbBitmap.compress(CompressFormat.JPEG, 100, fos);
+                            fos.close();
+                            sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            EMLog.e(TAG, e.getMessage());
+                        }
+                    }else {
+                        Uri videoUri = Uri.parse(uriString);
+                        File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis());
+                        try {
+                            FileOutputStream fos = new FileOutputStream(file);
+                            MediaMetadataRetriever media = new MediaMetadataRetriever();
+                            media.setDataSource(getContext(), videoUri);
+                            Bitmap frameAtTime = media.getFrameAtTime();
+                            frameAtTime.compress(CompressFormat.JPEG, 100, fos);
+                            fos.close();
+                            sendVideoMessage(videoUri, file.getAbsolutePath(), duration);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 break;

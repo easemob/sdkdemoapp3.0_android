@@ -41,6 +41,7 @@ import com.hyphenate.chatuidemo.video.util.ImageCache;
 import com.hyphenate.chatuidemo.video.util.ImageResizer;
 import com.hyphenate.chatuidemo.video.util.Utils;
 import com.hyphenate.chatuidemo.widget.RecyclingImageView;
+import com.hyphenate.easeui.utils.EaseVersionUtils;
 import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.TextFormater;
@@ -176,7 +177,12 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			startActivityForResult(intent, 100);
 		}else{
 			VideoEntity vEntty=mList.get(position-1);
-			Intent intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);
+			Intent intent;
+			if(EaseVersionUtils.isTargetQ()) {
+				intent=getActivity().getIntent().putExtra("uri", vEntty.uri.toString()).putExtra("dur", vEntty.duration);
+			}else {
+				intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);
+			}
 			getActivity().setResult(Activity.RESULT_OK, intent);
 			getActivity().finish();
 		}
@@ -300,8 +306,11 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				String title = cursor.getString(cursor
 						.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
 				// path：MediaStore.Audio.Media.DATA
-				String url = cursor.getString(cursor
-						.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+				String url = null;
+				if(!EaseVersionUtils.isTargetQ()) {
+					url = cursor.getString(cursor
+							.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+				}
 
 				// duration：MediaStore.Audio.Media.DURATION
 				int duration = cursor
@@ -312,12 +321,15 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 				int size = (int) cursor.getLong(cursor
 						.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
 
+				Uri uri = Uri.parse(MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString() + File.separator + id);
+
 				VideoEntity entty = new VideoEntity();
 				entty.ID = id;
 				entty.title = title;
 				entty.filePath = url;
 				entty.duration = duration;
 				entty.size = size;
+				entty.uri = uri;
 				mList.add(entty);
 			} while (cursor.moveToNext());
 
@@ -360,7 +372,11 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 						cursor=null;
 					}
 
-					getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+					if(EaseVersionUtils.isTargetQ()) {
+						getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("uri", uri).putExtra("dur", duration));
+					}else {
+						getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+					}
 
 				}else {
 					String path = data.getStringExtra("path");
