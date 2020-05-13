@@ -93,8 +93,8 @@
                     android:id="@+id/layout_talking"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/first"
                     android:layout_alignParentBottom="true"
+                    android:layout_below="@+id/first"
                     android:layout_marginLeft="@dimen/adaptive_24dp"
                     android:visibility="gone">
 
