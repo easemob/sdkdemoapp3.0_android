@@ -220,9 +220,6 @@ public class DemoHelper {
         options.setRequireAck(true);
         // set if you need delivery ack
         options.setRequireDeliveryAck(false);
-
-        options.setUseRtcConfig(true);
-
         // 设置是否使用 fcm，有些华为设备本身带有 google 服务，
         options.setUseFCM(demoModel.isUseFCM());
 
