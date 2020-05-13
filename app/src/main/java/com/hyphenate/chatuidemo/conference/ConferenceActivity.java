@@ -803,6 +803,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         stopAudioTalkingMonitor();
         timeHandler.stopTime();
 
+        if (ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.RUNNING) {
+            ScreenCaptureManager.getInstance().stop();
+        }
+
         // Stop to watch the phone call state.
         PhoneStateManager.get(ConferenceActivity.this).removeStateCallback(phoneStateCallback);
 
@@ -1201,6 +1205,9 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 // 隐藏悬浮窗
                 CallFloatWindow.getInstance(getApplicationContext()).dismiss();
                 DeskShareWindow.getInstance(getApplicationContext()).dismiss();
+                if (ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.RUNNING) {
+                    ScreenCaptureManager.getInstance().stop();
+                }
                 // 退出当前界面
                 finish();
             }
