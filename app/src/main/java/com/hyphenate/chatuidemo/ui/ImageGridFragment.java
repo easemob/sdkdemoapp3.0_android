@@ -32,7 +32,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hyphenate.chatuidemo.BuildConfig;
 import com.hyphenate.chatuidemo.R;
@@ -41,7 +40,7 @@ import com.hyphenate.chatuidemo.video.util.ImageCache;
 import com.hyphenate.chatuidemo.video.util.ImageResizer;
 import com.hyphenate.chatuidemo.video.util.Utils;
 import com.hyphenate.chatuidemo.widget.RecyclingImageView;
-import com.hyphenate.easeui.utils.EaseVersionUtils;
+import com.hyphenate.util.VersionUtils;
 import com.hyphenate.util.DateUtils;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.TextFormater;
@@ -178,7 +177,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 		}else{
 			VideoEntity vEntty=mList.get(position-1);
 			Intent intent;
-			if(EaseVersionUtils.isTargetQ()) {
+			if(VersionUtils.isTargetQ(getContext())) {
 				intent=getActivity().getIntent().putExtra("uri", vEntty.uri.toString()).putExtra("dur", vEntty.duration);
 			}else {
 				intent=getActivity().getIntent().putExtra("path", vEntty.filePath).putExtra("dur", vEntty.duration);
@@ -307,7 +306,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 						.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
 				// path：MediaStore.Audio.Media.DATA
 				String url = null;
-				if(!EaseVersionUtils.isTargetQ()) {
+				if(!VersionUtils.isTargetQ(getContext())) {
 					url = cursor.getString(cursor
 							.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
 				}
@@ -372,7 +371,7 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 						cursor=null;
 					}
 
-					if(EaseVersionUtils.isTargetQ()) {
+					if(VersionUtils.isTargetQ(getContext())) {
 						getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("uri", uri).putExtra("dur", duration));
 					}else {
 						getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
