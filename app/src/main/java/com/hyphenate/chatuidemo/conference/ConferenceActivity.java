@@ -147,6 +147,8 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     private TimeHandler timeHandler;
 
+    private HeadsetPlugReceiver headsetPlugReceiver;
+
     //水印显示bitmap
     private Bitmap watermarkbitmap;
     private EMWaterMarkOption watermark;
@@ -176,6 +178,39 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         context.startActivity(i);
     }
 
+    /**
+     * 监听耳机插入 插出的事件
+     */
+    public class HeadsetPlugReceiver extends BroadcastReceiver {
+        private static final String TAG = "HeadsetPlugReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.hasExtra("state")){
+                if (intent.getIntExtra("state", 0) == 0){
+                    EMLog.i(TAG, "HeadsetPlugReceiver:  headset not connected");
+                    if(audioManager != null){
+                        if (!audioManager.isSpeakerphoneOn()) {
+                            // 打开扬声器
+                            audioManager.setSpeakerphoneOn(true);
+                        }
+                        // 开启了扬声器之后，因为是进行通话，声音的模式也要设置成通讯模式
+                        audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+                    }
+                }else if(intent.getIntExtra("state", 0) == 1){
+                    EMLog.i(TAG, "HeadsetPlugReceiver:  headset connected");
+                    if(audioManager != null){
+                        if (audioManager.isSpeakerphoneOn()) {
+                            // 关闭扬声器
+                            audioManager.setSpeakerphoneOn(false);
+                        }
+                        // 设置声音模式为通讯模式
+                        audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,6 +226,9 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
         EMClient.getInstance().conferenceManager().addConferenceListener(conferenceListener);
         DemoHelper.getInstance().pushActivity(activity);
+
+        //注册耳机插拔事件
+        registerHeadsetPlugReceiver();
     }
 
     private void checkSaveInstanceState(Bundle bundle) {
@@ -831,7 +869,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
     private void startScreenCapture() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.IDLE) {
+            if(ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.IDLE) {
                 ScreenCaptureManager.getInstance().init(activity);
                 ScreenCaptureManager.getInstance().setScreenCaptureCallback(new ScreenCaptureManager.ScreenCaptureCallback() {
                     @Override
@@ -1073,6 +1111,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         super.onDestroy();
         audioManager.setMode(AudioManager.MODE_NORMAL);
         audioManager.setMicrophoneMute(false);
+        unregisterReceiver(headsetPlugReceiver);
     }
 
     /**
@@ -1358,6 +1397,13 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         } else {
             doShowFloatWindow();
         }
+    }
+
+    private void registerHeadsetPlugReceiver() {
+        headsetPlugReceiver = new HeadsetPlugReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.HEADSET_PLUG");
+        registerReceiver(headsetPlugReceiver, intentFilter);
     }
 
     private void doShowFloatWindow() {
