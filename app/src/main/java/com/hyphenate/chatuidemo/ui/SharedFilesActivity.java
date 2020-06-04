@@ -33,6 +33,8 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.TextFormater;
+import com.hyphenate.util.UriUtils;
+import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -281,11 +283,14 @@ public class SharedFilesActivity extends BaseActivity {
      */
     protected void selectFileFromLocal() {
         Intent intent = null;
-        if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
+        if(VersionUtils.isTargetQ(this)) {
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.setType("*/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+        }else if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
             intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-
         } else {
             intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         }
@@ -308,13 +313,7 @@ public class SharedFilesActivity extends BaseActivity {
     }
 
     private void uploadFileWithUri(Uri uri) {
-        String filePath = getFilePath(uri);
-        if (filePath == null) {
-            Toast.makeText(this, "only support upload image when android os >= 4.4", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        File file = new File(filePath);
-        if (!file.exists()) {
+        if(!UriUtils.isFileExistByUri(this, uri)) {
             Toast.makeText(this, R.string.File_does_not_exist, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -322,7 +321,7 @@ public class SharedFilesActivity extends BaseActivity {
         pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Uploading...");
         pd.show();
-        EMClient.getInstance().groupManager().asyncUploadGroupSharedFile(groupId, filePath, new EMCallBack() {
+        EMClient.getInstance().groupManager().asyncUploadGroupSharedFile(groupId, uri.toString(), new EMCallBack() {
             @Override
             public void onSuccess() {
                 runOnUiThread(new Runnable() {
