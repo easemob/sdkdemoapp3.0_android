@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -282,19 +283,7 @@ public class SharedFilesActivity extends BaseActivity {
      * select file
      */
     protected void selectFileFromLocal() {
-        Intent intent = null;
-        if(VersionUtils.isTargetQ(this)) {
-            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-        }else if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
-            intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-        } else {
-            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        }
-        startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
+        EaseCompat.openImage(this, REQUEST_CODE_SELECT_FILE);
     }
 
     @Override
@@ -305,11 +294,25 @@ public class SharedFilesActivity extends BaseActivity {
                 if (data != null) {
                     Uri uri = data.getData();
                     if (uri != null) {
-                        uploadFileWithUri(uri);
+                        if(VersionUtils.isTargetQ(this)) {
+                            uploadFileWithUri(uri);
+                        }else {
+                            sendByPath(uri);
+                        }
+
                     }
                 }
             }
         }
+    }
+
+    private void sendByPath(Uri uri) {
+        String path = EaseCompat.getPath(this, uri);
+        if(TextUtils.isEmpty(path)) {
+            Toast.makeText(this, R.string.File_does_not_exist, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        uploadFileWithUri(Uri.parse(path));
     }
 
     private void uploadFileWithUri(Uri uri) {
