@@ -456,4 +456,6 @@
 
     <string name="alert_request_video">%1$s发来视频请求</string>
     <string name="alert_request_voice">%1$s发来语音请求</string>
+
+    <string name="share_screen_ongoing">共享屏幕运行中...</string>
 </resources>
