@@ -730,7 +730,15 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         if (resultCode == RESULT_OK) {
             if (requestCode == ScreenCaptureManager.RECORD_REQUEST_CODE) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    ScreenCaptureManager.getInstance().start(resultCode, data);
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        Intent service = new Intent(this, SRForegroundService.class);
+                        service.putExtra("code", resultCode);
+                        service.putExtra("data", data);
+                        startForegroundService(service);
+                    }else {
+                        ScreenCaptureManager.getInstance().start(resultCode, data);
+                    }
+
                 }
             } else if (requestCode == REQUEST_CODE_INVITE) {
                 final String[] members = data.getStringArrayExtra("members");
@@ -801,6 +809,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
         if (ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.RUNNING) {
             ScreenCaptureManager.getInstance().stop();
+            stopForegroundService();
         }
 
         // Stop to watch the phone call state.
@@ -821,6 +830,16 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 finish();
             }
         });
+    }
+
+    /**
+     * 停止服务
+     */
+    private void stopForegroundService() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            Intent service = new Intent(this, SRForegroundService.class);
+            stopService(service);
+        }
     }
 
     private void startAudioTalkingMonitor() {
@@ -909,6 +928,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
             if (!TextUtils.isEmpty(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))
                     && publishId.equals(conference.getPubStreamId(EMConferenceStream.StreamType.DESKTOP))) {
                 ScreenCaptureManager.getInstance().stop();
+                stopForegroundService();
             }
         }
         EMClient.getInstance().conferenceManager().unpublish(publishId, new EMValueCallBack<String>() {
@@ -1202,6 +1222,7 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                 DeskShareWindow.getInstance(getApplicationContext()).dismiss();
                 if (ScreenCaptureManager.getInstance().state == ScreenCaptureManager.State.RUNNING) {
                     ScreenCaptureManager.getInstance().stop();
+                    stopForegroundService();
                 }
                 // 退出当前界面
                 finish();

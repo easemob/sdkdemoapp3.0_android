@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -33,6 +34,8 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.TextFormater;
+import com.hyphenate.util.UriUtils;
+import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -280,16 +283,7 @@ public class SharedFilesActivity extends BaseActivity {
      * select file
      */
     protected void selectFileFromLocal() {
-        Intent intent = null;
-        if (Build.VERSION.SDK_INT < 19) { //api 19 and later, we can't use this way, demo just select from images
-            intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        } else {
-            intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        }
-        startActivityForResult(intent, REQUEST_CODE_SELECT_FILE);
+        EaseCompat.openImage(this, REQUEST_CODE_SELECT_FILE);
     }
 
     @Override
@@ -300,21 +294,29 @@ public class SharedFilesActivity extends BaseActivity {
                 if (data != null) {
                     Uri uri = data.getData();
                     if (uri != null) {
-                        uploadFileWithUri(uri);
+                        if(VersionUtils.isTargetQ(this)) {
+                            uploadFileWithUri(uri);
+                        }else {
+                            sendByPath(uri);
+                        }
+
                     }
                 }
             }
         }
     }
 
-    private void uploadFileWithUri(Uri uri) {
-        String filePath = getFilePath(uri);
-        if (filePath == null) {
-            Toast.makeText(this, "only support upload image when android os >= 4.4", Toast.LENGTH_SHORT).show();
+    private void sendByPath(Uri uri) {
+        String path = EaseCompat.getPath(this, uri);
+        if(TextUtils.isEmpty(path)) {
+            Toast.makeText(this, R.string.File_does_not_exist, Toast.LENGTH_SHORT).show();
             return;
         }
-        File file = new File(filePath);
-        if (!file.exists()) {
+        uploadFileWithUri(Uri.parse(path));
+    }
+
+    private void uploadFileWithUri(Uri uri) {
+        if(!UriUtils.isFileExistByUri(this, uri)) {
             Toast.makeText(this, R.string.File_does_not_exist, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -322,7 +324,7 @@ public class SharedFilesActivity extends BaseActivity {
         pd.setCanceledOnTouchOutside(false);
         pd.setMessage("Uploading...");
         pd.show();
-        EMClient.getInstance().groupManager().asyncUploadGroupSharedFile(groupId, filePath, new EMCallBack() {
+        EMClient.getInstance().groupManager().asyncUploadGroupSharedFile(groupId, uri.toString(), new EMCallBack() {
             @Override
             public void onSuccess() {
                 runOnUiThread(new Runnable() {
