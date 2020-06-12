@@ -348,14 +348,48 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
 			if(requestCode==100) {
 				Uri uri = data.getParcelableExtra("uri");
 				if(uri != null) {
-					String filePath = UriUtils.getFilePath(uri);
-					int duration = UriUtils.getVideoOrAudioDuration(getActivity(), uri);
-					EMLog.d(TAG, "duration = "+duration);
+					if(!VersionUtils.isTargetQ(getContext())) {
+						String[] projects = new String[] { MediaStore.Video.Media.DATA,
+								MediaStore.Video.Media.DURATION };
+						Cursor cursor = getActivity().getContentResolver().query(
+								uri, projects, null,
+								null, null);
+						int duration=0;
+						String filePath=null;
 
-					if(!VersionUtils.isTargetQ(getContext()) && !TextUtils.isEmpty(filePath)) {
-						getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+						if (cursor.moveToFirst()) {
+							// path：MediaStore.Audio.Media.DATA
+							filePath = cursor.getString(cursor
+									.getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+							// duration：MediaStore.Audio.Media.DURATION
+							duration = cursor
+									.getInt(cursor
+											.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
+							EMLog.d(TAG, "duration:"+duration);
+						}
+						if(cursor!=null)
+						{
+							cursor.close();
+							cursor=null;
+						}
+						if(duration == 0) {
+							duration = UriUtils.getVideoOrAudioDuration(getActivity(), uri);
+						}
+						if(!TextUtils.isEmpty(filePath)) {
+							getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+						}else {
+							getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("uri", uri.toString()).putExtra("dur", duration));
+						}
 					}else {
-						getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("uri", uri.toString()).putExtra("dur", duration));
+						String filePath = UriUtils.getFilePath(getActivity(), uri);
+						int duration = UriUtils.getVideoOrAudioDuration(getActivity(), uri);
+						EMLog.d(TAG, "duration = "+duration);
+
+						if(!VersionUtils.isTargetQ(getContext()) && !TextUtils.isEmpty(filePath)) {
+							getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+						}else {
+							getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("uri", uri.toString()).putExtra("dur", duration));
+						}
 					}
 
 				}else {
