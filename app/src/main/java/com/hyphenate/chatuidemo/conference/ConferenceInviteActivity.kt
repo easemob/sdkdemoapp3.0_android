@@ -154,6 +154,16 @@ class ConferenceInviteActivity : BaseActivity() {
                         contactList.addAll(result.data)
                     }
                 } while (result!!.cursor != null && !result.cursor.isEmpty())
+
+                //获取管理员列表
+                try {
+                    val adminList = EMClient.getInstance().groupManager().getGroupFromServer(groupId, true)?.adminList
+                    if (adminList != null) {
+                        contactList.addAll(adminList)
+                    }
+                } catch (e: HyphenateException) {
+                    e.printStackTrace()
+                }
             }
 
             runOnUiThread {

@@ -2,14 +2,19 @@ package com.hyphenate.chatuidemo.ui;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,9 +54,12 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.EasyUtils;
 import com.hyphenate.util.PathUtil;
+import com.hyphenate.util.UriUtils;
+import com.hyphenate.util.VersionUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -219,15 +227,34 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
                 if (data != null) {
                     int duration = data.getIntExtra("dur", 0);
                     String videoPath = data.getStringExtra("path");
-                    File file = new File(PathUtil.getInstance().getImagePath(), "thvideo" + System.currentTimeMillis());
-                    try {
-                        FileOutputStream fos = new FileOutputStream(file);
-                        Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
-                        ThumbBitmap.compress(CompressFormat.JPEG, 100, fos);
-                        fos.close();
-                        sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    String uriString = data.getStringExtra("uri");
+                    EMLog.d(TAG, "path = "+videoPath + " uriString = "+uriString);
+                    if(!TextUtils.isEmpty(videoPath)) {
+                        File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis());
+                        try {
+                            FileOutputStream fos = new FileOutputStream(file);
+                            Bitmap ThumbBitmap = ThumbnailUtils.createVideoThumbnail(videoPath, 3);
+                            ThumbBitmap.compress(CompressFormat.JPEG, 100, fos);
+                            fos.close();
+                            sendVideoMessage(videoPath, file.getAbsolutePath(), duration);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            EMLog.e(TAG, e.getMessage());
+                        }
+                    }else {
+                        Uri videoUri = UriUtils.getLocalUriFromString(uriString);
+                        File file = new File(PathUtil.getInstance().getVideoPath(), "thvideo" + System.currentTimeMillis());
+                        try {
+                            FileOutputStream fos = new FileOutputStream(file);
+                            MediaMetadataRetriever media = new MediaMetadataRetriever();
+                            media.setDataSource(getContext(), videoUri);
+                            Bitmap frameAtTime = media.getFrameAtTime();
+                            frameAtTime.compress(CompressFormat.JPEG, 100, fos);
+                            fos.close();
+                            sendVideoMessage(videoUri, file.getAbsolutePath(), duration);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 break;
@@ -357,7 +384,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
      * select file
      */
     protected void selectFileFromLocal() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent();
+        if(VersionUtils.isTargetQ(getActivity())) {
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        }else {
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+        }
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*");
 
