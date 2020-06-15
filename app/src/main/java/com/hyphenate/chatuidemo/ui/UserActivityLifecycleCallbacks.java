@@ -49,7 +49,7 @@ public class UserActivityLifecycleCallbacks implements Application.ActivityLifec
         Log.e("ActivityLifecycle", "onActivityStopped "+activity.getLocalClassName());
         resumeActivity.remove(activity);
         if(resumeActivity.isEmpty()) {
-            Log.e("ActivityLifecycle", "在后台了");
+            Log.e("TAG", "在后台了");
         }
     }
 
