@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMirror;
 import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
@@ -257,12 +258,22 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                 case ACCEPTED: // call is accepted
                     surfaceState = 0;
                     handler.removeCallbacks(timeoutHangup);
+                    String callId = EMClient.getInstance().callManager().getCurrentCallSession().getCallId();
 
+                    if(!EMClient.getInstance().callManager().getCurrentCallSession().getIscaller()){
+                        //推流时设置水印图片
+                        if(PreferenceManager.getInstance().isWatermarkResolution()){
+                            EMClient.getInstance().callManager().setWaterMark(watermark);
 
-                    //推流时设置水印图片
-                    if(PreferenceManager.getInstance().isWatermarkResolution()){
-                        EMClient.getInstance().callManager().setWaterMark(watermark);
+                            //开启水印时候本地不开启镜像显示
+                            EMClient.getInstance().callManager().getCallOptions().
+                                    setLocalVideoViewMirror(EMMirror.OFF);
+                        }else{
+                            EMClient.getInstance().callManager().getCallOptions().
+                                    setLocalVideoViewMirror(EMMirror.ON);
+                        }
                     }
+
                     runOnUiThread(new Runnable() {
 
                         @Override

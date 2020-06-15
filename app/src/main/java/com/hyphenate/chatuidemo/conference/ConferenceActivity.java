@@ -2,6 +2,7 @@ package com.hyphenate.chatuidemo.conference;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +38,7 @@ import com.hyphenate.chat.EMConferenceMember;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMirror;
 import com.hyphenate.chat.EMStreamParam;
 import com.hyphenate.chat.EMStreamStatistics;
 import com.hyphenate.chat.EMWaterMarkOption;
@@ -814,6 +816,20 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
                     ExternalAudioInputRecord.getInstance().stopRecording();
                 }
                 finish();
+
+                //start MainActivity
+                if(DemoApplication.getInstance().getLifecycleCallbacks().isFront()){
+                   Activity activity =  DemoApplication.getInstance().getLifecycleCallbacks().getActivityList().get(0);
+                   if(activity instanceof ConferenceActivity){
+                       EMLog.i(TAG, "ConferenceActivity exit: " + "start MainActivity by ConferenceActivity");
+                       activity =  DemoApplication.getInstance().getLifecycleCallbacks().getActivityList().get(1);
+                       startActivity(new Intent(ConferenceActivity.this, activity.getClass()));
+
+                   }else{
+                       EMLog.i(TAG, "ConferenceActivity exit: " + "start MainActivity by DemoApplication.applicationContext");
+                       startActivity(new Intent(DemoApplication.applicationContext, activity.getClass()));
+                   }
+                }
             }
             @Override
             public void onError(int error, String errorMsg) {
@@ -841,6 +857,10 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         if(PreferenceManager.getInstance().isWatermarkResolution()){
             //推流时设置水印图片
             EMClient.getInstance().conferenceManager().setWaterMark(watermark);
+            //设置水印时取消本地镜像显示
+            EMClient.getInstance().conferenceManager().setLocalVideoViewMirror(EMMirror.OFF);
+        }else{
+            EMClient.getInstance().conferenceManager().setLocalVideoViewMirror(EMMirror.ON);
         }
         EMClient.getInstance().conferenceManager().publish(normalParam, new EMValueCallBack<String>() {
             @Override

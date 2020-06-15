@@ -199,7 +199,6 @@
                     android:layout_height="wrap_content"
                     android:text="back camera"
                     android:layout_gravity="center"/>
-
                 <Spinner
                     android:id="@+id/spinner_video_resolution_back"
                     android:layout_width="match_parent"
