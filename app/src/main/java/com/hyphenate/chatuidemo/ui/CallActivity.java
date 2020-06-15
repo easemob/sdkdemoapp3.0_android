@@ -21,6 +21,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMMessage.Status;
+import com.hyphenate.chat.EMMirror;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.EMWaterMarkOption;
 import com.hyphenate.chatuidemo.Constant;
@@ -61,7 +62,6 @@ public class CallActivity extends BaseActivity {
 
     private Bitmap watermarkbitmap;
     private EMWaterMarkOption watermark;
-    private EMWaterMarkOption wmOption;
     
     /**
      * 0：voice call，1：video call
@@ -125,8 +125,7 @@ public class CallActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            wmOption = new EMWaterMarkOption(watermarkbitmap, 75, 25, EMWaterMarkPosition.TOP_RIGHT, 8, 8);
-//            watermark = new EMWaterMarkOption(watermarkbitmap, 75, 25, EMWaterMarkPosition.TOP_RIGHT, 8, 8);
+           watermark = new EMWaterMarkOption(watermarkbitmap, 75, 25, EMWaterMarkPosition.TOP_RIGHT, 8, 8);
         }
 
     }
@@ -184,8 +183,13 @@ public class CallActivity extends BaseActivity {
                     if (msg.what == MSG_CALL_MAKE_VIDEO) {
                         //推流时设置水印图片
                         if(PreferenceManager.getInstance().isWatermarkResolution()){
-                            EMClient.getInstance().callManager().setWaterMark(wmOption);
-//                            EMClient.getInstance().callManager().setWaterMark(wmOption);
+                            EMClient.getInstance().callManager().setWaterMark(watermark);
+                            //开启水印时候本地不开启镜像显示
+                            EMClient.getInstance().callManager().getCallOptions().
+                                    setLocalVideoViewMirror(EMMirror.OFF);
+                        }else{
+                            EMClient.getInstance().callManager().getCallOptions().
+                                    setLocalVideoViewMirror(EMMirror.ON);
                         }
                         EMClient.getInstance().callManager().makeVideoCall(username, "", record, merge);
                     } else { 
