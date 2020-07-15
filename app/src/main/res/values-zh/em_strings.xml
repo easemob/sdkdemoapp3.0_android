@@ -320,6 +320,7 @@
     <string name="join_public_group">加入公开群</string>
     <string name="chatroom_allow_owner_leave"> 允许聊天室群主离开</string>
     <string name="delete_msg_when_exit_group">退出群组时删除聊天数据</string>
+    <string name="delete_msg_when_exit_chat_room">退出聊天室时删除聊天数据</string>
     <string name="set_transfer_file_by_userself">无需用户实现上传下载</string>
     <string name="set_autodownload_thumbnail">是否自动下载缩略图附件</string>
     <string name="auto_accept_group_invitation">自动同意群组加群邀请</string>

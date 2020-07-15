@@ -320,6 +320,7 @@
     <string name="join_public_group">Join public group</string>
     <string name="chatroom_allow_owner_leave">Allow channel owner leave</string>
     <string name="delete_msg_when_exit_group">Delete messages when exit group</string>
+    <string name="delete_msg_when_exit_chat_room">Delete messages when exit chat room</string>
     <string name="set_transfer_file_by_userself">No need to implement transfer file function by user</string>
     <string name="set_autodownload_thumbnail">Autodownload thumbnail or not</string>
     <string name="auto_accept_group_invitation">Auto accept group invitation</string>

@@ -91,6 +91,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 	private RelativeLayout rl_switch_chatroom_leave;
 	
     private RelativeLayout rl_switch_delete_msg_when_exit_group;
+    private RelativeLayout rl_switch_delete_msg_when_exit_chat_room;
 	private RelativeLayout rl_set_transfer_file_by_userself;
 	private RelativeLayout rl_set_autodownload_thumbnail;
 	private RelativeLayout rl_switch_auto_accept_group_invitation;
@@ -120,6 +121,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
     private EaseSwitchButton speakerSwitch;
     private EaseSwitchButton ownerLeaveSwitch;
     private EaseSwitchButton switch_delete_msg_when_exit_group;
+    private EaseSwitchButton switch_delete_msg_when_exit_chat_room;
 	private EaseSwitchButton set_transfer_file_by_userself;
 	private EaseSwitchButton set_autodownload_thumbnail;
 	private EaseSwitchButton switch_auto_accept_group_invitation;
@@ -149,6 +151,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		rl_switch_speaker = (RelativeLayout) getView().findViewById(R.id.rl_switch_speaker);
 		rl_switch_chatroom_leave = (RelativeLayout) getView().findViewById(R.id.rl_switch_chatroom_owner_leave);
 		rl_switch_delete_msg_when_exit_group = (RelativeLayout) getView().findViewById(R.id.rl_switch_delete_msg_when_exit_group);
+		rl_switch_delete_msg_when_exit_chat_room = (RelativeLayout) getView().findViewById(R.id.rl_switch_delete_msg_when_exit_chat_room);
 		rl_set_transfer_file_by_userself = (RelativeLayout) getView().findViewById(R.id.rl_set_transfer_file_by_userself);
 		rl_set_autodownload_thumbnail = (RelativeLayout) getView().findViewById(R.id.rl_set_autodownload_thumbnail);
 		rl_switch_auto_accept_group_invitation = (RelativeLayout) getView().findViewById(R.id.rl_switch_auto_accept_group_invitation);
@@ -172,6 +175,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		speakerSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_speaker);
 		ownerLeaveSwitch = (EaseSwitchButton) getView().findViewById(R.id.switch_owner_leave);
 		switch_delete_msg_when_exit_group = (EaseSwitchButton) getView().findViewById(R.id.switch_delete_msg_when_exit_group);
+		switch_delete_msg_when_exit_chat_room = (EaseSwitchButton) getView().findViewById(R.id.switch_delete_msg_when_exit_chat_room);
 		set_transfer_file_by_userself = (EaseSwitchButton) getView().findViewById(R.id.set_transfer_file_by_userself);
 		set_autodownload_thumbnail = (EaseSwitchButton) getView().findViewById(R.id.set_autodownload_thumbnail);
 		switch_auto_accept_group_invitation = (EaseSwitchButton) getView().findViewById(R.id.switch_auto_accept_group_invitation);
@@ -212,6 +216,7 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		pushNick.setOnClickListener(this);
 		rl_switch_chatroom_leave.setOnClickListener(this);
 		rl_switch_delete_msg_when_exit_group.setOnClickListener(this);
+		rl_switch_delete_msg_when_exit_chat_room.setOnClickListener(this);
 		rl_set_transfer_file_by_userself.setOnClickListener(this);
 		rl_set_autodownload_thumbnail.setOnClickListener(this);
 		rl_switch_auto_accept_group_invitation.setOnClickListener(this);
@@ -267,6 +272,13 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 		    switch_delete_msg_when_exit_group.openSwitch();
 		} else {
 		    switch_delete_msg_when_exit_group.closeSwitch();
+		}
+
+		// delete messages when exit chat room?
+		if(settingsModel.isDeleteMessagesAsExitChatRoom()){
+		    switch_delete_msg_when_exit_chat_room.openSwitch();
+		} else {
+			switch_delete_msg_when_exit_chat_room.closeSwitch();
 		}
 
 		if(settingsModel.isSetTransferFileByUser()){
@@ -402,6 +414,17 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 					switch_delete_msg_when_exit_group.openSwitch();
 					settingsModel.setDeleteMessagesAsExitGroup(true);
 					chatOptions.setDeleteMessagesAsExitGroup(true);
+				}
+				break;
+			case R.id.rl_switch_delete_msg_when_exit_chat_room:
+				if(switch_delete_msg_when_exit_chat_room.isSwitchOpen()){
+					switch_delete_msg_when_exit_chat_room.closeSwitch();
+					settingsModel.setDeleteMessagesAsExitChatRoom(false);
+					chatOptions.setDeleteMessagesAsExitChatRoom(false);
+				}else{
+					switch_delete_msg_when_exit_chat_room.openSwitch();
+					settingsModel.setDeleteMessagesAsExitChatRoom(true);
+					chatOptions.setDeleteMessagesAsExitChatRoom(true);
 				}
 				break;
 			case R.id.rl_set_transfer_file_by_userself:
