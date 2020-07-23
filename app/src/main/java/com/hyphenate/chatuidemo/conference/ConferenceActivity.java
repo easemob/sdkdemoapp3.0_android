@@ -231,6 +231,9 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
 
         //注册耳机插拔事件
         registerHeadsetPlugReceiver();
+
+        //设置小窗口悬浮类型
+        CallFloatWindow.getInstance(getApplicationContext()).setCallType(CallFloatWindow.CallWindowType.CONFERENCE);
     }
 
     private void checkSaveInstanceState(Bundle bundle) {

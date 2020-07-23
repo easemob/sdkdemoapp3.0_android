@@ -18,6 +18,15 @@
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 
+       <ImageButton
+           android:id="@+id/btn_small_call"
+           style="@style/style_call_tools_panel_button"
+           android:layout_alignParentEnd="true"
+           android:layout_gravity="bottom|right"
+           android:layout_marginTop="16dp"
+           android:layout_marginEnd="4dp"
+           android:src="@drawable/em_call_close" />
+
         <TextView
             android:id="@+id/tv_call_state"
             android:layout_width="wrap_content"
