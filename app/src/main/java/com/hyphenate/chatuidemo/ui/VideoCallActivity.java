@@ -13,15 +13,18 @@
  */
 package com.hyphenate.chatuidemo.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +33,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,10 +43,12 @@ import android.widget.Toast;
 import com.hyphenate.chat.EMCallSession;
 import com.hyphenate.chat.EMCallStateChangeListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chat.EMMirror;
 import com.hyphenate.chat.EMVideoCallHelper;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.conference.CallFloatWindow;
 import com.hyphenate.chatuidemo.utils.PhoneStateManager;
 import com.hyphenate.chatuidemo.utils.PreferenceManager;
 import com.hyphenate.exceptions.HyphenateException;
@@ -58,6 +64,8 @@ import java.util.UUID;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
 
+    private final int REQUEST_CODE_OVERLAY_PERMISSION = 1006;
+
     private boolean isMuteState;
     private boolean isHandsfreeState;
     private boolean isAnswered;
@@ -69,12 +77,16 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     protected EMCallSurfaceView oppositeSurface;
     private int surfaceState = -1;
 
+    // 正在显示音视频Window的stream
+    private static EMConferenceStream windowStream;
+
     private TextView callStateTextView;
 
     private LinearLayout comingBtnContainer;
     private Button refuseBtn;
     private Button answerBtn;
     private Button hangupBtn;
+    private ImageButton closeBtn;
     private ImageView muteImage;
     private ImageView handsFreeImage;
     private TextView nickTextView;
@@ -94,6 +106,10 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private Button toggleVideoBtn;
     private Bitmap watermarkbitmap;
     private EMWaterMarkOption watermark;
+    private VideoCallActivity activity;
+
+    //用于防止多次打开请求悬浮框页面
+    private boolean requestOverlayPermission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +122,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
         DemoHelper.getInstance().isVideoCalling = true;
         callType = 1;
+        activity =  this;
 
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
@@ -120,6 +137,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         refuseBtn = (Button) findViewById(R.id.btn_refuse_call);
         answerBtn = (Button) findViewById(R.id.btn_answer_call);
         hangupBtn = (Button) findViewById(R.id.btn_hangup_call);
+        closeBtn = (ImageButton)findViewById(R.id.btn_close_call);
         muteImage = (ImageView) findViewById(R.id.iv_mute);
         handsFreeImage = (ImageView) findViewById(R.id.iv_handsfree);
         callStateTextView = (TextView) findViewById(R.id.tv_call_state);
@@ -136,6 +154,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         refuseBtn.setOnClickListener(this);
         answerBtn.setOnClickListener(this);
         hangupBtn.setOnClickListener(this);
+        closeBtn.setOnClickListener(this);
         muteImage.setOnClickListener(this);
         handsFreeImage.setOnClickListener(this);
         rootContainer.setOnClickListener(this);
@@ -209,6 +228,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
         // get instance of call helper, should be called after setSurfaceView was called
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
+
+        //设置小窗口悬浮类型
+        CallFloatWindow.getInstance(getApplicationContext()).setCallType(CallFloatWindow.CallWindowType.VIDEOCALL);
     }
 
     /**
@@ -378,6 +400,8 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     Animation animation = new AlphaAnimation(1.0f, 0.0f);
                                     animation.setDuration(1200);
                                     rootContainer.startAnimation(animation);
+
+
                                     finish();
                                 }
 
@@ -456,6 +480,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                 }
                             }
                             Toast.makeText(VideoCallActivity.this, callStateTextView.getText(), Toast.LENGTH_SHORT).show();
+                            CallFloatWindow.getInstance(getApplicationContext()).dismiss();
                             postDelayedCloseMsg();
                         }
 
@@ -554,7 +579,9 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
             EMLog.d(TAG, "btn_hangup_call");
             handler.sendEmptyMessage(MSG_CALL_END);
             break;
-
+        case R.id.btn_close_call:
+            showFloatWindow();
+            break;
         case R.id.iv_mute: // mute
             if (isMuteState) {
                 // resume voice transfer
@@ -626,6 +653,40 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         }
     }
 
+    private void showFloatWindow() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.canDrawOverlays(activity)) {
+                doShowFloatWindow();
+            } else { // To reqire the window permission.
+                if(!requestOverlayPermission) {
+                    try {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                        // Add this to open the management GUI specific to this app.
+                        intent.setData(Uri.parse("package:" + activity.getPackageName()));
+                        activity.startActivityForResult(intent, REQUEST_CODE_OVERLAY_PERMISSION);
+                        requestOverlayPermission = true;
+                        // Handle the permission require result in #onActivityResult();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else {
+            doShowFloatWindow();
+        }
+    }
+
+    private void doShowFloatWindow() {
+            CallFloatWindow.getInstance(getApplicationContext()).show();
+
+            windowStream = new EMConferenceStream();
+            windowStream.setUsername(EMClient.getInstance().getCurrentUser());
+
+            CallFloatWindow.getInstance(getApplicationContext()).updateCallWindow(surfaceState);
+            VideoCallActivity.this.moveTaskToBack(false);
+    }
+
+
     @Override
     protected void onDestroy() {
         DemoHelper.getInstance().isVideoCalling = false;
@@ -641,6 +702,22 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     public void onBackPressed() {
         callDruationText = chronometer.getText().toString();
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        EMLog.i(TAG, "onActivityResult: " + requestCode + ", result code: " + resultCode);
+        if (requestCode == REQUEST_CODE_OVERLAY_PERMISSION && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestOverlayPermission = false;
+            // Result of window permission request, resultCode = RESULT_CANCELED
+            if (Settings.canDrawOverlays(activity)) {
+                doShowFloatWindow();
+            } else {
+                Toast.makeText(activity, getString(R.string.alert_window_permission_denied), Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
     }
 
     /**
@@ -711,4 +788,16 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(surfaceState == 0 ){
+            EMClient.getInstance().callManager().setSurfaceView(localSurface,oppositeSurface);
+        }else{
+            EMClient.getInstance().callManager().setSurfaceView(oppositeSurface,localSurface);
+        }
+
+        // 防止activity在后台被start至前台导致window还存在
+        CallFloatWindow.getInstance(getApplicationContext()).dismiss();
+    }
 }

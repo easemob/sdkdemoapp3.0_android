@@ -16,8 +16,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConferenceManager;
 import com.hyphenate.chat.EMConferenceStream;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.chatuidemo.ui.VideoCallActivity;
+import com.hyphenate.chatuidemo.ui.VoiceCallActivity;
 import com.hyphenate.easeui.model.EaseCompat;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.media.EMCallSurfaceView;
@@ -45,6 +48,7 @@ public class CallFloatWindow {
 
     private int screenWidth;
     private int floatViewWidth;
+    private CallWindowType callType;
 
     public CallFloatWindow(Context context) {
         this.context = context;
@@ -54,11 +58,22 @@ public class CallFloatWindow {
         screenWidth = point.x;
     }
 
+    public enum CallWindowType {
+        VOICECALL,
+        VIDEOCALL,
+        CONFERENCE,
+    }
+
+
     public static CallFloatWindow getInstance(Context context) {
         if (instance == null) {
             instance = new CallFloatWindow(context);
         }
         return instance;
+    }
+
+    public void setCallType(CallWindowType callType) {
+        this.callType = callType;
     }
 
     /**
@@ -92,7 +107,15 @@ public class CallFloatWindow {
         floatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ConferenceActivity.class);
+                Intent intent;
+                if(callType == CallWindowType.CONFERENCE){
+                    intent = new Intent(context, ConferenceActivity.class);
+                }else if(callType == CallWindowType.VIDEOCALL){
+                    intent = new Intent(context, VideoCallActivity.class);
+                }else{
+                    intent = new Intent(context, VoiceCallActivity.class);
+                }
+
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
 
@@ -163,6 +186,26 @@ public class CallFloatWindow {
                 EMClient.getInstance().conferenceManager().updateRemoteSurfaceView(stream.getStreamId(), surfaceView);
             }
         }
+    }
+
+    public void updateCallWindow(int surfaceState) {
+        if(callType == CallWindowType.VIDEOCALL){
+            floatView.findViewById(R.id.layout_call_voice).setVisibility(View.GONE);
+            floatView.findViewById(R.id.layout_call_video).setVisibility(View.VISIBLE);
+            prepareSurfaceView();
+            if (!isShowing()) {
+                return;
+            }
+            if(surfaceState == 0 ){
+                EMClient.getInstance().callManager().setSurfaceView(surfaceView,null);
+            }else{
+                EMClient.getInstance().callManager().setSurfaceView(null,surfaceView);
+            }
+        }else if(callType == CallWindowType.VOICECALL){
+            floatView.findViewById(R.id.layout_call_voice).setVisibility(View.VISIBLE);
+            floatView.findViewById(R.id.layout_call_video).setVisibility(View.GONE);
+        }
+
     }
 
     public boolean isShowing() {
