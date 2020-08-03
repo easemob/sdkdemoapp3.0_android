@@ -175,7 +175,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/em_icon_speaker_normal" />
+                            android:src="@drawable/em_icon_speaker_normal"
+                            />
 
                         <TextView
                             android:layout_width="fill_parent"
@@ -235,6 +236,15 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/btn_close_call"
+        style="@style/style_call_tools_panel_button"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/em_call_close" />
 
     <TextView
         android:id="@+id/tv_network_status"

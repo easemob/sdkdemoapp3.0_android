@@ -204,7 +204,7 @@ public class PreferenceManager {
 	}
 
 	public boolean isPushCall() {
-		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_OFFLINE_PUSH_CALL, false);
+		return mSharedPreferences.getBoolean(SHARED_KEY_SETTING_OFFLINE_PUSH_CALL, true);
 	}
 
 	public void setRecordOnServer(boolean value) {
@@ -475,7 +475,7 @@ public class PreferenceManager {
 	}
 
 	public boolean isUseFCM() {
-		return mSharedPreferences.getBoolean(SHARED_KEY_PUSH_USE_FCM, true);
+		return mSharedPreferences.getBoolean(SHARED_KEY_PUSH_USE_FCM, false);
 	}
 
 }
