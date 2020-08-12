@@ -11,7 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.heytap.mcssdk.PushManager;
+import com.heytap.msp.push.HeytapPushManager;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConferenceListener;
 import com.hyphenate.EMConnectionListener;
@@ -70,6 +70,7 @@ import com.hyphenate.push.EMPushConfig;
 import com.hyphenate.push.EMPushHelper;
 import com.hyphenate.push.EMPushType;
 import com.hyphenate.util.EMLog;
+import com.vivo.push.PushManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1876,8 +1877,8 @@ public class DemoHelper {
     public void showNotificationPermissionDialog() {
         EMPushType pushType = EMPushHelper.getInstance().getPushType();
         // oppo
-        if(pushType == EMPushType.OPPOPUSH && PushManager.isSupportPush(appContext)) {
-            PushManager.getInstance().requestNotificationPermission();
+        if(pushType == EMPushType.OPPOPUSH && HeytapPushManager.isSupportPush()) {
+            HeytapPushManager.requestNotificationPermission();
         }
     }
 }
