@@ -37,6 +37,8 @@ import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.chatuidemo.db.DemoDBManager;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 
 /**
  * Login screen
@@ -165,11 +167,22 @@ public class LoginActivity extends BaseActivity {
 			    EMClient.getInstance().chatManager().loadAllConversations();
 
 			    // update current user's display name for APNs
-				boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-						DemoApplication.currentUserNick.trim());
-				if (!updatenick) {
-					Log.e("LoginActivity", "update current user nick fail");
-				}
+				EMClient.getInstance().pushManager().asyncUpdatePushNickname(DemoApplication.currentUserNick, new EMCallBack() {
+					@Override
+					public void onSuccess() {
+
+					}
+
+					@Override
+					public void onError(int code, String error) {
+						EMLog.e("LoginActivity", "updatePushNickname error code:"+code + " error message:"+error);
+					}
+
+					@Override
+					public void onProgress(int progress, String status) {
+
+					}
+				});
 
 				if (!LoginActivity.this.isFinishing() && pd.isShowing()) {
 				    pd.dismiss();

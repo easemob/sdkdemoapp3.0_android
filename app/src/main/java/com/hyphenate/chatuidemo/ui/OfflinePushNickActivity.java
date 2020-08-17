@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 
 public class OfflinePushNickActivity extends BaseActivity {
 
@@ -44,8 +47,14 @@ public class OfflinePushNickActivity extends BaseActivity {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-								inputNickName.getText().toString());
+						boolean updatenick = false;
+						try {
+							updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+									inputNickName.getText().toString());
+						} catch (HyphenateException e) {
+							e.printStackTrace();
+							EMLog.e("OfflinePushNickActivity", "updatePushNickname error code:"+e.getErrorCode() + " error message:"+e.getDescription());
+						}
 						if (!updatenick) {
 							runOnUiThread(new Runnable() {
 								public void run() {
