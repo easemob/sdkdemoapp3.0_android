@@ -8,8 +8,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMPushConfigs;
+import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.DemoModel;
 import com.hyphenate.chatuidemo.R;
@@ -24,6 +26,7 @@ import com.hyphenate.exceptions.HyphenateException;
 public class OfflinePushSettingsActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener{
     private CheckBox noDisturbOn, noDisturbOff, noDisturbInNight;
     private EaseSwitchButton useFCMSwitch;
+    private EaseSwitchButton switchPushStyle;
     private Status status = Status.OFF;
 
     EMPushConfigs mPushConfigs;
@@ -39,6 +42,7 @@ public class OfflinePushSettingsActivity extends BaseActivity implements Compoun
         noDisturbOff = (CheckBox) findViewById(R.id.cb_no_disturb_off);
         noDisturbInNight = (CheckBox) findViewById(R.id.cb_no_disturb_only_night);
         useFCMSwitch = (EaseSwitchButton) findViewById(R.id.switch_use_fcm);
+        switchPushStyle = findViewById(R.id.switch_push_style);
         Button saveButton = (Button) findViewById(R.id.btn_save);
 
         noDisturbOn.setOnCheckedChangeListener(this);
@@ -140,6 +144,40 @@ public class OfflinePushSettingsActivity extends BaseActivity implements Compoun
             processPushConfigs();
         }
 
+        switchPushStyle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EMPushManager.DisplayStyle style;
+                if (switchPushStyle.isSwitchOpen()) {
+                    style = EMPushManager.DisplayStyle.SimpleBanner;
+                } else {
+                    style = EMPushManager.DisplayStyle.MessageSummary;
+                }
+
+                EMClient.getInstance().pushManager().asyncUpdatePushDisplayStyle(style, new EMCallBack() {
+                    @Override
+                    public void onSuccess() {
+                        runOnUiThread(()-> {
+                            if (switchPushStyle.isSwitchOpen()) {
+                                switchPushStyle.closeSwitch();
+                            } else {
+                                switchPushStyle.openSwitch();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(int code, String error) {
+
+                    }
+
+                    @Override
+                    public void onProgress(int progress, String status) {
+
+                    }
+                });
+            }
+        });
 
     }
 
@@ -183,6 +221,12 @@ public class OfflinePushSettingsActivity extends BaseActivity implements Compoun
         }else{
             status = Status.OFF;
             noDisturbOff.setChecked(true);
+        }
+
+        if(mPushConfigs.getDisplayStyle() == EMPushManager.DisplayStyle.MessageSummary) {
+            switchPushStyle.openSwitch();
+        }else {
+            switchPushStyle.closeSwitch();
         }
     }
 
