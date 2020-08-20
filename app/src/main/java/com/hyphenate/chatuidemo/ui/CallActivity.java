@@ -31,6 +31,9 @@ import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.chat.EMWaterMarkPosition;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.InputStream;
 
 @SuppressLint("Registered")
@@ -89,10 +92,32 @@ public class CallActivity extends BaseActivity {
                 
                 final EMMessage message = EMMessage.createTxtSendMessage("You have an incoming call", to);         
                 // set the user-defined extension field
-                message.setAttribute("em_apns_ext", true);
+                JSONObject apns = new JSONObject();
+                try {
+                    apns.put("em_push_sound", "ring.caf");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                message.setAttribute("em_apns_ext", apns);
                 
                 message.setAttribute("is_voice_call", callType == 0 ? true : false);
-                
+
+                JSONObject extObject = new JSONObject();
+                try {
+                    extObject.put("type", "call");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                message.setAttribute("em_push_ext", extObject);
+
+
+                JSONObject sound = new JSONObject();
+                try {
+                    sound.put("em_push_sound", "/raw/ring");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                message.setAttribute("em_android_push_ext", sound);
                 message.setMessageStatusCallback(new EMCallBack(){
 
                     @Override
