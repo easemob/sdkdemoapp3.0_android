@@ -92,14 +92,19 @@ public class CallActivity extends BaseActivity {
                 
                 final EMMessage message = EMMessage.createTxtSendMessage("You have an incoming call", to);         
                 // set the user-defined extension field
+                // 设置ios端铃声文件及开启apns通知扩展
                 JSONObject apns = new JSONObject();
                 try {
                     apns.put("em_push_sound", "ring.caf");
+                    apns.put("em_push_name", CallActivity.this.getString(R.string.incoming_call));
+                    apns.put("em_push_content", CallActivity.this.getString(R.string.incoming_call));
+                    //保证 APNs 通知扩展
+                    apns.put("em_push_mutable_content", true);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 message.setAttribute("em_apns_ext", apns);
-                
+                //设置呼叫类型
                 message.setAttribute("is_voice_call", callType == 0 ? true : false);
 
                 JSONObject extObject = new JSONObject();
@@ -110,14 +115,19 @@ public class CallActivity extends BaseActivity {
                 }
                 message.setAttribute("em_push_ext", extObject);
 
-
+                //设置自定义铃声，"/raw/ring"为应用"/res/raw/**",ring为铃声文件名（不包含后缀）
+                //若需更换铃声，请将铃声拷贝到"/res/raw/"目录下，并将下面的"ring"更换成相应的文件名即可
                 JSONObject sound = new JSONObject();
                 try {
+                    sound.put("em_push_name", CallActivity.this.getString(R.string.incoming_call));
+                    sound.put("em_push_content", CallActivity.this.getString(R.string.incoming_call));
                     sound.put("em_push_sound", "/raw/ring");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 message.setAttribute("em_android_push_ext", sound);
+                //强制推送，忽略消息免打扰设置
+                message.setAttribute("em_force_notification", true);
                 message.setMessageStatusCallback(new EMCallBack(){
 
                     @Override
