@@ -89,15 +89,17 @@ public class CallActivity extends BaseActivity {
 
                 //this function should exposed & move to Demo
                 EMLog.d(TAG, "onRemoteOffline, to:" + to);
-                
-                final EMMessage message = EMMessage.createTxtSendMessage("You have an incoming call", to);         
+                String content = CallActivity.this.getString(R.string.incoming_call);
+                final EMMessage message = EMMessage.createTxtSendMessage(content, to);
                 // set the user-defined extension field
                 // 设置ios端铃声文件及开启apns通知扩展
                 JSONObject apns = new JSONObject();
                 try {
+                    //设置ios端自定义铃声文件
                     apns.put("em_push_sound", "ring.caf");
-                    apns.put("em_push_name", CallActivity.this.getString(R.string.incoming_call));
-                    apns.put("em_push_content", CallActivity.this.getString(R.string.incoming_call));
+                    //对于华为emui10以上，需要添加下面两个参数，否则极易被华为通知智能分类分到营销通知渠道
+                    apns.put("em_push_name", content);
+                    apns.put("em_push_content", content);
                     //保证 APNs 通知扩展
                     apns.put("em_push_mutable_content", true);
                 } catch (JSONException e) {
@@ -105,7 +107,7 @@ public class CallActivity extends BaseActivity {
                 }
                 message.setAttribute("em_apns_ext", apns);
                 //设置呼叫类型
-                message.setAttribute("is_voice_call", callType == 0 ? true : false);
+                message.setAttribute("is_voice_call", callType == 0);
 
                 JSONObject extObject = new JSONObject();
                 try {
@@ -119,8 +121,10 @@ public class CallActivity extends BaseActivity {
                 //若需更换铃声，请将铃声拷贝到"/res/raw/"目录下，并将下面的"ring"更换成相应的文件名即可
                 JSONObject sound = new JSONObject();
                 try {
-                    sound.put("em_push_name", CallActivity.this.getString(R.string.incoming_call));
-                    sound.put("em_push_content", CallActivity.this.getString(R.string.incoming_call));
+                    //1、此处设置的channel_id不可与本地的notification中的channel_id相同，否则不会播放自定义铃声
+                    //2、由于铃声是通知渠道的属性，因此铃声仅在渠道创建时有效，渠道创建后，即使设置自定义铃声也不会播放，
+                    //而使用创建渠道时设置的铃声。
+                    sound.put("em_push_channel_id", "hyphenate_offline_push_notification");
                     sound.put("em_push_sound", "/raw/ring");
                 } catch (JSONException e) {
                     e.printStackTrace();
