@@ -13,8 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chatuidemo.DemoApplication;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
+import com.hyphenate.exceptions.HyphenateException;
 
 public class OfflinePushNickActivity extends BaseActivity {
 
@@ -44,10 +46,17 @@ public class OfflinePushNickActivity extends BaseActivity {
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-						boolean updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-								inputNickName.getText().toString());
+						boolean updatenick = false;
+						try {
+							updatenick = EMClient.getInstance().pushManager().updatePushNickname(
+									DemoApplication.currentUserNick.trim());
+						}catch (IllegalArgumentException e){
+
+						} catch (HyphenateException e) {
+							e.printStackTrace();
+						}
 						if (!updatenick) {
-							runOnUiThread(new Runnable() {
+							OfflinePushNickActivity.this.runOnUiThread(new Runnable() {
 								public void run() {
 									Toast.makeText(OfflinePushNickActivity.this, "update nickname failed!",
 											Toast.LENGTH_SHORT).show();

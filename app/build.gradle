@@ -11,7 +11,7 @@ android {
         applicationId "com.hyphenate.chatuidemo"
         //测试oppo离线消息，需修改包名如下，如果配置了FCM推送，同时替换google-services.json 中的 package_name 字段
         //applicationId "com.hyphenate.chatuidemo.push"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 29
         multiDexEnabled true
         ndk {

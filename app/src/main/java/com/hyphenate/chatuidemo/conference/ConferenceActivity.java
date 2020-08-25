@@ -67,6 +67,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
+import static com.superrtc.ContextUtils.getApplicationContext;
+
 /**
  * Created by lzan13 on 2017/8/15.
  * 多人音视频会议界面
@@ -383,7 +385,6 @@ public class ConferenceActivity extends BaseActivity implements EMConferenceList
         }
 
         timeHandler = new TimeHandler();
-
         //水印初始化
         if(PreferenceManager.getInstance().isWatermarkResolution()) {
             try {
