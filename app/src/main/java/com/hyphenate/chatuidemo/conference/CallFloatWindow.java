@@ -76,6 +76,11 @@ public class CallFloatWindow {
         this.callType = callType;
     }
 
+    public CallWindowType getCallType() {
+       return  callType;
+    }
+
+
     /**
      * add float window
      */
@@ -197,9 +202,9 @@ public class CallFloatWindow {
                 return;
             }
             if(surfaceState == 0 ){
-                EMClient.getInstance().callManager().setSurfaceView(surfaceView,null);
-            }else{
                 EMClient.getInstance().callManager().setSurfaceView(null,surfaceView);
+            }else{
+                EMClient.getInstance().callManager().setSurfaceView(surfaceView,null);
             }
         }else if(callType == CallWindowType.VOICECALL){
             floatView.findViewById(R.id.layout_call_voice).setVisibility(View.VISIBLE);

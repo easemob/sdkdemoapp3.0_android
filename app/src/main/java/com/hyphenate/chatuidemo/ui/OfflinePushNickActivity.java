@@ -69,6 +69,8 @@ public class OfflinePushNickActivity extends BaseActivity {
 						try {
 							updatenick = EMClient.getInstance().pushManager().updatePushNickname(
 									inputNickName.getText().toString());
+						} catch (IllegalArgumentException e) {
+							e.printStackTrace();
 						} catch (HyphenateException e) {
 							e.printStackTrace();
 							EMLog.e("OfflinePushNickActivity", "updatePushNickname error code:"+e.getErrorCode() + " error message:"+e.getDescription());

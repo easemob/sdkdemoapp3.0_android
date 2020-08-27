@@ -110,6 +110,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
 
     //用于防止多次打开请求悬浮框页面
     private boolean requestOverlayPermission;
+    private boolean isNewIntent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +166,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         username = getIntent().getStringExtra("username");
 
         nickTextView.setText(username);
+
 
         //获取水印图片
         if(PreferenceManager.getInstance().isWatermarkResolution()) {
@@ -733,7 +735,11 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         if (isRecord) {
             EMLog.e(TAG, "server record id: " + serverRecordId);
         }
-        final String recordString = " record? " + isRecord + " id: " + serverRecordId;
+        String recordString = " record? " + isRecord;
+        if(isRecord) {
+            recordString +=    " id: " + serverRecordId;
+        }
+        final String recordStr = recordString;
         new Thread(new Runnable() {
             public void run() {
                 while(monitor){
@@ -745,7 +751,7 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
                                     + "\nLost：" + callHelper.getVideoLostRate()
                                     + "\nLocalBitrate：" + callHelper.getLocalBitrate()
                                     + "\nRemoteBitrate：" + callHelper.getRemoteBitrate()
-                                    + "\n" + recordString);
+                                    + "\n" + recordStr);
 
                             ((TextView)findViewById(R.id.tv_is_p2p)).setText(EMClient.getInstance().callManager().isDirectCall()
                                     ? R.string.direct_call : R.string.relay_call);
@@ -779,17 +785,21 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        if(isInCalling){
-            try {
-                EMClient.getInstance().callManager().resumeVideoTransfer();
-            } catch (HyphenateException e) {
-                e.printStackTrace();
+        if(!isNewIntent){
+            if(isInCalling){
+                try {
+                    EMClient.getInstance().callManager().resumeVideoTransfer();
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
             }
         }
+        isNewIntent = false;
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
+        isNewIntent = true;
         super.onNewIntent(intent);
         if(surfaceState == 0 ){
             EMClient.getInstance().callManager().setSurfaceView(localSurface,oppositeSurface);
