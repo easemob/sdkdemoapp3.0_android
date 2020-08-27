@@ -563,8 +563,9 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                         String status = getApplicationContext().getString(EMClient.getInstance().callManager().isDirectCall()
                                 ? R.string.direct_call : R.string.relay_call);
                         status += " record? " + isRecord;
-                        status += " id: " + serverRecordId;
-
+                        if(isRecord){
+                            status += " id: " + serverRecordId;
+                        }
                         ((TextView)findViewById(R.id.tv_is_p2p)).setText(status);
                     }
                 });
