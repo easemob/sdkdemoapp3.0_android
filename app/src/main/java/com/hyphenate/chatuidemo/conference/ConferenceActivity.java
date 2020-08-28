@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -57,6 +56,7 @@ import com.hyphenate.util.EasyUtils;
 import com.superrtc.mediamanager.ScreenCaptureManager;
 import com.superrtc.sdk.VideoView;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,8 +66,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
-
-import static com.superrtc.ContextUtils.getApplicationContext;
 
 /**
  * Created by lzan13 on 2017/8/15.

@@ -31,6 +31,9 @@ import com.hyphenate.exceptions.EMServiceNotReadyException;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.chat.EMWaterMarkPosition;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.InputStream;
 
 @SuppressLint("Registered")
@@ -86,13 +89,47 @@ public class CallActivity extends BaseActivity {
 
                 //this function should exposed & move to Demo
                 EMLog.d(TAG, "onRemoteOffline, to:" + to);
-                
-                final EMMessage message = EMMessage.createTxtSendMessage("You have an incoming call", to);         
+                String content = CallActivity.this.getString(R.string.incoming_call);
+                final EMMessage message = EMMessage.createTxtSendMessage(content, to);
                 // set the user-defined extension field
-                message.setAttribute("em_apns_ext", true);
-                
-                message.setAttribute("is_voice_call", callType == 0 ? true : false);
-                
+                // 设置ios端铃声文件及开启apns通知扩展
+                JSONObject apns = new JSONObject();
+                try {
+                    //设置ios端自定义铃声文件
+                    apns.put("em_push_sound", "ring.caf");
+                    //对于华为EMUI 10以上系统需要设置以下参数，否则容易被华为通知智能分类分到营销通知渠道，从而不能播放自定义铃声
+                    apns.put("em_push_name", content);
+                    apns.put("em_push_content", content);
+                    //保证 APNs 通知扩展
+                    apns.put("em_push_mutable_content", true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                message.setAttribute("em_apns_ext", apns);
+                //设置呼叫类型
+                message.setAttribute("is_voice_call", callType == 0);
+
+                JSONObject extObject = new JSONObject();
+                try {
+                    extObject.put("type", "call");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                message.setAttribute("em_push_ext", extObject);
+
+                //设置自定义铃声，"/raw/ring"为应用"/res/raw/**",ring为铃声文件名（不包含后缀）
+                //若需更换铃声，请将铃声拷贝到"/res/raw/"目录下，并将下面的"ring"更换成相应的文件名即可
+                JSONObject sound = new JSONObject();
+                try {
+                    //指定自定义渠道
+                    sound.put("em_push_channel_id", "hyphenate_offline_push_notification");
+                    sound.put("em_push_sound", "/raw/ring");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                message.setAttribute("em_android_push_ext", sound);
+                //强制推送，忽略消息免打扰设置
+                message.setAttribute("em_force_notification", true);
                 message.setMessageStatusCallback(new EMCallBack(){
 
                     @Override

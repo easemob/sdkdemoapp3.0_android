@@ -62,10 +62,15 @@ dependencies {
     implementation 'com.meizu.flyme.internet:push-internal:3.7.0@aar'//配置集成sdk
     // hms push
     implementation 'com.huawei.hms:push:4.0.2.300'
+    //oppo push
+    implementation (name:'oppo_push_v2.1.0',ext:'aar')
 }
 
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'
 repositories {
     mavenCentral()
+    flatDir{
+        dirs 'libs'
+    }
 }

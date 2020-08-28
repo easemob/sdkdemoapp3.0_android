@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,10 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chatuidemo.DemoApplication;
+import com.hyphenate.chat.EMPushConfigs;
 import com.hyphenate.chatuidemo.DemoHelper;
 import com.hyphenate.chatuidemo.R;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
 
 public class OfflinePushNickActivity extends BaseActivity {
 
@@ -33,6 +36,22 @@ public class OfflinePushNickActivity extends BaseActivity {
 		inputNickName = (EditText) findViewById(R.id.et_input_nickname);
 		Button saveNickName = (Button) findViewById(R.id.btn_save);
 		nicknameDescription = (TextView) findViewById(R.id.tv_nickname_description);
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					EMPushConfigs configs = EMClient.getInstance().pushManager().getPushConfigsFromServer();
+					if(configs != null && !TextUtils.isEmpty(configs.getDisplayNickname())) {
+						runOnUiThread(()-> {
+							inputNickName.setText(configs.getDisplayNickname());
+						});
+					}
+				} catch (HyphenateException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
+
 
 		saveNickName.setOnClickListener(new OnClickListener() {
 
@@ -49,14 +68,15 @@ public class OfflinePushNickActivity extends BaseActivity {
 						boolean updatenick = false;
 						try {
 							updatenick = EMClient.getInstance().pushManager().updatePushNickname(
-									DemoApplication.currentUserNick.trim());
-						}catch (IllegalArgumentException e){
-
+									inputNickName.getText().toString());
+						} catch (IllegalArgumentException e) {
+							e.printStackTrace();
 						} catch (HyphenateException e) {
 							e.printStackTrace();
+							EMLog.e("OfflinePushNickActivity", "updatePushNickname error code:"+e.getErrorCode() + " error message:"+e.getDescription());
 						}
 						if (!updatenick) {
-							OfflinePushNickActivity.this.runOnUiThread(new Runnable() {
+							runOnUiThread(new Runnable() {
 								public void run() {
 									Toast.makeText(OfflinePushNickActivity.this, "update nickname failed!",
 											Toast.LENGTH_SHORT).show();

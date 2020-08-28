@@ -565,6 +565,31 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_switch_delete_msg_when_exit_chat_room"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:background="@drawable/em_btn_bottom_selector"
+                android:padding="10dip" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="10dip"
+                    android:text="@string/delete_msg_when_exit_chat_room"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:typeface="serif" />
+
+                <com.hyphenate.easeui.widget.EaseSwitchButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/switch_delete_msg_when_exit_chat_room"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/rl_set_transfer_file_by_userself"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"

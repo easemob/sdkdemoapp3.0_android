@@ -17,6 +17,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.heytap.msp.push.HeytapPushManager;
 import com.hyphenate.chatuidemo.ui.UserActivityLifecycleCallbacks;
 import com.hyphenate.easeui.EaseUI;
 import com.hyphenate.push.EMPushHelper;
@@ -50,7 +51,8 @@ public class DemoApplication extends Application {
 
         // 请确保环信SDK相关方法运行在主进程，子进程不会初始化环信SDK（该逻辑在EaseUI.java中）
 		if (EaseUI.getInstance().isMainProcess(this)) {
-
+			//OPPO SDK升级到2.1.0后需要进行初始化
+			HeytapPushManager.init(this, true);
 			EMPushHelper.getInstance().setPushListener(new PushListener() {
 				@Override
 				public void onError(EMPushType pushType, long errorCode) {

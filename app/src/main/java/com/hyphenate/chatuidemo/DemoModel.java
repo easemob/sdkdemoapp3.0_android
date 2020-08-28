@@ -226,6 +226,14 @@ public class DemoModel {
         return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
     }
 
+    public void setDeleteMessagesAsExitChatRoom(boolean value) {
+        PreferenceManager.getInstance().setDeleteMessagesAsExitChatRoom(value);
+    }
+
+    public boolean isDeleteMessagesAsExitChatRoom() {
+        return PreferenceManager.getInstance().isDeleteMessagesAsExitChatRoom();
+    }
+
     public void setTransfeFileByUser(boolean value) {
         PreferenceManager.getInstance().setTransferFileByUser(value);
     }

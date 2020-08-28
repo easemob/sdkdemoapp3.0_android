@@ -91,6 +91,7 @@
     <string name="yangshengqi">Use speaker</string>
     <string name="push_settings">Message push settings</string>
     <string name="push_use_fcm">Message push use fcm</string>
+    <string name="push_message_show_detail">Message push show detail</string>
     <string name="book_black">Black list</string>
     <string name="set_custom_appkey">Set custom App key</string>
     <string name="set_custom_server">Set custom servers</string>
@@ -320,6 +321,7 @@
     <string name="join_public_group">Join public group</string>
     <string name="chatroom_allow_owner_leave">Allow channel owner leave</string>
     <string name="delete_msg_when_exit_group">Delete messages when exit group</string>
+    <string name="delete_msg_when_exit_chat_room">Delete messages when exit chat room</string>
     <string name="set_transfer_file_by_userself">No need to implement transfer file function by user</string>
     <string name="set_autodownload_thumbnail">Autodownload thumbnail or not</string>
     <string name="auto_accept_group_invitation">Auto accept group invitation</string>
@@ -365,6 +367,7 @@
     <string name="group_nick">Group Nickname:</string>
     <string name="group_owner">Group Owner:</string>
     <string name="user_removed_from_group">You are removed from the group</string>
+    <string name="incoming_call">You have an incoming call</string>
 
     <string name="register_exceed_service_limit">You have exceeded the limit of the community edition,Please upgrade to the enterprise edition</string>
     
