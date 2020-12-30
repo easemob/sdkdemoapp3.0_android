@@ -5,9 +5,9 @@
 ## 新项目（环信/EaseIM）开源地址
 https://github.com/easemob/chat-android
 ## 新项目（环信/EaseIM）介绍
-一、新项目采用谷歌官方建议的应用架构：
+一、新项目采用谷歌官方建议的应用架构：</br>
 ![](https://developer.android.google.cn/topic/libraries/architecture/images/final-architecture.png)
-此架构有如下优点：
+此架构有如下优点：</br>
 >（1）UI和业务逻辑解耦。</br>
 >（2）有效避免生命周期组件内存泄漏。</br>
 >（3）提高模块可测试性。</br>
